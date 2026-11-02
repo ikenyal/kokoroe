@@ -11,7 +11,7 @@ import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { z } from "zod";
 import { SCENE_TYPE_LABELS, type Client, type Scene } from "@/src/core/types";
 import type { Disciple, Usage } from "@/src/disciple/v0";
-import { getClaude, MODELS } from "@/src/lib/claude";
+import { getClaude, MODELS, usageOf } from "@/src/lib/claude";
 import { jstDate } from "./fix";
 import type { KokoroeStore } from "./store";
 import type { GeneralizationMember, JudgmentRecord, KokoroeRule, Master } from "./types";
@@ -51,7 +51,7 @@ async function wordIt(members: GeneralizationMember[], usage?: Usage[]) {
     messages: [{ role: "user", content: `同じ傾向の心得:\n${list}` }],
     output_config: { effort: "low", format: zodOutputFormat(GeneralSchema) },
   });
-  usage?.push({ model: res.model, input_tokens: res.usage.input_tokens, output_tokens: res.usage.output_tokens });
+  usage?.push(usageOf(res, 0)); // rare call; not cached (prompt is below the cache minimum)
   if (!res.parsed_output) throw new Error("unparseable generalization");
   return res.parsed_output;
 }

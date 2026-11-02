@@ -1,26 +1,84 @@
 @import "tailwindcss";
 
+/*
+ * Kokoroe tokens — a ledger (帳面) passed between people.
+ * 紙 paper / 墨 ink / 藍 indigo (the noren, navigation and selection) / 朱 vermilion (only the master's marks) / 鈍 muted.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --kami: #f3f2ee;
+  --kami-2: #e9e7e1; /* a page under a page */
+  --sumi: #1f2328;
+  --nibi: #5f646b;
+  --ai: #2b4a6f;
+  --ai-soft: #dfe5ec;
+  --shu: #b5402f;
+  --shu-soft: #f3dcd6;
+  --keisen: #cfccc4; /* ruled lines */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --kami: #16191d;
+    --kami-2: #1d2126;
+    --sumi: #e6e4df;
+    --nibi: #a3a6ab;
+    --ai: #8fb0d6;
+    --ai-soft: #24303d;
+    --shu: #e07a64;
+    --shu-soft: #3a2420;
+    --keisen: #2e333a;
   }
 }
 
+@theme inline {
+  --color-kami: var(--kami);
+  --color-kami-2: var(--kami-2);
+  --color-sumi: var(--sumi);
+  --color-nibi: var(--nibi);
+  --color-ai: var(--ai);
+  --color-ai-soft: var(--ai-soft);
+  --color-shu: var(--shu);
+  --color-shu-soft: var(--shu-soft);
+  --color-keisen: var(--keisen);
+  --font-mincho: var(--font-shippori), "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --font-gothic: var(--font-zenkaku), "Hiragino Sans", "Yu Gothic", sans-serif;
+}
+
+html {
+  background: var(--kami);
+  color: var(--sumi);
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-gothic);
+  font-feature-settings: "palt" 1; /* proportional kana for UI text */
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Reading text: mincho, generous leading, no proportional squeeze, line breaks that respect Japanese rules. */
+.yomi {
+  font-family: var(--font-mincho);
+  font-feature-settings: normal;
+  line-height: 1.95;
+  letter-spacing: 0.02em;
+  line-break: strict;
+  word-break: normal;
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ai);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

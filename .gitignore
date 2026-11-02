@@ -31,3 +31,6 @@ npm-debug.log*
 
 # eval freshness marker (see .claude/hooks/after-edit.sh)
 .claude/.eval-stale
+
+# demo sessions (per visitor, never committed)
+.data/

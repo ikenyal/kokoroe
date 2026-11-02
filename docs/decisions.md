@@ -196,3 +196,13 @@ Seeding the ledger lowered match when the 台帳 rules were shown as kokoroe (65
 D-022 removes the cause of the drop while keeping the history, but training-path variance (D-024) is too large to settle this
 with single runs. Decide the official version from the multi-path runs (today: 3 paths, interim; official: 5 paths after the
 feature freeze on 11/7).
+
+## D-028 · 2026-11-03 · Accepted · UI v1 — what differs from the evaluation loop, and what must happen before going live
+From the `hitl-reviewer` review of the first UI (findings fixed: choice never applied; round 2 could write without a tap;
+lost updates / reused ids in session files; storage text; unverified successor citations; unescaped question):
+- **Difference to state openly:** the 帳場 path runs interpretation → (choice) → kokoroe-chō update, but not yet 確かめ稽古 or the
+  regression check that the evaluation loop runs (D-019). Rules learned live in the demo are not narrowed or rolled back. The
+  evaluation numbers come from the full loop; the UI must not present them as produced by the UI path until this is added.
+- **Before KOKOROE_LIVE is enabled on a public URL (11/6):** per-IP rate limits on start / ask / choose, a per-session cap on live
+  calls, a daily budget switch that falls back to recorded data, a cap on session count. Until then the public demo runs on recorded data.
+- Session files are swept after 24 h or when the visitor restarts; the start page says exactly that.

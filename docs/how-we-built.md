@@ -74,3 +74,9 @@ Short entries, appended every work session. Source material for the README secti
 - **Hooks as a safety net mid-edit** — while restructuring the loop, the PostToolUse hook ran the fast tests after each edit and
   reported the broken intermediate states immediately; the commit gate also blocked a combined "smoke + commit" command (it checks
   before anything runs), so the smoke eval is now run as its own step.
+- **UI built with fixed data, reviewed by a subagent** — the four screens were built against snapshots of real runs (no API calls),
+  screenshotted with Playwright in light/dark × desktop/mobile after each screen (`docs/screens/`), and fixed from the screenshots
+  (mobile nav wrapping, label widths). Next 16's bundled docs were read first (async `params`/`cookies`, `after()`, prerender rules).
+- **`hitl-reviewer` caught three blocking bugs before commit** — the master's tap on a reading was never applied (status race), round 2
+  could write a rule without a tap (contradicting D-025), and background work could overwrite the master's newer judgments in the
+  session file. All fixed, with a regression test for the concurrent-store case; the deferred items became D-028.

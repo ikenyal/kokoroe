@@ -13,7 +13,7 @@ import type { Client } from "@/src/core/types";
 import type { Usage } from "@/src/disciple/v0";
 import { renderRule } from "@/src/learning/compile";
 import type { KokoroeRule } from "@/src/learning/types";
-import { getClaude, MODELS } from "@/src/lib/claude";
+import { cachedSystem, getClaude, MODELS, textBlock, usageOf } from "@/src/lib/claude";
 
 export const AnswerSchema = z.object({
   answer: z.enum(["yes", "no", "unknown"]).describe("Direct answer to the yes/no question; 'unknown' if not covered."),
@@ -58,21 +58,28 @@ export async function askSuccessor(args: {
     mode === "general"
       ? ""
       : `\n\n心得帳（読み取り専用）:\n${rules.length ? rules.map(renderRule).join("\n\n") : "（この取引先についての心得はまだない）"}`;
+  const t0 = performance.now();
   const res = await getClaude().messages.parse({
     model: MODELS.disciple,
     max_tokens: 3000,
-    system: SYSTEM[mode],
+    system: cachedSystem(SYSTEM[mode]),
     messages: [
       {
         role: "user",
-        content: `取引先: ${client.name}（${client.industry}、取引${client.relationshipYears}年、窓口: ${client.contact}、決裁者: ${client.decider}、制約: ${client.constraints}）${book}
-
-<question from="${COMPANY.successor.name}">${question}</question>`,
+        content: [
+          // Client card + kokoroe-chō: the same for every question about this client → cached.
+          textBlock(
+            `取引先: ${client.name}（${client.industry}、取引${client.relationshipYears}年、窓口: ${client.contact}、決裁者: ${client.decider}、制約: ${client.constraints}）${book}\n\n`,
+            true,
+          ),
+          // The question is user text: strip angle brackets so it can't close the tag and pose as instructions.
+          textBlock(`<question from="${COMPANY.successor.name}">${question.replace(/[<>]/g, "")}</question>`, false),
+        ],
       },
     ],
     output_config: { effort: "low", format: zodOutputFormat(AnswerSchema) },
   });
-  args.usage?.push({ model: res.model, input_tokens: res.usage.input_tokens, output_tokens: res.usage.output_tokens });
+  args.usage?.push(usageOf(res, performance.now() - t0));
   if (!res.parsed_output) throw new Error(`unparseable successor answer (stop_reason=${res.stop_reason})`);
   const a = res.parsed_output;
   // Grounded answers must cite real rules unless they say "unknown".

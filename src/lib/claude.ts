@@ -22,3 +22,36 @@ export function getClaude(): Anthropic {
   client ??= new Anthropic();
   return client;
 }
+
+/**
+ * Prompt caching (D-027). The fixed parts — system prompt (+ output schema before it) and, per client, the client card and
+ * kokoroe-chō — are marked with cache_control so repeated calls read them from cache. KOKOROE_CACHE=0 turns it off (for A/B).
+ */
+export const cacheEnabled = () => process.env.KOKOROE_CACHE !== "0";
+
+export function textBlock(text: string, cache: boolean): Anthropic.TextBlockParam {
+  return cache && cacheEnabled() ? { type: "text", text, cache_control: { type: "ephemeral" } } : { type: "text", text };
+}
+
+/** System prompt as a cached block. */
+export const cachedSystem = (text: string): Anthropic.TextBlockParam[] => [textBlock(text, true)];
+
+export interface Usage {
+  model: string;
+  input_tokens: number; // uncached input
+  output_tokens: number;
+  cache_creation_input_tokens?: number;
+  cache_read_input_tokens?: number;
+  ms?: number; // wall-clock latency of the call
+}
+
+export function usageOf(res: { model: string; usage: Anthropic.Usage }, ms: number): Usage {
+  return {
+    model: res.model,
+    input_tokens: res.usage.input_tokens,
+    output_tokens: res.usage.output_tokens,
+    cache_creation_input_tokens: res.usage.cache_creation_input_tokens ?? 0,
+    cache_read_input_tokens: res.usage.cache_read_input_tokens ?? 0,
+    ms,
+  };
+}

@@ -6,7 +6,7 @@
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { z } from "zod";
 import { SCENE_TYPE_LABELS, type Client, type Proposal, type Scene, type Verdict } from "@/src/core/types";
-import { getClaude, MODELS } from "@/src/lib/claude";
+import { cachedSystem, getClaude, MODELS, usageOf } from "@/src/lib/claude";
 import type { Usage } from "@/src/disciple/v0";
 import { describeProposal, describeRules } from "./describe";
 import { FIX_VALUES_HELP } from "./fix";
@@ -112,14 +112,15 @@ ${describeProposal(judgment.proposal, client)}
 ${describeRules(existing)}
 </existing_rules>${conflictBlock}${rejectedBlock}`;
 
+  const t0 = performance.now();
   const res = await getClaude().messages.parse({
     model: MODELS.editor,
     max_tokens: 8000,
-    system: SYSTEM,
+    system: cachedSystem(SYSTEM),
     messages: [{ role: "user", content: user }],
     output_config: { effort: "medium", format: zodOutputFormat(InterpretationSchema) },
   });
-  args.usage?.push({ model: res.model, input_tokens: res.usage.input_tokens, output_tokens: res.usage.output_tokens });
+  args.usage?.push(usageOf(res, performance.now() - t0));
   if (res.stop_reason === "refusal") throw new Error(`interpreter refusal on ${scene.id}`);
   if (!res.parsed_output) throw new Error(`unparseable interpretation on ${scene.id}`);
   return { ...res.parsed_output, candidates: res.parsed_output.candidates.slice(0, 3) };

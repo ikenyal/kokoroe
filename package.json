@@ -17,7 +17,10 @@
     "curve": "tsx --env-file-if-exists=.env.local eval/curve.ts",
     "eval:successor": "tsx --env-file-if-exists=.env.local eval/successor.ts",
     "eval:adversarial": "tsx --env-file-if-exists=.env.local eval/adversarial.ts",
-    "eval:smoke": "tsx --env-file-if-exists=.env.local eval/run.ts --disciple v0 --scenes E01,E06,E10,E13,E19"
+    "eval:smoke": "tsx --env-file-if-exists=.env.local eval/run.ts --disciple v0 --scenes E01,E06,E10,E13,E19",
+    "eval:cache-ab": "tsx --env-file-if-exists=.env.local eval/cache-ab.ts",
+    "demo:snapshots": "tsx eval/build-snapshots.ts",
+    "demo:results": "tsx eval/build-results.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "1.4.0",
@@ -33,6 +36,7 @@
     "@types/react-dom": "19.3.0",
     "eslint": "9.39.5",
     "eslint-config-next": "16.4.4",
+    "playwright": "1.64.1",
     "tailwindcss": "4.3.3",
     "tsx": "4.23.15",
     "typescript": "5.9.3",

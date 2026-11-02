@@ -402,3 +402,21 @@ describe("second round and scope guard (D-025, no API)", () => {
     expect(typesNamedIn("金の話は説明しながら")).toContain("T3");
   });
 });
+
+describe("LocalJsonStore with concurrent instances (HITL review #3)", () => {
+  it("two instances on one file never overwrite each other's writes, and ids are never reused", async () => {
+    const { mkdtempSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const path = (await import("node:path")).default;
+    const file = path.join(mkdtempSync(path.join(tmpdir(), "kokoroe-")), "s.json");
+    const a = new LocalJsonStore(file); // e.g. a page request
+    const b = new LocalJsonStore(file); // e.g. background interpretation, opened earlier
+    const j1 = await a.addJudgment({ at: "x", sceneId: "S1", clientId: "C01", sceneType: "T1", proposal, verdict: "×", remark: "" });
+    const j2 = await b.addJudgment({ at: "x", sceneId: "S2", clientId: "C01", sceneType: "T1", proposal, verdict: "○", remark: "" });
+    expect([j1.id, j2.id]).toEqual(["J-0001", "J-0002"]);
+    const id = await b.nextRuleId();
+    await b.saveRule({ id, scope: { clientId: "C01", sceneTypes: null }, text: "r", when: null, status: "active", confidence: "low", sources: [], history: [] });
+    expect((await a.listJudgments()).map((j) => j.id)).toEqual(["J-0001", "J-0002"]);
+    expect((await a.listRules()).map((r) => r.id)).toEqual(["K-001"]);
+  });
+});

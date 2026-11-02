@@ -3,7 +3,7 @@
  * The learning loop only talks to `KokoroeStore`, so the backing store can be swapped
  * (local JSON now; Managed Agents memory store once D-002 is settled; DynamoDB for the hosted demo).
  */
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import type { SceneType } from "@/src/core/types";
 import type { JudgmentRecord, KokoroeRule } from "./types";
@@ -31,53 +31,71 @@ interface StoreFile {
   judgments: JudgmentRecord[];
 }
 
-/** JSON file store. Pass `null` as the path for an in-memory store (tests, throwaway runs). */
-export class LocalJsonStore implements KokoroeStore {
-  private data: StoreFile;
+const nextId = (ids: string[], prefix: string, width: number) =>
+  `${prefix}${String(Math.max(0, ...ids.map((id) => Number(id.slice(prefix.length)) || 0)) + 1).padStart(width, "0")}`;
 
-  constructor(private readonly file: string | null) {
-    this.data =
-      file && existsSync(file) ? (JSON.parse(readFileSync(file, "utf8")) as StoreFile) : { rules: [], judgments: [] };
+/**
+ * JSON file store. Pass `null` as the path for an in-memory store (tests, throwaway runs).
+ * Every operation re-reads the file and every mutation is a synchronous read-modify-write with an atomic replace
+ * (tmp + rename), so the 帳場's background work and page requests can't overwrite each other's updates in one process.
+ * Ids are max + 1, so a lost write can never cause an id to be reused (HITL review, 2026-11-03).
+ */
+export class LocalJsonStore implements KokoroeStore {
+  private mem: StoreFile = { rules: [], judgments: [] };
+
+  constructor(private readonly file: string | null) {}
+
+  private load(): StoreFile {
+    if (!this.file) return this.mem;
+    return existsSync(this.file) ? (JSON.parse(readFileSync(this.file, "utf8")) as StoreFile) : { rules: [], judgments: [] };
   }
 
-  private persist(): void {
-    if (!this.file) return;
-    mkdirSync(path.dirname(this.file), { recursive: true });
-    writeFileSync(this.file, JSON.stringify(this.data, null, 2) + "\n");
+  private mutate<T>(fn: (d: StoreFile) => T): T {
+    const d = this.load();
+    const out = fn(d);
+    if (this.file) {
+      mkdirSync(path.dirname(this.file), { recursive: true });
+      const tmp = `${this.file}.${process.pid}.${Date.now()}.tmp`;
+      writeFileSync(tmp, JSON.stringify(d, null, 2) + "\n");
+      renameSync(tmp, this.file);
+    } else this.mem = d;
+    return out;
   }
 
   async listRules() {
-    return structuredClone(this.data.rules);
+    return structuredClone(this.load().rules);
   }
 
   async rulesFor(clientId: string, sceneType: SceneType) {
-    return structuredClone(this.data.rules.filter((r) => applies(r, clientId, sceneType)));
+    return structuredClone(this.load().rules.filter((r) => applies(r, clientId, sceneType)));
   }
 
   async getRule(id: string) {
-    const r = this.data.rules.find((x) => x.id === id);
+    const r = this.load().rules.find((x) => x.id === id);
     return r && structuredClone(r);
   }
 
   async saveRule(rule: KokoroeRule) {
-    const i = this.data.rules.findIndex((x) => x.id === rule.id);
-    if (i >= 0) this.data.rules[i] = structuredClone(rule);
-    else this.data.rules.push(structuredClone(rule));
-    this.persist();
+    this.mutate((d) => {
+      const i = d.rules.findIndex((x) => x.id === rule.id);
+      if (i >= 0) d.rules[i] = structuredClone(rule);
+      else d.rules.push(structuredClone(rule));
+    });
   }
 
   async nextRuleId() {
-    return `K-${String(this.data.rules.length + 1).padStart(3, "0")}`;
+    return nextId(this.load().rules.map((r) => r.id), "K-", 3);
   }
 
   async addJudgment(j: Omit<JudgmentRecord, "id">) {
-    const rec: JudgmentRecord = { id: `J-${String(this.data.judgments.length + 1).padStart(4, "0")}`, ...structuredClone(j) };
-    this.data.judgments.push(rec);
-    this.persist();
-    return structuredClone(rec);
+    return this.mutate((d) => {
+      const rec: JudgmentRecord = { id: nextId(d.judgments.map((x) => x.id), "J-", 4), ...structuredClone(j) };
+      d.judgments.push(rec);
+      return structuredClone(rec);
+    });
   }
 
   async listJudgments() {
-    return structuredClone(this.data.judgments);
+    return structuredClone(this.load().judgments);
   }
 }
