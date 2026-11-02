@@ -46,6 +46,7 @@ const cand = (o: Partial<Candidate>): Candidate => ({
 const fakeMaster = (o: Partial<Master> & Pick<Master, "judge">): Master => ({
   choose: async () => 0,
   why: async () => "",
+  confirmGeneralization: async () => false,
   ...o,
 });
 
@@ -284,5 +285,88 @@ describe("ledger seeding (台帳)", () => {
     expect(renderRule(rules.find((x) => x.scope.clientId === "C04")!)).toContain("出典: 台帳");
     // Seeding twice does nothing.
     expect((await seedFromLedger({ store, clients: CLIENTS, master, now: fixedNow })).seeded).toEqual([]);
+  });
+});
+
+describe("一般化 (no API)", () => {
+  const word = async () => ({ text: "正式は窓口、決裁者には裏で一言", when: null, sceneTypes: null });
+  const back: Candidate["fix"] = { field: "backchannelTo", value: "decider" };
+  const baseP: Proposal = { ...proposal, channel: "mail", meeting: "in_person", formalTo: "contact", backchannelTo: null };
+
+  /** Two client rules (C06, C03) learned from corrections with the same fix. */
+  async function twoRules(store: LocalJsonStore) {
+    const ids: string[] = [];
+    for (const [sid, cid] of [["S1", "C06"], ["S2", "C03"]] as const) {
+      const j = await store.addJudgment({ at: fixedNow().toISOString(), sceneId: sid, clientId: cid, sceneType: "T4", proposal: baseP, verdict: "△", remark: "" });
+      const id = await store.nextRuleId();
+      await store.saveRule({
+        id, scope: { clientId: cid, sceneTypes: null }, text: `${cid}: 決裁者にも一言`, when: null, status: "active", confidence: "medium",
+        fix: back, sources: [{ kind: "judgment", judgmentId: j.id, date: "2026-11-03", sceneId: sid, verdict: "△", remark: "" }],
+        history: [{ date: "2026-11-03", before: null, after: "x", trigger: null, judgmentId: j.id, masterWords: "", reason: "" }],
+      });
+      ids.push(id);
+    }
+    return ids;
+  }
+  const scenesById = (id: string) => scene(id, id === "S1" ? "C06" : "C03", "T4");
+
+  it("asks the master once; yes → one company-wide rule, client rules folded in", async () => {
+    const store = new LocalJsonStore(null);
+    const [a] = await twoRules(store);
+    let asked = 0;
+    const r = await (await import("@/src/learning/generalize")).maybeGeneralize({
+      store, disciple: fixedDisciple, ruleId: a, sceneById: scenesById, clientById: getClient, wordFn: word,
+      master: fakeMaster({ judge: async () => ({ verdict: "○", remark: "" }), confirmGeneralization: async () => (asked++, true) }),
+    });
+    expect(asked).toBe(1);
+    expect(r).toMatchObject({ accepted: true, rolledBack: false, members: ["K-001", "K-002"] });
+    const g = (await store.getRule(r!.proposedRuleId!))!;
+    expect(g.scope.clientId).toBeNull();
+    expect(g.sources).toHaveLength(2);
+    expect(renderRule(g)).toContain("〔全社〕");
+    expect((await store.getRule("K-001"))!).toMatchObject({ status: "retired", mergedInto: g.id });
+    expect((await store.rulesFor("C09", "T4")).map((x) => x.id)).toEqual([g.id]); // now reaches other clients
+  });
+
+  it("no → nothing widened, and the same set is not proposed again", async () => {
+    const store = new LocalJsonStore(null);
+    const [a] = await twoRules(store);
+    const m = fakeMaster({ judge: async () => ({ verdict: "○", remark: "" }), confirmGeneralization: async () => false });
+    const gen = (await import("@/src/learning/generalize")).maybeGeneralize;
+    const args = { store, disciple: fixedDisciple, master: m, ruleId: a, sceneById: scenesById, clientById: getClient, wordFn: word };
+    expect((await gen(args))!.accepted).toBe(false);
+    expect(await gen(args)).toBeNull();
+    expect((await store.listRules()).every((x) => x.scope.clientId !== null && x.status === "active")).toBe(true);
+  });
+
+  it("a regression after widening rolls it back and restores the client rules", async () => {
+    const store = new LocalJsonStore(null);
+    const [a] = await twoRules(store);
+    await store.addJudgment({ at: fixedNow().toISOString(), sceneId: "S9", clientId: "C09", sceneType: "T4", proposal: { ...baseP, channel: "phone" }, verdict: "○", remark: "" });
+    const r = await (await import("@/src/learning/generalize")).maybeGeneralize({
+      store, disciple: fixedDisciple, ruleId: a, wordFn: word, clientById: getClient,
+      sceneById: (id) => (id === "S9" ? scene("S9", "C09", "T4") : scenesById(id)),
+      master: fakeMaster({ judge: async () => ({ verdict: "×", remark: "そこは違う" }), confirmGeneralization: async () => true }),
+    });
+    expect(r).toMatchObject({ accepted: true, rolledBack: true, brokenSceneId: "S9" });
+    expect((await store.getRule(r!.proposedRuleId!))!.status).toBe("retired");
+    expect((await store.getRule("K-001"))!.status).toBe("active");
+    expect((await store.getRule("K-001"))!.mergedInto).toBeUndefined();
+    expect((await store.getRule("K-001"))!.history.at(-1)!.reason).toContain("差し戻");
+  });
+});
+
+describe("台帳 rules and the apprentice", () => {
+  it("pure 台帳 rules are kept but not shown to the apprentice; a master-revised one is labelled 〔台帳＋師匠〕", async () => {
+    const { isPureLedger } = await import("@/src/disciple/v1");
+    const { seedFromLedger } = await import("@/src/learning/ledger");
+    const { CLIENTS } = await import("@/src/core/world");
+    const store = new LocalJsonStore(null);
+    await seedFromLedger({ store, clients: CLIENTS, master: createSimulatedMaster(1), now: fixedNow });
+    const r = (await store.rulesFor("C03", "T9"))[0];
+    expect(isPureLedger(r)).toBe(true);
+    r.sources.push({ kind: "judgment", judgmentId: "J-0001", date: "2026-11-03", sceneId: "T21", verdict: "×", remark: "生協は書式" });
+    expect(isPureLedger(r)).toBe(false);
+    expect(renderRule(r)).toContain("〔台帳＋師匠〕");
   });
 });

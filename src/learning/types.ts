@@ -38,6 +38,9 @@ export interface KokoroeRule {
   status: "active" | "retired";
   confidence: "low" | "medium" | "high";
   origin?: "master" | "ledger"; // undefined = master (learned from a judgment). Shown distinctly in the kokoroe-chō.
+  fix?: ProposalFix; // the proposal field this rule is about (from the chosen reading) — used to spot the same habit elsewhere
+  mergedInto?: string; // set when this client rule was folded into a company-wide rule
+  declinedMerge?: string[]; // rule ids the master declined (or a regression rejected) merging with — don't ask again
   sources: RuleSource[];
   history: RuleChange[];
 }
@@ -84,4 +87,17 @@ export interface Master {
    * (scene + candidate given), or once per ledger-seeded rule (no scene/candidate).
    */
   why(args: { scene?: Scene; client: Client; rule: KokoroeRule; candidate?: Candidate }): Promise<string>;
+  /**
+   * One tap: "the same correction showed up for several clients — make it a company-wide rule?" (HITL: never widened silently).
+   * `members` are the corrections behind the client rules being merged.
+   */
+  confirmGeneralization(args: { proposed: { text: string; when: string | null }; members: GeneralizationMember[] }): Promise<boolean>;
+}
+
+export interface GeneralizationMember {
+  rule: KokoroeRule;
+  scene: Scene;
+  client: Client;
+  proposal: Proposal; // the draft the master corrected
+  fix: ProposalFix;
 }

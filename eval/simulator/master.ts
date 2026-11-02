@@ -7,7 +7,7 @@
  */
 import type { Client, Proposal, Scene } from "@/src/core/types";
 import { applyFix } from "@/src/learning/fix";
-import type { Candidate, Master } from "@/src/learning/types";
+import type { Candidate, Master, ProposalFix } from "@/src/learning/types";
 import { getRule, HIDDEN_RULES } from "./hidden";
 import { judge, type RuleCheck } from "./judge";
 import { remarkFor, rng } from "./remark";
@@ -36,6 +36,14 @@ export function historyBehindConstraint(clientId: string, constraint: string): s
     if (r.scope === clientId && h && shares(constraint, `${h.before}${h.after}`)) return r.id;
   }
   return null;
+}
+
+/** Which failed hidden rule (most serious first) would this fix have cleared on this draft? */
+export function hiddenRuleFixedBy(scene: Scene, client: Client, proposal: Proposal, fix: ProposalFix): string | null {
+  const before = judge(scene, client, proposal).checks.filter((c) => c.outcome !== "ok");
+  const after = judge(scene, client, applyFix(proposal, fix)).checks;
+  const order = [...before.filter((x) => x.outcome === "violation"), ...before.filter((x) => x.outcome === "partial")];
+  return order.find((f) => after.find((a) => a.ruleId === f.ruleId)?.outcome === "ok")?.ruleId ?? null;
 }
 
 export function createSimulatedMaster(seed = 7): SimulatedMaster {
@@ -75,6 +83,13 @@ export function createSimulatedMaster(seed = 7): SimulatedMaster {
         if (best === null || severity(r) < severity(ruleClearedBy(candidates[best]))) best = i;
       }
       return best; // null = none of these
+    },
+
+    async confirmGeneralization({ members }) {
+      // Yes only if every member's correction was about the same hidden rule, and that rule holds for all clients.
+      const ids = members.map((m) => hiddenRuleFixedBy(m.scene, m.client, m.proposal, m.fix));
+      const first = ids[0];
+      return !!first && ids.every((id) => id === first) && getRule(first).scope === "all";
     },
 
     async why({ candidate, client, rule }) {

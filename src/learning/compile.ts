@@ -39,6 +39,7 @@ export async function applyCandidate(
     target.when = c.when;
     target.scope = { ...c.scope };
     target.confidence = meta.confidence;
+    target.fix = c.fix;
     target.sources.push(sourceOf(judgment));
     target.history.push({
       date,
@@ -60,6 +61,7 @@ export async function applyCandidate(
     when: c.when,
     status: "active",
     confidence: meta.confidence,
+    fix: c.fix,
     sources: [sourceOf(judgment)],
     history: [
       { date, before: null, after: full(c.text, c.when), trigger: null, judgmentId: judgment.id, masterWords: judgment.remark, reason: meta.diagnosis },
@@ -79,7 +81,11 @@ export async function recordTrigger(store: KokoroeStore, ruleId: string, trigger
 
 /** One rule as a kokoroe-chō entry: short rule, condition, then 沿革 lines (旧 → 新・きっかけ・日付・出典). */
 export function renderRule(r: KokoroeRule): string {
-  const head = `### ${r.id}${r.status === "retired" ? "（廃止）" : ""}${r.origin === "ledger" ? "〔台帳〕" : ""} ${r.text}`;
+  const state = r.mergedInto ? `（${r.mergedInto} に統合）` : r.status === "retired" ? "（廃止）" : "";
+  const fromLedger = r.sources.some((s) => s.kind === "ledger");
+  const fromMaster = r.sources.some((s) => s.kind !== "ledger");
+  const origin = fromLedger ? (fromMaster ? "〔台帳＋師匠〕" : "〔台帳〕") : "";
+  const head = `### ${r.id}${state}${origin}${r.scope.clientId === null ? "〔全社〕" : ""} ${r.text}`;
   const when = r.when ? `\n- 条件: ${r.when}` : "";
   const scope = `\n- 適用: ${r.scope.sceneTypes?.join("・") ?? "全場面"} / 確信度: ${r.confidence}`;
   const hist = r.history

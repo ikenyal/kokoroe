@@ -21,11 +21,13 @@ export async function trainScenes(args: {
   scenes: Scene[];
   seed: number;
   log?: (line: string) => void;
+  generalize?: boolean;
+  master?: ReturnType<typeof createSimulatedMaster>;
 }) {
   const { store, scenes } = args;
   const log = args.log ?? (() => {});
   const disciple = makeDiscipleV1(store);
-  const master = createSimulatedMaster(args.seed);
+  const master = args.master ?? createSimulatedMaster(args.seed);
   const interpUsage: Usage[] = [];
   const steps: TrainedStep[] = [];
   const sceneById = (id: string) => TRAIN_SCENES.find((s) => s.id === id);
@@ -33,7 +35,10 @@ export async function trainScenes(args: {
     const client = getClient(scene.clientId);
     const t0 = performance.now();
     const mark = master.failingLog().length; // the step's first judgment is the draft
-    const r = await learnStep({ store, disciple, master, scene, client, usage: interpUsage, sceneById });
+    const r = await learnStep({
+      store, disciple, master, scene, client, usage: interpUsage, sceneById,
+      generalize: args.generalize ? { clientById: getClient } : undefined,
+    });
     const step = { ...r, sceneId: scene.id, clientId: scene.clientId, hiddenFailing: master.failingLog()[mark] ?? [], sec: (performance.now() - t0) / 1000 };
     steps.push(step);
     const used = r.proposal.basedOnRules.length ? ` uses[${r.proposal.basedOnRules.join(",")}]` : "";
@@ -54,6 +59,12 @@ export async function trainScenes(args: {
       log(
         `    確かめ ${v.confirm?.verdict ?? "-"} | 回帰 ${v.regressionChecked}件（師匠に確認 ${v.regressionAsked}）` +
           `${v.narrowed ? " | 範囲を絞った" : ""}${v.rolledBack ? ` | 差し戻し（${v.brokenSceneId} が崩れた）` : ""}`,
+      );
+    const g = r.generalization;
+    if (g)
+      log(
+        `    一般化の提案 ${g.members.join("+")} → ${g.accepted ? `師匠○ ${g.proposedRuleId}` : "師匠×"}` +
+          `${g.accepted ? ` | 回帰 ${g.regressionChecked}件（確認 ${g.regressionAsked}）${g.rolledBack ? ` | 差し戻し（${g.brokenSceneId}）` : ""}` : ""}`,
       );
   }
   return {

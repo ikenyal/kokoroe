@@ -71,6 +71,7 @@ async function main() {
           return i >= 0 ? i : null;
         },
         why: async () => "",
+        confirmGeneralization: async () => false,
       };
       const step = await learnStep({ store, disciple, master, scene, client, usage: interpUsage });
       discipleUsd += estimateUsd(disciple.usage);

@@ -151,3 +151,10 @@ content and lost nothing in all 18+18 runs. A02's draft check (a live conversati
 run without the injected sentence produces the same drafts (mail, no meeting, 4/4 each) — the gap is not caused by the injection
 (the apprentice doesn't apply "explain prices in a conversation" to a first quote *request*). Per Kento, A02 passes on store
 protection; the draft gap is tracked as a learning issue.
+
+## D-022 · 2026-11-03 · Accepted · Pure 台帳 rules are kept in the kokoroe-chō but not shown to the apprentice
+Curve v3 (ledger seeding, D-020) raised history answers but lowered the held-out match at 0 scenes (48% → 40%). Diagnosis on E13
+(生協, groundwork for a big decision): with only the 台帳 rules in the prompt the apprentice went △×× (formal route straight to
+専務理事), without them ○○○. The constraint is already on the client card; repeating it under "the master's corrections, which take
+precedence" over-weighted it. Now pure-台帳 rules are not given to the apprentice; they stay for history and the successor. A 台帳 rule
+the master later revised is shown and labelled 〔台帳＋師匠〕.

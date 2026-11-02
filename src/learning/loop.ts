@@ -12,6 +12,7 @@ import { interpret, type Interpretation } from "./interpret";
 import type { KokoroeStore } from "./store";
 import type { Candidate, JudgmentRecord, Master } from "./types";
 import { verifyChange, type Verification } from "./verify";
+import { maybeGeneralize, type GeneralizeResult } from "./generalize";
 
 export type InterpretFn = typeof interpret;
 
@@ -26,6 +27,7 @@ export interface StepResult {
   rulesShown: string[]; // kokoroe-chō rules relevant when the proposal was made
   masterTaps: number; // judgment + choice + why + confirmations — how much the master had to do
   verification: Verification | null;
+  generalization?: GeneralizeResult | null;
 }
 
 export async function learnStep(args: {
@@ -39,6 +41,8 @@ export async function learnStep(args: {
   now?: () => Date;
   /** Look up earlier scenes for 確かめ稽古 / regression checks. Omit to skip verification. */
   sceneById?: (id: string) => Scene | undefined;
+  /** Enable 一般化 (needs sceneById). The master is asked before any rule is widened. */
+  generalize?: { clientById: (id: string) => Client };
 }): Promise<StepResult> {
   const { store, disciple, master, scene, client } = args;
   const rulesShown = (await store.rulesFor(client.id, scene.type)).map((r) => r.id);
@@ -92,5 +96,14 @@ export async function learnStep(args: {
     });
     taps += verification.taps;
   }
-  return { ...base, interpretation, asked, chosen, changes: [change], trigger, masterTaps: taps, verification };
+  let generalization: GeneralizeResult | null = null;
+  if (args.generalize && args.sceneById && !verification?.rolledBack) {
+    generalization = await maybeGeneralize({
+      store, disciple, master, ruleId: change.ruleId,
+      sceneById: args.sceneById, clientById: args.generalize.clientById,
+      usage: args.usage, now: args.now,
+    });
+    taps += generalization?.taps ?? 0;
+  }
+  return { ...base, interpretation, asked, chosen, changes: [change], trigger, masterTaps: taps, verification, generalization };
 }
