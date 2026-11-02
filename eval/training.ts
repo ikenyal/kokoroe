@@ -46,6 +46,7 @@ export async function trainScenes(args: {
       `${scene.id} ${scene.clientId} ${scene.type.padEnd(3)} ${r.judgment.verdict} ${r.judgment.remark ? `「${r.judgment.remark}」` : "（一言なし）"}` +
         ` shown[${r.rulesShown.join(",")}]${used} (${step.sec.toFixed(1)}s) hidden-fail:${step.hiddenFailing.join(",") || "-"}`,
     );
+    if (r.secondRound) log("    （1巡目は「どれでもない」→ 2巡目の候補）");
     if (r.interpretation && r.asked) {
       r.interpretation.candidates.forEach((c, i) =>
         log(`    ${i === r.chosen ? "▶" : " "} 候補${i + 1}: ${c.text}${c.when ? `（${c.when}）` : ""}  [${c.fix.field}=${c.fix.value}]`),

@@ -13,6 +13,7 @@ import type { KokoroeStore } from "./store";
 import type { Candidate, JudgmentRecord, Master } from "./types";
 import { verifyChange, type Verification } from "./verify";
 import { maybeGeneralize, type GeneralizeResult } from "./generalize";
+import { guardScope } from "./scope";
 
 export type InterpretFn = typeof interpret;
 
@@ -28,6 +29,7 @@ export interface StepResult {
   masterTaps: number; // judgment + choice + why + confirmations — how much the master had to do
   verification: Verification | null;
   generalization?: GeneralizeResult | null;
+  secondRound?: boolean; // the master said "none of these" and was shown a second set of readings
 }
 
 export async function learnStep(args: {
@@ -64,21 +66,34 @@ export async function learnStep(args: {
   const existing = (await store.listRules()).filter(
     (r) => r.status === "active" && (r.scope.clientId === null || r.scope.clientId === client.id),
   );
-  const interpretation = await (args.interpretFn ?? interpret)({ scene, client, judgment, existing, usage: args.usage });
+  const interpretFn = args.interpretFn ?? interpret;
+  let interpretation = await interpretFn({ scene, client, judgment, existing, usage: args.usage });
+  let secondRound = false;
   const cands = interpretation.candidates;
   if (!cands.length) return { ...base, interpretation, asked: false, chosen: null, changes: [], masterTaps: 1 };
 
   const asked = interpretation.ambiguous || cands.length > 1;
-  const chosen = asked ? await master.choose({ scene, client, proposal, candidates: cands }) : 0;
-  if (chosen === null || !cands[chosen]) {
-    return { ...base, interpretation, asked, chosen: null, changes: [], masterTaps: 2 };
+  let chosen = asked ? await master.choose({ scene, client, proposal, candidates: cands }) : 0;
+  let taps = asked ? 2 : 1;
+  let shown = cands;
+  if (asked && chosen === null) {
+    // Second round (D-025): "none of these" → new readings that differ from the rejected ones; one more tap.
+    interpretation = await interpretFn({ scene, client, judgment, existing, usage: args.usage, rejected: cands });
+    shown = interpretation.candidates;
+    secondRound = true;
+    if (shown.length) {
+      taps += 1;
+      chosen = await master.choose({ scene, client, proposal, candidates: shown });
+    }
   }
-  const pick: Candidate = cands[chosen];
+  if (chosen === null || !shown[chosen]) {
+    return { ...base, interpretation, asked, chosen: null, changes: [], masterTaps: taps, secondRound };
+  }
+  const pick: Candidate = guardScope(shown[chosen], judgment.remark);
   const snapshot = pick.action === "revise" && pick.targetRuleId ? await store.getRule(pick.targetRuleId) : undefined;
   const change = await applyCandidate(store, judgment, pick, interpretation);
 
   let trigger = "";
-  let taps = asked ? 2 : 1;
   if (change.action === "add") {
     const rule = (await store.getRule(change.ruleId))!;
     trigger = await master.why({ scene, client, rule, candidate: pick });
@@ -105,5 +120,5 @@ export async function learnStep(args: {
     });
     taps += generalization?.taps ?? 0;
   }
-  return { ...base, interpretation, asked, chosen, changes: [change], trigger, masterTaps: taps, verification, generalization };
+  return { ...base, interpretation, asked, chosen, changes: [change], trigger, masterTaps: taps, verification, generalization, secondRound };
 }

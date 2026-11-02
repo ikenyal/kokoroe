@@ -71,3 +71,6 @@ Short entries, appended every work session. Source material for the README secti
   rules (≈ $0.03) to find the cause before changing anything, then fixed only that (D-022).
 - **Gated spending** — Kento set the conditions for running curve v4 without asking (accepted widening, no drop vs v3, ≤ $30/day);
   Claude checked them against the trial output and logged the check in D-023 before launching.
+- **Hooks as a safety net mid-edit** — while restructuring the loop, the PostToolUse hook ran the fast tests after each edit and
+  reported the broken intermediate states immediately; the commit gate also blocked a combined "smoke + commit" command (it checks
+  before anything runs), so the smoke eval is now run as its own step.

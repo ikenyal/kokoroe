@@ -176,3 +176,23 @@ The difference traces to which corrections came with a remark and whether the in
 (e.g. 浜風 T15: silent ×, no right reading → "none of these" → lesson lost). Next: (1) report the After as the mean over ≥ 3 training
 paths (different seeds), (2) a second interpretation round after "none of these", (3) avoid scoping timing lessons to one scene type
 without evidence. Cost per extra training path with final eval ×3 ≈ $1.9.
+
+## D-025 · 2026-11-03 · Accepted · Second round after "none of these"; scope guard on scene types
+1. When the master taps "none of these", the interpreter gets the rejected readings and proposes 2–3 new ones (one more tap).
+   Still none → nothing is learned.
+2. A lesson is restricted to scene types only when the master's remark itself names that kind of situation (mechanical keyword
+   match, `src/learning/scope.ts`); otherwise it applies to all situations for that client. The interpreter is also told not to
+   tie a rule to details of one situation. Widened rules go through 確かめ稽古 and regression as before.
+**Why:** the two losses behind D-024 — 浜風 T15 (silent ×, no right reading → lesson lost) and the later lesson scoped to scheduling
+(「候補日が決まる前から」) so it never reached the bad-news scene.
+
+## D-026 · 2026-11-03 · Open (decide before the final After) · Trade-off: 台帳 seeding vs. match
+| Version (40 training scenes) | match (○) | History Qs |
+|---|---|---|
+| curve v2 — no 台帳 | 65% ± 0% | 2/8 (curve) |
+| curve v3 — 台帳 shown to the apprentice | 57% ± 3% | 6/8 (curve), 5.3/8 ± 0.6 (3 runs) |
+| trial / curve v4 — 台帳 hidden from the apprentice (D-022) + generalization | 65% / 55% (two training paths) | 5/8 (v4 curve) |
+Seeding the ledger lowered match when the 台帳 rules were shown as kokoroe (65% → 57%) but raised history answers (2/8 → 6/8).
+D-022 removes the cause of the drop while keeping the history, but training-path variance (D-024) is too large to settle this
+with single runs. Decide the official version from the multi-path runs (today: 3 paths, interim; official: 5 paths after the
+feature freeze on 11/7).

@@ -76,4 +76,11 @@ Short summary only. No code or data was produced before kickoff; planning notes 
 - **Same settings, 10 points apart (D-024)**: the generalization trial ended at 65%, curve v4 with the same configuration at 55%. Reading
   both logs showed the reason is the *path*: in one run the master's correction at 浜風 came silently and none of the readings fit, so the
   lesson was lost. The After will be an average over several training paths, and "none of these" needs a second round.
+- **A design tension made concrete: "keep the master's effort small" vs. "learn reliably".** The remark is optional by design —
+  a veteran shouldn't have to explain. But at 浜風 (T15) the master's × came with no remark, none of the interpreter's readings was
+  right, and the master tapped "none of these": the lesson was simply lost, and the final number dropped by ~10 points in that run.
+  We kept the remark optional and instead spent the effort on our side: a second round of readings after "none of these" (one more
+  tap, never an explanation), and not narrowing a lesson to one kind of situation unless the master's words do (D-025).
+- **Policy for numbers**: today's multi-path runs are interim. The official After for the video/README will be the mean and range
+  over 5 training paths after the feature freeze (11/7).
 

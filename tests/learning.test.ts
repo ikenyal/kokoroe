@@ -132,7 +132,8 @@ describe("learning loop (no API: fake master and interpreter)", () => {
       client: getClient("C10"),
       interpretFn: async () => amb,
     });
-    expect(none).toMatchObject({ asked: true, chosen: null, changes: [], masterTaps: 2 });
+    // "none of these" twice: first round + second round of readings (D-025) → judgment + 2 choices = 3 taps, nothing learned.
+    expect(none).toMatchObject({ asked: true, chosen: null, changes: [], masterTaps: 3, secondRound: true });
     const picked = await learnStep({
       store,
       disciple: fixedDisciple,
@@ -368,5 +369,36 @@ describe("台帳 rules and the apprentice", () => {
     r.sources.push({ kind: "judgment", judgmentId: "J-0001", date: "2026-11-03", sceneId: "T21", verdict: "×", remark: "生協は書式" });
     expect(isPureLedger(r)).toBe(false);
     expect(renderRule(r)).toContain("〔台帳＋師匠〕");
+  });
+});
+
+describe("second round and scope guard (D-025, no API)", () => {
+  it("after 'none of these' the interpreter gets the rejected readings and the master can pick from new ones", async () => {
+    const store = new LocalJsonStore(null);
+    const first: Interpretation = { diagnosis: "", ambiguous: true, candidates: [cand({ text: "A" }), cand({ text: "B", fix: { field: "followUp", value: "true" } })], confidence: "low" };
+    const second: Interpretation = { diagnosis: "", ambiguous: true, candidates: [cand({ text: "今すぐ伝える", fix: { field: "timing", value: "now" } })], confidence: "low" };
+    let seenRejected: string[] = [];
+    const r = await learnStep({
+      store, disciple: fixedDisciple, scene: scene("X1", "C01", "T1"), client: getClient("C01"),
+      master: fakeMaster({ judge: async () => ({ verdict: "×", remark: "" }), choose: async ({ candidates }) => (candidates[0].text === "今すぐ伝える" ? 0 : null) }),
+      interpretFn: async (a) => {
+        if (a.rejected) { seenRejected = a.rejected.map((c) => c.text); return second; }
+        return first;
+      },
+    });
+    expect(seenRejected).toEqual(["A", "B"]);
+    expect(r).toMatchObject({ secondRound: true, chosen: 0 });
+    expect((await store.getRule("K-001"))!.text).toBe("今すぐ伝える");
+    expect(r.masterTaps).toBe(4); // judgment + 2 choices + optional why
+  });
+
+  it("keeps a scene-type restriction only when the remark names that kind of situation", async () => {
+    const { guardScope, typesNamedIn } = await import("@/src/learning/scope");
+    const c = cand({ scope: { clientId: "C01", sceneTypes: ["T8"] } });
+    expect(guardScope(c, "浜風さんは決まる前に").scope.sceneTypes).toBeNull(); // timing lesson, not about scheduling
+    expect(guardScope(c, "").scope.sceneTypes).toBeNull();
+    expect(guardScope(c, "日程は早めに").scope.sceneTypes).toEqual(["T8"]);
+    expect(guardScope(cand({ scope: { clientId: "C03", sceneTypes: ["T3", "T8"] } }), "生協の見積りは書式").scope.sceneTypes).toEqual(["T3"]);
+    expect(typesNamedIn("金の話は説明しながら")).toContain("T3");
   });
 });
