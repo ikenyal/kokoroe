@@ -1,0 +1,49 @@
+/**
+ * Loader for the hidden ground truth. ONLY the simulator may import this file (D-005).
+ */
+import rulesFile from "@/data/hidden/rules.json";
+import traitsFile from "@/data/hidden/client-traits.json";
+import sceneKeysFile from "@/data/hidden/scene-keys.json";
+import historyAnswersFile from "@/data/hidden/history-answers.json";
+import type { HistoryEntry } from "@/src/core/types";
+
+export type RuleId = string;
+
+export interface HiddenRule {
+  id: RuleId;
+  scope: string; // "all" or a client id
+  text: string;
+  remarks: Record<string, string[]>; // keyed by failure reason; "default" when a rule has one
+  history?: HistoryEntry[];
+}
+
+export interface ClientTraits {
+  power: "above" | "equal" | "below";
+  values: string;
+  constraints: string;
+  busyMonths: number[];
+  valuesSeasonalGreetings?: boolean;
+}
+
+export interface HistoryAnswer {
+  ruleId: RuleId;
+  expectedAnswer: "yes" | "no";
+  keywordGroups: string[][];
+}
+
+export const HIDDEN_RULES = rulesFile.rules as unknown as HiddenRule[];
+
+/** Drop the human-readable "_note" field that the data files carry. */
+function withoutNote(o: object): Record<string, unknown> {
+  return Object.fromEntries(Object.entries(o).filter(([k]) => k !== "_note"));
+}
+
+export const CLIENT_TRAITS = withoutNote(traitsFile) as Record<string, ClientTraits>;
+export const SCENE_KEYS = withoutNote(sceneKeysFile) as Record<string, { rules: RuleId[] }>;
+export const HISTORY_ANSWERS = withoutNote(historyAnswersFile) as unknown as Record<string, HistoryAnswer>;
+
+export function getRule(id: RuleId): HiddenRule {
+  const r = HIDDEN_RULES.find((x) => x.id === id);
+  if (!r) throw new Error(`unknown rule ${id}`);
+  return r;
+}

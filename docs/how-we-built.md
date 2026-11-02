@@ -18,3 +18,12 @@ Short entries, appended every work session. Source material for the README secti
 - **Debugging with Claude** — a vitest 5 peer-dependency conflict (template pinned `@types/node@20`; vitest needs 22+) was fixed by
   matching `@types/node` to the Node 22 runtime instead of `--force`; a missing `LayoutProps` type was fixed by running `next typegen` before `tsc`.
 - **First guard test** — `tests/hidden-boundary.test.ts` fails if product code references `data/hidden/` (evaluation integrity).
+- **Evaluation harness first** — Claude wrote the master simulator as code predicates (one per hidden rule), a naive no-API
+  baseline, the runner, and 83 Vitest tests: an ideal ○ proposal per eval scene plus a ×/△ case per rule.
+- **The guard test caught Claude itself** — `hidden-boundary.test.ts` flagged `src/disciple/v0.ts` because a *comment* named the
+  hidden data path. The test was kept strict (any reference fails) and the comment reworded.
+- **Smoke run found a simulator bug** — the first `eval:quick` showed the master saying "don't visit in winter" in June.
+  Remarks are now keyed by the failure reason, with a test that every failing check has a matching remark list
+  (the apprentice learns from these one-liners, so a wrong remark would teach a wrong rule).
+- **Subagents & skills written for this repo** — `world-keeper` (fictional data, leak checks), `eval-runner` (runs eval, reports
+  numbers, never reads hidden data for prompt ideas); skills `world-consistency` (canon & terms) and `decision-log` (how to keep these logs).

@@ -45,3 +45,15 @@ before `git commit`.
 Code under MIT (Copyright (c) 2026 ikenyal). Fictional world data under `data/` is © 2026 ikenyal, all rights reserved,
 limited to evaluating/demonstrating this project (`data/NOTICE.md`).
 **Why:** the organizers confirmed code can be OSS while data/logos may carry a separate no-reuse condition, as long as it is explicit.
+
+## D-009 · 2026-11-03 · Provisional (confirm with Kento) · What the apprentice may know about a client
+Public ledger (`data/world/clients.json`): name, industry, years of relationship, contact and decider titles.
+Hidden (`data/hidden/client-traits.json`): power balance, what the client values, constraints (e.g. "no Zoom"), busy months.
+**Why:** traits like "Zoom is banned" or "busy in Feb–Mar" are exactly what a veteran carries in their head; if the apprentice
+saw them, the Before number would already include the kokoroe we want to show being learned.
+**Alternative:** expose constraints too (closer to a CRM with notes) — raises the Before and shrinks the visible learning.
+
+## D-010 · 2026-11-03 · Accepted · Master remarks keyed by failure reason
+Each hidden rule has remark lists keyed by why a check failed (e.g. R15: `winter` vs `visit`); the judge returns the key.
+**Why:** the apprentice learns from the one-liner; a random remark from the same rule taught the wrong condition
+(seen in the first smoke run: "don't visit in winter" for a June scene).

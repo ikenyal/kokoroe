@@ -1,0 +1,23 @@
+{
+  "_note": "Which hidden rules each scene tests (simulator only). Precedence is resolved here by the data author: e.g. E17 omits R05 because R16's 'Slack is fine' applies to a client already aligned day to day.",
+  "E01": { "rules": ["R10", "R01"] },
+  "E02": { "rules": ["R11"] },
+  "E03": { "rules": ["R05", "R06", "R12"] },
+  "E04": { "rules": ["R13"] },
+  "E05": { "rules": ["R14"] },
+  "E06": { "rules": ["R15", "R04", "R06"] },
+  "E07": { "rules": ["R16", "R01"] },
+  "E08": { "rules": ["R17", "R09", "R04"] },
+  "E09": { "rules": ["R18", "R07"] },
+  "E10": { "rules": ["R19"] },
+  "E11": { "rules": ["R02", "R10"] },
+  "E12": { "rules": ["R03"] },
+  "E13": { "rules": ["R04", "R12"] },
+  "E14": { "rules": ["R02", "R13"] },
+  "E15": { "rules": ["R01", "R14"] },
+  "E16": { "rules": ["R15", "R04"] },
+  "E17": { "rules": ["R16", "R06"] },
+  "E18": { "rules": ["R07", "R09", "R17"] },
+  "E19": { "rules": ["HITL", "R05", "R18"] },
+  "E20": { "rules": ["R19", "R01"] }
+}

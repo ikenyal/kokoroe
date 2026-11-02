@@ -1,0 +1,11 @@
+{
+  "_note": "Expected answers for history questions. A correct answer gives the expected yes/no conclusion AND mentions the trigger (keywords: any one per group must appear).",
+  "Q01": { "ruleId": "R13", "expectedAnswer": "no", "keywordGroups": [["Teams"], ["セキュリティ", "規程"], ["2024"]] },
+  "Q02": { "ruleId": "R19", "expectedAnswer": "no", "keywordGroups": [["打ち合わせ", "説明", "オンライン", "訪問"], ["先代と同じ"], ["2025"]] },
+  "Q03": { "ruleId": "R10", "expectedAnswer": "no", "keywordGroups": [["決まる前", "確定前", "早め"], ["配車"], ["2019", "繁忙期"]] },
+  "Q04": { "ruleId": "R12", "expectedAnswer": "no", "keywordGroups": [["指定", "先方の書式"], ["差し戻"], ["理事会"]] },
+  "Q05": { "ruleId": "R12", "expectedAnswer": "no", "keywordGroups": [["2週間"], ["差し戻", "逃した"]] },
+  "Q06": { "ruleId": "R13", "expectedAnswer": "no", "keywordGroups": [["Zoom"], ["2024"], ["セキュリティ", "規程"]] },
+  "Q07": { "ruleId": "R19", "expectedAnswer": "yes", "keywordGroups": [["先代と同じ"], ["2025", "二代目"]] },
+  "Q08": { "ruleId": "R10", "expectedAnswer": "no", "keywordGroups": [["配車"], ["叱", "組めな"]] }
+}

@@ -26,3 +26,8 @@ Short summary only. No code or data was produced before kickoff; planning notes 
 - Added a hard boundary: product code may not read the hidden ground-truth rules (`data/hidden/`), enforced by a test, so the
   Before/After numbers stay honest.
 - Development-time guard: no MCP tools in this repo (hook), to keep work-related connectors out of a public submission.
+- Proposal turned into a **structured, enum-only form** (channel, live meeting, formal route vs. quiet word, timing, follow-up,
+  format, posture, escalate). Free text alone can't be judged reliably; the structure is also what makes 表と裏 visible.
+- First smoke run (naive textbook apprentice, no API): ○ 0 / △ 9 / × 11 on the 20 held-out scenes. It exposed a simulator flaw —
+  the master's one-liner could name the wrong condition — so remarks are now tied to the reason a check failed.
+
