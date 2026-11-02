@@ -23,3 +23,8 @@ coverage/
 
 # Claude Code local-only settings
 .claude/settings.local.json
+
+# misc from Next.js template
+*.pem
+.vercel
+npm-debug.log*

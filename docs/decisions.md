@@ -33,6 +33,8 @@ references `data/hidden`.
 ## D-006 · 2026-11-03 · Accepted · npm with pinned versions
 Exact versions in `package.json` and a committed `package-lock.json`.
 **Why:** judges' Quickstart (`npm install` → run) must not break when upstream releases change after submission.
+**Detail:** `.npmrc` has `save-exact=true`; template caret ranges were rewritten to installed versions. `@types/node` follows the
+Node 22 runtime (22.x), which vitest 5 also requires. `npm audit --omit=dev`: 0 vulnerabilities (dev-only eslint/minimatch advisories remain).
 
 ## D-007 · 2026-11-03 · Accepted · Secret scanning without external tools
 `scripts/check-secrets.sh` (staged-diff regex + env-file block) runs from `.githooks/pre-commit` and from a Claude Code hook
