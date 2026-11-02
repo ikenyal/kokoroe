@@ -29,6 +29,7 @@ async function main() {
       seed: { type: "string", default: "7" },
       concurrency: { type: "string", default: "4" },
       "seed-ledger": { type: "boolean", default: false },
+      generalize: { type: "boolean", default: false },
     },
   });
   const repeat = Number(values.repeat);
@@ -85,7 +86,7 @@ async function main() {
 
     // Train the next block.
     const block = TRAIN_SCENES.slice(done, done + stepSize);
-    const t = await trainScenes({ store, scenes: block, seed: seed + done, log: (l) => trainLog.push(l) });
+    const t = await trainScenes({ store, scenes: block, seed: seed + done, log: (l) => trainLog.push(l), generalize: values.generalize });
     judgments += t.judgments;
     taps += t.taps;
     trainUsd += estimateUsd(t.discipleUsage) + estimateUsd(t.interpUsage);
@@ -102,6 +103,7 @@ async function main() {
     stepSize,
     seed,
     ledgerSeed: ledger,
+    generalize: values.generalize,
     points: points.map((p) => ({ ...p, history: { correct: p.history.correct, answerOk: p.history.answerOk, n: p.history.n } })),
     totalUsd: Number(totalUsd.toFixed(4)),
   };

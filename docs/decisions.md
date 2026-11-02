@@ -158,3 +158,21 @@ Curve v3 (ledger seeding, D-020) raised history answers but lowered the held-out
 専務理事), without them ○○○. The constraint is already on the client card; repeating it under "the master's corrections, which take
 precedence" over-weighted it. Now pure-台帳 rules are not given to the apprentice; they stay for history and the successor. A 台帳 rule
 the master later revised is shown and labelled 〔台帳＋師匠〕.
+
+## D-023 · 2026-11-03 · Accepted · 一般化 (HITL widening) — trial result and a known simulator limit
+Trial (台帳 + D-022 + generalization, 40 training scenes, held-out ×3): match **65% ± 0%**, ○+△ 80%; 104 master taps.
+Proposals: 5 — accepted 3 (one rolled back by the cross-client regression check after it broke T32), declined 2. Kept company-wide:
+K-024 「大事な話は窓口に通しつつ、決裁する立場の人にも別に一言伝えておく」 (表と裏) and K-017 (seasonal greetings).
+Declined correctly: "meet in person" for 生協's prices (R05) and 青葉's spec change (R02) — same field, different habits.
+**Known limit:** the simulated master accepts a widening by checking *which hidden rule* the corrections were about, not by reading
+the wording. K-017 「季節の節目に、あいさつ連絡は送らない」 lost the condition "unless the client values it"; 白樺 stayed ○ only because
+its client rule wins. A real master reads the sentence before tapping. Kept as is (no LLM grader in the simulator, D-004) and noted.
+The trial also includes D-022, so its gain over curve v3 is not all from generalization; curve v4 runs both.
+Gate for curve v4 (set by Kento): ≥ 1 accepted widening ✓, trial ≥ curve-v3 final 57% ✓, day total ≤ $30 ✓ (≈ $23 expected).
+
+## D-024 · 2026-11-03 · Recorded · Training-path variance dominates; the After must average several training runs
+Trial and curve v4 share the configuration but end at 65% vs 55% held-out match (each ± 0–5% over its own 3 evaluations).
+The difference traces to which corrections came with a remark and whether the interpreter's readings contained the right one
+(e.g. 浜風 T15: silent ×, no right reading → "none of these" → lesson lost). Next: (1) report the After as the mean over ≥ 3 training
+paths (different seeds), (2) a second interpretation round after "none of these", (3) avoid scoping timing lessons to one scene type
+without evidence. Cost per extra training path with final eval ×3 ≈ $1.9.

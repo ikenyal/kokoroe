@@ -67,3 +67,7 @@ Short entries, appended every work session. Source material for the README secti
   failure wasn't injection-driven. Both results are recorded (D-021).
 - **Mechanical simulator, again** — for ledger items, the simulated master's "why" answer is chosen by text overlap between the
   constraint and a hidden history (checked on all 10 constraints before wiring it in: exactly 生協, 港北, 大河原 match).
+- **A/B diagnosis on one scene** — when curve v3 dropped, Claude re-ran the one scene that moved most (E13) with and without the 台帳
+  rules (≈ $0.03) to find the cause before changing anything, then fixed only that (D-022).
+- **Gated spending** — Kento set the conditions for running curve v4 without asking (accepted widening, no drop vs v3, ≤ $30/day);
+  Claude checked them against the trial output and logged the check in D-023 before launching.

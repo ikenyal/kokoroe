@@ -67,4 +67,13 @@ Short summary only. No code or data was produced before kickoff; planning notes 
 - **The loop learned to check itself (D-019)**: after each new rule the apprentice re-solves the corrected scene and earlier ○ scenes;
   the master is asked only when a decision actually changed. In the first 16-scene run with it: 4 rules, every confirmation but one ○,
   one regression check that needed the master, and the 浜風 history (2019, 配車が組めず叱られた) recorded from the master's "why".
+- **Seeding the ledger fixed history but hurt drafts (D-020 → D-022)**: asking "why?" once per ledger constraint made 港北's 2024 Zoom
+  ban answerable (history Qs 3/8 → 5.3/8 on 3 runs), but showing those constraints to the apprentice *as the master's corrections*
+  made it over-formal at 生協 (E13 ○○○ → △××, confirmed by an A/B with and without them). They now stay in the book, not in drafts.
+- **Habits started to become company-wide (D-023)**: the same correction at two clients now produces a one-tap proposal to the master.
+  The 表と裏 habit (formal route via the contact, a quiet word to the decider) became one company-wide rule; a first wording was rolled
+  back by the cross-client regression check; two look-alike proposals (both "meet in person", but for different reasons) were declined.
+- **Same settings, 10 points apart (D-024)**: the generalization trial ended at 65%, curve v4 with the same configuration at 55%. Reading
+  both logs showed the reason is the *path*: in one run the master's correction at 浜風 came silently and none of the readings fit, so the
+  lesson was lost. The After will be an average over several training paths, and "none of these" needs a second round.
 
