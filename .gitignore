@@ -1,0 +1,25 @@
+# dependencies / build
+node_modules/
+.next/
+out/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# secrets — only .env.example is committed
+.env
+.env.*
+!.env.example
+
+# local outputs
+eval/runs/raw/
+spikes/**/out/
+spikes/**/state.json
+coverage/
+
+# OS / editor
+.DS_Store
+*.log
+
+# Claude Code local-only settings
+.claude/settings.local.json
