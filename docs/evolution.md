@@ -28,6 +28,18 @@ Short summary only. No code or data was produced before kickoff; planning notes 
 - Development-time guard: no MCP tools in this repo (hook), to keep work-related connectors out of a public submission.
 - Proposal turned into a **structured, enum-only form** (channel, live meeting, formal route vs. quiet word, timing, follow-up,
   format, posture, escalate). Free text alone can't be judged reliably; the structure is also what makes 表と裏 visible.
-- First smoke run (naive textbook apprentice, no API): ○ 0 / △ 9 / × 11 on the 20 held-out scenes. It exposed a simulator flaw —
-  the master's one-liner could name the wrong condition — so remarks are now tied to the reason a check failed.
+- First smoke run (naive textbook apprentice, no API): ○ 0 / △ 9 / × 11 on the 20 held-out scenes.
+- **The machine judge caught a flaw in the simulator itself**: in a **June** scene for the sake brewery, the simulated master said
+  「冬は蔵に行くな」("don't visit the brewery in winter"). The judgment (△/×) was right, but the remark was picked at random from the
+  rule's remarks, so it named the wrong condition. Since the apprentice learns from these one-liners, it would have learned a wrong
+  rule. Remarks are now keyed by the reason a check failed, with a test for every failing case (D-010). With an LLM grader this
+  kind of mismatch would have blended into run-to-run noise.
+- **Rethought what the Before should be (D-009 → D-011).** At first the apprentice saw only business-card facts. Kento pointed out
+  that hiding things a ledger can hold (Zoom ban, designated formats, fiscal months) would make the Before too low and invite
+  "just write it in the ledger". Now the apprentice starts from ledger + explicit constraints, so any gain is the part that
+  writing things down does not capture: what the client values, power nuances, formal route vs. quiet word, and history.
+- **First real Before**: apprentice v0 (Sonnet 5.5, ledger + constraints) scored ○ 10 / △ 3 / × 7 (match 50%, ○+△ 65%).
+  It already respects explicit constraints (Teams for Kohoku, Slack for NextLink, letter for Shirakaba); what it misses is tacit:
+  sharing *before* things are decided (浜風), sending the formal message to the brewer instead of via his wife (丸新),
+  phoning the second-generation president like his father (大河原), sending prices as paper without a conversation.
 

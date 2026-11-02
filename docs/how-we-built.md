@@ -27,3 +27,9 @@ Short entries, appended every work session. Source material for the README secti
   (the apprentice learns from these one-liners, so a wrong remark would teach a wrong rule).
 - **Subagents & skills written for this repo** — `world-keeper` (fictional data, leak checks), `eval-runner` (runs eval, reports
   numbers, never reads hidden data for prompt ideas); skills `world-consistency` (canon & terms) and `decision-log` (how to keep these logs).
+- **Spike run by Claude, key never shown** — `spike:memory` / `spike:export` ran against the real API with the key read from
+  `.env.local` only; results (timings, versions, 409) went to `docs/spikes/2026-11-03-managed-agents.md` with the API key id left out.
+- **Cost tracking added before spending** — the runner now records token usage and prints a USD estimate, so every eval run
+  reports its cost (first v0 baseline: ≈ $0.18 for 20 proposals).
+- **Kento's correction as a design input** — the D-009 question (what the apprentice may know) was asked, not decided silently;
+  Kento's answer became D-011 and changed the Before. Recorded in evolution.md as an in-period change.

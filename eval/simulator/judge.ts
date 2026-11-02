@@ -99,8 +99,8 @@ const PREDICATES: Record<RuleId, (c: Ctx) => Omit<RuleCheck, "ruleId">> = {
     if (scene.type === "T4" && !has(p, "reduce_burden")) return partial("doesn't frame it as reducing staff burden", "burden");
     return ok();
   },
-  R15: ({ scene, traits, p }) => {
-    const winter = traits.busyMonths.includes(scene.month);
+  R15: ({ scene, client, p }) => {
+    const winter = client.busyMonths.includes(scene.month);
     if (winter) {
       if (p.timing === "now" && p.meeting !== "none") return violation("visiting during brewing season", "winter");
       if (p.timing !== "heads_up_then_later") return partial("in winter, give a heads-up and visit later", "winter");

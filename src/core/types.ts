@@ -28,7 +28,7 @@ export const SCENE_TYPE_LABELS: Record<SceneType, string> = {
   T10: "先方の代替わり",
 };
 
-/** What the apprentice is allowed to know about a client (business-card / customer-ledger level). */
+/** What the apprentice is allowed to know about a client: ledger/CRM-level facts incl. explicit constraints (D-009). */
 export interface Client {
   id: string; // C01..C10
   name: string; // fictional
@@ -38,6 +38,8 @@ export interface Client {
   contact: string; // formal point of contact (title)
   decider: string; // decision maker (title); same as contact when contactIsDecider
   contactIsDecider: boolean;
+  constraints: string; // explicit facts a ledger/CRM would hold: allowed tools, formats, fiscal/busy months (D-009)
+  busyMonths: number[];
 }
 
 export interface Company {

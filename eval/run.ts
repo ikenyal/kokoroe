@@ -15,6 +15,7 @@ import { naiveDisciple } from "./disciples/naive";
 import { judge } from "./simulator/judge";
 import { remarkFor, rng } from "./simulator/remark";
 import { breakdown, pct, rates, type ScoredScene } from "./metrics";
+import { estimateUsd } from "@/src/lib/cost";
 
 const DISCIPLES: Record<string, Disciple> = { naive: naiveDisciple, v0: discipleV0 };
 
@@ -61,6 +62,15 @@ async function main() {
   }
   console.log(`○ ${total.ok}  △ ${total.partial}  × ${total.ng}  | match(○) ${pct(total.matchRate)}  ○+△ ${pct(total.okOrPartialRate)}  | ${(elapsedMs / 1000).toFixed(1)}s`);
 
+  const usage = disciple.usage ?? [];
+  const tokens = {
+    calls: usage.length,
+    input: usage.reduce((a, u) => a + u.input_tokens, 0),
+    output: usage.reduce((a, u) => a + u.output_tokens, 0),
+    estUsd: Number(estimateUsd(usage).toFixed(4)),
+  };
+  if (usage.length) console.log(`tokens in ${tokens.input} / out ${tokens.output} over ${tokens.calls} calls ≈ $${tokens.estUsd}`);
+
   const stamp = new Date().toISOString().replace(/[:.]/g, "-");
   const dir = path.join(__dirname, "runs");
   mkdirSync(path.join(dir, "raw"), { recursive: true });
@@ -71,6 +81,8 @@ async function main() {
     seed: Number(values.seed),
     note: "fictional 10 clients / 20 held-out scenes",
     total,
+    elapsedSec: Number((elapsedMs / 1000).toFixed(1)),
+    tokens,
     byType: breakdown(scored, "type"),
     byClient: breakdown(scored, "clientId"),
     scenes: rows.map(({ sceneId, verdict, remark }) => ({ sceneId, verdict, remark })),

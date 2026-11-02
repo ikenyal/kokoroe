@@ -17,11 +17,10 @@ export interface HiddenRule {
   history?: HistoryEntry[];
 }
 
+/** Tacit traits only (D-009): explicit constraints live in the public client ledger. */
 export interface ClientTraits {
   power: "above" | "equal" | "below";
   values: string;
-  constraints: string;
-  busyMonths: number[];
   valuesSeasonalGreetings?: boolean;
 }
 

@@ -1,12 +1,12 @@
 [
-  { "id": "C01", "name": "浜風運輸", "slug": "hamakaze-unyu", "industry": "物流", "relationshipYears": 20, "contact": "配車課長", "decider": "常務", "contactIsDecider": false },
-  { "id": "C02", "name": "白樺製菓", "slug": "shirakaba-seika", "industry": "製造（食品）", "relationshipYears": 25, "contact": "総務係長", "decider": "社長（創業家）", "contactIsDecider": false },
-  { "id": "C03", "name": "まちなか生活協同組合", "slug": "machinaka-coop", "industry": "小売・協同組合", "relationshipYears": 12, "contact": "情報担当", "decider": "専務理事", "contactIsDecider": false },
-  { "id": "C04", "name": "港北精機", "slug": "kohoku-seiki", "industry": "製造（部品）", "relationshipYears": 8, "contact": "生産技術主任", "decider": "工場長", "contactIsDecider": false },
-  { "id": "C05", "name": "ひだまり介護サービス", "slug": "hidamari-kaigo", "industry": "介護", "relationshipYears": 4, "contact": "事務長", "decider": "事務長", "contactIsDecider": true },
-  { "id": "C06", "name": "丸新酒造", "slug": "marushin-shuzo", "industry": "製造（酒造）", "relationshipYears": 31, "contact": "蔵元の奥様", "decider": "蔵元", "contactIsDecider": false },
-  { "id": "C07", "name": "ネクストリンク", "slug": "nextlink", "industry": "IT（スタートアップ）", "relationshipYears": 2, "contact": "PM", "decider": "CTO", "contactIsDecider": false },
-  { "id": "C08", "name": "県産業振興財団", "slug": "pref-industry-foundation", "industry": "外郭団体", "relationshipYears": 15, "contact": "主査", "decider": "事務局長", "contactIsDecider": false },
-  { "id": "C09", "name": "青葉ドラッグ", "slug": "aoba-drug", "industry": "小売（ドラッグストア）", "relationshipYears": 10, "contact": "システム担当", "decider": "部長", "contactIsDecider": false },
-  { "id": "C10", "name": "大河原建材", "slug": "okawara-kenzai", "industry": "建材卸", "relationshipYears": 18, "contact": "社長（二代目）", "decider": "社長（二代目）", "contactIsDecider": true }
+  {"id":"C01","name":"浜風運輸","slug":"hamakaze-unyu","industry":"物流","relationshipYears":20,"contact":"配車課長","decider":"常務","contactIsDecider":false,"constraints":"社外チャット不可（連絡はメール）","busyMonths":[]},
+  {"id":"C02","name":"白樺製菓","slug":"shirakaba-seika","industry":"製造（食品）","relationshipYears":25,"contact":"総務係長","decider":"社長（創業家）","contactIsDecider":false,"constraints":"3月決算。2〜3月は多忙","busyMonths":[2,3]},
+  {"id":"C03","name":"まちなか生活協同組合","slug":"machinaka-coop","industry":"小売・協同組合","relationshipYears":12,"contact":"情報担当","decider":"専務理事","contactIsDecider":false,"constraints":"理事会は月1回（第3木曜）。見積りは指定書式","busyMonths":[]},
+  {"id":"C04","name":"港北精機","slug":"kohoku-seiki","industry":"製造（部品）","relationshipYears":8,"contact":"生産技術主任","decider":"工場長","contactIsDecider":false,"constraints":"情報セキュリティ規程で Zoom 不可、Teams のみ","busyMonths":[]},
+  {"id":"C05","name":"ひだまり介護サービス","slug":"hidamari-kaigo","industry":"介護","relationshipYears":4,"contact":"事務長","decider":"事務長","contactIsDecider":true,"constraints":"平日昼は現場にいて電話に出られない","busyMonths":[]},
+  {"id":"C06","name":"丸新酒造","slug":"marushin-shuzo","industry":"製造（酒造）","relationshipYears":31,"contact":"蔵元の奥様","decider":"蔵元","contactIsDecider":false,"constraints":"冬（12〜2月）は仕込みで繁忙","busyMonths":[12,1,2]},
+  {"id":"C07","name":"ネクストリンク","slug":"nextlink","industry":"IT（スタートアップ）","relationshipYears":2,"contact":"PM","decider":"CTO","contactIsDecider":false,"constraints":"Slack 共有チャンネルあり","busyMonths":[]},
+  {"id":"C08","name":"県産業振興財団","slug":"pref-industry-foundation","industry":"外郭団体","relationshipYears":15,"contact":"主査","decider":"事務局長","contactIsDecider":false,"constraints":"年度予算。入札・随意契約の手続きがある","busyMonths":[]},
+  {"id":"C09","name":"青葉ドラッグ","slug":"aoba-drug","industry":"小売（ドラッグストア）","relationshipYears":10,"contact":"システム担当","decider":"部長","contactIsDecider":false,"constraints":"担当者が2年ごとに異動する","busyMonths":[]},
+  {"id":"C10","name":"大河原建材","slug":"okawara-kenzai","industry":"建材卸","relationshipYears":18,"contact":"社長（二代目）","decider":"社長（二代目）","contactIsDecider":true,"constraints":"先代から二代目社長に交代して1年","busyMonths":[]}
 ]

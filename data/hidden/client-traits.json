@@ -1,13 +1,44 @@
 {
-  "_note": "Hidden traits known only to the master simulator. Not shown to the apprentice.",
-  "C01": { "power": "above", "values": "段取りと早めの共有", "constraints": "社外チャット不可", "busyMonths": [] },
-  "C02": { "power": "equal", "values": "季節のあいさつ、礼儀", "constraints": "3月決算で2〜3月は多忙", "busyMonths": [2, 3], "valuesSeasonalGreetings": true },
-  "C03": { "power": "above", "values": "書面と稟議、合議", "constraints": "理事会が月1回、見積りは指定書式", "busyMonths": [] },
-  "C04": { "power": "equal", "values": "技術的な正確さ", "constraints": "情報セキュリティ規程で Zoom 不可、Teams のみ", "busyMonths": [] },
-  "C05": { "power": "below", "values": "現場の負担が減ること", "constraints": "平日昼は現場で電話に出られない", "busyMonths": [] },
-  "C06": { "power": "equal", "values": "長い付き合い、顔を合わせること", "constraints": "冬は仕込みで繁忙", "busyMonths": [12, 1, 2] },
-  "C07": { "power": "equal", "values": "速さ、Slack での即答", "constraints": "なし（Slack 共有チャンネルあり）", "busyMonths": [] },
-  "C08": { "power": "above", "values": "前例と手続き", "constraints": "年度予算、入札・随意契約の手続き", "busyMonths": [] },
-  "C09": { "power": "above", "values": "数字と根拠", "constraints": "担当者が2年ごとに異動", "busyMonths": [] },
-  "C10": { "power": "equal", "values": "社長同士の信頼", "constraints": "先代から二代目社長に交代して1年", "busyMonths": [] }
+  "_note": "Hidden traits known only to the master simulator: power balance and what the client values (tacit). Explicit constraints (tools, formats, fiscal/busy months) are public in data/world/clients.json (D-009).",
+  "C01": {
+    "power": "above",
+    "values": "段取りと早めの共有"
+  },
+  "C02": {
+    "power": "equal",
+    "values": "季節のあいさつ、礼儀",
+    "valuesSeasonalGreetings": true
+  },
+  "C03": {
+    "power": "above",
+    "values": "書面と稟議、合議"
+  },
+  "C04": {
+    "power": "equal",
+    "values": "技術的な正確さ"
+  },
+  "C05": {
+    "power": "below",
+    "values": "現場の負担が減ること"
+  },
+  "C06": {
+    "power": "equal",
+    "values": "長い付き合い、顔を合わせること"
+  },
+  "C07": {
+    "power": "equal",
+    "values": "速さ、Slack での即答"
+  },
+  "C08": {
+    "power": "above",
+    "values": "前例と手続き"
+  },
+  "C09": {
+    "power": "above",
+    "values": "数字と根拠"
+  },
+  "C10": {
+    "power": "equal",
+    "values": "社長同士の信頼"
+  }
 }
