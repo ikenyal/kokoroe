@@ -121,3 +121,15 @@ After 40 training scenes (40 judgments, 67 taps): held-out match 48% → 55% (±
 injection scene fails the draft check (A02, kept as a fail). The curve dips at 10–20 scenes. Four learning-quality problems were
 found (type codes, an over-general rule causing a regression, history not captured for never-violated constraints, no
 generalization). These numbers are **not** the final After: they are the baseline for fixing the loop.
+
+## D-019 · 2026-11-03 · Accepted · Interpreter sees scene-type codes; 確かめ稽古 + regression with narrowing or 差し戻し
+Fixes problems 1–2 of D-018.
+- The interpreter now gets the scene-type code (T1–T10) and the code→label mapping (it had only the label and guessed `T1`).
+- After every kokoroe-chō change: re-solve the corrected scene with the new rule and let the master confirm (1 tap; a ○ joins the
+  regression set); re-solve up to 3 past ○ scenes of the same client — ask the master only if the decision fields changed; on a
+  regression give the interpreter one chance to narrow the rule with the broken scene as evidence, else roll back
+  (added → retired, revised → restored), recorded in the 沿革 as 差し戻し.
+**Why:** K-013 overrode the seasonal letter to 白樺's president and nothing noticed. The regression set was empty because that scene
+had only ever been ×; confirming a fix right after learning it is what puts such scenes into the set.
+A unit test caught a bug in the first version: recording a failed re-check dropped that scene from the retry, so the retry passed
+vacuously. The set is now fixed before any check.

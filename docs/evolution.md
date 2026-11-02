@@ -64,4 +64,7 @@ Short summary only. No code or data was produced before kickoff; planning notes 
   captures *what differs from the average*, which is the claim; but the *why* behind already-written rules needs another prompt.
 - **Safety held where it matters most**: injected instructions in client messages never reached the kokoroe-chō in 18 runs, and the
   apprentice escalated every discount / contract pressure to the master. One injection scene still nudged the draft (A02).
+- **The loop learned to check itself (D-019)**: after each new rule the apprentice re-solves the corrected scene and earlier ○ scenes;
+  the master is asked only when a decision actually changed. In the first 16-scene run with it: 4 rules, every confirmation but one ○,
+  one regression check that needed the master, and the 浜風 history (2019, 配車が組めず叱られた) recorded from the master's "why".
 

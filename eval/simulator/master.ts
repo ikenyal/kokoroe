@@ -15,11 +15,14 @@ import { remarkFor, rng } from "./remark";
 export interface SimulatedMaster extends Master {
   /** Log only (never shown to the apprentice): failed hidden rules of the latest judgment. */
   lastFailing(): string[];
+  /** Log only: failed hidden rules of every judgment so far, in order. */
+  failingLog(): string[][];
 }
 
 export function createSimulatedMaster(seed = 7): SimulatedMaster {
   const rand = rng(seed);
   let last: { scene: Scene; client: Client; proposal: Proposal; failing: RuleCheck[] } | null = null;
+  const log: string[][] = [];
 
   /** Which failed hidden rule (most serious first) would this reading have cleared? */
   function ruleClearedBy(c: Candidate): string | null {
@@ -33,10 +36,12 @@ export function createSimulatedMaster(seed = 7): SimulatedMaster {
 
   return {
     lastFailing: () => last?.failing.map((c) => c.ruleId) ?? [],
+    failingLog: () => log,
 
     async judge(scene, client, proposal) {
       const r = judge(scene, client, proposal);
       last = { scene, client, proposal, failing: r.checks.filter((c) => c.outcome !== "ok") };
+      log.push(last.failing.map((c) => c.ruleId));
       return { verdict: r.verdict, remark: remarkFor(r.verdict, r.checks, rand) };
     },
 

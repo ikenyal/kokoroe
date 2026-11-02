@@ -200,3 +200,68 @@ describe("simulated master", () => {
     expect(applyFix(proposal, { field: "followUp", value: "true" }).followUp).toBe(true);
   });
 });
+
+describe("確かめ稽古 and regression (no API)", () => {
+  const sc = (id: string) => scene(id, "C02", "T6");
+  const ok: Proposal = { ...proposal, channel: "letter", meeting: "none", formalTo: "decider" };
+  const broken: Proposal = { ...ok, formalTo: "contact" };
+  const addRule: Interpretation = {
+    diagnosis: "窓口を飛ばした",
+    ambiguous: false,
+    candidates: [cand({ scope: { clientId: "C02", sceneTypes: null }, text: "正式な連絡は窓口宛て", fix: { field: "formalTo", value: "contact" } })],
+    confidence: "high",
+  };
+
+  async function seedOk(store: LocalJsonStore) {
+    await store.addJudgment({ at: new Date().toISOString(), sceneId: "P1", clientId: "C02", sceneType: "T6", proposal: ok, verdict: "○", remark: "" });
+  }
+
+  it("past ○ with an unchanged decision passes without asking the master", async () => {
+    const store = new LocalJsonStore(null);
+    await seedOk(store);
+    let judged = 0;
+    const r = await learnStep({
+      store,
+      disciple: { name: "same", propose: async (s) => (s.id === "P1" ? ok : proposal) },
+      master: fakeMaster({ judge: async () => (judged++ === 0 ? { verdict: "×", remark: "窓口を飛ばすな" } : { verdict: "○", remark: "" }) }),
+      scene: sc("X1"),
+      client: getClient("C02"),
+      interpretFn: async () => addRule,
+      sceneById: (id) => sc(id),
+    });
+    expect(r.verification).toMatchObject({ regressionChecked: 1, regressionAsked: 0, rolledBack: false });
+    expect(r.verification!.confirm!.verdict).toBe("○");
+    expect((await store.getRule("K-001"))!.status).toBe("active");
+  });
+
+  it("a rule that breaks a past ○ is narrowed once, then rolled back if it still breaks it (recorded in 沿革)", async () => {
+    const store = new LocalJsonStore(null);
+    await seedOk(store);
+    let interpCalls = 0;
+    const r = await learnStep({
+      store,
+      disciple: { name: "breaks", propose: async (s) => (s.id === "P1" ? broken : proposal) },
+      master: fakeMaster({
+        judge: async (s) => (s.id === "P1" ? { verdict: "×", remark: "白樺さんは手紙を社長宛に" } : { verdict: "×", remark: "窓口を飛ばすな" }),
+      }),
+      scene: sc("X1"),
+      client: getClient("C02"),
+      interpretFn: async (a) => {
+        interpCalls++;
+        if (a.conflict) {
+          expect(a.conflict.ruleId).toBe("K-001");
+          return { ...addRule, candidates: [{ ...addRule.candidates[0], text: "正式な連絡は窓口宛て", when: "あいさつ状以外" }] };
+        }
+        return addRule;
+      },
+      sceneById: (id) => sc(id),
+    });
+    expect(interpCalls).toBe(2);
+    expect(r.verification).toMatchObject({ narrowed: true, rolledBack: true, brokenSceneId: "P1" });
+    const k = (await store.getRule("K-001"))!;
+    expect(k.status).toBe("retired");
+    expect(k.history.at(-1)!.after).toBe("（差し戻し: 廃止）");
+    expect(k.history.at(-1)!.reason).toContain("P1");
+    expect(await store.rulesFor("C02", "T6")).toEqual([]);
+  });
+});

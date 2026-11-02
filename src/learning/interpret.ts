@@ -5,7 +5,7 @@
  */
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { z } from "zod";
-import { SCENE_TYPE_LABELS, type Client, type Scene } from "@/src/core/types";
+import { SCENE_TYPE_LABELS, type Client, type Proposal, type Scene, type Verdict } from "@/src/core/types";
 import { getClaude, MODELS } from "@/src/lib/claude";
 import type { Usage } from "@/src/disciple/v0";
 import { describeProposal, describeRules } from "./describe";
@@ -13,6 +13,7 @@ import { FIX_VALUES_HELP } from "./fix";
 import type { JudgmentRecord, KokoroeRule } from "./types";
 
 const SCENE_TYPES = ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10"] as const;
+const TYPE_HELP = Object.entries(SCENE_TYPE_LABELS).map(([k, v]) => `${k}=${v}`).join(", ");
 const FIX_FIELDS = ["channel", "meeting", "formalTo", "backchannelTo", "timing", "followUp", "format", "posture", "escalateToMaster"] as const;
 
 const CandidateSchema = z.object({
@@ -20,7 +21,10 @@ const CandidateSchema = z.object({
   targetRuleId: z.string().nullable().describe("For revise: id of the existing rule being changed. null for add."),
   scope: z.object({
     clientId: z.string().nullable().describe("Client id; null only when an existing rule shows the same pattern for other clients."),
-    sceneTypes: z.array(z.enum(SCENE_TYPES)).nullable().describe("Scene types; null = all scene types for that client."),
+    sceneTypes: z
+      .array(z.enum(SCENE_TYPES))
+      .nullable()
+      .describe(`Scene type codes; null = all scene types for that client. Codes: ${TYPE_HELP}. The current situation's code is in <situation type="…">.`),
   }),
   text: z.string().describe("The rule in Japanese, ONE short sentence (about 40 characters, max 60). What to do."),
   when: z.string().nullable().describe("Condition or exception in Japanese, short; null if none."),
@@ -60,13 +64,31 @@ export async function interpret(args: {
   judgment: JudgmentRecord;
   existing: KokoroeRule[];
   usage?: Usage[];
+  /** Regression evidence: the rule just written made the apprentice fail a scene the master had marked ○ before. */
+  conflict?: { ruleId: string; ruleText: string; scene: Scene; before: Proposal; after: Proposal; verdict: Verdict; remark: string };
 }): Promise<Interpretation> {
-  const { scene, client, judgment, existing } = args;
+  const { scene, client, judgment, existing, conflict } = args;
+  const conflictBlock = conflict
+    ? `
+<regression rule="${conflict.ruleId}">
+The rule 「${conflict.ruleText}」 was just written from this correction. With it, the apprentice's draft for an earlier scene that the
+master had marked ○ changed, and the master now marks it ${conflict.verdict}${conflict.remark ? `「${conflict.remark}」` : ""}.
+<earlier_situation type="${conflict.scene.type}" type_label="${SCENE_TYPE_LABELS[conflict.scene.type]}" month="${conflict.scene.month}">${conflict.scene.situation}</earlier_situation>
+<earlier_draft_marked_ok>
+${describeProposal(conflict.before, client)}
+</earlier_draft_marked_ok>
+<draft_with_the_new_rule>
+${describeProposal(conflict.after, client)}
+</draft_with_the_new_rule>
+Revise rule ${conflict.ruleId} (action "revise", targetRuleId "${conflict.ruleId}") so that it still fixes the current correction but no
+longer applies to the earlier scene — narrow it with a condition ("when") or sceneTypes. Give exactly one candidate.
+</regression>`
+    : "";
   const user = `<client>
 ${client.name}（${client.id}） 業界: ${client.industry} / 取引${client.relationshipYears}年 / 窓口: ${client.contact} / 決裁者: ${client.decider}
 先方の制約: ${client.constraints}
 </client>
-<situation type="${SCENE_TYPE_LABELS[scene.type]}" month="${scene.month}">
+<situation type="${scene.type}" type_label="${SCENE_TYPE_LABELS[scene.type]}" month="${scene.month}">
 ${scene.situation}
 </situation>
 <proposal>
@@ -75,7 +97,7 @@ ${describeProposal(judgment.proposal, client)}
 <master verdict="${judgment.verdict}">${judgment.remark || "（一言なし）"}</master>
 <existing_rules>
 ${describeRules(existing)}
-</existing_rules>`;
+</existing_rules>${conflictBlock}`;
 
   const res = await getClaude().messages.parse({
     model: MODELS.editor,

@@ -57,3 +57,8 @@ Short entries, appended every work session. Source material for the README secti
   `src/core|disciple|learning|successor` or the simulator runs the fast free tests at once (failures are fed back to Claude) and marks
   the API eval stale; `guard-commit.sh` then blocks `git commit` until `npm run eval:smoke` (5 held-out scenes, ≈ $0.05) has run.
   Running the full 20-scene eval on every edit would cost ≈ $0.18 each time, so the API check happens once per commit instead.
+- **Tests found a real bug in the self-check** — Claude wrote the "narrow, else roll back" test before trusting the code; it failed
+  because a recorded ×-recheck silently removed the scene from the retry. Fixed by fixing the regression set up front.
+- **Commit gate in action** — after the `src/learning` edits the commit was gated until `npm run eval:smoke` ran (≈ $0.05).
+  Note: edits made through shell scripts (python/sed) don't trigger the PostToolUse hook; Claude ran the tests and smoke eval
+  manually for those, and will prefer the Edit tool for core files.

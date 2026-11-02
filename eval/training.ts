@@ -1,7 +1,7 @@
 /**
  * Run a sequence of training scenes through the learning loop with the simulated master (used by train.ts and curve.ts).
  */
-import { getClient } from "@/src/core/world";
+import { getClient, TRAIN_SCENES } from "@/src/core/world";
 import type { Scene } from "@/src/core/types";
 import type { Usage } from "@/src/disciple/v0";
 import { makeDiscipleV1 } from "@/src/disciple/v1";
@@ -28,11 +28,13 @@ export async function trainScenes(args: {
   const master = createSimulatedMaster(args.seed);
   const interpUsage: Usage[] = [];
   const steps: TrainedStep[] = [];
+  const sceneById = (id: string) => TRAIN_SCENES.find((s) => s.id === id);
   for (const scene of scenes) {
     const client = getClient(scene.clientId);
     const t0 = performance.now();
-    const r = await learnStep({ store, disciple, master, scene, client, usage: interpUsage });
-    const step = { ...r, sceneId: scene.id, clientId: scene.clientId, hiddenFailing: master.lastFailing(), sec: (performance.now() - t0) / 1000 };
+    const mark = master.failingLog().length; // the step's first judgment is the draft
+    const r = await learnStep({ store, disciple, master, scene, client, usage: interpUsage, sceneById });
+    const step = { ...r, sceneId: scene.id, clientId: scene.clientId, hiddenFailing: master.failingLog()[mark] ?? [], sec: (performance.now() - t0) / 1000 };
     steps.push(step);
     const used = r.proposal.basedOnRules.length ? ` uses[${r.proposal.basedOnRules.join(",")}]` : "";
     log(
@@ -47,6 +49,12 @@ export async function trainScenes(args: {
     }
     for (const c of r.changes) log(`    ${c.action} ${c.ruleId}: ${c.after}`);
     if (r.trigger) log(`    経緯: ${r.trigger}`);
+    const v = r.verification;
+    if (v)
+      log(
+        `    確かめ ${v.confirm?.verdict ?? "-"} | 回帰 ${v.regressionChecked}件（師匠に確認 ${v.regressionAsked}）` +
+          `${v.narrowed ? " | 範囲を絞った" : ""}${v.rolledBack ? ` | 差し戻し（${v.brokenSceneId} が崩れた）` : ""}`,
+      );
   }
   return {
     steps,

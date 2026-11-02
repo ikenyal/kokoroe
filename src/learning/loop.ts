@@ -11,6 +11,7 @@ import { applyCandidate, recordTrigger, type AppliedChange } from "./compile";
 import { interpret, type Interpretation } from "./interpret";
 import type { KokoroeStore } from "./store";
 import type { Candidate, JudgmentRecord, Master } from "./types";
+import { verifyChange, type Verification } from "./verify";
 
 export type InterpretFn = typeof interpret;
 
@@ -23,7 +24,8 @@ export interface StepResult {
   changes: AppliedChange[];
   trigger: string; // the master's "why", "" if none
   rulesShown: string[]; // kokoroe-chō rules relevant when the proposal was made
-  masterTaps: number; // judgment + choice + why — how much the master had to do
+  masterTaps: number; // judgment + choice + why + confirmations — how much the master had to do
+  verification: Verification | null;
 }
 
 export async function learnStep(args: {
@@ -35,6 +37,8 @@ export async function learnStep(args: {
   interpretFn?: InterpretFn;
   usage?: Usage[];
   now?: () => Date;
+  /** Look up earlier scenes for 確かめ稽古 / regression checks. Omit to skip verification. */
+  sceneById?: (id: string) => Scene | undefined;
 }): Promise<StepResult> {
   const { store, disciple, master, scene, client } = args;
   const rulesShown = (await store.rulesFor(client.id, scene.type)).map((r) => r.id);
@@ -49,7 +53,7 @@ export async function learnStep(args: {
     verdict,
     remark,
   });
-  const base = { proposal, judgment, rulesShown, trigger: "" };
+  const base = { proposal, judgment, rulesShown, trigger: "", verification: null };
   if (verdict === "○") return { ...base, interpretation: null, asked: false, chosen: null, changes: [], masterTaps: 1 };
 
   // Every rule for this client plus company-wide ones, so the interpreter can revise instead of duplicating.
@@ -66,6 +70,7 @@ export async function learnStep(args: {
     return { ...base, interpretation, asked, chosen: null, changes: [], masterTaps: 2 };
   }
   const pick: Candidate = cands[chosen];
+  const snapshot = pick.action === "revise" && pick.targetRuleId ? await store.getRule(pick.targetRuleId) : undefined;
   const change = await applyCandidate(store, judgment, pick, interpretation);
 
   let trigger = "";
@@ -76,5 +81,16 @@ export async function learnStep(args: {
     taps += 1; // shown the optional "why?" prompt (answering is optional)
     if (trigger) await recordTrigger(store, change.ruleId, trigger);
   }
-  return { ...base, interpretation, asked, chosen, changes: [change], trigger, masterTaps: taps };
+  let verification: Verification | null = null;
+  if (args.sceneById) {
+    verification = await verifyChange({
+      store, disciple, master, scene, client, judgment, change, snapshot,
+      sceneById: args.sceneById,
+      interpretFn: args.interpretFn ?? interpret,
+      usage: args.usage,
+      now: args.now,
+    });
+    taps += verification.taps;
+  }
+  return { ...base, interpretation, asked, chosen, changes: [change], trigger, masterTaps: taps, verification };
 }

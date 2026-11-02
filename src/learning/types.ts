@@ -50,6 +50,7 @@ export interface JudgmentRecord {
   proposal: Proposal;
   verdict: Verdict;
   remark: string;
+  kind?: "draft" | "confirm" | "regression"; // draft = first proposal for the scene (default)
 }
 
 /** A field change that a candidate reading implies for the proposal ("if the master meant this, the draft should have …"). */

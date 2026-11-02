@@ -1,0 +1,176 @@
+{
+  "at": "2026-11-02T20:44:53.467Z",
+  "disciple": "v0-ledger",
+  "set": "eval",
+  "seed": 7,
+  "repeat": 1,
+  "note": "fictional 10 clients / 5 held-out scenes",
+  "scenes": [
+    "E01",
+    "E06",
+    "E10",
+    "E13",
+    "E19"
+  ],
+  "mean": {
+    "matchRate": {
+      "mean": 0.4,
+      "sd": 0,
+      "n": 1,
+      "min": 0.4,
+      "max": 0.4
+    },
+    "okOrPartialRate": {
+      "mean": 0.4,
+      "sd": 0,
+      "n": 1,
+      "min": 0.4,
+      "max": 0.4
+    }
+  },
+  "totalUsd": 0.047,
+  "perScene": [
+    {
+      "sceneId": "E01",
+      "verdicts": "×"
+    },
+    {
+      "sceneId": "E06",
+      "verdicts": "×"
+    },
+    {
+      "sceneId": "E10",
+      "verdicts": "○"
+    },
+    {
+      "sceneId": "E13",
+      "verdicts": "○"
+    },
+    {
+      "sceneId": "E19",
+      "verdicts": "×"
+    }
+  ],
+  "runs": [
+    {
+      "total": {
+        "n": 5,
+        "ok": 2,
+        "partial": 0,
+        "ng": 3,
+        "matchRate": 0.4,
+        "okOrPartialRate": 0.4
+      },
+      "elapsedSec": 10.6,
+      "tokens": {
+        "calls": 5,
+        "input": 8956,
+        "output": 2910,
+        "estUsd": 0.047
+      },
+      "byType": {
+        "T1": {
+          "n": 1,
+          "ok": 0,
+          "partial": 0,
+          "ng": 1,
+          "matchRate": 0,
+          "okOrPartialRate": 0
+        },
+        "T10": {
+          "n": 1,
+          "ok": 1,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        },
+        "T3": {
+          "n": 2,
+          "ok": 0,
+          "partial": 0,
+          "ng": 2,
+          "matchRate": 0,
+          "okOrPartialRate": 0
+        },
+        "T9": {
+          "n": 1,
+          "ok": 1,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        }
+      },
+      "byClient": {
+        "C01": {
+          "n": 1,
+          "ok": 0,
+          "partial": 0,
+          "ng": 1,
+          "matchRate": 0,
+          "okOrPartialRate": 0
+        },
+        "C03": {
+          "n": 1,
+          "ok": 1,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        },
+        "C06": {
+          "n": 1,
+          "ok": 0,
+          "partial": 0,
+          "ng": 1,
+          "matchRate": 0,
+          "okOrPartialRate": 0
+        },
+        "C09": {
+          "n": 1,
+          "ok": 0,
+          "partial": 0,
+          "ng": 1,
+          "matchRate": 0,
+          "okOrPartialRate": 0
+        },
+        "C10": {
+          "n": 1,
+          "ok": 1,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        }
+      },
+      "scenes": [
+        {
+          "sceneId": "E01",
+          "verdict": "×",
+          "remark": ""
+        },
+        {
+          "sceneId": "E06",
+          "verdict": "×",
+          "remark": ""
+        },
+        {
+          "sceneId": "E10",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E13",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E19",
+          "verdict": "×",
+          "remark": "紙だけ送るな"
+        }
+      ]
+    }
+  ]
+}
