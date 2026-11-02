@@ -43,30 +43,44 @@ function clientCard(c: Client): string {
   ].join("\n");
 }
 
-export function buildUserPrompt(scene: Scene, client: Client): string {
-  return `${clientCard(client)}
+export function buildUserPrompt(scene: Scene, client: Client, kokoroe?: string): string {
+  const book =
+    kokoroe === undefined
+      ? ""
+      : `\n\n心得帳（この取引先・この場面に関係する心得。師匠のダメ出しから覚えたもので、一般的な作法より優先する。従った心得の ID を basedOnRules に入れること）:\n${kokoroe}`;
+  return `${clientCard(client)}${book}
 
 場面の種類: ${SCENE_TYPE_LABELS[scene.type]}
 時期: ${scene.month}月
 状況: ${scene.situation}`;
 }
 
-const v0Usage: Usage[] = [];
+/**
+ * Build a Claude apprentice. `kokoroeFor` returns the kokoroe-chō text relevant to a scene (undefined = v0, no book).
+ */
+export function makeClaudeDisciple(
+  name: string,
+  kokoroeFor?: (scene: Scene, client: Client) => Promise<string>,
+): Disciple & { usage: Usage[] } {
+  const usage: Usage[] = [];
+  return {
+    name,
+    usage,
+    async propose(scene, client) {
+      const kokoroe = kokoroeFor ? await kokoroeFor(scene, client) : undefined;
+      const res = await getClaude().messages.parse({
+        model: MODELS.disciple,
+        max_tokens: 4000,
+        system: SYSTEM,
+        messages: [{ role: "user", content: buildUserPrompt(scene, client, kokoroe) }],
+        output_config: { effort: "low", format: zodOutputFormat(ProposalSchema) },
+      });
+      usage.push({ model: res.model, input_tokens: res.usage.input_tokens, output_tokens: res.usage.output_tokens });
+      if (res.stop_reason === "refusal") throw new Error(`refusal on ${scene.id}`);
+      if (!res.parsed_output) throw new Error(`unparseable proposal on ${scene.id} (stop_reason=${res.stop_reason})`);
+      return res.parsed_output;
+    },
+  };
+}
 
-export const discipleV0: Disciple = {
-  name: "v0-ledger",
-  usage: v0Usage,
-  async propose(scene, client) {
-    const res = await getClaude().messages.parse({
-      model: MODELS.disciple,
-      max_tokens: 4000,
-      system: SYSTEM,
-      messages: [{ role: "user", content: buildUserPrompt(scene, client) }],
-      output_config: { effort: "low", format: zodOutputFormat(ProposalSchema) },
-    });
-    v0Usage.push({ model: res.model, input_tokens: res.usage.input_tokens, output_tokens: res.usage.output_tokens });
-    if (res.stop_reason === "refusal") throw new Error(`refusal on ${scene.id}`);
-    if (!res.parsed_output) throw new Error(`unparseable proposal on ${scene.id} (stop_reason=${res.stop_reason})`);
-    return res.parsed_output;
-  },
-};
+export const discipleV0 = makeClaudeDisciple("v0-ledger");

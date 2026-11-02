@@ -1,0 +1,958 @@
+{
+  "at": "2026-11-02T20:07:16.294Z",
+  "disciple": "v0-ledger",
+  "set": "eval",
+  "seed": 7,
+  "repeat": 3,
+  "note": "fictional 10 clients / 20 held-out scenes",
+  "mean": {
+    "matchRate": {
+      "mean": 0.4666666666666666,
+      "sd": 0.028867513459481284,
+      "n": 3,
+      "min": 0.45,
+      "max": 0.5
+    },
+    "okOrPartialRate": {
+      "mean": 0.65,
+      "sd": 0,
+      "n": 3,
+      "min": 0.65,
+      "max": 0.65
+    }
+  },
+  "totalUsd": 0.5306,
+  "perScene": [
+    {
+      "sceneId": "E01",
+      "verdicts": "×××"
+    },
+    {
+      "sceneId": "E02",
+      "verdicts": "○○○"
+    },
+    {
+      "sceneId": "E03",
+      "verdicts": "×××"
+    },
+    {
+      "sceneId": "E04",
+      "verdicts": "○○○"
+    },
+    {
+      "sceneId": "E05",
+      "verdicts": "○○○"
+    },
+    {
+      "sceneId": "E06",
+      "verdicts": "×××"
+    },
+    {
+      "sceneId": "E07",
+      "verdicts": "○○○"
+    },
+    {
+      "sceneId": "E08",
+      "verdicts": "△△△"
+    },
+    {
+      "sceneId": "E09",
+      "verdicts": "○○○"
+    },
+    {
+      "sceneId": "E10",
+      "verdicts": "○○○"
+    },
+    {
+      "sceneId": "E11",
+      "verdicts": "××○"
+    },
+    {
+      "sceneId": "E12",
+      "verdicts": "△△△"
+    },
+    {
+      "sceneId": "E13",
+      "verdicts": "○○×"
+    },
+    {
+      "sceneId": "E14",
+      "verdicts": "△△○"
+    },
+    {
+      "sceneId": "E15",
+      "verdicts": "○○○"
+    },
+    {
+      "sceneId": "E16",
+      "verdicts": "×××"
+    },
+    {
+      "sceneId": "E17",
+      "verdicts": "○○○"
+    },
+    {
+      "sceneId": "E18",
+      "verdicts": "△△△"
+    },
+    {
+      "sceneId": "E19",
+      "verdicts": "×××"
+    },
+    {
+      "sceneId": "E20",
+      "verdicts": "×××"
+    }
+  ],
+  "runs": [
+    {
+      "total": {
+        "n": 20,
+        "ok": 9,
+        "partial": 4,
+        "ng": 7,
+        "matchRate": 0.45,
+        "okOrPartialRate": 0.65
+      },
+      "elapsedSec": 26.2,
+      "tokens": {
+        "calls": 20,
+        "input": 35892,
+        "output": 10828,
+        "estUsd": 0.1801
+      },
+      "byType": {
+        "T1": {
+          "n": 3,
+          "ok": 1,
+          "partial": 0,
+          "ng": 2,
+          "matchRate": 0.3333333333333333,
+          "okOrPartialRate": 0.3333333333333333
+        },
+        "T10": {
+          "n": 1,
+          "ok": 1,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        },
+        "T2": {
+          "n": 2,
+          "ok": 0,
+          "partial": 1,
+          "ng": 1,
+          "matchRate": 0,
+          "okOrPartialRate": 0.5
+        },
+        "T3": {
+          "n": 4,
+          "ok": 1,
+          "partial": 0,
+          "ng": 3,
+          "matchRate": 0.25,
+          "okOrPartialRate": 0.25
+        },
+        "T4": {
+          "n": 3,
+          "ok": 1,
+          "partial": 1,
+          "ng": 1,
+          "matchRate": 0.3333333333333333,
+          "okOrPartialRate": 0.6666666666666666
+        },
+        "T5": {
+          "n": 2,
+          "ok": 1,
+          "partial": 1,
+          "ng": 0,
+          "matchRate": 0.5,
+          "okOrPartialRate": 1
+        },
+        "T6": {
+          "n": 1,
+          "ok": 1,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        },
+        "T7": {
+          "n": 1,
+          "ok": 1,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        },
+        "T8": {
+          "n": 2,
+          "ok": 1,
+          "partial": 1,
+          "ng": 0,
+          "matchRate": 0.5,
+          "okOrPartialRate": 1
+        },
+        "T9": {
+          "n": 1,
+          "ok": 1,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        }
+      },
+      "byClient": {
+        "C01": {
+          "n": 2,
+          "ok": 0,
+          "partial": 0,
+          "ng": 2,
+          "matchRate": 0,
+          "okOrPartialRate": 0
+        },
+        "C02": {
+          "n": 2,
+          "ok": 1,
+          "partial": 1,
+          "ng": 0,
+          "matchRate": 0.5,
+          "okOrPartialRate": 1
+        },
+        "C03": {
+          "n": 2,
+          "ok": 1,
+          "partial": 0,
+          "ng": 1,
+          "matchRate": 0.5,
+          "okOrPartialRate": 0.5
+        },
+        "C04": {
+          "n": 2,
+          "ok": 1,
+          "partial": 1,
+          "ng": 0,
+          "matchRate": 0.5,
+          "okOrPartialRate": 1
+        },
+        "C05": {
+          "n": 2,
+          "ok": 2,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        },
+        "C06": {
+          "n": 2,
+          "ok": 0,
+          "partial": 0,
+          "ng": 2,
+          "matchRate": 0,
+          "okOrPartialRate": 0
+        },
+        "C07": {
+          "n": 2,
+          "ok": 2,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        },
+        "C08": {
+          "n": 2,
+          "ok": 0,
+          "partial": 2,
+          "ng": 0,
+          "matchRate": 0,
+          "okOrPartialRate": 1
+        },
+        "C09": {
+          "n": 2,
+          "ok": 1,
+          "partial": 0,
+          "ng": 1,
+          "matchRate": 0.5,
+          "okOrPartialRate": 0.5
+        },
+        "C10": {
+          "n": 2,
+          "ok": 1,
+          "partial": 0,
+          "ng": 1,
+          "matchRate": 0.5,
+          "okOrPartialRate": 0.5
+        }
+      },
+      "scenes": [
+        {
+          "sceneId": "E01",
+          "verdict": "×",
+          "remark": ""
+        },
+        {
+          "sceneId": "E02",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E03",
+          "verdict": "×",
+          "remark": ""
+        },
+        {
+          "sceneId": "E04",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E05",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E06",
+          "verdict": "×",
+          "remark": "表は窓口だ"
+        },
+        {
+          "sceneId": "E07",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E08",
+          "verdict": "△",
+          "remark": "前例をつけろ"
+        },
+        {
+          "sceneId": "E09",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E10",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E11",
+          "verdict": "×",
+          "remark": "それは画面見せて話せ"
+        },
+        {
+          "sceneId": "E12",
+          "verdict": "△",
+          "remark": "黙って先送りするな"
+        },
+        {
+          "sceneId": "E13",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E14",
+          "verdict": "△",
+          "remark": "数字を添えろ"
+        },
+        {
+          "sceneId": "E15",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E16",
+          "verdict": "×",
+          "remark": "表は窓口だ"
+        },
+        {
+          "sceneId": "E17",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E18",
+          "verdict": "△",
+          "remark": ""
+        },
+        {
+          "sceneId": "E19",
+          "verdict": "×",
+          "remark": "金の話は説明しながら"
+        },
+        {
+          "sceneId": "E20",
+          "verdict": "×",
+          "remark": "電話で済ますな"
+        }
+      ]
+    },
+    {
+      "total": {
+        "n": 20,
+        "ok": 9,
+        "partial": 4,
+        "ng": 7,
+        "matchRate": 0.45,
+        "okOrPartialRate": 0.65
+      },
+      "elapsedSec": 26.8,
+      "tokens": {
+        "calls": 20,
+        "input": 35892,
+        "output": 10366,
+        "estUsd": 0.1754
+      },
+      "byType": {
+        "T1": {
+          "n": 3,
+          "ok": 1,
+          "partial": 0,
+          "ng": 2,
+          "matchRate": 0.3333333333333333,
+          "okOrPartialRate": 0.3333333333333333
+        },
+        "T10": {
+          "n": 1,
+          "ok": 1,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        },
+        "T2": {
+          "n": 2,
+          "ok": 0,
+          "partial": 1,
+          "ng": 1,
+          "matchRate": 0,
+          "okOrPartialRate": 0.5
+        },
+        "T3": {
+          "n": 4,
+          "ok": 1,
+          "partial": 0,
+          "ng": 3,
+          "matchRate": 0.25,
+          "okOrPartialRate": 0.25
+        },
+        "T4": {
+          "n": 3,
+          "ok": 1,
+          "partial": 1,
+          "ng": 1,
+          "matchRate": 0.3333333333333333,
+          "okOrPartialRate": 0.6666666666666666
+        },
+        "T5": {
+          "n": 2,
+          "ok": 1,
+          "partial": 1,
+          "ng": 0,
+          "matchRate": 0.5,
+          "okOrPartialRate": 1
+        },
+        "T6": {
+          "n": 1,
+          "ok": 1,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        },
+        "T7": {
+          "n": 1,
+          "ok": 1,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        },
+        "T8": {
+          "n": 2,
+          "ok": 1,
+          "partial": 1,
+          "ng": 0,
+          "matchRate": 0.5,
+          "okOrPartialRate": 1
+        },
+        "T9": {
+          "n": 1,
+          "ok": 1,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        }
+      },
+      "byClient": {
+        "C01": {
+          "n": 2,
+          "ok": 0,
+          "partial": 0,
+          "ng": 2,
+          "matchRate": 0,
+          "okOrPartialRate": 0
+        },
+        "C02": {
+          "n": 2,
+          "ok": 1,
+          "partial": 1,
+          "ng": 0,
+          "matchRate": 0.5,
+          "okOrPartialRate": 1
+        },
+        "C03": {
+          "n": 2,
+          "ok": 1,
+          "partial": 0,
+          "ng": 1,
+          "matchRate": 0.5,
+          "okOrPartialRate": 0.5
+        },
+        "C04": {
+          "n": 2,
+          "ok": 1,
+          "partial": 1,
+          "ng": 0,
+          "matchRate": 0.5,
+          "okOrPartialRate": 1
+        },
+        "C05": {
+          "n": 2,
+          "ok": 2,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        },
+        "C06": {
+          "n": 2,
+          "ok": 0,
+          "partial": 0,
+          "ng": 2,
+          "matchRate": 0,
+          "okOrPartialRate": 0
+        },
+        "C07": {
+          "n": 2,
+          "ok": 2,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        },
+        "C08": {
+          "n": 2,
+          "ok": 0,
+          "partial": 2,
+          "ng": 0,
+          "matchRate": 0,
+          "okOrPartialRate": 1
+        },
+        "C09": {
+          "n": 2,
+          "ok": 1,
+          "partial": 0,
+          "ng": 1,
+          "matchRate": 0.5,
+          "okOrPartialRate": 0.5
+        },
+        "C10": {
+          "n": 2,
+          "ok": 1,
+          "partial": 0,
+          "ng": 1,
+          "matchRate": 0.5,
+          "okOrPartialRate": 0.5
+        }
+      },
+      "scenes": [
+        {
+          "sceneId": "E01",
+          "verdict": "×",
+          "remark": ""
+        },
+        {
+          "sceneId": "E02",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E03",
+          "verdict": "×",
+          "remark": ""
+        },
+        {
+          "sceneId": "E04",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E05",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E06",
+          "verdict": "×",
+          "remark": "表は窓口だ"
+        },
+        {
+          "sceneId": "E07",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E08",
+          "verdict": "△",
+          "remark": "上には裏で一言"
+        },
+        {
+          "sceneId": "E09",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E10",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E11",
+          "verdict": "×",
+          "remark": "それは画面見せて話せ"
+        },
+        {
+          "sceneId": "E12",
+          "verdict": "△",
+          "remark": "黙って先送りするな"
+        },
+        {
+          "sceneId": "E13",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E14",
+          "verdict": "△",
+          "remark": "数字を添えろ"
+        },
+        {
+          "sceneId": "E15",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E16",
+          "verdict": "×",
+          "remark": "表は窓口だ"
+        },
+        {
+          "sceneId": "E17",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E18",
+          "verdict": "△",
+          "remark": ""
+        },
+        {
+          "sceneId": "E19",
+          "verdict": "×",
+          "remark": "金の話は説明しながら"
+        },
+        {
+          "sceneId": "E20",
+          "verdict": "×",
+          "remark": "電話で済ますな"
+        }
+      ]
+    },
+    {
+      "total": {
+        "n": 20,
+        "ok": 10,
+        "partial": 3,
+        "ng": 7,
+        "matchRate": 0.5,
+        "okOrPartialRate": 0.65
+      },
+      "elapsedSec": 25,
+      "tokens": {
+        "calls": 20,
+        "input": 35892,
+        "output": 10332,
+        "estUsd": 0.1751
+      },
+      "byType": {
+        "T1": {
+          "n": 3,
+          "ok": 1,
+          "partial": 0,
+          "ng": 2,
+          "matchRate": 0.3333333333333333,
+          "okOrPartialRate": 0.3333333333333333
+        },
+        "T10": {
+          "n": 1,
+          "ok": 1,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        },
+        "T2": {
+          "n": 2,
+          "ok": 2,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        },
+        "T3": {
+          "n": 4,
+          "ok": 1,
+          "partial": 0,
+          "ng": 3,
+          "matchRate": 0.25,
+          "okOrPartialRate": 0.25
+        },
+        "T4": {
+          "n": 3,
+          "ok": 1,
+          "partial": 1,
+          "ng": 1,
+          "matchRate": 0.3333333333333333,
+          "okOrPartialRate": 0.6666666666666666
+        },
+        "T5": {
+          "n": 2,
+          "ok": 1,
+          "partial": 1,
+          "ng": 0,
+          "matchRate": 0.5,
+          "okOrPartialRate": 1
+        },
+        "T6": {
+          "n": 1,
+          "ok": 1,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        },
+        "T7": {
+          "n": 1,
+          "ok": 1,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        },
+        "T8": {
+          "n": 2,
+          "ok": 1,
+          "partial": 1,
+          "ng": 0,
+          "matchRate": 0.5,
+          "okOrPartialRate": 1
+        },
+        "T9": {
+          "n": 1,
+          "ok": 0,
+          "partial": 0,
+          "ng": 1,
+          "matchRate": 0,
+          "okOrPartialRate": 0
+        }
+      },
+      "byClient": {
+        "C01": {
+          "n": 2,
+          "ok": 1,
+          "partial": 0,
+          "ng": 1,
+          "matchRate": 0.5,
+          "okOrPartialRate": 0.5
+        },
+        "C02": {
+          "n": 2,
+          "ok": 1,
+          "partial": 1,
+          "ng": 0,
+          "matchRate": 0.5,
+          "okOrPartialRate": 1
+        },
+        "C03": {
+          "n": 2,
+          "ok": 0,
+          "partial": 0,
+          "ng": 2,
+          "matchRate": 0,
+          "okOrPartialRate": 0
+        },
+        "C04": {
+          "n": 2,
+          "ok": 2,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        },
+        "C05": {
+          "n": 2,
+          "ok": 2,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        },
+        "C06": {
+          "n": 2,
+          "ok": 0,
+          "partial": 0,
+          "ng": 2,
+          "matchRate": 0,
+          "okOrPartialRate": 0
+        },
+        "C07": {
+          "n": 2,
+          "ok": 2,
+          "partial": 0,
+          "ng": 0,
+          "matchRate": 1,
+          "okOrPartialRate": 1
+        },
+        "C08": {
+          "n": 2,
+          "ok": 0,
+          "partial": 2,
+          "ng": 0,
+          "matchRate": 0,
+          "okOrPartialRate": 1
+        },
+        "C09": {
+          "n": 2,
+          "ok": 1,
+          "partial": 0,
+          "ng": 1,
+          "matchRate": 0.5,
+          "okOrPartialRate": 0.5
+        },
+        "C10": {
+          "n": 2,
+          "ok": 1,
+          "partial": 0,
+          "ng": 1,
+          "matchRate": 0.5,
+          "okOrPartialRate": 0.5
+        }
+      },
+      "scenes": [
+        {
+          "sceneId": "E01",
+          "verdict": "×",
+          "remark": ""
+        },
+        {
+          "sceneId": "E02",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E03",
+          "verdict": "×",
+          "remark": ""
+        },
+        {
+          "sceneId": "E04",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E05",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E06",
+          "verdict": "×",
+          "remark": "表は窓口だ"
+        },
+        {
+          "sceneId": "E07",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E08",
+          "verdict": "△",
+          "remark": "上には裏で一言"
+        },
+        {
+          "sceneId": "E09",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E10",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E11",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E12",
+          "verdict": "△",
+          "remark": "頭出しだけ先にしとけ"
+        },
+        {
+          "sceneId": "E13",
+          "verdict": "×",
+          "remark": "表は窓口だ"
+        },
+        {
+          "sceneId": "E14",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E15",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E16",
+          "verdict": "×",
+          "remark": "窓口を飛ばすな"
+        },
+        {
+          "sceneId": "E17",
+          "verdict": "○",
+          "remark": ""
+        },
+        {
+          "sceneId": "E18",
+          "verdict": "△",
+          "remark": "引き継げてるか確かめろ"
+        },
+        {
+          "sceneId": "E19",
+          "verdict": "×",
+          "remark": ""
+        },
+        {
+          "sceneId": "E20",
+          "verdict": "×",
+          "remark": "電話で済ますな"
+        }
+      ]
+    }
+  ]
+}

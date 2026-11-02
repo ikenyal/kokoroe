@@ -33,3 +33,9 @@ Short entries, appended every work session. Source material for the README secti
   reports its cost (first v0 baseline: ≈ $0.18 for 20 proposals).
 - **Kento's correction as a design input** — the D-009 question (what the apprentice may know) was asked, not decided silently;
   Kento's answer became D-011 and changed the Before. Recorded in evolution.md as an in-period change.
+- **Subagent delegated in parallel** — the 40 training scenes were written by a subagent following `.claude/agents/world-keeper.md`
+  while Claude built the learning loop. Project subagents created mid-session aren't registered until restart, so it ran as
+  `general-purpose` instructed to follow the world-keeper definition. It wrote the scene keys, an ideal ○ proposal per scene and tests
+  (132 tests total), and reported precedence choices instead of changing the judge.
+- **Guarding the Before** — while refactoring the apprentice into a factory, Claude noticed an edit would also change v0's system
+  prompt (already measured) and moved the new instruction into the v1-only kokoroe block instead.

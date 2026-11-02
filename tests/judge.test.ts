@@ -84,7 +84,7 @@ describe("hidden data consistency", () => {
     }
   });
   it("every rule except R08 is tested by at least one eval scene", () => {
-    const used = new Set(Object.values(SCENE_KEYS).flatMap((k) => k.rules));
+    const used = new Set(EVAL_SCENES.flatMap((s) => SCENE_KEYS[s.id].rules));
     const unused = HIDDEN_RULES.map((r) => r.id).filter((id) => !used.has(id));
     expect(unused).toEqual(["R08"]); // seasonal greeting for clients who don't value it: covered by the train set (11/4)
   });

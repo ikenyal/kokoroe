@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "eval:quick": "tsx --env-file-if-exists=.env.local eval/run.ts --set eval",
     "spike:memory": "tsx --env-file-if-exists=.env.local spikes/managed-agents/memory-store.ts",
-    "spike:export": "tsx --env-file-if-exists=.env.local spikes/managed-agents/export-skill.ts"
+    "spike:export": "tsx --env-file-if-exists=.env.local spikes/managed-agents/export-skill.ts",
+    "train": "tsx --env-file-if-exists=.env.local eval/train.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "1.4.0",

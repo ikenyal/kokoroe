@@ -38,3 +38,11 @@ export function breakdown(items: ScoredScene[], by: "clientId" | "type"): Record
 }
 
 export const pct = (x: number) => `${(x * 100).toFixed(0)}%`;
+
+/** Mean and sample standard deviation (sd = 0 for a single run). */
+export function meanSd(xs: number[]): { mean: number; sd: number; n: number; min: number; max: number } {
+  const n = xs.length;
+  const mean = n ? xs.reduce((a, b) => a + b, 0) / n : 0;
+  const sd = n > 1 ? Math.sqrt(xs.reduce((a, b) => a + (b - mean) ** 2, 0) / (n - 1)) : 0;
+  return { mean, sd, n, min: Math.min(...xs), max: Math.max(...xs) };
+}

@@ -42,4 +42,13 @@ Short summary only. No code or data was produced before kickoff; planning notes 
   It already respects explicit constraints (Teams for Kohoku, Slack for NextLink, letter for Shirakaba); what it misses is tacit:
   sharing *before* things are decided (浜風), sending the formal message to the brewer instead of via his wife (丸新),
   phoning the second-generation president like his father (大河原), sending prices as paper without a conversation.
+- **Baseline variation measured**: v0 over 3 runs = match 47% ± 3% (○+△ 65% ± 0%). The Before is now quoted as a mean (D-013).
+- **40 training scenes** written (4 per client, every type ≥ 3, ordered so a correction and a similar later scene can be observed).
+- **First end-to-end learning loop (first 16 training scenes)**: the apprentice's draft for 丸新酒造 (T05) got △ — the formal route
+  to the brewer's wife was right, but there was no quiet word to the brewer himself. The interpreter (Opus) wrote rule K-001 scoped to
+  丸新酒造; at the next 丸新酒造 scene (T13) the apprentice cited K-001, added the quiet word to the brewer, and got ○.
+  Two more pairs improved the same way (T06 → T16, T07 → T11).
+- **What the first loop exposed**: the interpreter writes long rules, and when the remark is ambiguous it guesses — 「そこはいらん」
+  (the seasonal greeting itself wasn't needed) was read as "drop the business follow-up sentence" (K-007). This is the case the design
+  planned for: when the remark is ambiguous or missing, show the master 2–3 candidate readings to pick with one tap, instead of guessing.
 

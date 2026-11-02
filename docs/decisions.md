@@ -77,3 +77,8 @@ gain measures only what writing things down does not capture.
 - Open: ~6 s per draft is acceptable for a card that arrives in the master's inbox, but not for "tap ○ and see the next draft";
   try streaming or lower `max_tokens` before considering a smaller model.
 
+
+## D-013 · 2026-11-03 · Accepted · Report every comparison as a mean over repeated runs
+v0 on the 20 held-out scenes, 3 runs: match (○) **47% ± 3%** (45 / 45 / 50), ○+△ **65% ± 0%**. Unstable scenes: E11, E13, E14.
+(An earlier single run gave 50%.) From now on, Before/After numbers are the mean ± SD of ≥ 3 runs (`--repeat 3`), never one run.
+**Why (Kento):** one run's number can't carry the Before; the model's own variation is ±1 scene here.
