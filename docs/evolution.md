@@ -83,4 +83,7 @@ Short summary only. No code or data was produced before kickoff; planning notes 
   tap, never an explanation), and not narrowing a lesson to one kind of situation unless the master's words do (D-025).
 - **Policy for numbers**: today's multi-path runs are interim. The official After for the video/README will be the mean and range
   over 5 training paths after the feature freeze (11/7).
+- **Interim After with three training paths: 64% (58–70%) vs. Before 48%; ○+△ 92%.** The second round and the scope guard did not
+  make runs more alike, but they made them reliably *less wrong*: clearly wrong drafts almost disappeared. The one scene still wrong in
+  every run (浜風's spec change) points back at the ledger line 「連絡はメール」 — a written constraint quietly overriding a tacit one.
 

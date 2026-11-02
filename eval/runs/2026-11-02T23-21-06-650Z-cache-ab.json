@@ -1,0 +1,78 @@
+{
+  "at": "2026-11-02T23:21:06.659Z",
+  "repeat": 3,
+  "off": {
+    "match": {
+      "mean": 0.5333333333333333,
+      "sd": 0.028867513459481315,
+      "n": 3,
+      "min": 0.5,
+      "max": 0.55
+    },
+    "perRun": [
+      "×○×○○×○△○○×○○△○×○△××",
+      "○○×○○×○△○○×○○○○×△△××",
+      "○○×○○×○△○○×○○△○×○△××"
+    ],
+    "apprentice": {
+      "calls": 60,
+      "uncachedInput": 118377,
+      "cacheWrite": 0,
+      "cacheRead": 0,
+      "output": 29888,
+      "usd": 0.5356,
+      "msMean": 4673,
+      "msP50": 4581,
+      "msP90": 5366
+    },
+    "successor": {
+      "calls": 8,
+      "uncachedInput": 16474,
+      "cacheWrite": 0,
+      "cacheRead": 0,
+      "output": 2481,
+      "usd": 0.0578,
+      "msMean": 3310,
+      "msP50": 3267,
+      "msP90": 4252
+    },
+    "historyCorrect": 4
+  },
+  "on": {
+    "match": {
+      "mean": 0.5166666666666667,
+      "sd": 0.028867513459481315,
+      "n": 3,
+      "min": 0.5,
+      "max": 0.55
+    },
+    "perRun": [
+      "×○×○○×○△○○×○○△○×○△××",
+      "○○×○○×○△○○×○○△○×△△××",
+      "○○×○○×○△○○×○○△○△○△××"
+    ],
+    "apprentice": {
+      "calls": 60,
+      "uncachedInput": 6939,
+      "cacheWrite": 2634,
+      "cacheRead": 108804,
+      "output": 29778,
+      "usd": 0.34,
+      "msMean": 4632,
+      "msP50": 4604,
+      "msP90": 5232
+    },
+    "successor": {
+      "calls": 8,
+      "uncachedInput": 406,
+      "cacheWrite": 15077,
+      "cacheRead": 991,
+      "output": 2372,
+      "usd": 0.0624,
+      "msMean": 3735,
+      "msP50": 3767,
+      "msP90": 6413
+    },
+    "historyCorrect": 5
+  }
+}

@@ -27,9 +27,27 @@ const pct = (x: number) => `${Math.round(x * 100)}%`;
  * One emphasized series (the current setup, indigo); earlier setups thin and grey, labelled at their ends.
  * The Before (v0) is a band (mean ± sd). Hover shows every series at the nearest checkpoint.
  */
-export function CurveChart({ curves, emphasis, before }: { curves: Curve[]; emphasis: string; before: { match: number; sd: number } }) {
+export interface PathsResult {
+  mean: number;
+  min: number;
+  max: number;
+  n: number;
+  taps: number; // mean master taps of the paths
+}
+
+export function CurveChart({
+  curves,
+  emphasis,
+  before,
+  paths,
+}: {
+  curves: Curve[];
+  emphasis: string | null; // null = all curves are context (grey)
+  before: { match: number; sd: number };
+  paths?: PathsResult | null; // current setup, end points of several training paths (mean + range)
+}) {
   const [hover, setHover] = useState<number | null>(null); // checkpoint index
-  const maxTaps = Math.max(...curves.flatMap((c) => c.points.map((p) => p.taps)));
+  const maxTaps = Math.max(...curves.flatMap((c) => c.points.map((p) => p.taps)), paths?.taps ?? 0);
   const xMax = Math.ceil(maxTaps / 20) * 20;
   const x = (t: number) => M.left + (t / xMax) * (W - M.left - M.right);
   const y = (v: number) => M.top + (1 - v) * (H - M.top - M.bottom);
@@ -47,7 +65,7 @@ export function CurveChart({ curves, emphasis, before }: { curves: Curve[]; emph
         onMouseMove={(e) => {
           const r = e.currentTarget.getBoundingClientRect();
           const tx = ((e.clientX - r.left) / r.width) * W;
-          const em = curves.find((c) => c.key === emphasis)!;
+          const em = curves.find((c) => c.key === emphasis) ?? curves.at(-1)!;
           let best = 0;
           em.points.forEach((p, i) => {
             if (Math.abs(x(p.taps) - tx) < Math.abs(x(em.points[best].taps) - tx)) best = i;
@@ -89,10 +107,24 @@ export function CurveChart({ curves, emphasis, before }: { curves: Curve[]; emph
           );
         })}
 
+        {paths && (
+          <g>
+            {/* current setup: several training paths — mean dot and min–max bar */}
+            <line x1={x(paths.taps)} x2={x(paths.taps)} y1={y(paths.max)} y2={y(paths.min)} className="stroke-ai" strokeWidth={3} strokeLinecap="round" />
+            <circle cx={x(paths.taps)} cy={y(paths.mean)} r={6} strokeWidth={2} className="fill-ai stroke-kami" />
+            <text x={x(paths.taps) + 10} y={y(paths.mean) - 4} className="fill-sumi text-[11.5px] font-bold">
+              v1構成 {pct(paths.mean)}
+            </text>
+            <text x={x(paths.taps) + 10} y={y(paths.mean) + 11} className="fill-nibi text-[10.5px]">
+              学習{paths.n}本 {pct(paths.min)}〜{pct(paths.max)}
+            </text>
+          </g>
+        )}
+
         {hover !== null && (
           <line
-            x1={x(curves.find((c) => c.key === emphasis)!.points[hover].taps)}
-            x2={x(curves.find((c) => c.key === emphasis)!.points[hover].taps)}
+            x1={x((curves.find((c) => c.key === emphasis) ?? curves.at(-1)!).points[hover].taps)}
+            x2={x((curves.find((c) => c.key === emphasis) ?? curves.at(-1)!).points[hover].taps)}
             y1={M.top}
             y2={H - M.bottom}
             className="stroke-sumi/40"

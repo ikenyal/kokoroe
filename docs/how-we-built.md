@@ -80,3 +80,7 @@ Short entries, appended every work session. Source material for the README secti
 - **`hitl-reviewer` caught three blocking bugs before commit** — the master's tap on a reading was never applied (status race), round 2
   could write a rule without a tap (contradicting D-025), and background work could overwrite the master's newer judgments in the
   session file. All fixed, with a regression test for the concurrent-store case; the deferred items became D-028.
+- **Prompt caching, measured not assumed** — Claude added `cache_control` to the fixed parts and wrote an A/B harness (cache off vs
+  on, sequential calls) that reports uncached/write/read tokens, cost, latency percentiles and verdicts. Result: −37% cost on the
+  apprentice, latency unchanged, verdicts unchanged; no gain for parallel successor questions. The same A/B doubled as the check
+  Kento asked for — it showed the Before had moved by ~5 points with the new layout, so the Before was replaced (D-030).

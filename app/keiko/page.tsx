@@ -8,7 +8,8 @@ export default function KeikoPage() {
   const curves = results.curves as Curve[];
   const latest = curves.at(-1)!;
   const end = latest.points.at(-1)!;
-  const paths = results.paths as null | { mean: number; min: number; max: number; n: number };
+  const pathsRaw = results.paths as null | { mean: number; min: number; max: number; n: number; paths: { taps: number }[] };
+  const paths = pathsRaw && { ...pathsRaw, taps: Math.round(pathsRaw.paths.reduce((a, p) => a + p.taps, 0) / pathsRaw.paths.length) };
   const hist = results.history;
   const adv = results.adversarial;
   return (
@@ -48,9 +49,9 @@ export default function KeikoPage() {
       <section aria-labelledby="curve-h" className="mt-10 grid gap-8 lg:grid-cols-[1fr_17rem]">
         <div>
           <h2 id="curve-h" className="text-[15px] font-bold">学習曲線</h2>
-          <p className="mt-1 text-[13px] text-nibi">どれだけ師匠の手を借りて、どこまで一致するようになったか。藍が今の構成、灰色はそれ以前の版です。</p>
+          <p className="mt-1 text-[13px] text-nibi">どれだけ師匠の手を借りて、どこまで一致するようになったか。灰色の線は改良の途中の版、藍の点と縦線は今の構成（v1）を学習3本で測った平均と幅です。</p>
           <div className="mt-4">
-            <CurveChart curves={curves} emphasis={latest.key} before={results.before} />
+            <CurveChart curves={curves} emphasis={paths ? null : latest.key} before={results.before} paths={paths} />
           </div>
           <details className="mt-3 text-[13.5px]">
             <summary className="cursor-pointer text-ai select-none">表で見る</summary>

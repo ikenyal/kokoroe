@@ -36,14 +36,20 @@ const curves = CURVES.map((c) => {
   };
 });
 
-const v0 = files.filter((f) => f.includes("v0-ledger-x3")).map(read).at(-1);
+// Before = v0 with the current prompt layout (cache blocks, D-030): both arms of the latest caching A/B, 6 runs pooled.
+const cacheAb = files.filter((f) => f.includes("cache-ab")).map(read).at(-1);
+const beforeRuns: string[] = [...cacheAb.off.perRun, ...cacheAb.on.perRun];
+const beforeRates = beforeRuns.map((r) => [...r].filter((c) => c === "○").length / r.length);
+const beforeOkp = beforeRuns.map((r) => [...r].filter((c) => c !== "×").length / r.length);
+const mean = (xs: number[]) => xs.reduce((a, b) => a + b, 0) / xs.length;
+const sd = (xs: number[]) => Math.sqrt(xs.reduce((a, b) => a + (b - mean(xs)) ** 2, 0) / (xs.length - 1));
 const successor = files.filter((f) => f.includes("successor-x3")).map(read).at(-1);
 const adversarial = files.filter((f) => f.includes("adversarial-x3")).map(read).at(-1);
 const paths = files.filter((f) => f.includes("paths")).map(read).at(-1) ?? null;
 
 const out = {
   note: "すべて架空データ（取引先10社・評価用20場面・沿革の質問8件）、師匠はシミュレータ。11/3 の途中経過。正式な After は 11/7 に学習5本で取り直す。",
-  before: { label: "Before（台帳＋制約だけの弟子 v0）", match: v0.mean.matchRate.mean, sd: v0.mean.matchRate.sd, okp: v0.mean.okOrPartialRate.mean, runs: v0.repeat },
+  before: { label: "Before（台帳＋制約だけの弟子 v0）", match: mean(beforeRates), sd: sd(beforeRates), okp: mean(beforeOkp), runs: beforeRuns.length },
   curves,
   paths,
   history: successor.arms.map((a: { arm: string; correct: { mean: number; sd: number } }) => ({ arm: a.arm, mean: a.correct.mean, sd: a.correct.sd })),

@@ -206,3 +206,41 @@ lost updates / reused ids in session files; storage text; unverified successor c
 - **Before KOKOROE_LIVE is enabled on a public URL (11/6):** per-IP rate limits on start / ask / choose, a per-session cap on live
   calls, a daily budget switch that falls back to recorded data, a cap on session count. Until then the public demo runs on recorded data.
 - Session files are swept after 24 h or when the visitor restarts; the start page says exactly that.
+
+## D-029 · 2026-11-03 · Accepted · v1 構成 (the configuration the UI and demo build on)
+- Ledger constraints seeded as 〔台帳〕 rules with one optional "why?" each (D-020); **not shown to the apprentice** (D-022);
+  kept for history and the successor.
+- Learning loop: interpretation with 1–3 readings and a one-tap choice (D-015); **second round after "none of these"** (D-025);
+  **scope guard** — scene-type limits only when the master's words name the situation (D-025); **確かめ稽古 + regression** with
+  narrowing or 差し戻し (D-019); **HITL generalization** with cross-client regression (D-023).
+- Prompt caching on (D-027, measured separately).
+**Interim result (3 training paths, each: 40 training scenes then held-out ×3):** match **64% (58–70%)**, ○+△ **92% (90–95%)**,
+112–120 master taps; Before 48% ± 3%. Earlier two paths without D-025: 55% / 65%, ○+△ 75% / 80%.
+**What 1–2 (D-025) did:** the spread between paths did not shrink (12-point range vs 10), but the mean and the floor rose and
+clearly-wrong drafts (×) became rare and consistent — ○+△ went from 75–80% to 90–95%.
+**Still wrong in all 9 evaluations:** E11 (浜風, spec change → should talk live). Likely cause: the ledger line 「連絡はメール」 pulls the
+apprentice to mail-only. To look at before the final After (11/7), together with D-026 (台帳 trade-off).
+The official After stays: 5 training paths after the feature freeze (11/7), mean and range.
+
+## D-027 · 2026-11-03 · Accepted · Prompt caching on the fixed parts — measured
+`cache_control` on the system prompt (with the output schema before it) for apprentice / interpreter / successor, and on the
+per-client block (client card + kokoroe-chō) for apprentice and successor. A/B (`eval/cache-ab.ts`, same work, sequential calls):
+| Apprentice v0, 20 held-out × 3 | cache off | cache on |
+|---|---|---|
+| input tokens: uncached / write / read | 118,377 / 0 / 0 | 6,939 / 2,634 / 108,804 |
+| cost | $0.536 | **$0.340 (−37%)** |
+| latency mean / p50 / p90 | 4.67 s / 4.58 / 5.37 | 4.63 s / 4.60 / 5.23 |
+| match (○) | 53% ± 3% | 52% ± 3% |
+92% of the apprentice's input is served from cache; latency barely moves because output generation dominates each call.
+Verdicts are unchanged by caching (within run-to-run spread). For the successor's 8 questions asked **in parallel**, caching did
+not help (entries are written before any read): $0.058 → $0.062. It would help sequential questions about the same client
+within 5 minutes (the UI pattern). **Why use it:** the expensive part of every call is identical text; caching cuts cost where
+calls repeat (evaluation, the 帳場's queue) without changing what is judged.
+
+## D-030 · 2026-11-03 · Accepted · Before re-measured with the current prompt layout and replaced
+The caching change split the apprentice's user message into two blocks (same text; the reviewer confirmed it is byte-identical
+when concatenated). v0 with the new layout, 6 runs (both arms of the caching A/B): **52.5% ± 2.7%**, ○+△ 69%. The earlier Before
+(9 runs over three measurements, old layout): ~48%. The ~5-point difference (≈ one scene: E01/E12/E14 flip between runs) is larger
+than run-to-run noise would explain comfortably, so per Kento's rule the Before is **replaced by 52.5% (6 runs)**. The interim After
+(64%, D-029) was mostly measured with the new layout (2 of 3 paths). The gap Before → After shrinks from 16 to ~12 points — the
+honest comparison uses the same prompt layout on both sides.
