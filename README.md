@@ -33,4 +33,6 @@ See [docs/how-we-built.md](docs/how-we-built.md) (updated as we go), plus [decis
 
 ## License
 
-Code: MIT (TBD). The fictional world data (Daidai Kobo, its clients and kokoroe) is not licensed for reuse (TBD).
+- **Code:** [MIT](LICENSE) — Copyright (c) 2026 ikenyal.
+- **Fictional world data** (`data/`: Daidai Kobo, its clients, kokoroe and scenes): © 2026 ikenyal. All rights reserved.
+  Use is limited to evaluating and demonstrating this project; not covered by the MIT License. See [data/NOTICE.md](data/NOTICE.md).

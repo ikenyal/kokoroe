@@ -38,3 +38,8 @@ Exact versions in `package.json` and a committed `package-lock.json`.
 `scripts/check-secrets.sh` (staged-diff regex + env-file block) runs from `.githooks/pre-commit` and from a Claude Code hook
 before `git commit`.
 **Why:** gitleaks isn't installed; a tiny script covers the realistic risks (Anthropic/AWS keys, `.env.local`) with zero setup.
+
+## D-008 · 2026-11-03 · Accepted · Split licensing
+Code under MIT (Copyright (c) 2026 ikenyal). Fictional world data under `data/` is © 2026 ikenyal, all rights reserved,
+limited to evaluating/demonstrating this project (`data/NOTICE.md`).
+**Why:** the organizers confirmed code can be OSS while data/logos may carry a separate no-reuse condition, as long as it is explicit.

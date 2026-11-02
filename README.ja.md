@@ -23,3 +23,9 @@ Kokoroe はそこを使います。AI の弟子が先に案を作り、師匠は
 ## Claude Code でどう作ったか
 
 [docs/how-we-built.md](docs/how-we-built.md)（随時更新）、[決定記録](docs/decisions.md)、[アイデアの変遷](docs/evolution.md) を参照。
+
+## ライセンス
+
+- **コード:** [MIT](LICENSE)（Copyright (c) 2026 ikenyal）
+- **架空の世界データ**（`data/` 配下: だいだい工房の設定・心得・場面）: © 2026 ikenyal. All rights reserved.
+  このプロジェクトの評価・デモ目的に限ります。MIT ライセンスの対象外です。詳細は [data/NOTICE.md](data/NOTICE.md)。
