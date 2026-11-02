@@ -265,3 +265,24 @@ describe("確かめ稽古 and regression (no API)", () => {
     expect(await store.rulesFor("C02", "T6")).toEqual([]);
   });
 });
+
+describe("ledger seeding (台帳)", () => {
+  it("seeds one 台帳 rule per explicit constraint, asks why once each, records only real history", async () => {
+    const { seedFromLedger } = await import("@/src/learning/ledger");
+    const { CLIENTS } = await import("@/src/core/world");
+    const store = new LocalJsonStore(null);
+    const master = createSimulatedMaster(1);
+    const r = await seedFromLedger({ store, clients: CLIENTS, master, now: fixedNow });
+    expect(r.seeded.length).toBe(10);
+    expect(r.asked).toBe(10);
+    const rules = await store.listRules();
+    expect(rules.every((x) => x.origin === "ledger" && x.sources[0].kind === "ledger")).toBe(true);
+    const withWhy = rules.filter((x) => x.history[0].trigger).map((x) => [x.scope.clientId, x.history[0].trigger]);
+    expect(withWhy.map((x) => x[0]).sort()).toEqual(["C03", "C04", "C10"]);
+    expect(withWhy.find((x) => x[0] === "C04")![1]).toMatch(/^2024年、.*Zoom/);
+    expect(renderRule(rules.find((x) => x.scope.clientId === "C04")!)).toContain("〔台帳〕");
+    expect(renderRule(rules.find((x) => x.scope.clientId === "C04")!)).toContain("出典: 台帳");
+    // Seeding twice does nothing.
+    expect((await seedFromLedger({ store, clients: CLIENTS, master, now: fixedNow })).seeded).toEqual([]);
+  });
+});

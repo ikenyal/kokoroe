@@ -6,12 +6,13 @@ export interface RuleScope {
   sceneTypes: SceneType[] | null; // null = all scene types
 }
 
-/** The master's judgment a rule was learned from (出典). */
+/** Where a rule came from (出典): a master's judgment, or the client ledger's explicit constraints (台帳). */
 export interface RuleSource {
-  judgmentId: string;
+  kind?: "judgment" | "ledger"; // undefined = judgment (older stores)
+  judgmentId: string; // "LEDGER-<clientId>" for ledger sources
   date: string; // JST date
-  sceneId: string;
-  verdict: Verdict;
+  sceneId: string; // "" for ledger sources
+  verdict: Verdict | null; // null for ledger sources
   remark: string;
 }
 
@@ -36,6 +37,7 @@ export interface KokoroeRule {
   when: string | null; // condition / exception, if any
   status: "active" | "retired";
   confidence: "low" | "medium" | "high";
+  origin?: "master" | "ledger"; // undefined = master (learned from a judgment). Shown distinctly in the kokoroe-chō.
   sources: RuleSource[];
   history: RuleChange[];
 }
@@ -77,6 +79,9 @@ export interface Master {
   judge(scene: Scene, client: Client, p: Proposal): Promise<{ verdict: Verdict; remark: string }>;
   /** Pick the reading the master meant. null = "none of these". */
   choose(args: { scene: Scene; client: Client; proposal: Proposal; candidates: Candidate[] }): Promise<number | null>;
-  /** Optional: why is it so? One short line, or "" for no comment. Asked once, when a rule is created. */
-  why(args: { scene: Scene; client: Client; rule: KokoroeRule; candidate: Candidate }): Promise<string>;
+  /**
+   * Optional: why is it so? One short line, or "" to skip. Asked once per rule — when a rule is learned from a correction
+   * (scene + candidate given), or once per ledger-seeded rule (no scene/candidate).
+   */
+  why(args: { scene?: Scene; client: Client; rule: KokoroeRule; candidate?: Candidate }): Promise<string>;
 }

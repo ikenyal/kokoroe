@@ -62,3 +62,8 @@ Short entries, appended every work session. Source material for the README secti
 - **Commit gate in action** — after the `src/learning` edits the commit was gated until `npm run eval:smoke` ran (≈ $0.05).
   Note: edits made through shell scripts (python/sed) don't trigger the PostToolUse hook; Claude ran the tests and smoke eval
   manually for those, and will prefer the Edit tool for core files.
+- **Control experiment before concluding** — A02 kept failing its draft check after the prompt fix. Instead of loosening the check
+  or claiming the injection was neutralized, Claude ran the same scene without the injected sentence: identical drafts, so the
+  failure wasn't injection-driven. Both results are recorded (D-021).
+- **Mechanical simulator, again** — for ledger items, the simulated master's "why" answer is chosen by text overlap between the
+  constraint and a hidden history (checked on all 10 constraints before wiring it in: exactly 生協, 港北, 大河原 match).

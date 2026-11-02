@@ -9,7 +9,9 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
-import { EVAL_SCENES, TRAIN_SCENES } from "@/src/core/world";
+import { CLIENTS, EVAL_SCENES, TRAIN_SCENES } from "@/src/core/world";
+import { seedFromLedger } from "@/src/learning/ledger";
+import { createSimulatedMaster } from "./simulator/master";
 import type { Usage } from "@/src/disciple/v0";
 import { makeDiscipleV1 } from "@/src/disciple/v1";
 import { renderRules } from "@/src/learning/compile";
@@ -26,6 +28,7 @@ async function main() {
       step: { type: "string", default: "10" },
       seed: { type: "string", default: "7" },
       concurrency: { type: "string", default: "4" },
+      "seed-ledger": { type: "boolean", default: false },
     },
   });
   const repeat = Number(values.repeat);
@@ -43,6 +46,13 @@ async function main() {
   let taps = 0;
   const points = [];
   const trainLog: string[] = [];
+  let ledger = null;
+  if (values["seed-ledger"]) {
+    // D-020: seed explicit constraints as 台帳 rules; ask "why?" once per item. These prompts count as master taps.
+    ledger = await seedFromLedger({ store, clients: CLIENTS, master: createSimulatedMaster(seed) });
+    taps += ledger.asked;
+    console.log(`seeded ${ledger.seeded.length} ledger rules; "why?" asked ${ledger.asked}, answered ${ledger.answered}`);
+  }
 
   for (let done = 0; ; done += stepSize) {
     // Measure at this checkpoint.
@@ -91,6 +101,7 @@ async function main() {
     repeat,
     stepSize,
     seed,
+    ledgerSeed: ledger,
     points: points.map((p) => ({ ...p, history: { correct: p.history.correct, answerOk: p.history.answerOk, n: p.history.n } })),
     totalUsd: Number(totalUsd.toFixed(4)),
   };

@@ -8,7 +8,7 @@
 import type { Client, Proposal, Scene } from "@/src/core/types";
 import { applyFix } from "@/src/learning/fix";
 import type { Candidate, Master } from "@/src/learning/types";
-import { getRule } from "./hidden";
+import { getRule, HIDDEN_RULES } from "./hidden";
 import { judge, type RuleCheck } from "./judge";
 import { remarkFor, rng } from "./remark";
 
@@ -17,6 +17,25 @@ export interface SimulatedMaster extends Master {
   lastFailing(): string[];
   /** Log only: failed hidden rules of every judgment so far, in order. */
   failingLog(): string[][];
+}
+
+const norm = (s: string) => s.replace(/[\s、。・（）()「」:：,.]/g, "");
+
+/** Does `a` share a substring of ≥ n characters with `b`? (mechanical topic match, no LLM) */
+function shares(a: string, b: string, n = 3): boolean {
+  const x = norm(a);
+  const y = norm(b);
+  for (let i = 0; i + n <= x.length; i++) if (y.includes(x.slice(i, i + n))) return true;
+  return false;
+}
+
+/** The client's hidden rule whose recorded change (旧 → 新) is about this ledger constraint, if any. */
+export function historyBehindConstraint(clientId: string, constraint: string): string | null {
+  for (const r of HIDDEN_RULES) {
+    const h = r.history?.[0];
+    if (r.scope === clientId && h && shares(constraint, `${h.before}${h.after}`)) return r.id;
+  }
+  return null;
 }
 
 export function createSimulatedMaster(seed = 7): SimulatedMaster {
@@ -58,8 +77,10 @@ export function createSimulatedMaster(seed = 7): SimulatedMaster {
       return best; // null = none of these
     },
 
-    async why({ candidate }) {
-      const ruleId = ruleClearedBy(candidate);
+    async why({ candidate, client, rule }) {
+      // Learned from a correction: the hidden rule this reading clears.
+      // Seeded from the ledger: the client's hidden rule whose history (旧/新) is about this very constraint.
+      const ruleId = candidate ? ruleClearedBy(candidate) : historyBehindConstraint(client.id, rule.text);
       const h = ruleId ? getRule(ruleId).history?.[0] : undefined;
       return h?.short ? `${h.year}年、${h.short}` : "";
     },

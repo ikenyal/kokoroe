@@ -14,7 +14,13 @@ export interface AppliedChange {
 }
 
 function sourceOf(j: JudgmentRecord): RuleSource {
-  return { judgmentId: j.id, date: jstDate(j.at), sceneId: j.sceneId, verdict: j.verdict, remark: j.remark };
+  return { kind: "judgment", judgmentId: j.id, date: jstDate(j.at), sceneId: j.sceneId, verdict: j.verdict, remark: j.remark };
+}
+
+function describeSource(src: RuleSource | undefined, id: string): string {
+  if (!src) return id;
+  if (src.kind === "ledger") return "台帳（取引先台帳の明示的な制約）";
+  return `${id}（${src.sceneId} ${src.verdict}「${src.remark || "一言なし"}」）`;
 }
 
 const full = (text: string, when: string | null) => (when ? `${text}（${when}）` : text);
@@ -73,13 +79,12 @@ export async function recordTrigger(store: KokoroeStore, ruleId: string, trigger
 
 /** One rule as a kokoroe-chō entry: short rule, condition, then 沿革 lines (旧 → 新・きっかけ・日付・出典). */
 export function renderRule(r: KokoroeRule): string {
-  const head = `### ${r.id}${r.status === "retired" ? "（廃止）" : ""} ${r.text}`;
+  const head = `### ${r.id}${r.status === "retired" ? "（廃止）" : ""}${r.origin === "ledger" ? "〔台帳〕" : ""} ${r.text}`;
   const when = r.when ? `\n- 条件: ${r.when}` : "";
   const scope = `\n- 適用: ${r.scope.sceneTypes?.join("・") ?? "全場面"} / 確信度: ${r.confidence}`;
   const hist = r.history
     .map((h) => {
-      const src = r.sources.find((s) => s.judgmentId === h.judgmentId);
-      const where = src ? `${h.judgmentId}（${src.sceneId} ${src.verdict}「${src.remark || "一言なし"}」）` : h.judgmentId;
+      const where = describeSource(r.sources.find((s) => s.judgmentId === h.judgmentId), h.judgmentId);
       const change = h.before ? `旧「${h.before}」→ 新「${h.after}」` : `新「${h.after}」`;
       return `  - ${change}・きっかけ: ${h.trigger ?? "（未記入）"}・日付: ${h.date}・出典: ${where}`;
     })

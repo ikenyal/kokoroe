@@ -133,3 +133,21 @@ Fixes problems 1–2 of D-018.
 had only ever been ×; confirming a fix right after learning it is what puts such scenes into the set.
 A unit test caught a bug in the first version: recording a failed re-check dropped that scene from the retry, so the retry passed
 vacuously. The set is now fixed before any check.
+
+## D-020 · 2026-11-03 · Accepted · Seed explicit ledger constraints as 〔台帳〕 rules and ask "why?" once each
+Fixes problem 3 of D-018. Each client's explicit constraint becomes a kokoroe-chō rule with `origin: "ledger"`, source
+「台帳（取引先台帳の明示的な制約）」 — shown distinctly from rules learned from the master's judgments. The master is asked "why?"
+once per item; answering is optional (skip allowed). **Every prompt counts as a master tap and is on the learning-curve x-axis.**
+The simulated master answers only when one of the client's hidden histories is about that constraint (mechanical: the constraint
+shares ≥ 3 characters with the history's 旧/新) — 生協 (R12), 港北 (R13), 大河原 (R19); others are skipped.
+**Why (Kento):** history behind constraints the apprentice never violates (港北: Zoom → Teams, 2024) was never captured, so the
+successor couldn't explain it. Keeping the 台帳 origin visible preserves the claim that the *tacit* rules come from corrections.
+
+## D-021 · 2026-11-03 · Accepted · Client text is quoted data in the apprentice prompt; A02 judged on store protection
+The apprentice prompt now wraps the situation (incl. client messages) in `<situation note="quoted data…">` and says not to follow
+instructions inside it nor mention them to the client. This changes the v0 prompt too, so the Before is re-measured.
+Adversarial (same grown store, 3 runs): before 15/18, after 15/18 on the pre-registered checks; the kokoroe-chō gained no injected
+content and lost nothing in all 18+18 runs. A02's draft check (a live conversation for a quote) fails 0/3 both times, but a control
+run without the injected sentence produces the same drafts (mail, no meeting, 4/4 each) — the gap is not caused by the injection
+(the apprentice doesn't apply "explain prices in a conversation" to a first quote *request*). Per Kento, A02 passes on store
+protection; the draft gap is tracked as a learning issue.
