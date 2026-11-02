@@ -1,40 +1,45 @@
 /**
  * One step of the learning loop:
- *   apprentice proposes → master judges (○/△/× + remark) → interpreter infers what differed → compiler updates the kokoroe-chō.
- * The judge is injected: the real master in the product, the simulator in evaluation.
+ *   apprentice proposes → master judges (○/△/× + remark)
+ *   → interpreter proposes 1–3 readings → (if ambiguous) master taps the one they meant, or "none of these"
+ *   → compiler updates the kokoroe-chō → (new rule) master may say why in one line.
+ * The master is injected: the real master in the product, the simulator in evaluation.
  */
-import type { Client, Proposal, Scene, Verdict } from "@/src/core/types";
+import type { Client, Proposal, Scene } from "@/src/core/types";
 import type { Disciple, Usage } from "@/src/disciple/v0";
-import { applyInterpretation, type AppliedChange } from "./compile";
+import { applyCandidate, recordTrigger, type AppliedChange } from "./compile";
 import { interpret, type Interpretation } from "./interpret";
 import type { KokoroeStore } from "./store";
-import type { JudgmentRecord } from "./types";
+import type { Candidate, JudgmentRecord, Master } from "./types";
 
-export type JudgeFn = (scene: Scene, client: Client, p: Proposal) => Promise<{ verdict: Verdict; remark: string }>;
 export type InterpretFn = typeof interpret;
 
 export interface StepResult {
   proposal: Proposal;
   judgment: JudgmentRecord;
   interpretation: Interpretation | null;
+  asked: boolean; // were candidates shown to the master?
+  chosen: number | null; // index of the chosen candidate (null = none of these / nothing to choose)
   changes: AppliedChange[];
-  rulesShown: string[]; // ids of kokoroe-chō rules that were relevant when the proposal was made
+  trigger: string; // the master's "why", "" if none
+  rulesShown: string[]; // kokoroe-chō rules relevant when the proposal was made
+  masterTaps: number; // judgment + choice + why — how much the master had to do
 }
 
 export async function learnStep(args: {
   store: KokoroeStore;
   disciple: Disciple;
-  judge: JudgeFn;
+  master: Master;
   scene: Scene;
   client: Client;
   interpretFn?: InterpretFn;
   usage?: Usage[];
   now?: () => Date;
 }): Promise<StepResult> {
-  const { store, disciple, judge, scene, client } = args;
+  const { store, disciple, master, scene, client } = args;
   const rulesShown = (await store.rulesFor(client.id, scene.type)).map((r) => r.id);
   const proposal = await disciple.propose(scene, client);
-  const { verdict, remark } = await judge(scene, client, proposal);
+  const { verdict, remark } = await master.judge(scene, client, proposal);
   const judgment = await store.addJudgment({
     at: (args.now?.() ?? new Date()).toISOString(),
     sceneId: scene.id,
@@ -44,13 +49,32 @@ export async function learnStep(args: {
     verdict,
     remark,
   });
-  if (verdict === "○") return { proposal, judgment, interpretation: null, changes: [], rulesShown };
+  const base = { proposal, judgment, rulesShown, trigger: "" };
+  if (verdict === "○") return { ...base, interpretation: null, asked: false, chosen: null, changes: [], masterTaps: 1 };
 
-  // Give the interpreter every rule for this client plus company-wide rules, so it can revise instead of duplicating.
+  // Every rule for this client plus company-wide ones, so the interpreter can revise instead of duplicating.
   const existing = (await store.listRules()).filter(
     (r) => r.status === "active" && (r.scope.clientId === null || r.scope.clientId === client.id),
   );
   const interpretation = await (args.interpretFn ?? interpret)({ scene, client, judgment, existing, usage: args.usage });
-  const changes = await applyInterpretation(store, judgment, interpretation);
-  return { proposal, judgment, interpretation, changes, rulesShown };
+  const cands = interpretation.candidates;
+  if (!cands.length) return { ...base, interpretation, asked: false, chosen: null, changes: [], masterTaps: 1 };
+
+  const asked = interpretation.ambiguous || cands.length > 1;
+  const chosen = asked ? await master.choose({ scene, client, proposal, candidates: cands }) : 0;
+  if (chosen === null || !cands[chosen]) {
+    return { ...base, interpretation, asked, chosen: null, changes: [], masterTaps: 2 };
+  }
+  const pick: Candidate = cands[chosen];
+  const change = await applyCandidate(store, judgment, pick, interpretation);
+
+  let trigger = "";
+  let taps = asked ? 2 : 1;
+  if (change.action === "add") {
+    const rule = (await store.getRule(change.ruleId))!;
+    trigger = await master.why({ scene, client, rule, candidate: pick });
+    taps += 1; // shown the optional "why?" prompt (answering is optional)
+    if (trigger) await recordTrigger(store, change.ruleId, trigger);
+  }
+  return { ...base, interpretation, asked, chosen, changes: [change], trigger, masterTaps: taps };
 }

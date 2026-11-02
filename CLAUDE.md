@@ -26,6 +26,8 @@ Hackathon: Built with Claude: Japan 2026. Deadline **2026-11-08 20:00 JST**. The
   this public repo. Enforced by `.claude/hooks/block-mcp.sh`. Building an MCP server *as a product feature* needs Kento's approval first.
 - **Evaluation integrity:** product code (`src/`, `app/`) must never read `data/hidden/`. Only `eval/simulator/` may.
   Do not tune prompts by looking at hidden rules. A test enforces the import boundary.
+- **`data/hidden/` is frozen (since 2026-11-03, D-017).** Do not change the hidden ground truth or the judge's predicates
+  without Kento's explicit approval. A hook blocks edits; `tests/hidden-freeze.test.ts` checks checksums.
 - **HITL:** the apprentice never sends anything and never commits to discounts / contract terms / first contact with key clients;
   those always route to the master.
 - If a decision conflicts with the plan or is unclear: **stop and ask Kento**. Don't decide silently.

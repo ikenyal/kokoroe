@@ -1,5 +1,5 @@
 {
-  "_note": "Hidden ground-truth kokoroe of the fictional master (Shinohara). Simulator only. Precedence: client constraints > client rules (R10-R19) > company-wide rules (R01-R09). Discounts / contract terms always need the master (HITL). remarks are keyed by the reason a check failed (\"default\" when there is one reason).",
+  "_note": "Hidden ground-truth kokoroe of the fictional master (Shinohara). Simulator only. Precedence: client constraints > client rules (R10-R19) > company-wide rules (R01-R09). Discounts / contract terms always need the master (HITL). remarks are keyed by the reason a check failed (\"default\" when there is one reason). history[].short is how the master says the trigger in one breath when asked why (used for history questions).",
   "rules": [
     {
       "id": "R01",
@@ -139,7 +139,8 @@
           "year": 2019,
           "before": "決まってから連絡していた",
           "after": "決まる前から配車課長に共有する",
-          "trigger": "繁忙期の直前に連絡したら配車が組めず、強く叱られた"
+          "trigger": "繁忙期の直前に連絡したら配車が組めず、強く叱られた",
+          "short": "直前に伝えたら配車が組めなくて、えらく叱られた"
         }
       ]
     },
@@ -168,7 +169,7 @@
         ],
         "process": [
           "段取りを先に聞け",
-          "理事会に間に合わせろ"
+          "理事会の2週間前までに出せ"
         ]
       },
       "history": [
@@ -176,7 +177,8 @@
           "year": 2021,
           "before": "自社の書式で見積りを出していた",
           "after": "先方の指定書式で、理事会の2週間前までに出す",
-          "trigger": "自社書式で出して差し戻され、理事会を1回逃した"
+          "trigger": "自社書式で出して差し戻され、理事会を1回逃した",
+          "short": "うちの書式で出して差し戻されて、理事会を1回逃した"
         }
       ]
     },
@@ -199,7 +201,8 @@
           "year": 2024,
           "before": "Zoom で打ち合わせていた",
           "after": "Teams のみ",
-          "trigger": "先方の情報セキュリティ規程が改定され、Zoom が禁止になった"
+          "trigger": "先方の情報セキュリティ規程が改定され、Zoom が禁止になった",
+          "short": "向こうのセキュリティ規程が変わって Zoom が禁止になった"
         }
       ]
     },
@@ -289,7 +292,8 @@
           "year": 2025,
           "before": "社長に電話して即決してもらっていた",
           "after": "二代目にはオンラインか訪問で丁寧に説明する",
-          "trigger": "二代目社長に「先代と同じ扱いは困る」と言われた"
+          "trigger": "二代目社長に「先代と同じ扱いは困る」と言われた",
+          "short": "二代目に「先代と同じ扱いは困る」と言われた"
         }
       ]
     },

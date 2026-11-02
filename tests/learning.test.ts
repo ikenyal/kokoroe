@@ -1,11 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { getClient } from "@/src/core/world";
+import { getClient, TRAIN_SCENES } from "@/src/core/world";
 import type { Proposal, Scene } from "@/src/core/types";
 import type { Disciple } from "@/src/disciple/v0";
 import { learnStep } from "@/src/learning/loop";
-import { renderRules } from "@/src/learning/compile";
+import { renderRule } from "@/src/learning/compile";
+import { applyFix, jstDate } from "@/src/learning/fix";
 import { applies, LocalJsonStore } from "@/src/learning/store";
 import type { Interpretation } from "@/src/learning/interpret";
+import type { Candidate, KokoroeRule, Master } from "@/src/learning/types";
+import { createSimulatedMaster } from "@/eval/simulator/master";
+import { IDEAL_TRAIN } from "./fixtures/ideal-proposals-train";
 
 const scene = (id: string, clientId: string, type: Scene["type"]): Scene => ({
   id,
@@ -15,7 +19,6 @@ const scene = (id: string, clientId: string, type: Scene["type"]): Scene => ({
   month: 6,
   situation: "（テスト用の場面）",
 });
-
 const proposal: Proposal = {
   channel: "phone",
   meeting: "phone_call",
@@ -30,15 +33,29 @@ const proposal: Proposal = {
   basedOnRules: [],
 };
 const fixedDisciple: Disciple = { name: "fixed", propose: async () => proposal };
-const fixedNow = () => new Date("2026-11-03T10:00:00Z");
+const fixedNow = () => new Date("2026-11-03T01:00:00Z"); // 10:00 JST
+const cand = (o: Partial<Candidate>): Candidate => ({
+  action: "add",
+  targetRuleId: null,
+  scope: { clientId: "C10", sceneTypes: null },
+  text: "社長には電話で済まさず、打ち合わせで説明する",
+  when: null,
+  fix: { field: "meeting", value: "zoom" },
+  ...o,
+});
+const fakeMaster = (o: Partial<Master> & Pick<Master, "judge">): Master => ({
+  choose: async () => 0,
+  why: async () => "",
+  ...o,
+});
 
-describe("learning loop (no API: fake judge and interpreter)", () => {
+describe("learning loop (no API: fake master and interpreter)", () => {
   it("○ records the judgment and learns nothing", async () => {
     const store = new LocalJsonStore(null);
     const r = await learnStep({
       store,
       disciple: fixedDisciple,
-      judge: async () => ({ verdict: "○", remark: "" }),
+      master: fakeMaster({ judge: async () => ({ verdict: "○", remark: "" }) }),
       scene: scene("X1", "C10", "T1"),
       client: getClient("C10"),
       interpretFn: async () => {
@@ -46,41 +63,44 @@ describe("learning loop (no API: fake judge and interpreter)", () => {
       },
     });
     expect(r.changes).toEqual([]);
+    expect(r.masterTaps).toBe(1);
     expect(await store.listJudgments()).toHaveLength(1);
   });
 
-  it("× adds a narrow rule with its source and history, then a later × revises it", async () => {
+  it("clear remark → one reading applied without asking; history gets the master's why; later revise keeps 旧→新", async () => {
     const store = new LocalJsonStore(null);
-    const add: Interpretation = {
-      diagnosis: "二代目社長に電話で済ませた",
-      updates: [{ action: "add", targetRuleId: null, scope: { clientId: "C10", sceneTypes: null }, text: "大河原建材の社長には電話で済まさず、打ち合わせで説明する。" }],
-      confidence: "medium",
-    };
+    const one: Interpretation = { diagnosis: "電話で済ませた", ambiguous: false, candidates: [cand({})], confidence: "medium" };
     const r1 = await learnStep({
       store,
       disciple: fixedDisciple,
-      judge: async () => ({ verdict: "×", remark: "電話で済ますな" }),
+      master: fakeMaster({
+        judge: async () => ({ verdict: "×", remark: "電話で済ますな" }),
+        choose: async () => {
+          throw new Error("must not ask when the reading is clear");
+        },
+        why: async () => "2025年、二代目に「先代と同じ扱いは困る」と言われた",
+      }),
       scene: scene("X1", "C10", "T1"),
       client: getClient("C10"),
-      interpretFn: async () => add,
+      interpretFn: async () => one,
       now: fixedNow,
     });
-    expect(r1.changes).toEqual([{ ruleId: "K-001", action: "add", before: null, after: add.updates[0].text }]);
+    expect(r1.asked).toBe(false);
+    expect(r1.masterTaps).toBe(2); // judgment + optional why prompt
     const rule = (await store.getRule("K-001"))!;
-    expect(rule.scope).toEqual({ clientId: "C10", sceneTypes: null });
     expect(rule.sources[0]).toMatchObject({ judgmentId: "J-0001", sceneId: "X1", verdict: "×", remark: "電話で済ますな", date: "2026-11-03" });
-    expect(rule.history[0]).toMatchObject({ before: null, masterWords: "電話で済ますな" });
+    expect(rule.history[0]).toMatchObject({ before: null, trigger: "2025年、二代目に「先代と同じ扱いは困る」と言われた" });
 
-    // The next similar scene for the same client now gets the rule shown to the apprentice.
     const revise: Interpretation = {
-      diagnosis: "説明の丁寧さが足りない",
-      updates: [{ action: "revise", targetRuleId: "K-001", scope: { clientId: "C10", sceneTypes: null }, text: "大河原建材の社長には電話で済まさず、打ち合わせで丁寧に説明する。" }],
+      diagnosis: "説明の丁寧さ",
+      ambiguous: false,
+      candidates: [cand({ action: "revise", targetRuleId: "K-001", text: "社長には打ち合わせで丁寧に説明する", when: "金額が絡むとき", fix: { field: "posture", value: "explain_carefully" } })],
       confidence: "high",
     };
     const r2 = await learnStep({
       store,
       disciple: fixedDisciple,
-      judge: async () => ({ verdict: "△", remark: "二代目には説明しろ" }),
+      master: fakeMaster({ judge: async () => ({ verdict: "△", remark: "二代目には説明しろ" }) }),
       scene: scene("X2", "C10", "T3"),
       client: getClient("C10"),
       interpretFn: async () => revise,
@@ -88,24 +108,95 @@ describe("learning loop (no API: fake judge and interpreter)", () => {
     });
     expect(r2.rulesShown).toEqual(["K-001"]);
     const revised = (await store.getRule("K-001"))!;
-    expect(revised.history).toHaveLength(2);
-    expect(revised.history[1]).toMatchObject({ before: add.updates[0].text, after: revise.updates[0].text, masterWords: "二代目には説明しろ" });
-    expect(revised.sources.map((s) => s.judgmentId)).toEqual(["J-0001", "J-0002"]);
-    expect(renderRules("大河原建材", [revised])).toContain("「大河原建材の社長には電話で済まさず、打ち合わせで説明する。」→");
+    expect(revised.history[1]).toMatchObject({ before: "社長には電話で済まさず、打ち合わせで説明する", after: "社長には打ち合わせで丁寧に説明する（金額が絡むとき）" });
+    const page = renderRule(revised);
+    expect(page).toContain("旧「社長には電話で済まさず、打ち合わせで説明する」→ 新「社長には打ち合わせで丁寧に説明する（金額が絡むとき）」");
+    expect(page).toContain("きっかけ: 2025年、二代目に「先代と同じ扱いは困る」と言われた");
+    expect(page).toContain("出典: J-0001（X1 ×「電話で済ますな」）");
+  });
+
+  it("ambiguous → master taps a reading; 'none of these' learns nothing", async () => {
+    const store = new LocalJsonStore(null);
+    const amb: Interpretation = {
+      diagnosis: "一言なし",
+      ambiguous: true,
+      candidates: [cand({ text: "A" }), cand({ text: "B", fix: { field: "followUp", value: "true" } })],
+      confidence: "low",
+    };
+    const none = await learnStep({
+      store,
+      disciple: fixedDisciple,
+      master: fakeMaster({ judge: async () => ({ verdict: "△", remark: "" }), choose: async () => null }),
+      scene: scene("X1", "C10", "T1"),
+      client: getClient("C10"),
+      interpretFn: async () => amb,
+    });
+    expect(none).toMatchObject({ asked: true, chosen: null, changes: [], masterTaps: 2 });
+    const picked = await learnStep({
+      store,
+      disciple: fixedDisciple,
+      master: fakeMaster({ judge: async () => ({ verdict: "△", remark: "" }), choose: async () => 1 }),
+      scene: scene("X2", "C10", "T1"),
+      client: getClient("C10"),
+      interpretFn: async () => amb,
+    });
+    expect(picked.chosen).toBe(1);
+    expect((await store.getRule("K-001"))!.text).toBe("B");
   });
 
   it("scopes are respected: a C10 rule is not shown for C01", () => {
-    const rule = {
+    const rule: KokoroeRule = {
       id: "K-001",
-      scope: { clientId: "C10", sceneTypes: ["T3" as const] },
+      scope: { clientId: "C10", sceneTypes: ["T3"] },
       text: "",
-      status: "active" as const,
-      confidence: "low" as const,
+      when: null,
+      status: "active",
+      confidence: "low",
       sources: [],
       history: [],
     };
     expect(applies(rule, "C10", "T3")).toBe(true);
     expect(applies(rule, "C10", "T1")).toBe(false);
     expect(applies(rule, "C01", "T3")).toBe(false);
+  });
+
+  it("dates are JST", () => {
+    expect(jstDate("2026-11-02T20:10:00Z")).toBe("2026-11-03");
+  });
+});
+
+describe("simulated master", () => {
+  const t05 = TRAIN_SCENES.find((s) => s.id === "T05")!; // 丸新酒造: formal via the wife, quiet word to the brewer
+  const client = getClient(t05.clientId);
+  const noBack = { ...IDEAL_TRAIN.T05, backchannelTo: null };
+
+  it("picks the reading that would have fixed the draft, and says 'none' when no reading does", async () => {
+    const m = createSimulatedMaster(1);
+    const j = await m.judge(t05, client, noBack);
+    expect(j.verdict).toBe("△");
+    const wrong = cand({ scope: { clientId: "C06", sceneTypes: null }, fix: { field: "posture", value: "concise" } });
+    const right = cand({ scope: { clientId: "C06", sceneTypes: null }, fix: { field: "backchannelTo", value: "decider" } });
+    expect(await m.choose({ scene: t05, client, proposal: noBack, candidates: [wrong, right] })).toBe(1);
+    expect(await m.choose({ scene: t05, client, proposal: noBack, candidates: [wrong] })).toBeNull();
+  });
+
+  it("answers 'why' with the hidden history trigger only for rules that have one", async () => {
+    const kohoku = TRAIN_SCENES.find((s) => s.clientId === "C04" && IDEAL_TRAIN[s.id].meeting === "teams")!;
+    const m = createSimulatedMaster(1);
+    const zoom = { ...IDEAL_TRAIN[kohoku.id], meeting: "zoom" as const };
+    await m.judge(kohoku, getClient("C04"), zoom);
+    const teams = cand({ scope: { clientId: "C04", sceneTypes: null }, fix: { field: "meeting", value: "teams" } });
+    const rule = {} as KokoroeRule;
+    expect(await m.why({ scene: kohoku, client: getClient("C04"), rule, candidate: teams })).toMatch(/^2024年、.*Zoom/);
+
+    await m.judge(t05, client, noBack);
+    const back = cand({ fix: { field: "backchannelTo", value: "decider" } });
+    expect(await m.why({ scene: t05, client, rule, candidate: back })).toBe(""); // R04 has no recorded history
+  });
+
+  it("applyFix ignores invalid values", () => {
+    expect(applyFix(proposal, { field: "channel", value: "fax" }).channel).toBe("phone");
+    expect(applyFix(proposal, { field: "posture", value: "with_numbers" }).posture).toEqual(["with_numbers"]);
+    expect(applyFix(proposal, { field: "followUp", value: "true" }).followUp).toBe(true);
   });
 });

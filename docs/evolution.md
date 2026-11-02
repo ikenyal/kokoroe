@@ -51,4 +51,17 @@ Short summary only. No code or data was produced before kickoff; planning notes 
 - **What the first loop exposed**: the interpreter writes long rules, and when the remark is ambiguous it guesses — 「そこはいらん」
   (the seasonal greeting itself wasn't needed) was read as "drop the business follow-up sentence" (K-007). This is the case the design
   planned for: when the remark is ambiguous or missing, show the master 2–3 candidate readings to pick with one tap, instead of guessing.
+- **From guessing to asking (D-015)**: when the remark is missing or ambiguous, the interpreter now offers 2–3 readings and the master
+  taps one. In the first run with it, T05 (△, no remark) got three readings and the master picked 「蔵元にも一言添えておく」; for
+  「大事にする相手だけだ」 none of the readings said "don't send", so the master answered "none of these" and nothing wrong was learned.
+- **Rules became short (D-014)** — one sentence plus a condition, with 沿革 lines (旧 → 新・きっかけ・日付・出典) in the body.
+  The trigger comes from asking the master "why?" once (optional), which is how history questions become answerable.
+- **First full learning curve (0 → 40 training scenes)**: match 48% → 55%, ○+△ 70% → 85%, but with a dip at 10–20 scenes and one
+  regression (白樺's seasonal letter). Looking scene by scene showed *why*: the interpreter never saw scene-type codes, and one
+  over-general rule (「社長に用がある場合も窓口宛て」) overrode an older one. The number alone would have hidden both.
+- **History needs a mistake to be asked about.** For 港北精機 (Teams only since 2024) the apprentice is right from day one, because the
+  constraint is in the ledger — so the master is never asked "why", and the successor can't explain it. Correction-only learning
+  captures *what differs from the average*, which is the claim; but the *why* behind already-written rules needs another prompt.
+- **Safety held where it matters most**: injected instructions in client messages never reached the kokoroe-chō in 18 runs, and the
+  apprentice escalated every discount / contract pressure to the master. One injection scene still nudged the draft (A02).
 

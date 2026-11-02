@@ -82,3 +82,42 @@ gain measures only what writing things down does not capture.
 v0 on the 20 held-out scenes, 3 runs: match (○) **47% ± 3%** (45 / 45 / 50), ○+△ **65% ± 0%**. Unstable scenes: E11, E13, E14.
 (An earlier single run gave 50%.) From now on, Before/After numbers are the mean ± SD of ≥ 3 runs (`--repeat 3`), never one run.
 **Why (Kento):** one run's number can't carry the Before; the model's own variation is ±1 scene here.
+
+## D-014 · 2026-11-03 · Accepted · Kokoroe-chō entry format: short rule + condition + 沿革 lines
+Each rule = one short sentence (`text`, ~40 chars) + optional condition (`when`) + scope + confidence, followed by history lines
+in the body: **旧「…」→ 新「…」・きっかけ・日付（JST）・出典（judgment id, scene, ○/△/×, the master's words）**.
+`きっかけ` is the master's own one-line answer to an optional "why?" asked once when a rule is created; otherwise （未記入）.
+**Why:** the first loop produced paragraph-long rules (hard to read and to delete); and history questions need the trigger,
+which a terse master only gives when asked. Memory-store versions don't record *why*, so it must live in the body (spike 11/3).
+
+## D-015 · 2026-11-03 · Accepted · Ambiguous corrections → the master taps one of 2–3 readings (or "none of these")
+The interpreter returns 1 reading when the remark is clear, 2–3 when it is missing/ambiguous; each reading names the single
+proposal field it implies (`fix`). The master taps one, or "none of these" (nothing is learned).
+The **simulated master chooses mechanically**: it applies each reading's `fix` to the draft and picks the one that clears the
+most serious failed hidden check — the way a real master knows their own intent. No LLM in the simulator's choice (D-004).
+**Why:** the first loop guessed wrong on 「そこはいらん」 (K-007). Choosing is still "one tap", not explaining.
+**Observed:** for 「大事にする相手だけだ」 none of the readings was "don't send", so the master answered "none of these".
+Open: offer a re-interpretation round after "none of these".
+
+## D-016 · 2026-11-03 · Accepted · Learning-curve protocol
+Fresh kokoroe-chō; train on the 40 training scenes in blocks of 10; at 0/10/20/30/40 measure v1 on the 20 held-out scenes ×3
+(mean ± sd) and the successor on the 8 history questions. x-axis: the master's judgments (and total taps incl. choices and the
+optional "why?" prompt). Point 0 is v1 with an empty book (prompt differs from v0 only by the empty book line); v0 stays the Before.
+
+## D-017 · 2026-11-03 · Accepted · Hidden ground truth frozen
+Changes to `data/hidden/rules.json` since the v0 baseline were limited to: adding `history[].short` (the master's one-line
+trigger, used only when asked "why?"), replacing one R12 remark (「理事会に間に合わせろ」→「理事会の2週間前までに出せ」), and the
+`_note`. `eval/simulator/judge.ts` is unchanged since the v0 baseline commit, and **re-judging all 60 stored v0 proposals
+(3 runs × 20) with the current simulator gives identical verdicts (60/60)**. Remarks and "why" affect what the apprentice can
+learn, not how proposals are judged.
+From now on `data/hidden/` is **frozen**: a PreToolUse hook (`.claude/hooks/guard-hidden.sh`) blocks edits and shell writes whose
+target is in `data/hidden/`, and `tests/hidden-freeze.test.ts` checks SHA-256 checksums (`tests/fixtures/hidden-freeze.json`).
+Any change needs Kento's explicit approval and a new decision record.
+**Why:** so the Before/After cannot look like the answers were moved mid-experiment.
+
+## D-018 · 2026-11-03 · Recorded · Day-1 results and what they say (docs/results/2026-11-03-day1.md)
+After 40 training scenes (40 judgments, 67 taps): held-out match 48% → 55% (± 5), ○+△ 70% → 85%; history questions 0/8 → 3/8
+(grounded) vs 0/8 for a general assistant; injection never changed the kokoroe-chō (18/18), lures always escalated (9/9), one
+injection scene fails the draft check (A02, kept as a fail). The curve dips at 10–20 scenes. Four learning-quality problems were
+found (type codes, an over-general rule causing a regression, history not captured for never-violated constraints, no
+generalization). These numbers are **not** the final After: they are the baseline for fixing the loop.

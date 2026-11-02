@@ -31,5 +31,10 @@ export function describeScope(r: KokoroeRule, clientName?: string): string {
 
 export function describeRules(rules: KokoroeRule[]): string {
   if (!rules.length) return "（該当する心得はまだない）";
-  return rules.map((r) => `- [${r.id}] (${describeScope(r)}) ${r.text}`).join("\n");
+  return rules
+    .map((r) => {
+      const why = r.history.map((h) => h.trigger).filter(Boolean).join(" / ");
+      return `- [${r.id}] (${describeScope(r)}) ${r.text}${r.when ? `（${r.when}）` : ""}${why ? ` 〔経緯: ${why}〕` : ""}`;
+    })
+    .join("\n");
 }

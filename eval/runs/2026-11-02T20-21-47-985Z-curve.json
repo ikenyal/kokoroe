@@ -1,0 +1,165 @@
+{
+  "at": "2026-11-02T20:34:27.330Z",
+  "note": "fictional 10 clients / 40 training + 20 held-out scenes / 8 history questions; master = simulator",
+  "repeat": 3,
+  "stepSize": 10,
+  "seed": 7,
+  "points": [
+    {
+      "trainedScenes": 0,
+      "judgments": 0,
+      "masterTaps": 0,
+      "rules": 0,
+      "match": {
+        "mean": 0.48333333333333334,
+        "sd": 0.028867513459481284,
+        "n": 3,
+        "min": 0.45,
+        "max": 0.5
+      },
+      "okOrPartial": {
+        "mean": 0.6999999999999998,
+        "sd": 1.3597399555105182e-16,
+        "n": 3,
+        "min": 0.7,
+        "max": 0.7
+      },
+      "perRun": [
+        "×○×○○×○△○○×△○△○○○△××",
+        "×○×○○×○△○○×△○△○○○△××",
+        "×○×○○×○△○○×△○△○○△△××"
+      ],
+      "history": {
+        "correct": 0,
+        "answerOk": 6,
+        "n": 8
+      },
+      "measureUsd": 0.563
+    },
+    {
+      "trainedScenes": 10,
+      "judgments": 10,
+      "masterTaps": 18,
+      "rules": 4,
+      "match": {
+        "mean": 0.4166666666666667,
+        "sd": 0.07637626158259735,
+        "n": 3,
+        "min": 0.35,
+        "max": 0.5
+      },
+      "okOrPartial": {
+        "mean": 0.6666666666666666,
+        "sd": 0.028867513459481253,
+        "n": 3,
+        "min": 0.65,
+        "max": 0.7
+      },
+      "perRun": [
+        "×○×○○×○△○○×△○△○○○△××",
+        "×××○○×○△○○×△○△○△△△××",
+        "×××○○×○△○○×△○△○○△△××"
+      ],
+      "history": {
+        "correct": 0,
+        "answerOk": 6,
+        "n": 8
+      },
+      "measureUsd": 0.5534
+    },
+    {
+      "trainedScenes": 20,
+      "judgments": 20,
+      "masterTaps": 32,
+      "rules": 6,
+      "match": {
+        "mean": 0.4166666666666667,
+        "sd": 0.057735026918962595,
+        "n": 3,
+        "min": 0.35,
+        "max": 0.45
+      },
+      "okOrPartial": {
+        "mean": 0.6833333333333332,
+        "sd": 0.028867513459481253,
+        "n": 3,
+        "min": 0.65,
+        "max": 0.7
+      },
+      "perRun": [
+        "×××○○△○△○○×△○△○×△△××",
+        "×○×○○△○△○○×△○△○×○△××",
+        "×○×○○△○△○○×△○△○×○△××"
+      ],
+      "history": {
+        "correct": 2,
+        "answerOk": 7,
+        "n": 8
+      },
+      "measureUsd": 0.5503
+    },
+    {
+      "trainedScenes": 30,
+      "judgments": 30,
+      "masterTaps": 50,
+      "rules": 9,
+      "match": {
+        "mean": 0.5499999999999999,
+        "sd": 0.04999999999999999,
+        "n": 3,
+        "min": 0.5,
+        "max": 0.6
+      },
+      "okOrPartial": {
+        "mean": 0.8000000000000002,
+        "sd": 1.3597399555105182e-16,
+        "n": 3,
+        "min": 0.8,
+        "max": 0.8
+      },
+      "perRun": [
+        "○○○○○△○△○○×△×△○×○△×○",
+        "○○○○○△○△○○×△×○○×○△×○",
+        "○○○○○△○△○○×△×△○×△△×○"
+      ],
+      "history": {
+        "correct": 3,
+        "answerOk": 8,
+        "n": 8
+      },
+      "measureUsd": 0.5589
+    },
+    {
+      "trainedScenes": 40,
+      "judgments": 40,
+      "masterTaps": 67,
+      "rules": 15,
+      "match": {
+        "mean": 0.5499999999999999,
+        "sd": 0.04999999999999999,
+        "n": 3,
+        "min": 0.5,
+        "max": 0.6
+      },
+      "okOrPartial": {
+        "mean": 0.85,
+        "sd": 0,
+        "n": 3,
+        "min": 0.85,
+        "max": 0.85
+      },
+      "perRun": [
+        "○×△○○△○△○○×△○△○○○△×○",
+        "○×△○○△○△○○×△○△○○△△×○",
+        "○×○○○△○△○○×△○△○○○△×○"
+      ],
+      "history": {
+        "correct": 4,
+        "answerOk": 8,
+        "n": 8
+      },
+      "measureUsd": 0.5614
+    }
+  ],
+  "totalUsd": 3.6637
+}

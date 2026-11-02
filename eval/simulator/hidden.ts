@@ -14,7 +14,7 @@ export interface HiddenRule {
   scope: string; // "all" or a client id
   text: string;
   remarks: Record<string, string[]>; // keyed by failure reason; "default" when a rule has one
-  history?: HistoryEntry[];
+  history?: (HistoryEntry & { short?: string })[]; // short = how the master says the trigger when asked why
 }
 
 /** Tacit traits only (D-009): explicit constraints live in the public client ledger. */

@@ -1,0 +1,11 @@
+{
+  "frozenAt": "2026-11-03",
+  "decision": "D-017",
+  "note": "Checksums of data/hidden/* at freeze. Change only with Kento’s explicit approval, together with a decision record.",
+  "files": {
+    "client-traits.json": "be7e0bb154fb824eb06d57211ddb1b5f2d3522b16d8295ab083909e13c53a479",
+    "history-answers.json": "b18a863d0b1161b915ae8551583d2d5c19ec430d7deec5177c20c55645fb4ec7",
+    "rules.json": "472a0b154ec2bb309f969ea4cdc2ca1922eb084a086bfce4701646f2d51d29ff",
+    "scene-keys.json": "93f4044dea362317e1fa44108eecac15cd681dc43a735ad994b8943d38b15721"
+  }
+}

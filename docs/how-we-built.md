@@ -39,3 +39,21 @@ Short entries, appended every work session. Source material for the README secti
   (132 tests total), and reported precedence choices instead of changing the judge.
 - **Guarding the Before** — while refactoring the apprentice into a factory, Claude noticed an edit would also change v0's system
   prompt (already measured) and moved the new instruction into the v1-only kokoroe block instead.
+- **Demo material captured as it happened** — the T05 → T13 run (表と裏 at 丸新酒造) was saved to `demo/scene5-marushin-front-back/`
+  straight from the run's store file, with a note that the △ came without a remark (not edited for the video).
+- **Simulator design kept mechanical** — Claude proposed that the simulated master pick a reading by *applying its implied fix and
+  re-running the judge*, so the choice step needs no LLM grader. Tests cover "right reading picked", "none of these", and the
+  history trigger answered only for rules that have one.
+- **Smoke run before spending** — an 8-scene run (≈ $0.14) checked the new interpreter (short rules, 2–3 readings) before the
+  ≈ $4–5 learning-curve run.
+- **Freezing the answers with a hook + checksum test** — after Kento asked to freeze `data/hidden/`, Claude first proved the judge
+  was unchanged by re-judging 60 stored v0 proposals (60/60 identical), then added `guard-hidden.sh` and a SHA-256 test.
+  The first version of the hook blocked Claude's own `>> docs/decisions.md` because the text *mentioned* the path; it was narrowed
+  to write targets and checked with 8 allow/block cases.
+- **`hitl-reviewer` subagent** (`.claude/agents/hitl-reviewer.md`) — reviews diffs for: the master keeps the final say, nothing is
+  sent/promised by the AI, untrusted client text can't write the kokoroe-chō, sources/history stay traceable, no real data/secrets,
+  evaluation integrity. Read-only tools.
+- **"Change it → re-test it" as hooks** (the product's regression idea applied to development) — `PostToolUse` on edits to
+  `src/core|disciple|learning|successor` or the simulator runs the fast free tests at once (failures are fed back to Claude) and marks
+  the API eval stale; `guard-commit.sh` then blocks `git commit` until `npm run eval:smoke` (5 held-out scenes, ≈ $0.05) has run.
+  Running the full 20-scene eval on every edit would cost ≈ $0.18 each time, so the API check happens once per commit instead.

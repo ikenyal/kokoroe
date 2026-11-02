@@ -28,3 +28,6 @@ coverage/
 *.pem
 .vercel
 npm-debug.log*
+
+# eval freshness marker (see .claude/hooks/after-edit.sh)
+.claude/.eval-stale

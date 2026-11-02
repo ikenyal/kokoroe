@@ -13,7 +13,11 @@
     "eval:quick": "tsx --env-file-if-exists=.env.local eval/run.ts --set eval",
     "spike:memory": "tsx --env-file-if-exists=.env.local spikes/managed-agents/memory-store.ts",
     "spike:export": "tsx --env-file-if-exists=.env.local spikes/managed-agents/export-skill.ts",
-    "train": "tsx --env-file-if-exists=.env.local eval/train.ts"
+    "train": "tsx --env-file-if-exists=.env.local eval/train.ts",
+    "curve": "tsx --env-file-if-exists=.env.local eval/curve.ts",
+    "eval:successor": "tsx --env-file-if-exists=.env.local eval/successor.ts",
+    "eval:adversarial": "tsx --env-file-if-exists=.env.local eval/adversarial.ts",
+    "eval:smoke": "tsx --env-file-if-exists=.env.local eval/run.ts --disciple v0 --scenes E01,E06,E10,E13,E19"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "1.4.0",
