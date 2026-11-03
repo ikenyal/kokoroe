@@ -3,7 +3,8 @@ import { start } from "./actions";
 import { getSession, liveEnabled } from "@/src/server/session";
 import { fieldEnabled } from "@/src/server/field";
 
-export default async function Home() {
+export default async function Home(props: PageProps<"/">) {
+  const { limit } = await props.searchParams;
   const s = await getSession();
   const live = liveEnabled();
   return (
@@ -19,6 +20,12 @@ export default async function Home() {
           ここでは AI の弟子・橙丸が先に対応案を作り、師匠の篠原が ○・△・× と短い一言を付けます。直された分だけが、出典と沿革つきで心得帳に残り、後任の三上に引き継がれます。
         </p>
 
+        {limit === "starts" && (
+          <p role="status" className="mt-8 border-l-4 border-ai bg-ai-soft px-4 py-2 text-[14px]">
+            短い時間に、この接続から何度も始め直されています。しばらくしてからもう一度お試しください。
+            {s && <>続きがあるので、<Link className="underline" href="/choba">帳場に戻る</Link>こともできます。</>}
+          </p>
+        )}
         <div className="mt-10 grid gap-4 sm:grid-cols-2">
           <form action={start}>
             <input type="hidden" name="mode" value="demo" />

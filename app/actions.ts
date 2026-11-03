@@ -24,7 +24,7 @@ export async function start(formData: FormData) {
   const mode = formData.get("mode");
   if (mode !== "demo" && mode !== "trial" && mode !== "field") throw new Error("invalid mode");
   if (mode === "field" && !fieldEnabled()) throw new Error("invalid mode"); // the master-role test exists only where KOKOROE_FIELD=1
-  if (!(await allowStart())) throw new Error("too many sessions from this address; try again later");
+  if (!(await allowStart())) redirect("/?limit=starts"); // a visitor can hit this: say so on the home page instead of an error screen
   await startSession(mode as Mode);
   redirect("/choba");
 }
@@ -139,7 +139,8 @@ export async function ask(formData: FormData) {
     clientId = presetQ.clientId;
     question = presetQ.question;
   }
-  if (!CLIENTS.some((c) => c.id === clientId) || !question) throw new Error("invalid question");
+  if (!question) redirect("/noren"); // e.g. only spaces: nothing to ask, back to the form
+  if (!CLIENTS.some((c) => c.id === clientId)) throw new Error("invalid question");
   let turn: SuccessorTurn;
   const refused = liveEnabled() ? await allowLive(s.sid) : "daily";
   if (liveEnabled() && refused) {
