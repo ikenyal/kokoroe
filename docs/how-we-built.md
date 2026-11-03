@@ -113,3 +113,6 @@ Short entries, appended every work session. Source material for the README secti
   surprises were handled without bypassing anything: Next.js segfaulting under amd64 emulation (→ build on the host, copy-only image)
   and lightsailctl needing a newer Docker API than Podman reports (→ `DOCKER_API_VERSION=1.46`). The public URL was then checked with
   Playwright, and the shared Podman VM was audited afterwards (only kokoroe images added).
+- **Holding an approved deployment** — Kento approved the live deployment and, in the same message, asked to check how the per-IP
+  limit reads X-Forwarded-For. It used the spoofable first entry. Claude did not deploy the approved (now known-flawed) image; it fixed
+  and tested the IP logic first and brought the changed deployment back for approval.

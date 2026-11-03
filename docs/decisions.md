@@ -288,3 +288,10 @@ only, 80% / 100% email alerts). First deployment runs on recorded data only (no 
 segfaulted, so the app is built on the host and the image only copies files (`scripts/prepare-image.sh`, `Dockerfile.prebuilt`;
 `sharp` excluded with `images.unoptimized`). lightsailctl + Podman needed `DOCKER_API_VERSION=1.46`. The shared Podman VM
 (another project's) gained only kokoroe images; nothing else changed (checked before/after by image list and storage timestamps).
+
+## D-036 · 2026-11-03 · Accepted · Per-IP limit uses the X-Forwarded-For entry appended by the trusted proxy
+Found before the first live deployment (Kento asked to check): the per-IP limit read the **first** X-Forwarded-For entry, which a
+visitor controls — sending a new fake value each time would bypass it. Now `trustedClientIp()` takes the entry appended by the
+last trusted hop, counted from the end (`KOKOROE_TRUSTED_PROXY_HOPS`, default 1 = Lightsail's load balancer); X-Real-IP is ignored.
+Tests cover spoofed leading entries and rotating fake values (still limited). The live deployment was held until this was fixed,
+because fixing it changes the image that had been approved.

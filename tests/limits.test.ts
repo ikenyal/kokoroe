@@ -23,3 +23,31 @@ describe("public-demo limits (D-032)", () => {
     vi.unstubAllEnvs();
   });
 });
+
+describe("client IP behind the load balancer (spoof-resistant)", () => {
+  it("uses the entry appended by the trusted proxy (from the end), not what the client put first", async () => {
+    const { trustedClientIp } = await import("@/src/server/limits");
+    // Lightsail LB appends the real client IP; a visitor may prepend anything.
+    expect(trustedClientIp("203.0.113.7")).toBe("203.0.113.7");
+    expect(trustedClientIp("1.2.3.4, 203.0.113.7")).toBe("203.0.113.7"); // spoofed first entry is ignored
+    expect(trustedClientIp("9.9.9.9, 8.8.8.8, 203.0.113.7")).toBe("203.0.113.7");
+    expect(trustedClientIp(" 1.2.3.4 ,203.0.113.7 ")).toBe("203.0.113.7");
+    expect(trustedClientIp(null)).toBe("direct");
+    expect(trustedClientIp("")).toBe("direct");
+    // Two trusted hops (e.g. a CDN in front of the LB): take the second from the end.
+    expect(trustedClientIp("1.2.3.4, 203.0.113.7, 198.51.100.9", 2)).toBe("203.0.113.7");
+  });
+  it("rotating a spoofed first entry does not get around the per-IP limit", async () => {
+    const { mkdtempSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const path = (await import("node:path")).default;
+    vi.stubEnv("KOKOROE_DATA_DIR", mkdtempSync(path.join(tmpdir(), "kokoroe-ip-")));
+    vi.stubEnv("KOKOROE_IP_CALLS_PER_HOUR", "2");
+    vi.stubEnv("KOKOROE_SESSION_CALLS", "100");
+    vi.resetModules();
+    const { reserve, trustedClientIp } = await import("@/src/server/limits");
+    const results = ["10.0.0.1", "10.0.0.2", "10.0.0.3"].map((fake, i) => reserve(`s${i}`, trustedClientIp(`${fake}, 203.0.113.7`)));
+    expect(results).toEqual([null, null, "ip"]);
+    vi.unstubAllEnvs();
+  });
+});

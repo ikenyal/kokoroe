@@ -48,9 +48,22 @@ function save(c: Counters) {
   renameSync(tmp, FILE);
 }
 
+/**
+ * The visitor's IP as seen by our own load balancer. X-Forwarded-For is "client-supplied, …, proxy-appended": a visitor can put
+ * anything at the front, and each trusted proxy appends the address it saw. So the trustworthy entry is the one appended by
+ * the last trusted hop — counted from the END, never the first. With Lightsail there is one trusted hop (its load balancer).
+ * X-Real-IP is ignored (a client can send it). No header (local dev) → "direct".
+ */
+export function trustedClientIp(xff: string | null, trustedHops = Number(process.env.KOKOROE_TRUSTED_PROXY_HOPS ?? 1)): string {
+  const parts = (xff ?? "").split(",").map((x) => x.trim()).filter(Boolean);
+  if (!parts.length || trustedHops < 1) return "direct";
+  const ip = parts[Math.max(0, parts.length - trustedHops)];
+  return ip.slice(0, 64);
+}
+
 async function clientIp(): Promise<string> {
   const h = await headers();
-  return (h.get("x-forwarded-for")?.split(",")[0] ?? h.get("x-real-ip") ?? "local").trim().slice(0, 64);
+  return trustedClientIp(h.get("x-forwarded-for"));
 }
 
 export type LimitReason = "session" | "ip" | "daily";
