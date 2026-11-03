@@ -53,8 +53,11 @@ store.** We tried it and, within the current scope, its advantages do not show, 
   https://platform.claude.com/docs/en/managed-agents/memory: "A memory store is a workspace-scoped collection of text documents").
 - **What would change it:** a session-mounted agent (compiler `read_write`, successor `read_only`), or a need for the kokoroe-chō
   to survive redeploys or be shared across server nodes.
-- **Follow-ups:** the s07 diagram's store slot reads 「既定: ローカル JSON / Managed Agents にも切替可」. The memory stores created
-  for the spikes are deleted once Kento has seen the list (they hold fictional data only).
+- **Follow-ups:** the s07 diagram's store slot reads 「既定: ローカル JSON / Managed Agents にも切替可」; its hand-off slots show
+  both ways to hand over (Kento): **Agent Skills（SKILL.md）** — a written-out copy kept at hand — and **MCP（読み取り専用）** —
+  queries to the kokoroe-chō as it keeps growing (D-042), drawn as a dotted read-only line straight from 心得帳. The three spike
+  memory stores (`kokoroe-spike` ×1, `kokoroe-adapter-check` ×2; fictional data only) were deleted on 11/3 after Kento saw the
+  list; a fresh listing (archived included) returned none. The results live on in `docs/spikes/` and this record.
 
 ## D-003 · 2026-11-03 · Accepted · No MCP tools during development
 A PreToolUse hook (`mcp__.*`) blocks every MCP call in this repo.

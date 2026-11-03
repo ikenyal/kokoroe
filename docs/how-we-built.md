@@ -212,7 +212,8 @@ Short entries, appended every work session. Source material for the README secti
   local JSON by default, the memory store behind `KOKOROE_STORE=memory`, recorded with the spike's numbers (session start ≈ 2.1 s,
   reads/writes 0.2–0.7 s). The s07 diagram's store slot was filled and checked as a still; the first two wordings wrapped badly
   inside the box, which only the rendered frame showed. Before deleting the spike's memory stores, Claude listed them on the API
-  (read-only) and found three, not the two expected, so the deletion waits for Kento.
+  (read-only) and found three, not the two expected, and asked before deleting; after Kento's OK all three were deleted and a
+  fresh listing showed none left.
 - **Planned for 11/7: `/goal` with visible completion conditions** — the official run and the video will be driven by `/goal`
   (a public Claude Code feature: https://code.claude.com/docs/en/goal). The docs say the evaluator only reads the conversation, never files or commands, so every
   condition in `docs/final-day.md` names the command whose output proves it (results.json values, `npm test`, `ffprobe` ≤ 180 s).

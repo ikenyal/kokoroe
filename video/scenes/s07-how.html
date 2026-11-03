@@ -4,7 +4,8 @@
      Model labels follow src/lib/claude.ts (MODELS.disciple = Sonnet for drafts and successor Q&A, MODELS.editor = Opus for interpretation).
      The apprentice, who reads the client's text, sits inside a read-only boundary: it can read the 心得帳 but never write it.
      Slots below: edit NAMES only. store = D-002 as decided on 11/3 (local JSON by default, a Managed Agents memory store by flag);
-     handoff is still open ("\n" breaks a line). -->
+     The two hand-off slots show the roles: Agent Skills = a copy (from 後任, solid arrow); MCP = read-only queries to the
+     kokoroe-chō as it keeps growing (dotted line straight from 心得帳). "\n" breaks a line. -->
 <style>
   .node { position: absolute; width: 180px; padding: 16px 10px 14px; text-align: center; background: #faf9f6;
     border: 2px solid var(--sumi); opacity: 0; animation: fade .8s var(--d) ease both; }
@@ -18,6 +19,9 @@
   .carry { padding: 10px 8px 10px; }
   .carry h2 { font-size: 20px; line-height: 1.35; letter-spacing: .02em; }
   .carry p { font-size: 14px; margin-top: 4px; white-space: nowrap; }
+  .carry .slots { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+  .carry .slots .slot { margin-top: 0; }
+  .slot.live.filled { border-style: dotted; border-width: 2px; }
   .slot { display: inline-block; white-space: pre-line; line-height: 1.45; margin-top: 8px; padding: 2px 8px; font-size: 14px; color: var(--nibi); border: 1px dashed var(--usuzumi); }
   .slot.filled { border-style: solid; border-color: var(--ai); color: var(--ai); }
   .lbl { position: absolute; font-size: 17px; color: var(--nibi); white-space: nowrap; opacity: 0; animation: fade .6s var(--d) ease both; }
@@ -42,8 +46,14 @@
   <path class="head" style="--d:6.4s" d="M781,333 L793,340 L781,347" fill="none" stroke="var(--sumi)" stroke-width="2"/>
   <path class="arrow draw" pathLength="1" style="--d:11.4s;--t:.5s" d="M977,340 H1034"/>
   <path class="head" style="--d:11.9s" d="M1026,333 L1038,340 L1026,347" fill="none" stroke="var(--sumi)" stroke-width="2"/>
-  <path class="arrow draw" pathLength="1" style="--d:12.5s;--t:.5s" d="M1130,268 V226"/>
-  <path class="head" style="--d:13s" d="M1123,234 L1130,222 L1137,234" fill="none" stroke="var(--sumi)" stroke-width="2"/>
+  <!-- 後任 → Claude Code: Agent Skills, a copy handed over -->
+  <path class="arrow draw" pathLength="1" style="--d:12.5s;--t:.5s" d="M1115,268 V226"/>
+  <path class="head" style="--d:13s" d="M1108,234 L1115,222 L1122,234" fill="none" stroke="var(--sumi)" stroke-width="2"/>
+  <!-- 心得帳 → Claude Code: MCP, read-only queries to the live kokoroe-chō -->
+  <g class="head" style="--d:13.3s;animation-duration:.7s">
+    <path class="arrow read" d="M905,268 V226"/>
+    <path d="M898,234 L905,222 L912,234" fill="none" stroke="var(--ai)" stroke-width="2"/>
+  </g>
   <!-- 心得帳 → 弟子: read only (dotted, under the row) -->
   <g class="head" style="--d:7.6s;animation-duration:.9s">
     <path class="arrow read" d="M885,420 V470 Q885,490 865,490 H170 Q150,490 150,470 V424"/>
@@ -57,7 +67,7 @@
 <div class="node" style="left:550px;top:270px;--d:4.6s"><h2>解釈</h2><p>直しを心得に<br>書き起こす</p><p class="model gothic">Claude Opus 5.5</p></div>
 <div class="node" style="left:795px;top:270px;--d:6.4s"><h2>心得帳</h2><p>範囲と沿革つき</p><span class="slot" data-slot="store"></span></div>
 <div class="node" style="left:1040px;top:270px;--d:11.9s"><h2>後任</h2><p>暖簾を継ぐ</p><p class="model gothic">Claude Sonnet 5.5</p></div>
-<div class="node carry" style="left:1040px;top:48px;--d:13s"><h2>後任の手元の<br>Claude Code</h2><p>心得帳を読み込んで使う</p><span class="slot" data-slot="handoff"></span></div>
+<div class="node carry" style="left:795px;top:56px;width:425px;--d:13s"><h2>後任の手元の Claude Code</h2><p>心得帳を使う、2つの渡し方</p><div class="slots"><span class="slot live" data-slot="mcp"></span><span class="slot" data-slot="skills"></span></div></div>
 
 <p class="lbl" style="left:164px;top:212px;--d:1.6s">読む</p>
 <p class="lbl" style="left:560px;top:226px;--d:6.9s">書き込めるのは、師匠が選んだ直しだけ</p>
@@ -66,8 +76,12 @@
 
 <script>
   // null → a dashed placeholder slot.
-  const NAMES = { store: "既定: ローカル JSON\nManaged Agents\nにも切替可", handoff: null };
-  const PLACEHOLDER = { store: "〔保存先の名前〕", handoff: "〔渡し方の名前〕" };
+  const NAMES = {
+    store: "既定: ローカル JSON\nManaged Agents\nにも切替可",
+    mcp: "MCP（読み取り専用）\n育ち続ける心得帳に\nその都度問い合わせる",
+    skills: "Agent Skills（SKILL.md）\n書き出した写しを\n手元に置いて読む",
+  };
+  const PLACEHOLDER = { store: "〔保存先の名前〕", mcp: "〔渡し方の名前〕", skills: "〔渡し方の名前〕" };
   for (const el of document.querySelectorAll("[data-slot]")) {
     const key = el.dataset.slot;
     el.textContent = NAMES[key] ?? PLACEHOLDER[key];
