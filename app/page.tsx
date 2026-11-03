@@ -2,8 +2,11 @@ import Link from "next/link";
 import { start } from "./actions";
 import { getSession, liveEnabled } from "@/src/server/session";
 import { fieldEnabled } from "@/src/server/field";
+import { redirect } from "next/navigation";
+import { ownEnabled } from "@/src/core/own-world";
 
 export default async function Home(props: PageProps<"/">) {
+  if (ownEnabled()) redirect("/own"); // own mode: the fictional demo is not offered in this process
   const { limit } = await props.searchParams;
   const s = await getSession();
   const live = liveEnabled();

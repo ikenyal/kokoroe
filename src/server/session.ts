@@ -6,6 +6,9 @@
  * Only fictional data (だいだい工房). Nothing about a session is logged.
  */
 import { randomUUID } from "node:crypto";
+import { headers } from "next/headers";
+import { isLocalRequest } from "./own";
+import { ensureOwnDir, ownDir, ownEnabled } from "@/src/core/own-world";
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { cookies } from "next/headers";
@@ -15,8 +18,8 @@ import { createSeededStore, MemoryStoreKokoroe } from "@/src/learning/memory-sto
 import { getClaude } from "@/src/lib/claude";
 import type { Candidate, JudgmentRecord, KokoroeRule } from "@/src/learning/types";
 
-export type Mode = "demo" | "trial" | "field"; // field = 師匠役テスト (the author as the master, timings recorded)
-export const MODES: Mode[] = ["demo", "trial", "field"];
+export type Mode = "demo" | "trial" | "field" | "own"; // field = 師匠役テスト; own = 自分の会社で始める (KOKOROE_OWN, local only)
+export const MODES: Mode[] = ["demo", "trial", "field", "own"];
 
 export interface QueueItem {
   scene: Scene;
@@ -112,8 +115,11 @@ export interface Snapshot {
   queue: QueueItem[];
 }
 
-const DATA_DIR = process.env.KOKOROE_DATA_DIR ?? path.join(process.cwd(), ".data");
-const SNAPSHOTS: Record<Mode, string> = {
+/** Own mode keeps everything in its own folder outside the repo (src/core/own-world.ts); otherwise the server's data dir. */
+const DATA_DIR = ownEnabled() ? ownDir() : (process.env.KOKOROE_DATA_DIR ?? path.join(process.cwd(), ".data"));
+/** Own mode has one lasting session (no cookie expiry, no 24 h sweep): your 心得帳 stays until you delete it. */
+export const OWN_SID = "00000000-0000-4000-8000-000000000000";
+const SNAPSHOTS: Record<Exclude<Mode, "own">, string> = {
   demo: path.join(process.cwd(), "data", "demo", "demo-snapshot.json"),
   trial: path.join(process.cwd(), "data", "demo", "trial-snapshot.json"),
   field: path.join(process.cwd(), "data", "demo", "field-snapshot.json"),
@@ -163,13 +169,26 @@ function videoQueue(mode: Mode, queue: Snapshot["queue"]): Snapshot["queue"] {
   return ids.map((id) => queue.find((q) => q.scene.id === id)).filter((q): q is Snapshot["queue"][number] => !!q);
 }
 
+/** Own mode: open the lasting session, creating an empty one the first time (never resets an existing 心得帳). */
+export function startOwnSession(): void {
+  if (!ownEnabled()) throw new Error("own mode is off");
+  ensureOwnDir(); // the folder (and its marker) exist before any session file is written
+  const f = files("own", OWN_SID);
+  if (existsSync(f.meta) && existsSync(f.store)) return;
+  mkdirSync(path.dirname(f.store), { recursive: true });
+  writeFileSync(f.store, JSON.stringify({ rules: [], judgments: [] }, null, 2));
+  const meta: SessionMeta = { mode: "own", createdAt: new Date().toISOString(), queue: [], pos: 0, pending: [] };
+  writeFileSync(f.meta, JSON.stringify(meta, null, 2));
+}
+
 /** Create (or reset) a session from its snapshot. Called from a Server Action, which may set cookies. */
 export async function startSession(mode: Mode): Promise<void> {
+  if (mode === "own" || ownEnabled()) throw new Error("not in own mode"); // own mode: startOwnSession; fictional modes: not here
   const jar = await cookies();
   const prev = jar.get("kokoroe_sid")?.value;
   sweep(prev && SID.test(prev) ? prev : undefined);
   const sid = randomUUID();
-  const snap = JSON.parse(readFileSync(SNAPSHOTS[mode], "utf8")) as Snapshot;
+  const snap = JSON.parse(readFileSync(SNAPSHOTS[mode as Exclude<Mode, "own">], "utf8")) as Snapshot;
   const f = files(mode, sid);
   mkdirSync(path.dirname(f.store), { recursive: true });
   writeFileSync(f.store, JSON.stringify(snap.store, null, 2));
@@ -191,10 +210,12 @@ export interface Session {
 
 /** The current visitor's session, or null if they haven't started one (or it expired). */
 export async function getSession(): Promise<Session | null> {
+  // Own mode: one lasting session, and only for requests to this machine (pages, actions and route handlers all come through here).
+  if (ownEnabled()) return isLocalRequest(await headers()) ? openSession("own", OWN_SID) : null;
   const jar = await cookies();
   const sid = jar.get("kokoroe_sid")?.value;
   const mode = jar.get("kokoroe_mode")?.value as Mode | undefined;
-  if (!sid || !SID.test(sid) || !MODES.includes(mode as Mode)) return null;
+  if (!sid || !SID.test(sid) || !MODES.includes(mode as Mode) || mode === "own") return null;
   return openSession(mode as Mode, sid);
 }
 

@@ -54,8 +54,9 @@ export interface SkillFiles {
   files: Record<string, string>; // relative path → content
 }
 
-export function exportSkill(rules: KokoroeRule[], clients: Client[], company: { name: string; master: { name: string } }): SkillFiles {
-  assertSkillName(SKILL_NAME);
+export function exportSkill(rules: KokoroeRule[], clients: Client[], company: { name: string; master: { name: string } }, opts: { own?: boolean } = {}): SkillFiles {
+  const name = opts.own ? "kokoroe-own" : SKILL_NAME; // own mode (KOKOROE_OWN): your company, not the fictional one
+  assertSkillName(name);
   const active = rules.filter((r) => r.status === "active");
   const common = active.filter((r) => r.scope.clientId === null);
   const files: Record<string, string> = {};
@@ -71,10 +72,10 @@ export function exportSkill(rules: KokoroeRule[], clients: Client[], company: { 
   const asOf =
     rules.flatMap((r) => r.history.map((h) => h.at ?? `${h.date}T00:00:00+09:00`)).sort((a, b) => Date.parse(a) - Date.parse(b)).at(-1) ?? "記録なし";
   const description =
-    `${company.name}（架空）の取引先ごとの付き合い方の作法と、その沿革（なぜそうなったか）。` +
+    `${company.name}${opts.own ? "" : "（架空）"}の取引先ごとの付き合い方の作法と、その沿革（なぜそうなったか）。` +
     `${company.name}の取引先に連絡・相談・見積り・あいさつなどをするとき、またはその取引先について「この手順は省いていいか」「なぜこうするのか」を判断するときに使う。`;
   files["SKILL.md"] = `---
-name: ${SKILL_NAME}
+name: ${name}
 description: ${description}
 ---
 
@@ -99,7 +100,7 @@ ${index.join("\n")}
 ## 全社の作法
 ${rulesMarkdown(common, "###")}
 `;
-  return { name: SKILL_NAME, files };
+  return { name, files };
 }
 
 /** Minimal ZIP (store, no compression) — enough for a handful of text files, no dependency. */

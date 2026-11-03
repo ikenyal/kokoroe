@@ -89,6 +89,7 @@ Nothing permanent lives in the container. Evaluation results, decision records a
 | `KOKOROE_GLOBAL_CALLS_PER_DAY` | `1500` | live calls per day, all visitors |
 | `KOKOROE_DATA_DIR` | `/tmp/kokoroe` | set in the Dockerfile |
 | `KOKOROE_FIELD` | *(unset)* | never enable in public |
+| `KOKOROE_OWN` | *(unset)* | 自分の会社で始める — local only, never in public (`tests/own.test.ts`; even if set, a proxied or non-local request gets nothing) |
 
 ## Build and deploy
 

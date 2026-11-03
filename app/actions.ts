@@ -20,6 +20,11 @@ import { fieldEnabled } from "@/src/server/field";
 import { enforceHitl } from "@/src/disciple/hitl";
 import { CLIENTS, getClient, HISTORY_QUESTIONS } from "@/src/core/world";
 import recorded from "@/data/demo/recorded-answers.json";
+import { deleteOwnData, parseClientsCsv, saveOwnClients, saveOwnCompany, toClients, type ClientRow } from "@/src/core/own-world";
+import { reloadOwnWorld } from "@/src/core/world";
+import { requireOwn } from "@/src/server/own";
+import { OWN_SID, openSession, startOwnSession } from "@/src/server/session";
+import { SCENE_TYPE_LABELS, type SceneType } from "@/src/core/types";
 
 export async function start(formData: FormData) {
   const mode = formData.get("mode");
@@ -70,6 +75,7 @@ export async function judge(formData: FormData) {
   if (!VERDICTS.has(verdict)) throw new Error("invalid verdict");
   const item = s.meta.paused ? undefined : s.meta.queue[s.meta.pos]; // 「ここで区切る」: nothing is judged until 「続きから」
   if (!item || item.scene.id !== sceneId) return; // stale form (double submit) — ignore
+  if (s.mode === "own" && !item.live) return; // own mode: no draft was made (limit or error) — nothing to judge, nothing to learn
   const j = await s.store.addJudgment({
     at: new Date().toISOString(),
     sceneId: item.scene.id,
@@ -278,4 +284,82 @@ export async function submitWrite(formData: FormData) {
   if (t !== null) addTimings(meta, [{ kind: "write", sceneId, ms: t, chars: text.length }]);
   s.saveMeta(meta);
   revalidatePath("/choba/write");
+}
+
+/* ---------- 自分の会社で始める (KOKOROE_OWN=1, local only) ---------- */
+
+/** The company: name, the master, the successor. */
+export async function ownSaveCompany(formData: FormData) {
+  await requireOwn();
+  const t = (k: string, d: string) => String(formData.get(k) ?? "").trim().slice(0, 40) || d;
+  saveOwnCompany({ name: t("company", "自分の会社"), masterName: t("master", "師匠"), successorName: t("successor", "後任") });
+  reloadOwnWorld();
+  revalidatePath("/own");
+}
+
+/** The client ledger, from the form rows or a pasted CSV (replaces the whole ledger). */
+export async function ownSaveClients(formData: FormData) {
+  await requireOwn();
+  const csv = String(formData.get("csv") ?? "").trim().slice(0, 50_000);
+  let rows: ClientRow[];
+  if (csv) rows = parseClientsCsv(csv);
+  else {
+    const all = (k: string) => formData.getAll(k).map((v) => String(v));
+    const names = all("name");
+    rows = names.map((name, i) => ({
+      id: all("id")[i] || undefined, name, industry: all("industry")[i] ?? "", contact: all("contact")[i] ?? "", decider: all("decider")[i] ?? "",
+      constraints: all("constraints")[i] ?? "", busyMonths: all("busyMonths")[i] ?? "", years: all("years")[i] ?? "",
+    }));
+  }
+  // Clients the 心得帳, a judgment or a written scene refers to are never dropped or renumbered (rules must not move clients).
+  const s = openSession("own", OWN_SID);
+  const referenced = new Set<string>();
+  if (s) {
+    for (const r of await s.store.listRules()) if (r.scope.clientId) referenced.add(r.scope.clientId);
+    for (const j of await s.store.listJudgments()) referenced.add(j.clientId);
+    for (const q of s.meta.queue) referenced.add(q.scene.clientId);
+  }
+  saveOwnClients(toClients(rows, [...CLIENTS], referenced).clients);
+  reloadOwnWorld();
+  revalidatePath("/own");
+}
+
+/** Open (or create, the first time) the lasting own session, then the 帳場. */
+export async function ownStart() {
+  await requireOwn();
+  startOwnSession();
+  redirect("/choba");
+}
+
+/** The master writes a new situation; the apprentice drafts for it (live) on the 帳場. */
+export async function ownAddScene(formData: FormData) {
+  await requireOwn();
+  const s = openSession("own", OWN_SID);
+  if (!s) redirect("/own");
+  const clientId = String(formData.get("clientId") ?? "");
+  const type = String(formData.get("type") ?? "") as SceneType;
+  const month = Number(formData.get("month"));
+  if (!Number.isInteger(month)) throw new Error("invalid month");
+  const situation = String(formData.get("situation") ?? "").trim().slice(0, 600);
+  if (!CLIENTS.some((c) => c.id === clientId) || !(type in SCENE_TYPE_LABELS) || !(month >= 1 && month <= 12) || !situation) throw new Error("invalid scene");
+  const meta = readMeta("own", OWN_SID);
+  const id = `S-${String(meta.queue.length + 1).padStart(4, "0")}`;
+  const draft = { channel: "none", meeting: "none", formalTo: "contact", backchannelTo: null, timing: "now", followUp: false, format: "not_applicable", posture: [], escalateToMaster: false, message: "", basedOnRules: [] } as const;
+  meta.queue.push({ scene: { id, set: "train", clientId, type, month, situation }, draft: { ...draft, posture: [] } as never });
+  meta.pos = Math.min(meta.pos, meta.queue.length - 1);
+  meta.paused = false;
+  s.saveMeta(meta);
+  redirect("/choba"); // the 帳場 drafts it live (draftLive) before showing the card
+}
+
+/** 全部消す: the own folder (company, ledger, 心得帳, judgments). Needs the word 消す typed. */
+export async function ownDeleteAll(formData: FormData) {
+  await requireOwn();
+  if (String(formData.get("confirm") ?? "").trim() !== "消す") throw new Error("type 消す to confirm");
+  // Not while the apprentice is still working: a late write would bring data back after the delete.
+  const s = openSession("own", OWN_SID);
+  if (s?.meta.pending.some((p) => ["queued", "interpreting", "choosing", "verifying"].includes(p.status))) throw new Error("弟子の読み取りが終わってから消してください");
+  if (deleteOwnData() === "refused") throw new Error("このフォルダは自分の会社モードが作ったものではないため、消しませんでした");
+  reloadOwnWorld();
+  redirect("/own");
 }

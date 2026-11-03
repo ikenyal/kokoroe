@@ -301,3 +301,12 @@ Short entries, appended every work session. Source material for the README secti
     misattribute the apprentice's rule text. So near-miss and discount questions and a verbatim-quote check were added.
   - **Reading the result:** reading the answers showed that two of the "near-miss" questions were in fact covered by learned
     rules, and the result is reported that way.
+
+- **11/4 — 自分の会社で始める (D-056).**
+  - **Live check:** Claude Code walked the whole own-company flow live on 127.0.0.1 with a throwaway data folder: ledger → a
+    written situation → draft → △ with a remark → a rule written → 「全部消す」. It stopped the server afterwards. Cost about $0.1.
+  - **Three problems found by running it, not by reading:**
+    - Next.js adds X-Forwarded-For to local requests, so the first "no proxy" check refused everything.
+    - With cacheComponents, reading the request in the root layout breaks prerendering.
+    - A production build's static shell is fixed at build time, so own mode runs on `next dev` (`npm run own`).
+  - **Review:** the hitl-reviewer subagent reviewed the guards, the data handling and the deletion.

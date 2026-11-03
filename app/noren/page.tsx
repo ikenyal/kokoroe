@@ -5,6 +5,7 @@ import { CLIENTS, COMPANY, getClient, HISTORY_QUESTIONS } from "@/src/core/world
 import { getSession, liveEnabled, type SuccessorTurn } from "@/src/server/session";
 import { ask } from "../actions";
 import { citationParts, plainText } from "@/src/lib/plain";
+import { ownEnabled } from "@/src/core/own-world";
 
 const ANSWER: Record<SuccessorTurn["answer"], { word: string; tone: string }> = {
   yes: { word: "はい", tone: "text-ai" },
@@ -97,10 +98,10 @@ export default async function NorenPage() {
         </form>
         {!live && <p className="mt-2 text-[13px] text-nibi">いまは記録済みデータで動いています。自由な質問にはライブ版で答えます。</p>}
         <div className="mt-10 space-y-10">
-          {answers.length ? answers.map((t, i) => <Turn key={i} t={t} ruleText={ruleText} />) : <p className="text-[14px] text-nibi">右の質問例から選ぶか、質問を入れてください。</p>}
+          {answers.length ? answers.map((t, i) => <Turn key={i} t={t} ruleText={ruleText} />) : <p className="text-[14px] text-nibi">{ownEnabled() ? "取引先を選んで、質問を入れてください。" : "右の質問例から選ぶか、質問を入れてください。"}</p>}
         </div>
       </section>
-      <aside aria-labelledby="ex-h" className="lg:border-l-2 lg:border-keisen lg:pl-6">
+      {!ownEnabled() && <aside aria-labelledby="ex-h" className="lg:border-l-2 lg:border-keisen lg:pl-6">
         <h2 id="ex-h" className="text-[15px] font-bold">後任がよく迷うこと</h2>
         <form action={ask} className="mt-3 space-y-2">
           {HISTORY_QUESTIONS.map((q) => (
@@ -110,7 +111,7 @@ export default async function NorenPage() {
             </button>
           ))}
         </form>
-      </aside>
+      </aside>}
     </div>
   );
 }

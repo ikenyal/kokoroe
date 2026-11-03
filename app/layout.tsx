@@ -1,7 +1,11 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Shippori_Mincho, Zen_Kaku_Gothic_New } from "next/font/google";
 import { Nav } from "./nav";
+import { ownEnabled } from "@/src/core/own-world";
+import { COMPANY } from "@/src/core/world";
+import { ownHere } from "@/src/server/own";
 import "./globals.css";
 
 // Japanese fonts: next/font splits the glyphs by unicode-range; only "latin" is preloadable.
@@ -13,23 +17,43 @@ export const metadata: Metadata = {
   description: "商いの心得を継ぐ、AIの弟子 — 架空の「だいだい工房」のデモ",
 };
 
+/**
+ * Own mode answers only on this machine: any other request gets a refusal instead of the app. Reading the request lives here,
+ * inside <Suspense>, so the layout itself stays a static shell (cacheComponents).
+ */
+async function OwnGate({ children }: { children: React.ReactNode }) {
+  if (ownEnabled() && !(await ownHere())) return <p className="yomi">自分の会社モードは、このPC（127.0.0.1）からだけ開けます。</p>;
+  return <>{children}</>;
+}
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  const own = ownEnabled();
   return (
     <html lang="ja" className={`${shippori.variable} ${zenkaku.variable}`}>
       <body className="min-h-dvh">
         {/* Always visible: who drafts and who decides. */}
         <p role="note" className="border-b border-keisen bg-ai-soft px-4 py-1.5 text-center text-[13px] text-sumi">
-          案は AI の弟子（橙丸）が作り、判断は師匠が行います。登場する会社・人物はすべて架空です。
+          {own
+            ? "自分の会社モード：データはこのPCだけに保存し、案を作るときだけ Claude API に送ります。案は AI の弟子が作り、判断はあなたが行います。"
+            : "案は AI の弟子（橙丸）が作り、判断は師匠が行います。登場する会社・人物はすべて架空です。"}
         </p>
         <header className="mx-auto flex max-w-5xl flex-wrap items-end justify-between gap-x-8 gap-y-3 px-5 pt-6 pb-3">
           <Link href="/" className="group">
             <span className="block font-mincho text-[26px] leading-none tracking-[0.08em]">ココロエ</span>
-            <span className="mt-1 block text-[12px] text-nibi">株式会社だいだい工房　橙丸の帳面</span>
+            <span className="mt-1 block text-[12px] text-nibi">{own ? "自分の会社モード" : COMPANY.name}　橙丸の帳面</span>
           </Link>
-          <Nav />
+          <Nav own={own} />
         </header>
         <div className="mx-auto max-w-5xl border-t-2 border-sumi/80 px-5" />
-        <main className="mx-auto max-w-5xl px-5 pt-6 pb-20">{children}</main>
+        <main className="mx-auto max-w-5xl px-5 pt-6 pb-20">
+          {own ? (
+            <Suspense fallback={null}>
+              <OwnGate>{children}</OwnGate>
+            </Suspense>
+          ) : (
+            children
+          )}
+        </main>
       </body>
     </html>
   );

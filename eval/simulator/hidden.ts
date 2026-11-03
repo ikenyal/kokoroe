@@ -6,6 +6,10 @@ import traitsFile from "@/data/hidden/client-traits.json";
 import sceneKeysFile from "@/data/hidden/scene-keys.json";
 import historyAnswersFile from "@/data/hidden/history-answers.json";
 import type { HistoryEntry } from "@/src/core/types";
+import { ownEnabled } from "@/src/core/own-world";
+
+// The evaluation runs on the fictional world only: with KOKOROE_OWN=1 set in the shell it would quietly use your own ledger.
+if (ownEnabled()) throw new Error("KOKOROE_OWN=1 is set: the evaluation runs on the fictional company only — unset it first");
 
 export type RuleId = string;
 

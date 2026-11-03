@@ -18,7 +18,8 @@ export interface Disciple {
   usage?: Usage[];
 }
 
-const SYSTEM = `You are ${COMPANY.apprentice.name}, an apprentice salesperson at ${COMPANY.name} (${COMPANY.description})
+/** Built at call time: in own mode (KOKOROE_OWN) the company is read after setup. For the fictional company it is the same text. */
+const SYSTEM = () => `You are ${COMPANY.apprentice.name}, an apprentice salesperson at ${COMPANY.name} (${COMPANY.description})
 Your master is ${COMPANY.master.name} (${COMPANY.master.role}).
 
 For each situation, propose how to handle the client: channel, whether to hold a live conversation, who receives the
@@ -85,7 +86,7 @@ export function makeClaudeDisciple(
       const res = await getClaude().messages.parse({
         model: MODELS.disciple,
         max_tokens: 4000,
-        system: cachedSystem(SYSTEM),
+        system: cachedSystem(SYSTEM()),
         messages: [
           {
             role: "user",

@@ -8,6 +8,7 @@
  * (docs/deploy.md). Only counts and amounts are stored, never content.
  */
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
+import { ownEnabled } from "@/src/core/own-world";
 import path from "node:path";
 import { headers } from "next/headers";
 import type { Usage } from "@/src/lib/claude";
@@ -72,14 +73,15 @@ export type LimitReason = "session" | "ip" | "daily";
 
 /** Reserve one live call. Returns null if allowed, or the reason it isn't. */
 export async function allowLive(sid: string): Promise<LimitReason | null> {
-  return reserve(sid, await clientIp());
+  // Own mode (local, your own key): the per-session cap would stop your one lasting 心得帳 for the day; the daily spend cap stays.
+  return reserve(sid, await clientIp(), { sessionCap: !ownEnabled() });
 }
 
 /** The counting logic, separated from the request so it can be tested. */
-export function reserve(sid: string, ip: string): LimitReason | null {
+export function reserve(sid: string, ip: string, opts: { sessionCap?: boolean } = {}): LimitReason | null {
   const c = load();
   if (c.usd >= LIMITS.dailyUsd || c.calls >= LIMITS.globalCallsPerDay) return "daily";
-  if ((c.sessions[sid] ?? 0) >= LIMITS.sessionCalls) return "session";
+  if ((opts.sessionCap ?? true) && (c.sessions[sid] ?? 0) >= LIMITS.sessionCalls) return "session";
   const ipc = c.ips[ip]?.hour === hour() ? c.ips[ip] : { hour: hour(), calls: 0 };
   if (ipc.calls >= LIMITS.ipCallsPerHour) return "ip";
   c.calls += 1;

@@ -728,3 +728,56 @@ for a replay before any screen was built.
 - **Later:** trust ranks are to be considered only with data from real use, where the same kind of situation comes back often.
 - `src/core/rank.ts` is kept for the replay record and the plain track record.
 
+## D-056 · 2026-11-04 · Accepted (Kento) · 自分の会社で始める — your own client ledger, on your own machine only
+
+**Context.** So Kokoroe can be used after the hackathon, Kento asked for a mode that starts from your own client ledger instead of
+the fictional company. Conditions: `KOKOROE_OWN=1`, 127.0.0.1 only, data outside the repository, absent from the public version
+(tests), visible data handling, and a way to delete everything.
+
+**Decision.**
+- **One switch for the whole process:**
+  - With `KOKOROE_OWN=1`, `src/core/world.ts` loads the company and the client ledger from `KOKOROE_OWN_DIR` (default
+    `~/.kokoroe`, refused if it is inside the repository or is the home folder itself).
+  - The fictional demo, お試し and 師匠役テスト are not offered in that process.
+  - Without the switch (the evaluation, the public version) the world is the fictional one, unchanged. The apprentice's and the
+    successor's prompts are now built at call time, giving the same text for the fictional company.
+- **Run with `npm run own`** (`next dev` on 127.0.0.1, `KOKOROE_LIVE=1`). A production build made without the switch cannot serve
+  it: its static shell was rendered for the fictional company. It then fails closed rather than showing anything.
+- **Local only, in code:**
+  - The own session is returned only for a local, unproxied request: Host is loopback, and the X-Forwarded-For chain, which
+    Next.js itself adds, is all loopback.
+  - Every own action checks the same, and the layout shows a refusal otherwise. Checked live: a spoofed Host gets only the
+    refusal, and a proxied export gets 401.
+- **The ledger:** a form or a pasted CSV (取引先名, 業界, 窓口, 決裁者, 制約, 繁忙月, 取引年数), limited to 50 clients.
+- **Use:** in the 帳場 the master writes a situation (client, kind, month, text), the apprentice drafts it live, and the master
+  marks it. Learning, 確かめ稽古, the successor and the Skill export work as in the demo. The HITL floor is unchanged: nothing is
+  sent, and money and contracts go to the master.
+- **One lasting session:** no cookie expiry and no 24-hour sweep; the 心得帳 stays until deleted.
+- **Data handling, on the setup page:** the folder where everything is kept; what is sent to the Claude API and when (only to make
+  a draft, a reading or an answer); who can open it (this machine only); and that the public demo has no such mode.
+- **「全部消す」:**
+  - It needs 消す typed in.
+  - It removes the folder only if it carries the marker file this mode wrote, so it never removes a folder it did not make.
+- **Not in the public version:** `KOKOROE_OWN` is unset in the deploy environment (docs/deploy.md). A test checks that the image
+  build and `.env.example` never set it and that the world is the fictional one without it.
+- **Hardened after the hitl-reviewer** (4 blockers, all fixed, with tests):
+  1. **「全部消す」:**
+     - The folder may not contain the repository or the home folder.
+     - The marker is written only into a folder this mode creates (or finds empty).
+     - Deletion removes only this mode's files, then the folder if it is empty. There is never a recursive delete of the folder,
+       and a symlinked folder is refused.
+  2. **"Outside the repo"** compares real paths (symlinks resolved, case-insensitive on macOS).
+  3. **Client ids stay stable across saves:**
+     - Form rows keep their id; a CSV is matched by name; an id is never reused.
+     - A client that the 心得帳, a judgment or a written scene refers to is never dropped, so a rule can never move to another
+       client.
+     - Duplicate names are refused.
+  4. **No draft, nothing to learn:** in own mode a card without a live draft (limit or error) is not shown and cannot be judged.
+- **Smaller points, also fixed:**
+  - The company name is not shown outside the local gate.
+  - Deletion is refused while the apprentice is still working.
+  - The per-session call cap does not stop your one lasting 心得帳 (the daily spend cap stays).
+  - The Dockerfiles are part of the public-version test.
+  - The evaluation refuses to run with `KOKOROE_OWN=1` set.
+  - The month must be an integer.
+

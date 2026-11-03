@@ -10,11 +10,13 @@ const ITEMS = [
   { href: "/keiko", label: "稽古の記録", hint: "評価の数字" },
 ];
 
-export function Nav() {
+export function Nav({ own = false }: { own?: boolean }) {
   const path = usePathname();
+  // Own mode: the evaluation numbers are about the fictional company, so that tab is not shown; the setup page is.
+  const items = own ? [{ href: "/own", label: "台帳", hint: "自分の会社の台帳とデータの扱い" }, ...ITEMS.filter((x) => x.href !== "/keiko")] : ITEMS;
   return (
     <nav aria-label="画面" className="-mx-1 flex max-w-full gap-0.5 overflow-x-auto">
-      {ITEMS.map((it) => {
+      {items.map((it) => {
         const active = path.startsWith(it.href);
         return (
           <Link

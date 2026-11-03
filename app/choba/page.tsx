@@ -11,7 +11,8 @@ import { ScrollToAction } from "./scroll-to-action";
 import { standing } from "@/src/core/rank";
 import { draftLive } from "@/src/server/background";
 import { getSession, liveEnabled, type Pending } from "@/src/server/session";
-import { answerWhy, choose, pause, undo, verifyCheck } from "../actions";
+import { answerWhy, choose, ownAddScene, pause, undo, verifyCheck } from "../actions";
+import { CLIENTS } from "@/src/core/world";
 import { TimedFields } from "./timed";
 import { Mark, VERDICT_WORD } from "../marks";
 import { enforceHitl } from "@/src/disciple/hitl";
@@ -127,11 +128,19 @@ function CheckCard({ p, step, sceneId, proposal, before }: { p: Pending; step: "
   );
 }
 
-/** Words for a scene of the queue (no internal ids on screen). */
-function sceneWords(sceneId: string) {
-  const t = TRAIN_SCENES.find((x) => x.id === sceneId);
-  return t ? `${getClient(t.clientId).name}・${SCENE_TYPE_LABELS[t.type]}` : "";
+type Words = (sceneId: string) => string;
+
+/**
+ * Words for a scene (no internal ids on screen). Scenes the master wrote in own mode live only in the session's queue, so the
+ * page builds this per request from the queue, falling back to the fictional training scenes.
+ */
+function sceneWordsFrom(queue: { scene: { id: string; clientId: string; type: keyof typeof SCENE_TYPE_LABELS } }[]): Words {
+  return (sceneId) => {
+    const t = queue.find((q) => q.scene.id === sceneId)?.scene ?? TRAIN_SCENES.find((x) => x.id === sceneId);
+    return t ? `${getClient(t.clientId).name}・${SCENE_TYPE_LABELS[t.type]}` : "";
+  };
 }
+const sceneWords = sceneWordsFrom([]); // fictional scenes only (the recorded example)
 
 /**
  * Without a key nothing is interpreted. Show instead what the live version writes, from the recorded demo kokoroe-chō: the rule
@@ -152,11 +161,11 @@ function OfflineExample({ sceneId }: { sceneId: string }) {
   );
 }
 
-function PendingItem({ p, beforeOf, ruleText }: { p: Pending; beforeOf: (judgmentId: string) => Proposal | undefined; ruleText: (id: string) => string }) {
+function PendingItem({ p, beforeOf, ruleText, words }: { p: Pending; beforeOf: (judgmentId: string) => Proposal | undefined; ruleText: (id: string) => string; words: Words }) {
   return (
     <li className="border-t border-keisen py-3 first:border-t-0">
       <p className="text-[13px] text-nibi">
-        {sceneWords(p.sceneId)}　{STATUS[p.status]}
+        {words(p.sceneId)}　{STATUS[p.status]}
         {p.round === 2 && p.status === "needs-choice" ? "（別の読み方）" : ""}
       </p>
       {p.status === "offline" && <OfflineExample sceneId={p.sceneId} />}
@@ -216,12 +225,39 @@ function PendingItem({ p, beforeOf, ruleText }: { p: Pending; beforeOf: (judgmen
   );
 }
 
+/** Own mode: the master writes the next situation; the apprentice drafts for it (live). */
+function NewScene() {
+  const field = "mt-1 block h-11 w-full rounded-[3px] border border-waku bg-kami px-2 text-[15px]";
+  return (
+    <form action={ownAddScene} className="mt-6 space-y-4">
+      <h1 className="font-mincho text-[22px]">次の場面を書く</h1>
+      <p className="text-[13.5px] text-nibi">取引先に何かを伝える・相談する場面を、ありのままに書いてください。弟子が案を作ります。送るのはあなたです（弟子は何も送りません）。</p>
+      <div className="grid gap-3 sm:grid-cols-[1fr_1fr_6rem]">
+        <label className="text-[13px] text-nibi">取引先
+          <select name="clientId" required className={field}>{CLIENTS.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}</select>
+        </label>
+        <label className="text-[13px] text-nibi">場面の種類
+          <select name="type" required className={field}>{Object.entries(SCENE_TYPE_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select>
+        </label>
+        <label className="text-[13px] text-nibi">月
+          <input name="month" type="number" min={1} max={12} placeholder="例：4" required className={field} />
+        </label>
+      </div>
+      <label className="block text-[13px] text-nibi">場面
+        <textarea name="situation" required maxLength={600} rows={4} placeholder="例：来月の納品が1週間遅れそう。まだ確定ではない。" className="mt-1 block w-full rounded-[3px] border border-waku bg-kami p-3 font-mincho text-[16px]" />
+      </label>
+      <button className="h-12 rounded-[3px] bg-sumi px-6 text-[15px] text-kami">弟子に案を作らせる</button>
+    </form>
+  );
+}
+
 export default async function ChobaPage() {
   const s = await getSession();
   if (!s) redirect("/");
   const live = liveEnabled();
   if (live && !s.meta.paused && s.meta.queue[s.meta.pos] && !s.meta.queue[s.meta.pos].live) await draftLive(s, s.meta.pos);
   const meta = (await getSession())!.meta;
+  const words = sceneWordsFrom(meta.queue);
   const item = meta.paused ? undefined : meta.queue[meta.pos];
   const busy = meta.pending.some((p) => ["queued", "interpreting", "choosing", "verifying"].includes(p.status));
   const recent = meta.pending.slice(0, 6);
@@ -237,7 +273,7 @@ export default async function ChobaPage() {
   const record = item
     ? standing(judgments.filter((j) => j.clientId === item.scene.clientId).map((j) => ({ clientId: j.clientId, sceneType: j.sceneType, verdict: j.verdict, kind: j.kind, undone: j.undone, at: j.at })))
     : null;
-  const label = s.mode === "demo" ? "デモの続き" : s.mode === "field" ? "師匠役テスト" : "お試し";
+  const label = s.mode === "demo" ? "デモの続き" : s.mode === "field" ? "師匠役テスト" : s.mode === "own" ? "自分の会社" : "お試し";
 
   return (
     <div className="grid gap-10 lg:grid-cols-[1fr_19rem]">
@@ -262,7 +298,7 @@ export default async function ChobaPage() {
         {undoable && (
           <form action={undo} className="mt-2 text-[13px] text-nibi">
             <input type="hidden" name="judgmentId" value={undoable.judgment.id} />
-            直前の判定：{sceneWords(undoable.judgment.sceneId)}に <span className="font-mincho text-shu">{undoable.judgment.verdict}</span>
+            直前の判定：{words(undoable.judgment.sceneId)}に <span className="font-mincho text-shu">{undoable.judgment.verdict}</span>
             {undoable.block === "busy" ? (
               <span>（弟子が読み取り中です。終わると取り消せます）</span>
             ) : undoable.block === "changed-since" ? (
@@ -276,7 +312,15 @@ export default async function ChobaPage() {
             )}
           </form>
         )}
-        {item ? (
+        {s.mode === "own" && !live ? (
+          <p role="alert" className="mt-6 border-l-4 border-shu bg-shu-soft px-4 py-2 text-[14px]">
+            案を作るには Claude API のキーが要ります。.env.local に ANTHROPIC_API_KEY を置き、KOKOROE_LIVE=1 をつけて起動してください。
+          </p>
+        ) : item && s.mode === "own" && !item.live ? (
+          <p role="alert" className="mt-6 border-l-4 border-shu bg-shu-soft px-4 py-2 text-[14px]">
+            この場面の案を作れませんでした（その日の上限か、通信の失敗）。しばらくしてから、このページを開き直してください。
+          </p>
+        ) : item ? (
           <article className="mt-4">
             <header>
               <h1 id="card-h" className="font-mincho text-[25px] tracking-[0.04em]">
@@ -305,6 +349,8 @@ export default async function ChobaPage() {
               <button className="rounded-[3px] bg-sumi px-5 py-2.5 text-[15px] text-kami">続きから</button>
             </form>
           </div>
+        ) : s.mode === "own" ? (
+          <NewScene />
         ) : (
           <div className="mt-6">
             <h1 className="font-mincho text-[22px]">今日の稽古はここまでです</h1>
@@ -324,7 +370,7 @@ export default async function ChobaPage() {
         <h2 id="bg-h" className="text-[15px] font-bold">弟子の読み取り</h2>
         <p className="mt-1 text-[13px] text-nibi">△・× の意味を弟子が読み取り、心得帳に書きます。待たずに次の案へ進めます。</p>
         {recent.length ? (
-          <ul className="mt-3">{recent.map((p) => <PendingItem key={p.judgmentId} p={p} ruleText={ruleText} beforeOf={(id) => judgments.find((j) => j.id === id)?.proposal} />)}</ul>
+          <ul className="mt-3">{recent.map((p) => <PendingItem key={p.judgmentId} p={p} ruleText={ruleText} words={words} beforeOf={(id) => judgments.find((j) => j.id === id)?.proposal} />)}</ul>
         ) : (
           <p className="mt-4 flex items-center gap-2 text-[14px] text-nibi">
             <Mark v="○" size={20} className="text-shu" />
