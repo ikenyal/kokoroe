@@ -9,9 +9,9 @@ TypeScript (strict) + Next.js App Router + Tailwind, `@anthropic-ai/sdk`, Vitest
 **Why:** one language for UI, API routes, eval scripts and spikes; one person, one week.
 **Alternatives:** Python backend + separate frontend (two toolchains, slower).
 
-## D-002 · 2026-11-03 · Provisional · Fast apprentice vs. slow compiler
+## D-002 · 2026-11-03 · Accepted (settled 11/3; see "Decision" below) · Fast apprentice vs. slow compiler
 
-_As built today: the interpreter is a Messages API call (Opus) and the kokoroe-chō is local JSON by default; the memory store is an opt-in adapter. The material and recommendation are below._
+_The first plan is kept below as written. As decided: the interpreter is a Messages API call (Opus) and the kokoroe-chō is local JSON by default; the memory store is an opt-in adapter (`KOKOROE_STORE=memory`)._
 Apprentice drafts and successor Q&A use the **Messages API** (Sonnet 5.5, seconds). Interpreting corrections and compiling the
 kokoroe-chō use **Managed Agents** with a memory store (Opus 5.5, async).
 **Why:** the master's 1-tap ○/△/× flow can't wait on a long-running session; compilation is async and benefits from a persisted,
@@ -42,6 +42,19 @@ Do not move the apprentice or interpreter into Managed Agents sessions before 11
 (redeploy survival, multi-node, versions) don't show, while the 2 s session start and a beta dependency sit on the critical path;
 the 沿革 is already carried in the rule body and exported. The case that would change this is a
 session-mounted successor agent with the store `read_only`.
+
+### D-002 — Decision (2026-11-03, Kento)
+**The demo and all evaluation use the local JSON store by default; `KOKOROE_STORE=memory` switches to a Managed Agents memory
+store.** We tried it and, within the current scope, its advantages do not show, so it is not the default.
+- **Measured** (`spikes/managed-agents/adapter-check.ts`, laptop in Japan, real API, fictional data): starting a session (seeding
+  16 rules + 27 judgments) **≈ 2.1 s**; each read or write **0.2–0.7 s** (listRules / rulesFor ≈ 0.23–0.25 s, saveRule ≈ 0.5 s,
+  addJudgment ≈ 0.73 s), against ~0–2 ms for local JSON. No model tokens.
+- **Basis:** only our own measurements above and the official documentation ("Using agent memory",
+  https://platform.claude.com/docs/en/managed-agents/memory: "A memory store is a workspace-scoped collection of text documents").
+- **What would change it:** a session-mounted agent (compiler `read_write`, successor `read_only`), or a need for the kokoroe-chō
+  to survive redeploys or be shared across server nodes.
+- **Follow-ups:** the s07 diagram's store slot reads 「既定: ローカル JSON / Managed Agents にも切替可」. The memory stores created
+  for the spikes are deleted once Kento has seen the list (they hold fictional data only).
 
 ## D-003 · 2026-11-03 · Accepted · No MCP tools during development
 A PreToolUse hook (`mcp__.*`) blocks every MCP call in this repo.
@@ -97,7 +110,7 @@ would make the Before too low and invite "just write it in the ledger". The Befo
 gain measures only what writing things down does not capture.
 **Comparison recorded in three tiers:** `naive` (no API) / `v0` (ledger + constraints — the Before in the video) / Kokoroe (grown kokoroe-chō).
 
-## D-012 · 2026-11-03 · Evidence for D-002 (still provisional)
+## D-012 · 2026-11-03 · Evidence for D-002 (D-002 settled the same day — see its Decision)
 - Memory-store host-side reads/writes take ~0.2–0.4 s, versions and 409 preconditions work (docs/spikes/2026-11-03-managed-agents.md).
 - Apprentice v0 on the Messages API (Sonnet 5.5, effort low, structured output): 20 scenes in 31.2 s at concurrency 4,
   i.e. roughly 6 s per proposal; 35.9k input / 10.5k output tokens ≈ $0.18 for 20 proposals.

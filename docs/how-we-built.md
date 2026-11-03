@@ -208,3 +208,13 @@ Short entries, appended every work session. Source material for the README secti
   usually meant "something else is still missing". Claude parked the change on a branch instead of merging, showed the evidence,
   and Kento chose the narrower rule: withdraw only when the draft does not follow the rule; otherwise keep it and learn the rest
   separately. The same run after the change kept the rule; hitl-reviewer reviewed both versions.
+- **Settling D-002 from measurements** — the prepared recommendation was accepted on the strength of the spike's numbers and the official documentation alone:
+  local JSON by default, the memory store behind `KOKOROE_STORE=memory`, recorded with the spike's numbers (session start ≈ 2.1 s,
+  reads/writes 0.2–0.7 s). The s07 diagram's store slot was filled and checked as a still; the first two wordings wrapped badly
+  inside the box, which only the rendered frame showed. Before deleting the spike's memory stores, Claude listed them on the API
+  (read-only) and found three, not the two expected, so the deletion waits for Kento.
+- **Planned for 11/7: `/goal` with visible completion conditions** — the official run and the video will be driven by `/goal`
+  (a public Claude Code feature: https://code.claude.com/docs/en/goal). The docs say the evaluator only reads the conversation, never files or commands, so every
+  condition in `docs/final-day.md` names the command whose output proves it (results.json values, `npm test`, `ffprobe` ≤ 180 s).
+  The day is split into two goals so a video retry can never loop back into the paid measurement, and "run eval:final once" is
+  written into the condition itself.

@@ -31,7 +31,8 @@ All motion is CSS animation (no timers/randomness), so stills are reproducible. 
 - [ ] s09: replace the interim numbers with the official Before/After (same ledger, 5 training paths); the interim Before and
       After were measured with different ledger wording (D-033).
 - [x] Animations s02, s03, s07, s10.
-- [ ] s07: fill the product names in `NAMES` (s07-how.html) after D-002 (slots for the store and the hand-off form).
+- [x] s07: store slot filled after D-002 (「既定: ローカル JSON / Managed Agents にも切替可」).
+- [ ] s07: hand-off slot (`NAMES.handoff`) still open.
 - [x] Real-screen steps for s05 (お試し with `KOKOROE_VIDEO_QUEUE=T05,T13`), s06, s08, s09 (/keiko, reads results.json);
       s08b compares Skill only vs Skill + MCP from `demo/successor-mcp/answers.json` (re-recorded by `--mcp`).
 - [ ] Narration lengths: s01 (~15 s / 12 s) and s07 (~21 s / 15 s) run long — rebalance after the voice is chosen.

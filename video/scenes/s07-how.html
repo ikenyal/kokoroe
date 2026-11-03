@@ -3,7 +3,8 @@
 <!-- s07 (15 s): how it works. 弟子 → 師匠 (○△× + one line) → 解釈 → 心得帳 → 後任 → the successor's own Claude Code.
      Model labels follow src/lib/claude.ts (MODELS.disciple = Sonnet for drafts and successor Q&A, MODELS.editor = Opus for interpretation).
      The apprentice, who reads the client's text, sits inside a read-only boundary: it can read the 心得帳 but never write it.
-     Product names (Managed Agents / Agent Skills) go into the slots below once D-002 is settled — edit NAMES only. -->
+     Slots below: edit NAMES only. store = D-002 as decided on 11/3 (local JSON by default, a Managed Agents memory store by flag);
+     handoff is still open ("\n" breaks a line). -->
 <style>
   .node { position: absolute; width: 180px; padding: 16px 10px 14px; text-align: center; background: #faf9f6;
     border: 2px solid var(--sumi); opacity: 0; animation: fade .8s var(--d) ease both; }
@@ -17,7 +18,7 @@
   .carry { padding: 10px 8px 10px; }
   .carry h2 { font-size: 20px; line-height: 1.35; letter-spacing: .02em; }
   .carry p { font-size: 14px; margin-top: 4px; white-space: nowrap; }
-  .slot { display: inline-block; white-space: nowrap; margin-top: 8px; padding: 2px 8px; font-size: 14px; color: var(--nibi); border: 1px dashed var(--usuzumi); }
+  .slot { display: inline-block; white-space: pre-line; line-height: 1.45; margin-top: 8px; padding: 2px 8px; font-size: 14px; color: var(--nibi); border: 1px dashed var(--usuzumi); }
   .slot.filled { border-style: solid; border-color: var(--ai); color: var(--ai); }
   .lbl { position: absolute; font-size: 17px; color: var(--nibi); white-space: nowrap; opacity: 0; animation: fade .6s var(--d) ease both; }
   .wall-lbl { position: absolute; font-size: 19px; color: var(--ai); opacity: 0; animation: fade .8s 8.4s ease both; line-height: 1.5; }
@@ -64,8 +65,8 @@
 <div class="wall-lbl" style="left:284px;top:100px">読み取り専用<br><span style="color:var(--nibi);font-size:17px">取引先の文面を読む側は、心得帳を書き換えられない</span></div>
 
 <script>
-  // Fill after D-002: e.g. { store: "…", handoff: "…" }. null → a dashed placeholder slot.
-  const NAMES = { store: null, handoff: null };
+  // null → a dashed placeholder slot.
+  const NAMES = { store: "既定: ローカル JSON\nManaged Agents\nにも切替可", handoff: null };
   const PLACEHOLDER = { store: "〔保存先の名前〕", handoff: "〔渡し方の名前〕" };
   for (const el of document.querySelectorAll("[data-slot]")) {
     const key = el.dataset.slot;

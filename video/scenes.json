@@ -17,7 +17,7 @@
       "narration": "（実画面に合わせて 11/7 に確定）" },
     { "id": "s07-how", "kind": "anim", "seconds": 15, "page": "video/scenes/s07-how.html",
       "narration": "弟子が案を出し、師匠は○△×と一言だけ返します。解釈役がそれを、範囲と沿革のついた心得に書き起こします。取引先の文面を読む弟子は、心得帳を読めても書き換えられません。心得帳は、そのまま後任へ渡ります。",
-      "note": "draft; product names (Managed Agents / Agent Skills) go into the diagram slots after D-002" },
+      "note": "draft; store slot filled per D-002 (11/3); hand-off slot still open" },
     { "id": "s08-noren", "kind": "screen", "seconds": 20, "page": "/noren", "action": "successor asks a preset question → answer with rule id + 沿革",
       "narration": "（実画面に合わせて 11/7 に確定）" },
     { "id": "s08b-mcp", "kind": "anim", "seconds": 5, "page": "video/scenes/s08b-mcp.html",
