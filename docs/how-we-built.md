@@ -185,7 +185,8 @@ Short entries, appended every work session. Source material for the README secti
   the ○△× marks in 9 stops, arrows choose, Enter records; the hidden radios now show a focus ring. The accessibility tree showed
   what a screen reader hears: the check-card buttons were named just "○" — now "○ よい / △ 条件つき / × ちがう", the prose box is
   labelled by its question, and the visible word under each mark no longer doubles the name. Screenshots: `docs/screens/a11y-*.png`.
-- **A milestone audit by independent subagents** — two read-only subagents,
+- **A milestone audit by independent subagents** (after the past Claude Code hackathon winner ARIA, whose public repo keeps an audit
+  per milestone: https://github.com/zestones/Aria, `docs/audits/`) — two read-only subagents,
   briefed with angles but not with conclusions: (A) safety/HITL, evaluation fairness, secrets; (B) README vs code and where every
   number comes from. The main session re-checked each finding against code and data before acting — which also caught one of its
   own errors: it first wrote that the repo was already public, because the test clone had succeeded; an unauthenticated request

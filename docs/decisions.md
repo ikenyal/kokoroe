@@ -506,8 +506,10 @@ were edited so that no unpublishable content stays in the repo; the decision its
 **Also edited:**
 - the spike note
 - three `how-we-built.md` entries
-- the 11/3 audit's opening line
-- the video typography backlog's source line
+- the video typography backlog's source line (it pointed to someone else's post)
+
+The ARIA attribution in the 11/3 audit and `how-we-built.md` was removed by mistake and then restored. It does not come from a
+session: it comes from ARIA's public repo (https://github.com/zestones/Aria, `docs/audits/`), which is now cited.
 
 Mentions of "kickoff" as a date are kept: they say when the period began, not what was said. No image, recording, narration or
 subtitle in the repo comes from a session (all 61 PNGs are produced by this repo's scripts; `video/out/` is not committed).
