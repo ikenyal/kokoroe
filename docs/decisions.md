@@ -252,3 +252,11 @@ then writes the same etiquette as prose for 5 of them. The app records, in field
 no new content beyond the fictional data. Report at /choba/report (medians). Designed for ≤ 30 minutes. Enabled only with
 `KOKOROE_FIELD=1`; never shown on the public demo. Needs KOKOROE_LIVE=1 for choices and "why?" (interpretation runs live).
 The 帳場 now also asks "なぜ？" once after a new rule is written (optional, skippable), matching the evaluation loop (D-020).
+
+## D-032 · 2026-11-03 · Accepted (limits) / Open (hosting) · Public-demo guards and where it runs
+Live Claude calls from the UI go through `src/server/limits.ts`: per session (40), per IP per hour (60), per day by count (1500)
+and by estimated spend (`KOKOROE_DAILY_USD`, default $5). Interpretation is reserved in the action (before `after()`), the second
+round in `choose`, drafts and successor answers before calling. Over a limit → recorded data + 「本日のお試し上限」 notice.
+**Open — hosting (needs Kento):** Amplify Hosting documents SSR for Next.js 12–15 and its compute is per-request, which breaks the
+file-based sessions/counters. Recommended: App Runner with exactly one instance (works as is); Amplify only after a DynamoDB
+store adapter. Details and the list of resources to create: docs/deploy.md.

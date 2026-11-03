@@ -1,3 +1,4 @@
+import { LimitNote } from "../limit-note";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { CLIENTS, COMPANY, getClient, HISTORY_QUESTIONS } from "@/src/core/world";
@@ -54,6 +55,7 @@ export default async function NorenPage() {
   const answers = s.meta.answers ?? [];
   return (
     <div className="grid gap-10 lg:grid-cols-[1fr_20rem]">
+      <div className="lg:col-span-2 -mb-6 empty:hidden"><LimitNote reason={s.meta.limit} /></div>
       <section aria-labelledby="noren-h">
         <h1 id="noren-h" className="font-mincho text-[24px] tracking-[0.06em]">暖簾を継ぐ</h1>
         <p className="yomi mt-2 max-w-[36em] text-[15.5px]">

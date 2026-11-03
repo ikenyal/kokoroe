@@ -61,6 +61,7 @@ export interface FieldWrite {
 
 export interface SessionMeta {
   mode: Mode;
+  limit?: "session" | "ip" | "daily"; // set when a live call was refused; the UI says so and falls back to recorded data
   timings?: Timing[];
   writes?: FieldWrite[];
   answers?: SuccessorTurn[]; // 暖簾を継ぐ — newest first

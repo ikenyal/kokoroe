@@ -12,6 +12,8 @@ import { applyChoice, interpretInBackground } from "@/src/server/background";
 import { recordTrigger } from "@/src/learning/compile";
 import type { SessionMeta, SuccessorTurn, Timing } from "@/src/server/session";
 import { askSuccessor } from "@/src/successor/ask";
+import type { Usage } from "@/src/lib/claude";
+import { allowLive, recordSpend } from "@/src/server/limits";
 import { CLIENTS, getClient, HISTORY_QUESTIONS } from "@/src/core/world";
 import recorded from "@/data/demo/recorded-answers.json";
 
@@ -79,9 +81,13 @@ export async function judge(formData: FormData) {
     ...(tJudge !== null ? [{ kind: "judge" as const, sceneId: item.scene.id, ms: tJudge, verdict }] : []),
     ...(tRemark !== null ? [{ kind: "remark" as const, sceneId: item.scene.id, ms: tRemark, chars: remark.length, verdict }] : []),
   ]);
-  if (verdict !== "○") meta.pending.unshift({ judgmentId: j.id, sceneId: item.scene.id, status: liveEnabled() ? "queued" : "offline" });
+  // Reserve the live call here (after() runs without the request, so limits are checked now).
+  const refused = verdict !== "○" && liveEnabled() ? await allowLive(s.sid) : null;
+  const live = verdict !== "○" && liveEnabled() && !refused;
+  if (refused) meta.limit = refused;
+  if (verdict !== "○") meta.pending.unshift({ judgmentId: j.id, sceneId: item.scene.id, status: live ? "queued" : "offline" });
   s.saveMeta(meta);
-  if (verdict !== "○" && liveEnabled()) after(() => interpretInBackground(s.mode, s.sid, j.id));
+  if (live) after(() => interpretInBackground(s.mode, s.sid, j.id));
   revalidatePath("/choba");
 }
 
@@ -94,6 +100,18 @@ export async function choose(formData: FormData) {
   if (!/^J-\d{4}$/.test(judgmentId) || !/^(none|[0-2])$/.test(pick)) throw new Error("invalid choice");
   if (!liveEnabled()) return;
   const index = pick === "none" ? null : Number(pick);
+  if (index === null) {
+    // "none of these" in round 1 starts a second interpretation — a live call.
+    const refused = await allowLive(s.sid);
+    if (refused) {
+      const m = readMeta(s.mode, s.sid);
+      m.limit = refused;
+      m.pending = m.pending.map((p) => (p.judgmentId === judgmentId ? { ...p, status: "nothing-learned", note: "お試し上限のため、別の読み方は出していません" } : p));
+      s.saveMeta(m);
+      revalidatePath("/choba");
+      return;
+    }
+  }
   const meta = readMeta(s.mode, s.sid);
   const sceneId = meta.pending.find((p) => p.judgmentId === judgmentId)?.sceneId ?? "";
   const tChoose = ms(formData, "shownAt", "submitAt");
@@ -118,9 +136,16 @@ export async function ask(formData: FormData) {
   }
   if (!CLIENTS.some((c) => c.id === clientId) || !question) throw new Error("invalid question");
   let turn: SuccessorTurn;
-  if (liveEnabled()) {
+  const refused = liveEnabled() ? await allowLive(s.sid) : "daily";
+  if (liveEnabled() && refused) {
+    const m = readMeta(s.mode, s.sid);
+    m.limit = refused;
+    s.saveMeta(m);
+  }
+  if (liveEnabled() && !refused) {
     const rules = (await s.store.listRules()).filter((r) => r.status === "active" && (r.scope.clientId === null || r.scope.clientId === clientId));
-    const a = await askSuccessor({ client: getClient(clientId), question, rules });
+    const usage: Usage[] = [];
+    const a = await askSuccessor({ client: getClient(clientId), question, rules, usage }).finally(() => recordSpend(usage));
     if (!a.citationsValid) {
       // Grounding check: a yes/no without real kokoroe-chō citations is not shown as an answer.
       turn = { at: new Date().toISOString(), clientId, question, answer: "unknown", explanation: "心得帳には記録がありません。師匠に確認してください。", citations: [], source: "live" };

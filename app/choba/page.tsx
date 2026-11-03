@@ -1,3 +1,4 @@
+import { LimitNote } from "../limit-note";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { CHANNEL_JA, FORMAT_JA, MEETING_JA, POSTURE_JA, TIMING_JA, who } from "@/src/core/labels";
@@ -138,6 +139,7 @@ export default async function ChobaPage() {
   return (
     <div className="grid gap-10 lg:grid-cols-[1fr_19rem]">
       <AutoRefresh active={busy} />
+      <div className="lg:col-span-2 -mb-6 empty:hidden"><LimitNote reason={meta.limit} /></div>
       <section aria-labelledby="card-h">
         <p className="text-[13px] text-nibi">
           {s.mode === "demo" ? "デモの続き" : s.mode === "field" ? "実地テスト" : "お試し"}　{meta.pos + 1} / {meta.queue.length} 件目

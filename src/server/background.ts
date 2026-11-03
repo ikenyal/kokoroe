@@ -8,6 +8,8 @@ import { makeDiscipleV1 } from "@/src/disciple/v1";
 import { applyCandidate } from "@/src/learning/compile";
 import { interpret } from "@/src/learning/interpret";
 import { guardScope } from "@/src/learning/scope";
+import type { Usage } from "@/src/lib/claude";
+import { allowLive, recordSpend } from "./limits";
 import { openSession, readMeta, type Mode, type Pending, type Session } from "./session";
 
 function update(s: Session, judgmentId: string, patch: Partial<Pending>) {
@@ -35,7 +37,8 @@ export async function interpretInBackground(mode: Mode, sid: string, judgmentId:
     update(s, judgmentId, { status: "interpreting", round });
     const { judgment, scene, client, existing } = await context(s, judgmentId);
     const rejected = round === 2 ? readMeta(mode, sid).pending.find((p) => p.judgmentId === judgmentId)?.candidates : undefined;
-    const interp = await interpret({ scene, client, judgment, existing, rejected });
+    const usage: Usage[] = [];
+    const interp = await interpret({ scene, client, judgment, existing, rejected, usage }).finally(() => recordSpend(usage));
     const cands = interp.candidates;
     if (!cands.length) return update(s, judgmentId, { status: "nothing-learned", note: "読み取れる違いがありませんでした" });
     // Round 2 always asks (D-025): after "none of these", nothing is written without the master's tap.
@@ -77,9 +80,17 @@ export async function draftLive(s: Session, index: number) {
   const key = `${s.mode}-${s.sid}-${index}`;
   const item = readMeta(s.mode, s.sid).queue[index];
   if (!item || item.live || drafting.has(key)) return;
+  const refused = await allowLive(s.sid);
+  if (refused) {
+    const meta = readMeta(s.mode, s.sid);
+    meta.limit = refused;
+    s.saveMeta(meta);
+    return; // keep the recorded draft
+  }
   drafting.add(key);
+  const d = makeDiscipleV1(s.store, "v1-live");
   try {
-    const draft = await makeDiscipleV1(s.store, "v1-live").propose(item.scene, getClient(item.scene.clientId));
+    const draft = await d.propose(item.scene, getClient(item.scene.clientId)).finally(() => recordSpend(d.usage));
     // Re-read after the await and patch only this card, so background updates made meanwhile are kept.
     const meta = readMeta(s.mode, s.sid);
     meta.queue[index] = { ...meta.queue[index], draft, live: true };
