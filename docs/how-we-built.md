@@ -276,3 +276,12 @@ Short entries, appended every work session. Source material for the README secti
   - **Smoothness, measured:** to decide about HyperFrames, Claude Code counted unique frames in windows of continuous motion
     (ffmpeg `mpdecimate`) instead of judging by eye. Nearly every frame was new, so HyperFrames was not needed.
   - **Polly:** 558 billed characters, about $0.009.
+
+- **11/4 — v5: breath and words (D-052).**
+  - **Breaths:** `assemble.sh` holds frames with ffmpeg `tpad` (the last frame after a scene, the closed noren before a chapter).
+    Checked in the output: the pauses are digital silence (`astats` peak −∞ dB), and the held frames carry no subtitle.
+  - **Words:** Claude Code checked the use of ココロエ / 心得 / 心得帳 across the video, UI, READMEs and docs with `git grep`.
+    It fixed the video and docs, and left the UI change for Kento's OK because it needs a redeploy.
+  - **Shorter s04b:** the line that says the relation turned out shorter than the one it replaced (9.4 s against 10.3 s), so it
+    went in the narration as well as on screen.
+  - **Polly:** 680 + 64 billed characters, about $0.012.

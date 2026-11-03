@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
-<!-- s08 (v3, why it works; 11.8 s; the question 「直すだけで、本当に、伝わるのでしょうか。」 is asked just before, in s07c-ask).
+<!-- s08 (v5, why it works; 10.9 s; times below are v3's, now about 0.6 s earlier (narration 「AIが出すのは、平均的な答えです。…」); the question 「直すだけで、本当に、伝わるのでしょうか。」 is asked just before, in s07c-ask).
      On the narration's sentences (+0.3 s lead):
      0.3  AIは、平均的な答えを出すのが得意です。 → the AI's draft, labelled as the average answer (it would fit any client)
      4.4  ベテランの知恵は、その平均との、ずれにあります。 → the master's 朱 correction on that draft: the gap from the average
@@ -13,10 +13,10 @@
      Colors: 墨, 朱 (and the ruled lines). Faces: Mincho for the ledger, Klee (handwritten) for the master's words. -->
 <style>
   .page { position: absolute; left: 400px; top: 70px; width: 560px; height: 520px; background: #faf9f6;
-    border: 1.5px solid var(--keisen); opacity: 0; animation: fade .7s 6.2s ease forwards; }
+    border: 1.5px solid var(--keisen); opacity: 0; animation: fade .7s 5.6s ease forwards; }
   .ledger { position: absolute; inset: 24px 28px; writing-mode: vertical-rl; font-size: 22px; line-height: 38px; letter-spacing: .06em;
     background: repeating-linear-gradient(to left, transparent 0 37px, var(--keisen) 37px 38px); }
-  .head { font-size: 30px; line-height: 76px; letter-spacing: .3em; background: #faf9f6; opacity: 0; animation: fade .7s 6.4s ease forwards; }
+  .head { font-size: 30px; line-height: 76px; letter-spacing: .3em; background: #faf9f6; opacity: 0; animation: fade .7s 5.8s ease forwards; }
   .head small { font-size: 17px; letter-spacing: .1em; color: var(--nibi); margin-top: 18px; }
   .entry { display: block; clip-path: inset(0 0 100% 0); } /* revealed column by column, top → bottom (script below) */
   .entry .note { color: var(--shu); font-family: "Klee", "Hiragino Mincho ProN", serif; font-weight: 600; font-size: 18px; opacity: 0;
@@ -29,14 +29,14 @@
   @keyframes land { to { transform: translate(var(--tx), var(--ty)) scale(.53); opacity: 0; } }
   /* the average answer and the master's correction (before the ledger) */
   .avg { position: absolute; left: 330px; top: 200px; width: 620px; padding: 26px 36px 66px; background: #faf9f6; border: 1.5px solid var(--usuzumi);
-    font-size: 27px; line-height: 1.75; opacity: 0; animation: fade .5s .2s ease forwards, fade-out .5s 6.0s ease forwards; }
+    font-size: 27px; line-height: 1.75; opacity: 0; animation: fade .5s .1s ease forwards, fade-out .5s 5.4s ease forwards; }
   .avg .h { font-size: 16px; color: var(--nibi); letter-spacing: .06em; }
   .avg .lab { position: absolute; right: 18px; top: -38px; font-size: 18px; color: var(--nibi); opacity: 0; animation: fade .5s .6s ease forwards; }
   .avg .x { position: relative; }
-  .avg .strike { position: absolute; left: -2px; top: 52%; height: 3px; width: 0; background: var(--shu); animation: strike .3s 4.5s ease-out forwards; }
+  .avg .strike { position: absolute; left: -2px; top: 52%; height: 3px; width: 0; background: var(--shu); animation: strike .3s 3.9s ease-out forwards; }
   @keyframes strike { to { width: calc(100% + 4px); } }
   .fix { position: absolute; left: 380px; top: 344px; color: var(--shu); font-family: "Klee", "Hiragino Mincho ProN", serif; font-weight: 600; font-size: 27px;
-    transform: rotate(-3deg); clip-path: inset(0 100% 0 0); animation: write .7s 4.8s steps(8, end) forwards, fade-out .5s 6.0s ease forwards; }
+    transform: rotate(-3deg); clip-path: inset(0 100% 0 0); animation: write .7s 4.2s steps(8, end) forwards, fade-out .5s 5.4s ease forwards; }
   @keyframes write { to { clip-path: inset(0 0 0 0); } }
 </style></head>
 <body>
@@ -60,7 +60,7 @@
   ];
   const ledger = document.getElementById("ledger"), said = document.getElementById("said");
   E.forEach(([w, rule], i) => {
-    const t = 6.6 + i * 1.3; // said → land → write
+    const t = 6.0 + i * 1.2; // said → land → write
     const en = document.createElement("div");
     en.className = "entry";
     en.style.cssText = `--w:${(t + 0.95).toFixed(2)}s;--land:${(t + 1.15).toFixed(2)}s`;

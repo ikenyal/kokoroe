@@ -10,8 +10,13 @@ Max 3:00, Japanese. Plan: [scenes.json](scenes.json) — **structure v4** (11/4)
     the retiring director knows why).
   - The three forces move.
   - A noren wipe marks the three chapter breaks.
+- **v5** (fourth review):
+  - A breath between scenes: 0.5 s of silence on the held last frame. Chapter breaks add 0.5 s more on the closed noren.
+  - The words are used one way throughout (D-052): ココロエ (Kokoroe) is the product; a 心得 is one piece of the master's
+    practice; the 心得帳 is those, written down with why each came to be. s04b says so in the narration and on screen.
+  - The total is kept near 2:55, leaving room under 3:00.
 
-16 scenes, 2:59.7. Everything is generated here during the hackathon — no outside footage, images or music:
+16 scenes, **2:54.8**. Everything is generated here during the hackathon — no outside footage, images or music:
 - **screen** scenes are recordings of the real app (the features shown were built during the hackathon),
 - **anim** scenes are HTML/CSS pages in [scenes/](scenes/) recorded the same way (explanations only).
 Remotion was not used (separate license terms for company use); Playwright + ffmpeg only.
@@ -26,22 +31,25 @@ video/assemble.sh                                        # → video/out/kokoroe
 
 | Starts at | Scene | Kind | Seconds | Narration |
 |---|---|---|---|---|
-| 0:00.0 | `s00-open` — two messages, one line circled, drawn into the director's head, 「来春 退職」 | anim | 12.9 | 12.4 s |
-| 0:12.9 | `s01-why` — 51.2% counts up, tags on half the companies / people walk out through a noren / the AI lights only written lines | anim | 22.2 | 21.7 s |
-| 0:35.1 | `s02-problem` | anim | 21.1 | 20.4 s |
-| 0:56.2 | `s03-head` | anim | 4.1 | 3.5 s |
-| 1:00.3 | `s04-title` (noren wipe) | anim | 10.6 | 9.9 s |
-| 1:10.9 | `s04b-flow` | anim | 10.8 | 10.3 s |
-| 1:21.7 | `s05-choba` (noren wipe; answers the cold open) | screen | 22.0 | 20.9 s |
-| 1:43.7 | `s06-kokoroe` | screen | 8.1 | 7.7 s |
-| 1:51.8 | `s06b-ask` | anim | 5.4 | 4.5 s |
-| 1:57.2 | `s07-noren` | screen | 10.5 | 5.7 s |
-| 2:07.7 | `s07b-mcp` | anim | 10.5 | 7.6 s |
-| 2:18.2 | `s07c-ask` | anim | 4.2 | 3.2 s |
-| 2:22.4 | `s08-pile` | anim | 11.6 | 11.1 s |
-| 2:34.0 | `s08b-keiko` | screen | 9.3 | 8.7 s |
-| 2:43.3 | `s09-edo` (noren wipe) | anim | 6.8 | 6.0 s |
-| 2:50.1 | `s09b-end` | anim | 9.6 | 9.0 s |
+| 0:00.0 | `s00-open` — two messages, one line circled, drawn into the director's head, 「来春 退職」 | anim | 12.7 | 12.4 s |
+| 0:13.2 | `s01-why` — 51.2% counts up, tags on half the companies / people walk out through a noren / the AI lights only written lines | anim | 17.0 | 16.7 s |
+| 0:30.7 | `s02-problem` | anim | 16.6 | 16.3 s |
+| 0:47.8 | `s03-head` | anim | 3.9 | 3.5 s |
+| 0:52.2 | `s04-title` (chapter: noren) — the title is now ココロエ / Kokoroe | anim | 0.5 + 10.2 | 9.9 s |
+| 1:03.4 | `s04b-flow` — 心得 and 心得帳 defined (narration and screen) | anim | 9.7 | 9.4 s |
+| 1:13.6 | `s05-choba` (chapter: noren; answers the cold open) | screen | 0.5 + 22.0 | 20.9 s |
+| 1:36.6 | `s06-kokoroe` | screen | 8.0 | 7.7 s |
+| 1:45.1 | `s06b-ask` | anim | 4.9 | 4.5 s |
+| 1:50.5 | `s07-noren` | screen | 10.5 | 5.7 s |
+| 2:01.5 | `s07b-mcp` | anim | 10.5 | 7.6 s |
+| 2:12.5 | `s07c-ask` | anim | 3.6 | 3.2 s |
+| 2:16.6 | `s08-pile` | anim | 10.9 | 10.6 s |
+| 2:28.0 | `s08b-keiko` | screen | 9.0 | 8.7 s |
+| 2:37.5 | `s09-edo` (chapter: noren) | anim | 0.5 + 6.3 | 6.0 s |
+| 2:44.8 | `s09b-end` — ココロエ / Kokoroe | anim | 10.0 | 8.9 s |
+
+Each scene but the last is followed by a 0.5 s breath (silence, its last frame held). "0.5 +" is the closed noren held before a
+chapter scene. The narration starts 0.15 s into each scene (`lead`).
 
 Sources on screen (s01-why):
 - 51.2%: 帝国データバンク「全国『後継者不在率』動向調査（2025年）」, of the small and medium firms surveyed.
@@ -64,9 +72,10 @@ Sources on screen (s01-why):
   v3's time: s03's interview-memo and 「違う」 beats. `scenes/s07-how.html` and `scenes/s09-numbers.html` are kept but unused.
 - Text-led cards (`ask.html#…`, `"subtitle": false`) have no subtitle: the question is the picture.
 - Chapter breaks (`"wipe": "noren"` on s04-title, s05-choba, s09-edo only):
-  - The scene opens behind a 藍 noren with the 心得 crest, which parts left and right.
+  - The scene opens behind a 藍 noren with a 心 crest (a mark, not the product name), held closed for 0.5 s (`wipeHold`), which
+    then parts left and right.
   - It is drawn by the recorder over the page, so it works the same on anim and screen scenes.
-  - It takes no extra time. Stills: `docs/screens/video-wipe-noren-*.png` (frames from the video).
+  - Stills: `docs/screens/video-wipe-noren-*.png` (frames from the video).
 - Smoothness (11/4):
   - Playwright records at 25 fps. In continuous motion nearly every frame is new (cards sliding in: 22/22; people walking:
     75/75; the AI's scan: 40/40).

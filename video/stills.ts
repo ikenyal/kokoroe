@@ -11,17 +11,17 @@ import { chromium } from "playwright";
 const ROOT = path.resolve(__dirname, "..");
 const FRAMES: Record<string, number[]> = {
   "s00-open": [0.6, 2.0, 4.3, 5.6, 6.9, 7.8, 10.4, 12.6],
-  "s01-why": [1.4, 3.2, 6.6, 8.4, 12.9, 14.6, 17.2, 21.8],
-  "s02-problem": [2.6, 7.6, 12.6, 17.4, 21.8],
-  "s03-head": [1.6, 2.6, 4.2],
-  "s04-title": [2.0, 3.4, 4.5, 6.4, 10.2],
-  "s04b-flow": [2.2, 5.2, 8.2, 10.8],
+  "s01-why": [1.2, 3.0, 6.0, 7.6, 9.9, 11.0, 13.0, 16.8],
+  "s02-problem": [1.0, 3.2, 6.6, 11.2, 15.6],
+  "s03-head": [1.4, 2.6, 3.8],
+  "s04-title": [2.0, 3.4, 4.5, 6.4, 10.0],
+  "s04b-flow": [1.2, 3.6, 5.6, 7.0, 9.6],
   "s06b-ask": [5.0],
   "s07b-mcp": [2.6, 6.8, 10.2],
   "s07c-ask": [4.0],
-  "s08-pile": [2.4, 5.2, 7.0, 9.0, 11.6],
-  "s09-edo": [2.0, 4.2, 5.6, 7.2],
-  "s09b-end": [3.2, 5.6, 9.8],
+  "s08-pile": [2.0, 4.6, 6.4, 8.4, 10.8],
+  "s09-edo": [2.0, 4.2, 5.4, 6.2],
+  "s09b-end": [2.4, 5.2, 9.8],
 };
 const PAGES = Object.fromEntries(
   (JSON.parse(readFileSync(path.join(ROOT, "video/scenes.json"), "utf8")) as { scenes: { id: string; page: string }[] }).scenes.map((s) => [s.id, s.page]),

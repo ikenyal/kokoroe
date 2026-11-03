@@ -2,7 +2,9 @@
 
 ## What this is
 
-**Kokoroe (心得)** — "an AI apprentice that inherits the unwritten etiquette of doing business."
+**Kokoroe (ココロエ)** — "an AI apprentice that inherits the unwritten etiquette of doing business."
+Naming (D-052): the product is ココロエ (Kokoroe); a 心得 is one piece of the master's practice; the 心得帳 is those, written down
+with why each came to be.
 
 An AI apprentice (**Daidaimaru / 橙丸**) drafts how to handle a client situation (e.g. telling a client about a delivery delay).
 The master (a veteran salesperson about to retire) only marks it **○ / △ (OK with a condition) / ×** plus an optional one-liner.

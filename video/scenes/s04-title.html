@@ -7,8 +7,9 @@
      how a kokoroe is made. Final text = the narration: 教えなくていい。直すだけで、心得は継がれます。
      Colors: 墨 and 朱 only (朱 = the master's hand). Faces: Mincho for the text, Klee (handwritten) for the master's note. -->
 <style>
-  .title { font-size: 120px; letter-spacing: .2em; opacity: 0; animation: fade 1s 5.6s ease forwards; }
-  .rule { width: 0; height: 2px; background: var(--sumi); margin: 28px auto 0; animation: grow .9s 5.9s ease forwards; }
+  .title { font-size: 104px; letter-spacing: .14em; opacity: 0; animation: fade 1s 5.4s ease forwards; }
+  .title .en { display: block; font-size: 22px; letter-spacing: .3em; color: var(--nibi); margin-top: 4px; }
+  .rule { width: 0; height: 2px; background: var(--sumi); margin: 28px auto 0; animation: grow .9s 5.7s ease forwards; }
   @keyframes grow { to { width: 520px; } }
   .lines { margin-top: 40px; font-size: 40px; line-height: 1.9; letter-spacing: .04em; }
   .line { display: block; white-space: nowrap; }
@@ -30,7 +31,7 @@
   @keyframes settle { 40% { transform: translate(478px, 0) rotate(-2deg) scale(.9); } to { transform: translate(0, 0) rotate(0deg) scale(1); } }
 </style></head>
 <body><div class="stage"><div style="text-align:center">
-  <div class="title">心得</div>
+  <div class="title">ココロエ<span class="en gothic">Kokoroe</span></div>
   <div class="rule"></div>
   <div class="lines">
     <span class="line"><span class="l1"><svg class="tri" viewBox="0 0 40 40"><path class="draw" pathLength="1" style="--d:2.4s;--t:.4s" d="M20,5 L36,34 L4,34 Z"/></svg>教えなくていい。</span></span>

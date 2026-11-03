@@ -603,3 +603,33 @@ pulling them in. The three forces also sat still.
 
 **Consequences.** Readings 「1行」→いちぎょう and 「2通」→につう were added. Only about 0.3 s of headroom is left under 3:00.
 
+## D-052 · 2026-11-04 · Accepted (Kento) · One way to use the words: ココロエ, 心得, 心得帳; a breath between scenes
+
+**Context.**
+- Kento asked for a pause between scenes and for the relation between 心得 and 心得帳 to be said once, clearly.
+- The product was sometimes called 「心得」: in the title cards, the app's header and title, and the README titles. So the same
+  word meant both the product and one piece of practice.
+
+**Decision.**
+- **Words:**
+  - The product is **ココロエ (Kokoroe)**.
+  - A **心得** is one piece of the master's practice.
+  - The **心得帳** is those, written down with why each came to be.
+  - s04b says it in the narration (「その一つ一つが心得になり、経緯ごと、心得帳に綴られます。」) and on screen as two definitions.
+  - Fixed now in the video (title cards say ココロエ / Kokoroe; the noren crest is 「心」, a mark), README.ja/README (title and a
+    word line), the submission draft and CLAUDE.md.
+  - **The app's header and page title are not changed yet:** that needs a public redeploy, so the change is shown to Kento
+    first.
+- **Breath:**
+  - After every scene but the last, its last frame is held in silence for 0.5 s; subtitles clear 0.3 s after the voice, so the
+    held frame has none.
+  - A chapter scene (noren wipe) also opens on the closed noren for 0.5 s, so a chapter break is 1.0 s.
+- **Time:**
+  - The total is kept near 2:55: 174.8 s, about 5 s of room under 3:00.
+  - To pay for 9 s of breaths:
+    - s01 no longer narrates 異動 (it stays on screen), and s02 no longer repeats the retirement (the cold open says it).
+    - s04b, s08 and s09b are shorter.
+    - The narration lead went from 0.3 to 0.15 s.
+  - s05, s07 and s07b are unchanged.
+- **Intonation:** the final adjustment goes with the 11/7 number swap (docs/final-day.md).
+

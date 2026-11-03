@@ -31,7 +31,7 @@ function cueTimes(id: string, cues: string[], seconds: number): { at: number[]; 
   const marks = path.join(__dirname, "out", "audio", VOICE.id, `${id}.marks.json`);
   if (existsSync(marks)) {
     const m = JSON.parse(readFileSync(marks, "utf8")) as { seconds: number; sentences: number[] };
-    if (m.sentences.length === cues.length) return { at: m.sentences.map((t) => LEAD + t / 1000), end: Math.min(seconds, LEAD + m.seconds + 1.2) };
+    if (m.sentences.length === cues.length) return { at: m.sentences.map((t) => LEAD + t / 1000), end: Math.min(seconds - 0.05, LEAD + m.seconds + 0.3) };
     console.warn(`  ${id}: ${m.sentences.length} sentence marks for ${cues.length} subtitle lines — timing by length instead`);
   }
   const total = cues.reduce((n, c) => n + c.length, 0);
@@ -60,7 +60,7 @@ const SUBTITLE = (cues: string[], at: number[], end: number, t0: number, px: num
   });`;
 
 /** Chapter break (scenes.json "wipe": "noren", used three times only): the scene opens behind a noren — four 藍 flaps on a bar,
- *  the 心得 crest across the middle — that parts to the left and right, as if the viewer walks through it. Drawn over the page
+ *  a 心 crest across the middle (a mark, not the product name) — that parts to the left and right, as if the viewer walks through it. Drawn over the page
  *  (works the same on anim and screen scenes); only on the first load of the clip, never after a navigation inside it. */
 const WIPE = (t0: number) => `
   window.addEventListener("DOMContentLoaded", () => {
@@ -72,8 +72,8 @@ const WIPE = (t0: number) => `
       #noren .f { position: absolute; top: 2.2vh; bottom: -2vh; width: calc(25% - .4vw); background: #2b4a6f;
         animation: var(--k) .8s var(--d) cubic-bezier(.55,0,.35,1) forwards; transform-origin: top center; }
       #noren .mon { position: absolute; left: 50%; top: 42%; width: 18vh; height: 18vh; margin: -9vh 0 0 -9vh; border-radius: 50%;
-        border: .5vh solid #f3f2ee; color: #f3f2ee; display: grid; place-items: center; font: 600 6vh/1 "Hiragino Mincho ProN", serif;
-        letter-spacing: .1em; animation: nmon .25s .12s ease forwards; }
+        border: .5vh solid #f3f2ee; color: #f3f2ee; display: grid; place-items: center; font: 600 8vh/1 "Hiragino Mincho ProN", serif;
+        animation: nmon .25s .12s ease forwards; }
       @keyframes nL { to { transform: translateX(-60vw) skewX(8deg); } }
       @keyframes nR { to { transform: translateX(60vw) skewX(-8deg); } }
       @keyframes nmon { to { opacity: 0; } }
@@ -83,7 +83,7 @@ const WIPE = (t0: number) => `
     n.id = "noren";
     n.innerHTML = '<div class="bar"></div>' +
       [0, 1, 2, 3].map((i) => \`<div class="f" style="left:calc(\${i * 25}% + .2vw);--k:\${i < 2 ? "nL" : "nR"};--d:\${[0.22, 0.16, 0.16, 0.22][i]}s"></div>\`).join("") +
-      '<div class="mon">心得</div>';
+      '<div class="mon">心</div>';
     document.body.appendChild(n);
   });`;
 

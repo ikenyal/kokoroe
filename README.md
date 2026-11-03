@@ -1,11 +1,12 @@
-# Kokoroe (心得) — an AI apprentice that inherits the unwritten etiquette of business
+# Kokoroe — an AI apprentice that inherits the unwritten etiquette of business
 
 [日本語版 README](README.ja.md) · Built with Claude: Japan 2026
 
 > **Draft.** Numbers marked _(interim)_ are from 2026-11-03 and will be replaced on 11/7 by the official run (5 training paths).
 > All companies, people and situations are fictional (株式会社だいだい工房 and its 10 clients).
 
-**Words used below:** the *kokoroe-chō* (心得帳) is the book of client-by-client etiquette the apprentice learns into;
+**Words used below:** *Kokoroe* (ココロエ) is the name of this work. A *kokoroe* (心得) is one piece of the master's practice; the
+*kokoroe-chō* (心得帳) is the book that keeps them, client by client, with why each came to be — the apprentice learns into it, and
 each entry keeps its *沿革* (history: old → new, the trigger, the master's words, the date). The *帳場* is the master's desk
 (the review screen), and *暖簾を継ぐ* ("taking over the shop curtain") is the successor's screen.
 

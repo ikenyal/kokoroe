@@ -7,12 +7,12 @@
     "pause": "0.5 s between sentences (0.3 s where a scene is short)",
     "decided": "Kento 11/4, docs/voice-trial-2026-11-04.md"
   },
-  "lead": 0.3,
+  "lead": 0.15,
   "scenes": [
     {
       "id": "s00-open",
       "kind": "anim",
-      "seconds": 12.9,
+      "seconds": 12.7,
       "page": "video/scenes/s00-open.html",
       "part": "0 冒頭（見て分かる違い、分からない理由）",
       "note": "two near-identical messages to 丸新酒造; the right one has one more line (a word to the 蔵元, T05 → T13); answered in s05",
@@ -22,26 +22,26 @@
     {
       "id": "s01-why",
       "kind": "anim",
-      "seconds": 22.2,
+      "seconds": 17.0,
       "page": "video/scenes/s01-why.html",
       "part": "なぜ今か（3つの力）",
       "source": "帝国データバンク「全国『後継者不在率』動向調査（2025年）」調査対象の中小企業のうち51.2%／総務省統計局「労働力調査（詳細集計）2025年平均結果」転職者数330万人",
-      "narration": "中小企業の、半数あまりで、跡継ぎが決まっていません。仕事を変える人は、一年に三百三十万人。異動も、当たり前です。そしてAIは、書かれたものしか使えません。頭の中にしかない知恵を、渡せる形にする。いま、それが必要です。",
+      "narration": "中小企業の半数あまりで、跡継ぎが決まっていません。仕事を変える人は、一年に三百三十万人。そしてAIは、書かれたものしか使えません。頭の中にしかない知恵を、いま、渡せる形に。",
       "pauseMs": 300
     },
     {
       "id": "s02-problem",
       "kind": "anim",
-      "seconds": 21.1,
+      "seconds": 16.6,
       "page": "video/scenes/s02-problem.html",
       "part": "1・2 課題と何が起きるか（統合）",
-      "narration": "営業部長は、三十年、取引先を見てきました。どの取引先に、何を、どう伝えるか。その作法は、部長の頭の中にしかありません。後任が、悪い知らせを、決まってからメールで送る。それだけで、長年の段取りが、崩れます。",
+      "narration": "どの取引先に、何を、どう伝えるか。三十年分の作法は、部長の頭の中にしかありません。後任が、悪い知らせを、決まってからメールで送る。それだけで、長年の段取りが崩れます。",
       "pauseMs": 300
     },
     {
       "id": "s03-head",
       "kind": "anim",
-      "seconds": 4.1,
+      "seconds": 3.9,
       "page": "video/scenes/s03-head.html",
       "part": "3 なぜ残らないか",
       "narration": "書いて残して、と頼んでも、言葉にはなりません。"
@@ -49,7 +49,7 @@
     {
       "id": "s04-title",
       "kind": "anim",
-      "seconds": 10.6,
+      "seconds": 10.2,
       "page": "video/scenes/s04-title.html",
       "part": "4 解決とタイトル",
       "narration": "でも、案を見せれば、ベテランは一瞬で、「違う」と言えます。ココロエは、その「違う」を集める、AIの弟子です。",
@@ -59,10 +59,10 @@
     {
       "id": "s04b-flow",
       "kind": "anim",
-      "seconds": 10.8,
+      "seconds": 9.7,
       "page": "video/scenes/s04b-flow.html",
       "part": "4 解決とタイトル（流れ）",
-      "narration": "師匠は、弟子の案に、○△×と、一言だけ。作法は、経緯ごと心得帳に残り、後任へ渡せます。",
+      "narration": "師匠は、○△×と一言だけ。その一つ一つが心得になり、経緯ごと、心得帳に綴られます。",
       "pauseMs": 300
     },
     {
@@ -79,7 +79,7 @@
     {
       "id": "s06-kokoroe",
       "kind": "screen",
-      "seconds": 8.1,
+      "seconds": 8.0,
       "page": "/kokoroe",
       "part": "6 心得帳",
       "action": "open a rule's 沿革 and sources",
@@ -89,7 +89,7 @@
     {
       "id": "s06b-ask",
       "kind": "anim",
-      "seconds": 5.4,
+      "seconds": 4.9,
       "page": "video/scenes/ask.html#noren",
       "part": "引き（暖簾の前）",
       "subtitle": false,
@@ -116,7 +116,7 @@
     {
       "id": "s07c-ask",
       "kind": "anim",
-      "seconds": 4.2,
+      "seconds": 3.6,
       "page": "video/scenes/ask.html#why",
       "part": "引き（なぜ効くかの前）",
       "subtitle": false,
@@ -125,16 +125,16 @@
     {
       "id": "s08-pile",
       "kind": "anim",
-      "seconds": 11.6,
+      "seconds": 10.9,
       "page": "video/scenes/s08-pile.html",
       "part": "8 なぜ効くか",
-      "narration": "AIは、平均的な答えを出すのが得意です。ベテランの知恵は、その平均との、ずれにあります。だから、ずれだけを集めればいい。",
+      "narration": "AIが出すのは、平均的な答えです。ベテランの知恵は、その平均との、ずれにあります。だから、ずれだけを集めればいい。",
       "pauseMs": 300
     },
     {
       "id": "s08b-keiko",
       "kind": "screen",
-      "seconds": 9.3,
+      "seconds": 9.0,
       "page": "/keiko",
       "part": "8 なぜ効くか（数字）",
       "action": "稽古の記録: Before/After (reads data/demo/results.json; interim until 11/7)",
@@ -144,7 +144,7 @@
     {
       "id": "s09-edo",
       "kind": "anim",
-      "seconds": 6.8,
+      "seconds": 6.3,
       "page": "video/scenes/s09-edo.html",
       "part": "9 締め",
       "narration": "江戸の商人は、火事のとき、品物より先に、帳面を守ったと伝えられています。",
@@ -153,11 +153,13 @@
     {
       "id": "s09b-end",
       "kind": "anim",
-      "seconds": 9.6,
+      "seconds": 10.0,
       "page": "video/scenes/s09b-end.html",
       "part": "9 締め（エンドカード）",
-      "narration": "いま守るべき帳面は、人の頭の中にあります。ココロエ。直すだけで、心得は、次の代へ。",
+      "narration": "守るべき帳面は、いま、人の頭の中に。ココロエ。直すだけで、心得は次の代へ。",
       "pauseMs": 300
     }
-  ]
+  ],
+  "gap": 0.5,
+  "wipeHold": 0.5
 }
