@@ -38,5 +38,6 @@ Only fictional data was written. The spike store was kept (not deleted) for late
 
 ## Not done today
 
-- Agent + environment + session with the store attached (`read_only`) and its round-trip latency → not measured.
+- Agent + environment + session with the store attached (`read_only`) and its round-trip latency → not measured (D-002 keeps the
+  memory store as an opt-in store only).
 - Outcomes (rubric self-check) → later, with the compiler.

@@ -159,7 +159,7 @@ Short entries, appended every work session. Source material for the README secti
   test (the guard named the path), so it now checks the store's content instead.
 - **Preparing a decision instead of taking it** — for D-002 Claude built the memory-store adapter behind the existing store
   interface (flag-switchable, default unchanged), proved parity with a fake API in a test, then measured the real API with the
-  same operations (no model tokens) and laid the evidence out under D-002 with one recommendation; the decision itself waits for
+  same operations (no model tokens) and laid the evidence out under D-002 with one recommendation, leaving the decision to
   Kento. The official docs (via the claude-api skill) settled the workspace question: memory stores are
   workspace-scoped, so anything shared in public must be created with the public workspace's key.
 - **Rehearsing the human test with a robot** — Claude drove the master-role test mode live with Playwright (20 cards, three corrections,
@@ -185,7 +185,7 @@ Short entries, appended every work session. Source material for the README secti
   the ○△× marks in 9 stops, arrows choose, Enter records; the hidden radios now show a focus ring. The accessibility tree showed
   what a screen reader hears: the check-card buttons were named just "○" — now "○ よい / △ 条件つき / × ちがう", the prose box is
   labelled by its question, and the visible word under each mark no longer doubles the name. Screenshots: `docs/screens/a11y-*.png`.
-- **A milestone audit by independent subagents** (after ARIA's "have Claude audit at each milestone") — two read-only subagents,
+- **A milestone audit by independent subagents** — two read-only subagents,
   briefed with angles but not with conclusions: (A) safety/HITL, evaluation fairness, secrets; (B) README vs code and where every
   number comes from. The main session re-checked each finding against code and data before acting — which also caught one of its
   own errors: it first wrote that the repo was already public, because the test clone had succeeded; an unauthenticated request
@@ -208,8 +208,8 @@ Short entries, appended every work session. Source material for the README secti
   usually meant "something else is still missing". Claude parked the change on a branch instead of merging, showed the evidence,
   and Kento chose the narrower rule: withdraw only when the draft does not follow the rule; otherwise keep it and learn the rest
   separately. The same run after the change kept the rule; hitl-reviewer reviewed both versions.
-- **Settling D-002 from measurements** — the prepared recommendation was accepted on the strength of the spike's numbers and the official documentation alone:
-  local JSON by default, the memory store behind `KOKOROE_STORE=memory`, recorded with the spike's numbers (session start ≈ 2.1 s,
+- **Settling D-002 from measurements** — Kento accepted the prepared recommendation on the strength of the spike's numbers and the
+  official documentation alone: local JSON by default, the memory store behind `KOKOROE_STORE=memory` (session start ≈ 2.1 s,
   reads/writes 0.2–0.7 s). The s07 diagram's store slot was filled and checked as a still; the first two wordings wrapped badly
   inside the box, which only the rendered frame showed. Before deleting the spike's memory stores, Claude listed them on the API
   (read-only) and found three, not the two expected, and asked before deleting; after Kento's OK all three were deleted and a

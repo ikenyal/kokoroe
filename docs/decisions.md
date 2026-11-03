@@ -40,8 +40,8 @@ the same operations on both stores (fake API, no network).
 tested, flag-switchable option, and state it plainly (s07 "保存先" slot: local JSON, switchable to a Managed Agents memory store).
 Do not move the apprentice or interpreter into Managed Agents sessions before 11/8. Reason: within the demo's lifetime the gains
 (redeploy survival, multi-node, versions) don't show, while the 2 s session start and a beta dependency sit on the critical path;
-the 沿革 is already carried in the rule body and exported. The case that would change this is a
-session-mounted successor agent with the store `read_only`.
+the 沿革 is already carried in the rule body and exported. The case that would change this is a session-mounted successor agent
+with the store `read_only`.
 
 ### D-002 — Decision (2026-11-03, Kento)
 **The demo and all evaluation use the local JSON store by default; `KOKOROE_STORE=memory` switches to a Managed Agents memory
@@ -495,3 +495,22 @@ master on fictional scenes in the 帳場 and the app times each action.
 - the `field-rehearsal-*.png` screenshots
 
 The README and the procedure say so in one line. Earlier records (D-031, D-040, the 11/3 audit) keep the old name as written.
+
+## D-047 · 2026-11-03 · Accepted (Kento) · No hackathon session content in the repo; earlier records edited as an exception
+The organizers announced that nothing from the hackathon's sessions may be published (video, photos or audio). The repo becomes
+public at submission, so every mention of what the hackathon's sessions presented, or of their speakers, was removed. Reasons are now
+given only from our own measurements and from official documentation, and Claude Code features (`/goal`) are cited from their
+public docs.
+**Exception:** past decision records are normally never rewritten. This time the D-002 bodies (headings, "material", "Decision")
+were edited so that no unpublishable content stays in the repo; the decision itself is unchanged.
+**Also edited:**
+- the spike note
+- three `how-we-built.md` entries
+- the 11/3 audit's opening line
+- the video typography backlog's source line
+
+Mentions of "kickoff" as a date are kept: they say when the period began, not what was said. No image, recording, narration or
+subtitle in the repo comes from a session (all 61 PNGs are produced by this repo's scripts; `video/out/` is not committed).
+**Open:** older commits still contain the removed text. Whether to rewrite history before publishing is Kento's decision
+(see `docs/publishing.md`).
+
