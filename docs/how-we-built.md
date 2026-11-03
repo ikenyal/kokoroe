@@ -239,3 +239,11 @@ Short entries, appended every work session. Source material for the README secti
   The API was not used. In the morning Kento decided five questions; the cost fix (D-048) and putting s09a into the video
   (shortening s02 and s06, not the demo's peak) followed, and the branch was merged with a normal push.
 
+
+- **11/4 — voice trial for the narration.** Kento found all three Polly voices lacking, so before giving up on Polly we
+  tested whether text and SSML help: the v2 structure's passages 1 and 4 (drafted in-period on 11/4), four steps (as drafted →
+  spoken rewrite → 90% rate + longer pauses → accents via pron-kana), Tomoko and Takumi. Claude Code read the Polly docs for
+  per-engine tag support, ran `describe-voices` read-only (no generative or long-form Japanese voice in Tokyo), and
+  proved each tag's effect by hashing PCM output with one tag changed at a time (Polly returned byte-identical audio for
+  identical input, which made that test possible). Characters and cost were shown before any synthesis; ~$0.03.
+  Notes: `docs/voice-trial-2026-11-04.md`. The choice is Kento's, by ear.
