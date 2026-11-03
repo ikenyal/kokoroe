@@ -38,7 +38,9 @@ All motion is CSS animation (no timers/randomness), so stills are reproducible. 
 - [ ] Narration lengths: s01 (~15 s / 12 s) and s07 (~21 s / 15 s) run long — rebalance after the voice is chosen.
 - [ ] Polly narration per scene (read-only API call with `--profile brightflow-sandbox-ikeda`).
 
-## Backlog: letters with a job (from 11/4; Kento's request on 11/3, not started)
+## Letters with a job (Kento's request on 11/3; built on the night of 11/3 → see docs/night-2026-11-03.md)
+**Status:** s04 and s03 done (same lengths); s09a built as a candidate, not yet in scenes.json (needs a length decision).
+
 The idea: kinetic typography made entirely in code, with no assets. Showiness is not the point. Three ideas are taken, kept inside Kokoroe's world (帳面, 明朝, 墨/藍/朱):
 1. **Give each piece of text a job.** Specify what the letters *do* (get corrected, come undone, pile up as a ledger), not that
    they look good.
