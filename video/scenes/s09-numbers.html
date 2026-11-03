@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<style>
+  .wrap { width: 1080px; }
+  .note { font-size: 18px; color: var(--nibi); }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; margin-top: 36px; border-top: 3px solid var(--sumi); border-bottom: 3px solid var(--sumi); padding: 36px 0; }
+  .label { font-size: 20px; color: var(--nibi); }
+  .num { font-size: 92px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .after { color: var(--ai); }
+  .sub { font-size: 18px; color: var(--nibi); }
+</style></head>
+<body><div class="stage"><div class="wrap">
+  <p class="note gothic">架空の取引先10社・評価用20場面（学習に使わない）での結果。師匠はシミュレータ。</p>
+  <div class="cards">
+    <div><p class="label">Before　台帳と制約だけの弟子</p><p class="num" id="before">–</p><p class="sub" id="before-sub"></p></div>
+    <div><p class="label">ダメ出し40場面のあと</p><p class="num after" id="after">–</p><p class="sub" id="after-sub"></p></div>
+    <div><p class="label">後任が経緯ごと答えられた</p><p class="num after" id="hist">–</p><p class="sub">沿革の質問 8問中</p></div>
+  </div>
+</div></div>
+<script>
+  // Numbers come from the recorded evaluation (window.RESULTS is injected by video/record.ts from data/demo/results.json).
+  const R = window.RESULTS;
+  const pct = (x) => Math.round(x * 100);
+  function count(el, to, suffix, ms) {
+    const t0 = performance.now();
+    const step = (t) => { const k = Math.min(1, (t - t0) / ms); el.textContent = (Number.isInteger(to) ? Math.round(to * k) : (to * k).toFixed(1)) + suffix; if (k < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }
+  if (R) {
+    count(document.getElementById("before"), pct(R.before.match), "%", 1200);
+    document.getElementById("before-sub").textContent = `一致率（○）、${R.before.runs}回平均`;
+    const after = R.paths ? R.paths.mean : R.curves.at(-1).points.at(-1).match;
+    setTimeout(() => count(document.getElementById("after"), pct(after), "%", 1600), 1400);
+    document.getElementById("after-sub").textContent = R.paths ? `学習${R.paths.n}本の平均（${pct(R.paths.min)}〜${pct(R.paths.max)}%）` : "";
+    setTimeout(() => count(document.getElementById("hist"), Number(R.history.at(-1).mean.toFixed(1)), "", 1400), 3200);
+  }
+</script></body></html>

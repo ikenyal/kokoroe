@@ -120,3 +120,6 @@ Short entries, appended every work session. Source material for the README secti
   steps. Claude extracted the shared pieces (regression set, rollback) and rebuilt the flow as a small state machine in the pending
   item, then pinned it with tests that mock Claude. A wrong timestamp in the test data surfaced as a clean `error` status — the
   failure path worked too.
+- **The demo video as code** — `video/` holds the scene table, HTML/CSS animation pages in the app's look, a Playwright recorder
+  (subtitles drawn as an overlay, since this ffmpeg build has no subtitle filter) and an ffmpeg assembler. A draft with placeholders
+  rendered end to end (2:49.7); Claude reviewed extracted frames and listed what must change before the final render.

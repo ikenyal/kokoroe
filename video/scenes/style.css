@@ -1,0 +1,10 @@
+/* Video scenes share the app's look: paper, ink, indigo; vermilion only for the master's marks; Mincho for reading. */
+:root { --kami:#f3f2ee; --kami-2:#e9e7e1; --sumi:#1f2328; --nibi:#5f646b; --ai:#2b4a6f; --shu:#b5402f; --keisen:#cfccc4; }
+* { box-sizing: border-box; margin: 0; }
+html, body { width: 1280px; height: 720px; overflow: hidden; background: var(--kami); color: var(--sumi);
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", serif; }
+.stage { position: absolute; inset: 0; display: grid; place-items: center; }
+.gothic { font-family: "Hiragino Sans", "Yu Gothic", sans-serif; }
+.fade-in { opacity: 0; animation: fade 1.2s ease forwards; }
+@keyframes fade { to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; } }

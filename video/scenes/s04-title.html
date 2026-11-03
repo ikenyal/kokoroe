@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<style>
+  .title { font-size: 120px; letter-spacing: .2em; }
+  .lines { margin-top: 36px; font-size: 40px; line-height: 1.9; text-align: center; }
+  .lines span { display: block; opacity: 0; animation: fade 1.4s ease forwards; }
+  .lines span:nth-child(1) { animation-delay: 1.6s; }
+  .lines span:nth-child(2) { animation-delay: 3.4s; }
+  .rule { width: 0; height: 2px; background: var(--sumi); margin: 28px auto 0; animation: grow 1.2s .6s ease forwards; }
+  @keyframes grow { to { width: 520px; } }
+</style></head>
+<body><div class="stage"><div style="text-align:center">
+  <div class="title fade-in">心得</div>
+  <div class="rule"></div>
+  <div class="lines"><span>教えなくていい。</span><span>直すだけで、心得は継がれます。</span></div>
+</div></div></body></html>

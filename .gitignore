@@ -37,3 +37,6 @@ npm-debug.log*
 
 # container build context (scripts/prepare-image.sh)
 .image/
+
+# rendered video (large binaries)
+video/out/

@@ -1,0 +1,27 @@
+{
+  "_note": "Kokoroe demo video (target 2:45, max 3:00, Japanese). kind: screen = recorded from the real app (the feature shown must be built during the hackathon); anim = HTML/CSS page in video/scenes/ (explanation only). Narration is a draft — real-screen lines are finalized after the feature freeze (11/7). Numbers only from our own evaluation (data/demo/results.json), always labelled as fictional data.",
+  "voice": { "engine": "neural", "language": "ja-JP", "note": "Amazon Polly (decided later; synth is a read-only API call, run with the sandbox profile)" },
+  "scenes": [
+    { "id": "s01-hook", "kind": "screen", "seconds": 12, "page": "/choba", "action": "glimpse: mark △ → 心得帳 → 暖簾 answer",
+      "narration": "来年の春に退職する営業部長。取引先ごとの付き合い方は、その人の頭の中にしかありません。ココロエは、ダメ出しだけでそれをAIの弟子に覚えさせ、後任へ引き継ぎます。" },
+    { "id": "s02-ledger", "kind": "anim", "seconds": 13, "page": "video/scenes/s02-ledger.html",
+      "narration": "江戸の商人は、火事が迫ると、品物よりも先に、お得意さまとの帳面を井戸に沈めて守ったと伝えられています。" },
+    { "id": "s03-head", "kind": "anim", "seconds": 15, "page": "video/scenes/s03-head.html",
+      "narration": "いま、その帳面の中身は、ベテランの頭の中にあります。中小企業の半数あまりは、まだ後継ぎが決まっていません。書いて残してと頼まれても、言葉にはなりにくいものです。",
+      "source": "帝国データバンク「全国『後継者不在率』動向調査（2025年）」中小企業51.2%" },
+    { "id": "s04-title", "kind": "anim", "seconds": 10, "page": "video/scenes/s04-title.html",
+      "narration": "教えなくていい。直すだけで、心得は継がれます。" },
+    { "id": "s05-choba", "kind": "screen", "seconds": 30, "page": "/choba", "action": "draft with 表/裏 → △ + remark → interpretation → next similar scene changes",
+      "narration": "（実画面に合わせて 11/7 に確定）" },
+    { "id": "s06-kokoroe", "kind": "screen", "seconds": 20, "page": "/kokoroe", "action": "open a rule's 沿革 and sources",
+      "narration": "（実画面に合わせて 11/7 に確定）" },
+    { "id": "s07-how", "kind": "anim", "seconds": 15, "page": "video/scenes/s07-how.html",
+      "narration": "（仕組み図。弟子・解釈役・確かめ。取引先の文面は心得帳を書き換えられない。11/7 に確定）" },
+    { "id": "s08-noren", "kind": "screen", "seconds": 25, "page": "/noren", "action": "successor asks → answer with rule + 沿革; Skill in successor's Claude Code",
+      "narration": "（実画面に合わせて 11/7 に確定）" },
+    { "id": "s09-numbers", "kind": "anim", "seconds": 20, "page": "video/scenes/s09-numbers.html",
+      "narration": "（Before／After。11/7 の正式な数字が出てから確定。架空の取引先10社・評価用20場面と明記）" },
+    { "id": "s10-end", "kind": "anim", "seconds": 10, "page": "video/scenes/s10-end.html",
+      "narration": "ココロエ。教えなくていい。直すだけで、商いの心得は次の代へ。" }
+  ]
+}
