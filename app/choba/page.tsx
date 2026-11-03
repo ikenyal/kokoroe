@@ -8,6 +8,7 @@ import type { KokoroeRule } from "@/src/learning/types";
 import demo from "@/data/demo/demo-snapshot.json";
 import { lastUndoable } from "@/src/server/undo";
 import { ScrollToAction } from "./scroll-to-action";
+import { standing } from "@/src/core/rank";
 import { draftLive } from "@/src/server/background";
 import { getSession, liveEnabled, type Pending } from "@/src/server/session";
 import { answerWhy, choose, pause, undo, verifyCheck } from "../actions";
@@ -232,6 +233,10 @@ export default async function ChobaPage() {
   const asking = recent.filter((p) => ["needs-choice", "needs-why", "needs-confirm", "needs-regression"].includes(p.status));
   const signature = asking.map((p) => `${p.judgmentId}:${p.status}`).join(",");
   const done = Math.min(meta.pos, meta.queue.length);
+  // The track record with this client, as information only (D-055: no rank names, no lighter review).
+  const record = item
+    ? standing(judgments.filter((j) => j.clientId === item.scene.clientId).map((j) => ({ clientId: j.clientId, sceneType: j.sceneType, verdict: j.verdict, kind: j.kind, undone: j.undone, at: j.at })))
+    : null;
   const label = s.mode === "demo" ? "デモの続き" : s.mode === "field" ? "師匠役テスト" : "お試し";
 
   return (
@@ -278,6 +283,11 @@ export default async function ChobaPage() {
                 {getClient(item.scene.clientId).name}
                 <span className="mt-1 block text-[15px] text-nibi sm:mt-0 sm:ml-3 sm:inline">{SCENE_TYPE_LABELS[item.scene.type]}・{item.scene.month}月</span>
               </h1>
+              {record && (
+                <p className="mt-1 text-[13px] text-nibi">
+                  {record.last === null ? "この取引先の判定は、まだありません。" : record.streak > 0 ? `この取引先では ○ が${record.streak}回続いています。` : "この取引先の直近の判定は ○ ではありません。"}
+                </p>
+              )}
               <blockquote className="yomi mt-3 border-l-2 border-ai pl-4 text-[16px]">{item.scene.situation}</blockquote>
               <p className="mt-6 text-[13px] text-nibi">弟子（橙丸）の案</p>
             </header>

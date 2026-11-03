@@ -1,5 +1,9 @@
 /**
- * 段位 (ranks): how much of the master's review the apprentice has earned, per client × situation type (Kento 11/4).
+ * D-055 (Kento 11/4): ranks were tried and NOT adopted — a run of ○ did not predict the next draft (replay: 64–76% of drafts that
+ * would have been marked 「確認だけ」 were △/×, worse than the overall rate). Kept for the replay record (eval/rank-replay.ts) and
+ * for the 帳場's plain track record (「この取引先では ○ が3回続いています」), which carries no rank name and lightens no review.
+ *
+ * 段位 (ranks), as tried: how much of the master's review the apprentice has earned, per client × situation type (Kento 11/4).
  *   見習い — every draft goes to the master (the start, and after any △/×)
  *   手代   — TEDAI ○ in a row there. Review is NOT skipped: the draft is marked 「確認だけ」 and such drafts can be approved
  *            together with one tap; a wrong one is still seen by the master (Kento 11/4)

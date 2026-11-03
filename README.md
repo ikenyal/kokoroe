@@ -125,6 +125,12 @@ Built in one week by one person with Claude Code at the center (full log: [docs/
   range over several training paths, never one run.
 - **The ledger trade-off.** Seeding the ledger's constraints and asking "why?" once each made the history answerable (港北: Zoom → Teams,
   2024), but showing those constraints to the apprentice as the master's corrections made it over-formal; they now stay in the book only.
+- **Ranks, tried and dropped.** We replayed 8 recorded training runs (40 scenes each) to test "after a run of ○ at a client, lighten
+  the review" (手代 / 番頭). Of the drafts that would have been marked "just confirm", 64–76% had actually been marked △/× — worse
+  than the overall rate (55%). Even at one client, each kind of situation needs its own etiquette, so a run of ○ does not predict
+  the next draft. Rank names are gone; the 帳場 only shows the record ("○ three times in a row with this client"). First contacts,
+  discounts and contracts still always go to the master, in code. Trust ranks wait for real use, where the same kind of situation
+  comes back often enough to measure.
 
 ## Related work
 Learning from human corrections and widening autonomy step by step is not new (e.g. *The Digital Apprentice*, arXiv 2606.04321;

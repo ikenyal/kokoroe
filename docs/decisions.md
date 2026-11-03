@@ -704,3 +704,27 @@ still 「分からない、師匠に確認を」, and that must be checked. Q05 
 - **Effect on the official measurement:** the 11/7 history numbers are measured with this prompt. Match is not affected (the
   successor is not used in training or the held-out scenes).
 
+## D-055 · 2026-11-04 · Accepted (Kento) · Ranks (見習い・手代・番頭) tried in replay and not adopted; a plain track record instead
+
+**Context.** The original idea gave the apprentice ranks for its proven record and widened what it may do on its own. Kento asked
+for a replay before any screen was built.
+
+**What was measured** (no API; 8 recorded training runs × 40 drafts, fictional data; `eval/rank-replay.ts`,
+`docs/results/rank-replay-2026-11-04-*.json`):
+- **Rules replayed:** grouped by client. 手代 = 2 ○ in a row (review not skipped: only a 「確認だけ」 mark). 番頭 = 5 ○ in a row plus
+  a passed 確かめ稽古 (review skipped).
+- **手代:** reached 39 times counting the master's marks on drafts, 84 counting every mark. Of the drafts it would have marked
+  「確認だけ」, **76% / 64% had been marked △/×**, worse than the overall 55% of training drafts.
+- **番頭:** reached 0 / 3 times, and no draft ever passed without review.
+- **Client × situation type:** never reached at all; each pair occurs once in the 40 training scenes.
+
+**Decision.**
+- **No ranks:** no rank names, no 「確認だけ」 mark, no batch approval, no skipped review.
+- **Why:** a run of ○ did not predict whether the next draft was right. Even with one client, each kind of situation needs its own
+  etiquette.
+- **What the 帳場 shows instead:** the plain record with the client, e.g. 「この取引先では ○ が3回続いています」, as information.
+- **The floor stays in code** (`mustReview` in `src/disciple/hitl.ts`, tests): first contact with a client, discounts and
+  contracts, and anything the apprentice escalates always go to the master.
+- **Later:** trust ranks are to be considered only with data from real use, where the same kind of situation comes back often.
+- `src/core/rank.ts` is kept for the replay record and the plain track record.
+
