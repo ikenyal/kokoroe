@@ -104,3 +104,7 @@ Short entries, appended every work session. Source material for the README secti
   public ledger; fixed per Kento (hidden data untouched), Before re-measured (55%), both recorded (D-033).
 - **Reproducible demo recording** — `demo/successor-claude-code/run.sh` recreates the successor's Claude Code exactly: empty
   directory, only the exported skill, `--setting-sources project`, no MCP.
+- **A hook before any AWS access** — this machine holds AWS profiles for other organizations, so before the first `aws` call Claude
+  added `guard-aws.sh`: every `aws` command must carry `--profile brightflow-sandbox-ikeda`; other profiles, the default profile and
+  inline `AWS_PROFILE`/keys are blocked, read-only calls included (13 allow/block cases tested, then verified live by a blocked call).
+  The first real call found the SSO session expired, so work stopped there until Kento logged in.

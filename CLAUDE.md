@@ -26,6 +26,10 @@ Hackathon: Built with Claude: Japan 2026. Deadline **2026-11-08 20:00 JST**. The
   this public repo. Enforced by `.claude/hooks/block-mcp.sh`. Building an MCP server *as a product feature* needs Kento's approval first.
 - **Evaluation integrity:** product code (`src/`, `app/`) must never read `data/hidden/`. Only `eval/simulator/` may.
   Do not tune prompts by looking at hidden rules. A test enforces the import boundary.
+- **AWS: only the `brightflow-sandbox-ikeda` profile, always explicit** (`--profile brightflow-sandbox-ikeda`, region
+  ap-northeast-1). Never rely on the default profile or AWS_PROFILE — other employers' profiles exist on this machine. Enforced by
+  `.claude/hooks/guard-aws.sh`. Create/change/delete commands: show the list to Kento and wait for OK first (also in auto mode).
+  Never write account IDs or ARNs with account numbers into the repo.
 - **`data/hidden/` is frozen (since 2026-11-03, D-017).** Do not change the hidden ground truth or the judge's predicates
   without Kento's explicit approval. A hook blocks edits; `tests/hidden-freeze.test.ts` checks checksums.
 - **HITL:** the apprentice never sends anything and never commits to discounts / contract terms / first contact with key clients;
