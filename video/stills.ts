@@ -12,6 +12,7 @@ const ROOT = path.resolve(__dirname, "..");
 const FRAMES: Record<string, number[]> = {
   "s02-ledger": [2.2, 5.6, 8.6, 11.6],
   "s03-head": [3.2, 7.4, 11.2, 13.8],
+  "s04-title": [2.8, 4.8, 5.8, 6.4, 9.0],
   "s07-how": [3.6, 7.2, 10.2, 14.0],
   "s08b-mcp": [1.0, 4.5],
   "s10-end": [1.4, 4.0, 9.0],

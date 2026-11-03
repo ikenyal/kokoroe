@@ -1,16 +1,38 @@
 <!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<!-- s04 (10 s): the title. The letters play the part of *being corrected* (video/README.md, "letters with a job"):
+     「教えなくていい。」 is written in ink; the master's vermilion pen marks a △ beside it and writes a margin note 「直すだけで、」;
+     the note then moves down and settles into ink as the start of the second line — a correction becoming the text, which is
+     how a kokoroe is made. Final text = the narration: 教えなくていい。直すだけで、心得は継がれます。
+     Colors: 墨 and 朱 only (朱 = the master's hand). Faces: Mincho for the text, Klee (handwritten) for the master's note. -->
 <style>
   .title { font-size: 120px; letter-spacing: .2em; }
-  .lines { margin-top: 36px; font-size: 40px; line-height: 1.9; text-align: center; }
-  .lines span { display: block; opacity: 0; animation: fade 1.4s ease forwards; }
-  .lines span:nth-child(1) { animation-delay: 1.6s; }
-  .lines span:nth-child(2) { animation-delay: 3.4s; }
   .rule { width: 0; height: 2px; background: var(--sumi); margin: 28px auto 0; animation: grow 1.2s .6s ease forwards; }
   @keyframes grow { to { width: 520px; } }
+  .lines { margin-top: 40px; font-size: 40px; line-height: 1.9; letter-spacing: .04em; }
+  .line { display: block; white-space: nowrap; }
+  .l1 { position: relative; display: inline-block; opacity: 0; animation: fade 1s 1.6s ease forwards; }
+  /* the master's △, drawn to the left of the first line */
+  .tri { position: absolute; right: calc(100% + 18px); top: 50%; width: 40px; height: 40px; margin-top: -22px; overflow: visible; }
+  .tri path { fill: none; stroke: var(--shu); stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+  /* second line: the settled correction + the rest */
+  .a { position: relative; display: inline-block; }
+  .a .ink { opacity: 0; animation: fade .7s 6.4s ease forwards; }
+  .b { opacity: 0; animation: fade 1s 7.2s ease forwards; }
+  /* the master's margin note: written (left → right), then carried down into the line */
+  .note { position: absolute; left: 0; top: 0; color: var(--shu); font-family: "Klee", "Hiragino Mincho ProN", serif; font-weight: 600;
+    white-space: nowrap; transform-origin: left center;
+    clip-path: inset(0 100% 0 0); transform: translate(478px, -98px) rotate(-5deg) scale(.82);
+    animation: write 1.3s 3.7s steps(12, end) forwards, settle 1.5s 5.3s ease-in-out forwards, fade-out .5s 6.6s ease forwards; }
+  @keyframes write { to { clip-path: inset(0 0 0 0); } }
+  /* down through the gap first (never across 「教えなくていい」), then left along the second line */
+  @keyframes settle { 40% { transform: translate(478px, 0) rotate(-2deg) scale(.9); } to { transform: translate(0, 0) rotate(0deg) scale(1); } }
 </style></head>
 <body><div class="stage"><div style="text-align:center">
   <div class="title fade-in">心得</div>
   <div class="rule"></div>
-  <div class="lines"><span>教えなくていい。</span><span>直すだけで、心得は継がれます。</span></div>
+  <div class="lines">
+    <span class="line"><span class="l1"><svg class="tri" viewBox="0 0 40 40"><path class="draw" pathLength="1" style="--d:3s;--t:.6s" d="M20,5 L36,34 L4,34 Z"/></svg>教えなくていい。</span></span>
+    <span class="line"><span class="a"><span class="ink">直すだけで、</span><span class="note" aria-hidden="true">直すだけで、</span></span><span class="b">心得は継がれます。</span></span>
+  </div>
 </div></div></body></html>
