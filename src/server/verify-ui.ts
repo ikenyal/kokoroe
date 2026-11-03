@@ -3,6 +3,9 @@
  * answers arrive as separate taps, so each step stores its state in the pending item and the next step runs in the background:
  *
  *   rule written ─▶ startVerification: re-solve the corrected scene ─▶ [needs-confirm] master ○△×
+ *     △/× (D-045): the draft follows the rule's point ─▶ keep the rule; after its regression check, the △/× becomes its own
+ *                  correction item (normal flow; it may not rewrite this rule)
+ *                  it does not ─▶ (once) re-read the same rule, re-solve ─▶ [needs-confirm] again; still not ─▶ 取り下げ
  *     ─▶ fix the regression set (past ○ of this client, ≤ 3) ─▶ runRegression: re-solve each;
  *        same decision → passes silently;  changed → [needs-regression] master ○△×
  *          ○ → continue;  △/× → (first time) narrow the rule with that scene as evidence, re-check the whole set
@@ -16,7 +19,9 @@ import type { Proposal, Scene, Verdict } from "@/src/core/types";
 import { makeDiscipleV1 } from "@/src/disciple/v1";
 import { applyCandidate } from "@/src/learning/compile";
 import { interpret } from "@/src/learning/interpret";
-import { MAX_REGRESSION, okScenes, rollbackChange, sameDecision } from "@/src/learning/verify";
+import { MAX_REGRESSION, okScenes, rollbackChange, ruleTook, sameDecision } from "@/src/learning/verify";
+import { guardScope } from "@/src/learning/scope";
+import { interpretInBackground } from "./background";
 import type { Usage } from "@/src/lib/claude";
 import { recordSpend } from "./limits";
 import { openSession, readMeta, type Mode, type Pending, type Session, type UiVerification } from "./session";
@@ -72,14 +77,88 @@ export async function afterConfirm(mode: Mode, sid: string, judgmentId: string, 
     const p = pendingOf(s, judgmentId);
     const scene = p && sceneById(s, p.sceneId);
     if (!p?.verify?.confirm || !scene) return;
-    await s.store.addJudgment({
+    const cj = await s.store.addJudgment({
       at: new Date().toISOString(), sceneId: scene.id, clientId: scene.clientId, sceneType: scene.type,
       proposal: p.verify.confirm.proposal, verdict, remark, kind: "confirm",
     });
+    if (verdict !== "○") {
+      // D-045: did the re-solved draft follow the new rule's own point?
+      const rule = (await s.store.getRule(p.verify.change.ruleId))!;
+      if (ruleTook(rule, p.verify.confirm.proposal) === false) {
+        // It didn't take. Once: re-read the same rule from this judgment (an unambiguous reading only) and ask again.
+        if (!p.verify.retried) {
+          patch(s, judgmentId, { status: "verifying", verify: { ...p.verify, confirm: undefined, retried: true } });
+          const client = getClient(scene.clientId);
+          const existing = (await s.store.listRules()).filter((r) => r.status === "active" && (r.scope.clientId === null || r.scope.clientId === client.id));
+          const usage: Usage[] = [];
+          // On a failed call, withdraw rather than leave a rule that did not take active (review of D-045).
+          const interp = await interpret({ scene, client, judgment: cj, existing, usage })
+            .catch(() => null)
+            .finally(() => recordSpend(usage));
+          if (!interp) return withdraw(s, judgmentId, p.verify, cj.id, scene.id, verdict, remark, false);
+          const c = !interp.ambiguous && interp.candidates.length === 1 ? interp.candidates[0] : undefined;
+          if (c) {
+            const pick = guardScope({ ...c, action: "revise", targetRuleId: rule.id, scope: { ...c.scope, clientId: rule.scope.clientId } }, remark);
+            const applied = await applyCandidate(s.store, cj, pick, interp);
+            if (applied.ruleId === rule.id) {
+              const proposal = await draft(s, scene);
+              const v = pendingOf(s, judgmentId)!.verify!;
+              return patch(s, judgmentId, { status: "needs-confirm", note: "心得どおりの案にならなかったので、読み直して解き直しました", verify: { ...v, confirm: { proposal } } });
+            }
+          }
+        }
+        return withdraw(s, judgmentId, p.verify, cj.id, scene.id, verdict, remark, !!p.verify.retried); // reread = a re-read happened before this check
+      }
+      // It took: the rule did its job. What is still missing is a separate lesson — the normal correction flow handles it
+      // (readings, the master's choice, its own verification), and it may not rewrite the rule just written.
+      // Queued only after this rule's regression check ends (queueRemainder), so the new rule can't break it.
+      p.verify.remainder = cj.id;
+    }
     const fixedSet = (await okScenes(s.store, scene.clientId, scene.id)).slice(0, MAX_REGRESSION).map((j) => ({ sceneId: j.sceneId, pastJudgmentId: j.id }));
     patch(s, judgmentId, { status: "verifying", verify: { ...p.verify, confirm: undefined, fixedSet, remaining: fixedSet } });
     await runRegression(s, judgmentId);
   });
+}
+
+/**
+ * D-045: the rule took but the master's △/× on 確かめ稽古 pointed at something else — after this rule's checks are done, that
+ * judgment goes through the normal correction flow as its own item, and may not rewrite the rule just written.
+ */
+async function queueRemainder(s: Session, judgmentId: string) {
+  const v = pendingOf(s, judgmentId)?.verify;
+  const cj = v?.remainder;
+  if (!v || !cj) return;
+  const meta = readMeta(s.mode, s.sid);
+  meta.pending = meta.pending.map((x) => (x.judgmentId === judgmentId ? { ...x, verify: { ...v, remainder: undefined } } : x));
+  const scene = (await s.store.listJudgments()).find((j) => j.id === cj);
+  if (scene) meta.pending.unshift({ judgmentId: cj, sceneId: scene.sceneId, status: "queued", exclude: v.change.ruleId });
+  s.saveMeta(meta);
+  if (scene) await interpretInBackground(s.mode, s.sid, cj);
+}
+
+/** D-045 取り下げ: the rule is not adopted (retired, or restored if it was a revision); recorded in its 沿革. No Claude call. */
+async function withdraw(s: Session, judgmentId: string, v: UiVerification, confirmId: string, sceneId: string, verdict: Verdict, remark: string, reread: boolean) {
+  await rollbackChange({ store: s.store, change: v.change, snapshot: v.snapshot, judgmentId: confirmId, brokenSceneId: sceneId, verdict, remark, at: new Date().toISOString(), kind: "confirm", reread });
+  patch(s, judgmentId, { status: "withdrawn", note: "解き直した案が心得どおりにならなかったため、この心得は採用せず取り下げました（沿革に記録）" });
+}
+
+/**
+ * The live-call limit was hit when the master tapped a check (no Claude call allowed). △/× on 確かめ稽古 is still recorded,
+ * and a rule that did not take is withdrawn — nothing is adopted without a ○ (review of D-045).
+ */
+export async function confirmWithoutLive(mode: Mode, sid: string, judgmentId: string, verdict: Verdict, remark: string): Promise<void> {
+  const s = openSession(mode, sid);
+  if (!s) return;
+  const p = pendingOf(s, judgmentId);
+  const scene = p && sceneById(s, p.sceneId);
+  if (!p?.verify?.confirm || !scene) return;
+  const cj = await s.store.addJudgment({
+    at: new Date().toISOString(), sceneId: scene.id, clientId: scene.clientId, sceneType: scene.type,
+    proposal: p.verify.confirm.proposal, verdict, remark, kind: "confirm",
+  });
+  const rule = await s.store.getRule(p.verify.change.ruleId);
+  if (verdict !== "○" && rule && ruleTook(rule, p.verify.confirm.proposal) === false) return withdraw(s, judgmentId, p.verify, cj.id, scene.id, verdict, remark, !!p.verify.retried);
+  patch(s, judgmentId, { status: "applied", note: verdict === "○" ? "お試し上限のため、確かめはここまでにしました" : "お試し上限のため、確かめの △・× は記録だけして、残りの直しはまだ覚えていません" });
 }
 
 /** Re-solve the remaining past ○ scenes until one changes (ask the master) or all pass (verified). */
@@ -87,7 +166,10 @@ async function runRegression(s: Session, judgmentId: string) {
   for (;;) {
     const v = pendingOf(s, judgmentId)!.verify!;
     const [next, ...rest] = v.remaining;
-    if (!next) return patch(s, judgmentId, { status: "applied", note: `確かめ済み（回帰 ${v.checked} 件、師匠に確認 ${v.asked} 件${v.narrowed ? "、範囲を絞った" : ""}）` });
+    if (!next) {
+      patch(s, judgmentId, { status: "applied", note: `確かめ済み（回帰 ${v.checked} 件、師匠に確認 ${v.asked} 件${v.narrowed ? "、範囲を絞った" : ""}）` });
+      return queueRemainder(s, judgmentId);
+    }
     const scene = sceneById(s, next.sceneId);
     const past = (await s.store.listJudgments()).find((j) => j.id === next.pastJudgmentId);
     if (!scene || !past) {
@@ -150,6 +232,7 @@ export async function afterRegression(mode: Mode, sid: string, judgmentId: strin
       brokenSceneId: scene.id, verdict, remark, at: new Date().toISOString(),
     });
     patch(s, judgmentId, { status: "rolled-back", note: `${scene.id}（以前は○）が崩れたため、この心得を差し戻しました` });
+    await queueRemainder(s, judgmentId);
   });
 }
 

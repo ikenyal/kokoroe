@@ -23,9 +23,11 @@ away from family succession.
   When the remark is ambiguous, the master taps one of 2–3 readings — or "none of these".
 - **Corrections become the kokoroe-chō.** Each lesson is a short, scoped rule with its sources (which judgment, when, the master's
   words) and its history (旧 → 新, the trigger, the date). The master can read and delete every entry.
-- **It checks itself.** After each new rule it re-solves the corrected scene and earlier ○ scenes; if a re-solved earlier ○ scene now
-  gets △/× from the master, the rule is narrowed once; if it still breaks, it is rolled back (差し戻し) and that is recorded in its
-  沿革. (A △/× on the corrected scene itself is recorded as a judgment; the rule stays.) In the training loop, habits seen at several clients are also proposed as company-wide rules for the master to confirm (not yet in the 帳場 screen).
+- **It checks itself.** After each new rule it re-solves the corrected scene and earlier ○ scenes; if the corrected scene still gets
+  △/× and the new draft does not even follow the new rule, the rule is re-read once and checked again; if it still does not take,
+  it is withdrawn (not adopted) and 「確かめで外れたため取り下げ」 is recorded in its 沿革. (If the draft does follow the rule,
+  the rest of the △/× is learned as a separate rule.) If a re-solved earlier ○ scene now gets △/×, the rule is
+  narrowed once; if it still breaks, it is rolled back (差し戻し), also recorded. In the training loop, habits seen at several clients are also proposed as company-wide rules for the master to confirm (not yet in the 帳場 screen).
 - **The successor inherits it.** 暖簾を継ぐ: the successor asks "can I skip this?" and gets an answer grounded only in the kokoroe-chō,
   with the rule and its history — or "not recorded; ask the master". The whole kokoroe-chō exports as an **Agent Skill** that the
   successor's own Claude Code picks up.

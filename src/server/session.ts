@@ -39,6 +39,7 @@ export interface Pending {
     | "needs-regression" // the master checks a past ○ scene whose decision changed
     | "applied" // written (and verified, when verification ran)
     | "rolled-back" // 差し戻し
+    | "withdrawn" // 取り下げ: the rule did not take in 確かめ稽古 (D-045)
     | "nothing-learned"
     | "offline"
     | "error";
@@ -48,6 +49,7 @@ export interface Pending {
   round?: 1 | 2;
   ruleId?: string;
   note?: string;
+  exclude?: string; // D-045: a follow-up correction from 確かめ稽古 may not rewrite this rule (the one just written)
 }
 
 export interface SuccessorTurn {
@@ -84,6 +86,8 @@ export interface UiVerification {
   remaining: { sceneId: string; pastJudgmentId: string }[];
   current?: { sceneId: string; pastJudgmentId: string; proposal: Proposal }; // waiting for the master
   narrowed: boolean;
+  retried?: boolean; // D-045: the rule did not take in 確かめ稽古 and was re-read once
+  remainder?: string; // D-045: a confirm judgment to learn as its own correction once this rule's checks are done
   checked: number;
   asked: number;
 }

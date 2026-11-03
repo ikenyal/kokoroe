@@ -59,6 +59,7 @@ export async function trainScenes(args: {
     if (v)
       log(
         `    確かめ ${v.confirm?.verdict ?? "-"} | 回帰 ${v.regressionChecked}件（師匠に確認 ${v.regressionAsked}）` +
+          `${v.remainderLearned ? " | 心得は効いた・残りを別の心得に" : ""}${v.reinterpreted ? " | 心得が効かず読み直した" : ""}${v.withdrawn ? " | 確かめで外れたため取り下げ" : ""}` +
           `${v.narrowed ? " | 範囲を絞った" : ""}${v.rolledBack ? ` | 差し戻し（${v.brokenSceneId} が崩れた）` : ""}`,
       );
     const g = r.generalization;

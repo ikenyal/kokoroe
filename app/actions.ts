@@ -9,7 +9,7 @@ import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 import { getSession, liveEnabled, readMeta, startSession, type Mode } from "@/src/server/session";
 import { applyChoice, interpretInBackground } from "@/src/server/background";
-import { afterConfirm, afterRegression, startVerification } from "@/src/server/verify-ui";
+import { afterConfirm, afterRegression, confirmWithoutLive, startVerification } from "@/src/server/verify-ui";
 import { recordTrigger } from "@/src/learning/compile";
 import type { SessionMeta, SuccessorTurn, Timing } from "@/src/server/session";
 import { askSuccessor } from "@/src/successor/ask";
@@ -219,8 +219,15 @@ export async function verifyCheck(formData: FormData) {
   const refused = await allowLive(s.sid);
   if (refused) {
     meta.limit = refused;
-    meta.pending = meta.pending.map((x) => (x.judgmentId === judgmentId ? { ...x, status: "applied", note: "お試し上限のため、確かめはここまでにしました" } : x));
-    s.saveMeta(meta);
+    if (step === "confirm") {
+      // Still record the master's mark; a rule that did not take is withdrawn without a Claude call (D-045).
+      meta.pending = meta.pending.map((x) => (x.judgmentId === judgmentId ? { ...x, status: "verifying" } : x));
+      s.saveMeta(meta);
+      await confirmWithoutLive(s.mode, s.sid, judgmentId, verdict as "○" | "△" | "×", remark);
+    } else {
+      meta.pending = meta.pending.map((x) => (x.judgmentId === judgmentId ? { ...x, status: "applied", note: "お試し上限のため、確かめはここまでにしました" } : x));
+      s.saveMeta(meta);
+    }
     revalidatePath("/choba");
     return;
   }

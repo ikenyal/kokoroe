@@ -202,3 +202,9 @@ Short entries, appended every work session. Source material for the README secti
   own decision next to the floored one, the interim "9/9" is labelled as measured before the floor, and the 帳場 tells the master
   when the code, not the apprentice, escalated. A data-wide test checks the floor catches every lure and price scene. The widened
   hidden-boundary test from the audit caught Claude's own type-only import of `eval/` in a page within the hour.
+- **A decision tested against a real run before merging** — Kento's first version of D-045 (withdraw a rule whose own 確かめ稽古
+  fails, after one re-read) passed its unit tests, but Claude also ran 6 real training scenes (≈ $0.23) because the smoke run never
+  reached the new path. The run withdrew correct rules — including the 丸新酒造 rule the demo video depends on — because a △ there
+  usually meant "something else is still missing". Claude parked the change on a branch instead of merging, showed the evidence,
+  and Kento chose the narrower rule: withdraw only when the draft does not follow the rule; otherwise keep it and learn the rest
+  separately. The same run after the change kept the rule; hitl-reviewer reviewed both versions.

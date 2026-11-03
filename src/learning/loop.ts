@@ -112,7 +112,7 @@ export async function learnStep(args: {
     taps += verification.taps;
   }
   let generalization: GeneralizeResult | null = null;
-  if (args.generalize && args.sceneById && !verification?.rolledBack) {
+  if (args.generalize && args.sceneById && !verification?.rolledBack && !verification?.withdrawn) {
     generalization = await maybeGeneralize({
       store, disciple, master, ruleId: change.ruleId,
       sceneById: args.sceneById, clientById: args.generalize.clientById,

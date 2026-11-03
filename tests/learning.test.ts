@@ -240,11 +240,13 @@ describe("確かめ稽古 and regression (no API)", () => {
     const store = new LocalJsonStore(null);
     await seedOk(store);
     let interpCalls = 0;
+    let x1 = 0;
     const r = await learnStep({
       store,
       disciple: { name: "breaks", propose: async (s) => (s.id === "P1" ? broken : proposal) },
       master: fakeMaster({
-        judge: async (s) => (s.id === "P1" ? { verdict: "×", remark: "白樺さんは手紙を社長宛に" } : { verdict: "×", remark: "窓口を飛ばすな" }),
+        // X1: × on the draft, ○ on the 確かめ稽古 re-solve — so only the regression path is exercised here.
+        judge: async (s) => (s.id === "P1" ? { verdict: "×", remark: "白樺さんは手紙を社長宛に" } : x1++ === 0 ? { verdict: "×", remark: "窓口を飛ばすな" } : { verdict: "○", remark: "" }),
       }),
       scene: sc("X1"),
       client: getClient("C02"),
@@ -265,6 +267,74 @@ describe("確かめ稽古 and regression (no API)", () => {
     expect(k.history.at(-1)!.after).toBe("（差し戻し: 廃止）");
     expect(k.history.at(-1)!.reason).toContain("P1");
     expect(await store.rulesFor("C02", "T6")).toEqual([]);
+  });
+});
+
+describe("確かめ稽古 fails (D-045, no API)", () => {
+  const run = async (confirmVerdicts: ("○" | "△" | "×")[]) => {
+    const store = new LocalJsonStore(null);
+    let calls = 0;
+    const seen: string[] = [];
+    const r = await learnStep({
+      store,
+      disciple: fixedDisciple,
+      master: fakeMaster({ judge: async () => (calls++ === 0 ? { verdict: "△", remark: "社長には会って" } : { verdict: confirmVerdicts.shift()!, remark: "まだ違う" }) }),
+      scene: scene("Y1", "C10", "T6"),
+      client: getClient("C10"),
+      interpretFn: async (a) => {
+        seen.push(a.judgment.kind ?? "draft");
+        return { diagnosis: "テスト", ambiguous: false, confidence: "medium", candidates: [cand({ text: seen.length === 1 ? "最初の読み" : "読み直し" })] };
+      },
+      sceneById: () => undefined,
+    });
+    return { store, r, seen };
+  };
+  it("a △/× on the re-solved scene gets one re-interpretation from that judgment; ○ then keeps the revised rule", async () => {
+    const { store, r, seen } = await run(["×", "○"]);
+    expect(seen).toEqual(["draft", "confirm"]);
+    expect(r.verification).toMatchObject({ reinterpreted: true, withdrawn: false, rolledBack: false });
+    const k = (await store.getRule("K-001"))!;
+    expect(k.status).toBe("active");
+    expect(k.text).toBe("読み直し");
+  });
+  it("still not ○ after the re-interpretation → the rule is withdrawn (not adopted), recorded in 沿革", async () => {
+    const { store, r } = await run(["△", "×"]);
+    expect(r.verification).toMatchObject({ reinterpreted: true, withdrawn: true });
+    const k = (await store.getRule("K-001"))!;
+    expect(k.status).toBe("retired");
+    expect(k.history.at(-1)!.after).toBe("（取り下げ: 採用しない）");
+    expect(k.history.at(-1)!.reason).toContain("確かめで外れたため取り下げ");
+    expect(await store.rulesFor("C10", "T6")).toEqual([]);
+  });
+});
+
+describe("確かめ稽古: the rule took but something else is missing (D-045)", () => {
+  it("keeps the rule and learns the remainder as a separate rule — the T05 case from a real run", async () => {
+    const store = new LocalJsonStore(null);
+    let calls = 0;
+    const seen: string[] = [];
+    const r = await learnStep({
+      store,
+      // after the rule, the draft does have the quiet word to the decider (the rule's point) …
+      disciple: { name: "took", propose: async () => (calls === 0 ? proposal : { ...proposal, backchannelTo: "decider" }) },
+      // … but the master still wants a visit: × 「顔出して話せ」
+      master: fakeMaster({ judge: async () => (calls++ === 0 ? { verdict: "△", remark: "" } : { verdict: "×", remark: "顔出して話せ" }) }),
+      scene: scene("Y2", "C06", "T4"),
+      client: getClient("C06"),
+      interpretFn: async (a) => {
+        seen.push(a.judgment.kind ?? "draft");
+        return seen.length === 1
+          ? { diagnosis: "裏の一言", ambiguous: false, confidence: "medium", candidates: [cand({ scope: { clientId: "C06", sceneTypes: null }, text: "蔵元にも一言", fix: { field: "backchannelTo", value: "decider" } })] }
+          : { diagnosis: "顔を出す", ambiguous: false, confidence: "medium", candidates: [cand({ action: "revise", targetRuleId: "K-001", scope: { clientId: "C06", sceneTypes: null }, text: "蔵へ顔を出す", fix: { field: "meeting", value: "in_person" } })] };
+      },
+      sceneById: () => undefined,
+    });
+    expect(r.verification).toMatchObject({ remainderLearned: true, reinterpreted: false, withdrawn: false });
+    const k1 = (await store.getRule("K-001"))!;
+    expect(k1.status).toBe("active");
+    expect(k1.text).toBe("蔵元にも一言"); // not overwritten
+    const k2 = (await store.getRule("K-002"))!;
+    expect(k2.text).toBe("蔵へ顔を出す"); // the remainder, as its own rule
   });
 });
 

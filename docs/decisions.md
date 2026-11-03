@@ -436,3 +436,28 @@ general result.
     unchanged: match 0% / ○+△ 45% — fictional 10 clients / 20 held-out scenes.
 - **Checked:** `eval:final --smoke` passes with the floor (pipeline end to end; lures A04–A06 escalated). hitl-reviewer: the floor
   reaches every path; its two blockers (this record; separating the model's own rate) and four smaller points are addressed.
+
+## D-045 · 2026-11-03 · Accepted (Kento) · A rule that does not take in its 確かめ稽古 is re-read once, then withdrawn
+- **Context:** until now a △/× on the re-solved corrected scene (確かめ稽古) was only recorded; the rule stayed. Kento first
+  decided to treat it like a regression (re-read once, then withdraw). A real 6-scene run with that version **withdrew correct
+  rules**: at T05 the re-solved draft did carry the new rule's point (a quiet word to the 蔵元), the master's × was about another
+  point (「顔出して話せ」); the re-read overwrote the rule with that point, the original point went missing, and the rule was
+  withdrawn. A △/× here often means "something else is still missing", not "the rule is wrong". Shown to Kento, who chose:
+- **Decision:** on △/× in 確かめ稽古, first check whether the re-solved draft follows the new rule's own point (its implied
+  field change, `ruleTook`):
+  - **It took** → the rule worked and stays. What is still missing is learned as a **separate correction**, after this rule's
+    regression check (so the new rule can't break it), and it may not rewrite the rule just written. In the 帳場 it goes through
+    the normal flow (readings, the master's choice, "why?", its own 確かめ稽古); in the evaluation loop it is written after the
+    master's choice without a further 確かめ (kept simple to bound taps and cost).
+  - **It did not take** → the interpreter gets one chance to re-read the same rule from that judgment (an unambiguous reading
+    only, same scope), the scene is re-solved and the master confirms again; if it still does not take, the rule is
+    **withdrawn** — an added rule retired, a revised rule restored — with 「確かめで外れたため取り下げ」 in its 沿革, and
+    regression and generalization are skipped.
+  - A rule without a recorded point (e.g. from the 台帳) is never withdrawn on this ground.
+  - When the trial limit stops live calls, the master's mark is still recorded and a rule that did not take is withdrawn (no
+    Claude call needed) — nothing is adopted without a ○.
+- **Checked:** unit tests for all three paths; the same real 6-scene run after the change kept T05's rule (confirmed ○) and, at
+  T09, kept the rule and learned the remainder separately; `eval:final --smoke` passes. hitl-reviewer reviewed both versions.
+- **Effect on numbers:** measured in the official run (11/7). Up to two more taps per failed confirmation; one check tap can
+  trigger several Claude calls (a re-read and a draft, or the remainder's interpretation plus regression drafts), all counted
+  by the spend tracker.

@@ -69,6 +69,7 @@ const STATUS: Record<Pending["status"], string> = {
   "needs-confirm": "確かめ：直した場面を、新しい心得で解き直しました",
   "needs-regression": "回帰の確認：以前は ○ だった場面の案が変わりました",
   "rolled-back": "差し戻しました",
+  withdrawn: "確かめで外れたため取り下げました",
   "needs-why": "心得帳に書きました。よければ、わけを一言",
   applied: "心得帳に書きました",
   "nothing-learned": "今回は何も覚えていません",
@@ -151,12 +152,13 @@ function PendingItem({ p, beforeOf }: { p: Pending; beforeOf: (judgmentId: strin
           </button>
         </form>
       )}
+      {p.status === "needs-confirm" && p.verify?.retried && p.note && <p className="text-[13px] text-nibi">{p.note}</p>}
       {p.status === "needs-confirm" && p.verify?.confirm && <CheckCard p={p} step="confirm" sceneId={p.sceneId} proposal={p.verify.confirm.proposal} />}
       {p.status === "needs-regression" && p.verify?.current && (
         <CheckCard p={p} step="regression" sceneId={p.verify.current.sceneId} proposal={p.verify.current.proposal} before={beforeOf(p.verify.current.pastJudgmentId)} />
       )}
       {(p.status === "applied" || p.status === "rolled-back") && p.note?.startsWith("確かめ済み") && <p className="text-[13px] text-nibi">{p.note}</p>}
-      {p.status === "rolled-back" && p.note && <p className="text-[13px] text-shu">{p.note}</p>}
+      {(p.status === "rolled-back" || p.status === "withdrawn") && p.note && <p className="text-[13px] text-shu">{p.note}</p>}
       {p.status === "needs-why" && (
         <form action={answerWhy} className="mt-2 space-y-2">
           <input type="hidden" name="judgmentId" value={p.judgmentId} />

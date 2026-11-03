@@ -40,7 +40,8 @@ export async function interpretInBackground(mode: Mode, sid: string, judgmentId:
     const rejected = round === 2 ? readMeta(mode, sid).pending.find((p) => p.judgmentId === judgmentId)?.candidates : undefined;
     const usage: Usage[] = [];
     const interp = await interpret({ scene, client, judgment, existing, rejected, usage }).finally(() => recordSpend(usage));
-    const cands = interp.candidates;
+    const ex = readMeta(mode, sid).pending.find((p) => p.judgmentId === judgmentId)?.exclude;
+    const cands = interp.candidates.map((c) => (ex && c.targetRuleId === ex ? { ...c, action: "add" as const, targetRuleId: null } : c));
     if (!cands.length) return update(s, judgmentId, { status: "nothing-learned", note: "読み取れる違いがありませんでした" });
     // Round 2 always asks (D-025): after "none of these", nothing is written without the master's tap.
     if (round === 2 || interp.ambiguous || cands.length > 1)
