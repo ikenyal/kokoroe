@@ -1,3 +1,67 @@
 <!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css"></head>
-<body><div class="stage"><p class="fade-in" style="font-size:40px;color:var(--nibi)">（s07-how：アニメーションは 11/6〜7 に作成）</p></div></body></html>
+<html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<!-- s07 (15 s): how it works. 弟子 → 師匠 (○△× + one line) → 解釈 → 心得帳 → 後任.
+     The apprentice, who reads the client's text, sits inside a read-only boundary: it can read the 心得帳 but never write it.
+     Product names (Managed Agents / Agent Skills) go into the slots below once D-002 is settled — edit NAMES only. -->
+<style>
+  .node { position: absolute; width: 180px; padding: 16px 10px 14px; text-align: center; background: #faf9f6;
+    border: 2px solid var(--sumi); opacity: 0; animation: fade .8s var(--d) ease both; }
+  .node h2 { font-size: 30px; font-weight: 600; letter-spacing: .08em; }
+  .node p { font-size: 19px; color: var(--nibi); margin-top: 6px; line-height: 1.4; }
+  .node .marks { color: var(--shu); font-size: 26px; letter-spacing: .2em; }
+  .client { border-style: solid; border-width: 1.5px; border-color: var(--nibi); background: var(--kami-2); }
+  .client h2 { font-size: 22px; font-weight: 500; }
+  .slot { display: inline-block; white-space: nowrap; margin-top: 8px; padding: 2px 8px; font-size: 14px; color: var(--nibi); border: 1px dashed var(--usuzumi); }
+  .slot.filled { border-style: solid; border-color: var(--ai); color: var(--ai); }
+  .lbl { position: absolute; font-size: 17px; color: var(--nibi); white-space: nowrap; opacity: 0; animation: fade .6s var(--d) ease both; }
+  .wall-lbl { position: absolute; font-size: 19px; color: var(--ai); opacity: 0; animation: fade .8s 8.4s ease both; line-height: 1.5; }
+  .wall { fill: none; stroke: var(--ai); stroke-width: 2; stroke-dasharray: 9 7; opacity: 0; animation: fade .9s 8s ease both; }
+  .head { opacity: 0; animation: fade .3s var(--d) ease both; }
+  .arrow { fill: none; stroke: var(--sumi); stroke-width: 2; }
+  .arrow.read { stroke: var(--ai); stroke-dasharray: 2 6; stroke-linecap: round; }
+</style></head>
+<body>
+<svg width="1280" height="720" viewBox="0 0 1280 720" style="position:absolute;inset:0">
+  <!-- read-only boundary around the client's text and the apprentice -->
+  <rect class="wall" x="40" y="96" width="220" height="420" rx="6"/>
+  <!-- flow arrows (drawn, then the head appears) -->
+  <path class="arrow draw" pathLength="1" style="--d:1.3s;--t:.5s" d="M150,188 V262"/>
+  <path class="head" style="--d:1.8s" d="M143,254 L150,266 L157,254" fill="none" stroke="var(--sumi)" stroke-width="2"/>
+  <path class="arrow draw" pathLength="1" style="--d:2.1s;--t:.5s" d="M242,340 H299"/>
+  <path class="head" style="--d:2.6s" d="M291,333 L303,340 L291,347" fill="none" stroke="var(--sumi)" stroke-width="2"/>
+  <path class="arrow draw" pathLength="1" style="--d:4.2s;--t:.5s" d="M487,340 H544"/>
+  <path class="head" style="--d:4.7s" d="M536,333 L548,340 L536,347" fill="none" stroke="var(--sumi)" stroke-width="2"/>
+  <path class="arrow draw" pathLength="1" style="--d:5.9s;--t:.5s" d="M732,340 H789"/>
+  <path class="head" style="--d:6.4s" d="M781,333 L793,340 L781,347" fill="none" stroke="var(--sumi)" stroke-width="2"/>
+  <path class="arrow draw" pathLength="1" style="--d:11.4s;--t:.5s" d="M977,340 H1034"/>
+  <path class="head" style="--d:11.9s" d="M1026,333 L1038,340 L1026,347" fill="none" stroke="var(--sumi)" stroke-width="2"/>
+  <!-- 心得帳 → 弟子: read only (dotted, under the row) -->
+  <g class="head" style="--d:7.6s;animation-duration:.9s">
+    <path class="arrow read" d="M885,420 V470 Q885,490 865,490 H170 Q150,490 150,470 V424"/>
+    <path d="M143,430 L150,418 L157,430" fill="none" stroke="var(--ai)" stroke-width="2"/>
+  </g>
+</svg>
+
+<div class="node client" style="left:60px;top:120px;--d:.8s"><h2>取引先の文面</h2></div>
+<div class="node" style="left:60px;top:270px;--d:0s"><h2>弟子</h2><p>案を出す</p></div>
+<div class="node" style="left:305px;top:270px;--d:2.6s"><h2>師匠</h2><p class="marks">○△×</p><p>と一言だけ</p></div>
+<div class="node" style="left:550px;top:270px;--d:4.6s"><h2>解釈</h2><p>直しを心得に<br>書き起こす</p></div>
+<div class="node" style="left:795px;top:270px;--d:6.4s"><h2>心得帳</h2><p>範囲と沿革つき</p><span class="slot" data-slot="store"></span></div>
+<div class="node" style="left:1040px;top:270px;--d:11.9s"><h2>後任</h2><p>暖簾を継ぐ</p><span class="slot" data-slot="handoff"></span></div>
+
+<p class="lbl" style="left:164px;top:212px;--d:1.6s">読む</p>
+<p class="lbl" style="left:560px;top:226px;--d:6.9s">書き込めるのは、師匠が選んだ直しだけ</p>
+<p class="lbl" style="left:470px;top:500px;--d:8.2s;color:var(--ai)">読むだけ</p>
+<div class="wall-lbl" style="left:284px;top:100px">読み取り専用<br><span style="color:var(--nibi);font-size:17px">取引先の文面を読む側は、心得帳を書き換えられない</span></div>
+
+<script>
+  // Fill after D-002: e.g. { store: "…", handoff: "…" }. null → a dashed placeholder slot.
+  const NAMES = { store: null, handoff: null };
+  const PLACEHOLDER = { store: "〔保存先の名前〕", handoff: "〔渡し方の名前〕" };
+  for (const el of document.querySelectorAll("[data-slot]")) {
+    const key = el.dataset.slot;
+    el.textContent = NAMES[key] ?? PLACEHOLDER[key];
+    if (NAMES[key]) el.classList.add("filled");
+  }
+</script>
+</body></html>

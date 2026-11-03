@@ -35,6 +35,7 @@ Hackathon: Built with Claude: Japan 2026. Deadline **2026-11-08 20:00 JST**. The
 - **HITL:** the apprentice never sends anything and never commits to discounts / contract terms / first contact with key clients;
   those always route to the master.
 - If a decision conflicts with the plan or is unclear: **stop and ask Kento**. Don't decide silently.
+- **Local servers bind to 127.0.0.1 only** (`--hostname 127.0.0.1` for `next dev` / `next start`) and are stopped when the check is done — never reachable from the LAN.
 - Pin dependency versions (exact versions in `package.json`, commit `package-lock.json`).
 
 ## Records (update as you work)
@@ -79,7 +80,7 @@ docs/                 how-we-built, decisions, evolution, spike notes
 ## Commands
 
 ```
-npm run dev           # Next.js dev server
+npm run dev -- --hostname 127.0.0.1   # dev server — always bind to localhost (it can call Claude with the dev key); same for next start
 npm test              # Vitest
 npm run eval:quick    # held-out 20 scenes through the simulator
 npm run spike:memory  # Managed Agents memory-store spike

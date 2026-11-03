@@ -1,3 +1,78 @@
 <!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css"></head>
-<body><div class="stage"><p class="fade-in" style="font-size:40px;color:var(--nibi)">（s02-ledger：アニメーションは 11/6〜7 に作成）</p></div></body></html>
+<html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<!-- s02 (13 s): an Edo townscape in line drawing, sparks rising, a ledger carried to a well and sunk into it.
+     Told as a tradition ("…と伝えられています"), so the corner note says 言い伝え. -->
+<style>
+  .move { animation: move 3.3s 5s ease-in-out both; }
+  @keyframes move { from { opacity: 0; transform: translate(-430px, 170px); } 18% { opacity: 1; } to { opacity: 1; transform: none; } }
+  .sink { animation: sink 1.8s 8.8s ease-in both; }
+  @keyframes sink { to { transform: translate(0, 200px); } }
+  .spark { fill: var(--kaki); opacity: 0; animation: rise var(--t) var(--d) ease-out 3 both; }
+  @keyframes rise { 0% { opacity: 0; transform: none; } 15% { opacity: .9; } 70% { opacity: .5; } 100% { opacity: 0; transform: translate(var(--dx), -230px); } }
+  .ripple { fill: none; stroke: var(--ai); stroke-width: 1.6; opacity: 0; transform-box: fill-box; transform-origin: center;
+    animation: ripple 2s var(--d) ease-out both; }
+  @keyframes ripple { 0% { opacity: 0; transform: scale(.2); } 8% { opacity: .9; } 100% { opacity: 0; transform: scale(1); } }
+  .note { animation: fade 1.2s .3s ease both; opacity: 0; }
+</style></head>
+<body>
+<p class="corner-note note">言い伝え</p>
+<svg width="1280" height="720" viewBox="0 0 1280 720">
+  <defs><!-- everything except the inside of the well below the rim -->
+        <clipPath id="above-rim"><rect x="0" y="0" width="1280" height="431"/><rect x="0" y="431" width="884" height="289"/><rect x="1056" y="431" width="224" height="289"/></clipPath>
+        <clipPath id="in-rim"><ellipse cx="970" cy="430" rx="84" ry="19"/></clipPath></defs>
+
+  <!-- ground and town (draws in first) -->
+  <path class="ink thin draw" pathLength="1" style="--d:0s;--t:1.6s" d="M30,420 L840,420"/>
+  <path class="ink draw" pathLength="1" style="--d:.2s;--t:2.6s" d="
+    M50,420 V366 M170,420 V366 M30,368 L66,334 L164,334 L200,368 Z
+    M216,420 V362 M354,420 V362 M200,364 L232,344 L338,344 L370,364 M242,344 V312 M318,344 V312 M226,314 L256,290 L304,290 L334,314
+    M396,420 V372 M554,420 V372 M378,374 L420,340 L532,340 L574,374 Z M450,420 V392 H500 V420
+    M726,420 V376 M814,420 V376 M710,378 L746,350 L794,350 L830,378 Z"/>
+  <!-- fire lookout tower -->
+  <path class="ink draw" pathLength="1" style="--d:.8s;--t:2.2s" d="
+    M640,420 L658,250 M700,420 L682,250 M646,370 H694 M651,320 H689 M655,280 H685 M648,252 L670,230 L692,252 Z M670,252 V262"/>
+  <circle cx="670" cy="268" r="6" class="ink thin draw" pathLength="1" style="--d:2.4s;--t:.6s"/>
+
+  <!-- sparks: rise from behind the roofs (positions fixed by formula below, no randomness) -->
+  <g id="sparks"></g>
+
+  <!-- well: back half of the rim, posts, pulley -->
+  <path class="ink draw" pathLength="1" style="--d:1s;--t:2.4s" d="
+    M886,430 A84,19 0 0 1 1054,430 M896,416 V252 M1044,416 V252 M878,258 H1062 M866,260 L970,226 L1074,260"/>
+  <circle cx="970" cy="280" r="12" class="ink thin draw" pathLength="1" style="--d:2.6s;--t:.6s"/>
+  <path class="ink thin draw" pathLength="1" style="--d:2.8s;--t:.8s" d="M970,292 V412"/>
+
+  <!-- ledger: carried in, then sunk; clipped at the rim so it disappears into the well -->
+  <g clip-path="url(#above-rim)"><g class="move"><g class="sink">
+    <rect x="920" y="250" width="100" height="140" fill="var(--kami-2)" stroke="var(--sumi)" stroke-width="2.2"/>
+    <path class="ink thin" d="M1006,250 V390 M1006,270 H1020 M1006,305 H1020 M1006,335 H1020 M1006,370 H1020"/>
+    <rect x="936" y="264" width="28" height="96" fill="var(--kami)" stroke="var(--sumi)" stroke-width="1.2"/>
+    <text x="950" y="272" font-size="20" style="writing-mode:vertical-rl" fill="var(--sumi)">大福帳</text>
+  </g></g></g>
+
+  <!-- ripples inside the rim -->
+  <g clip-path="url(#in-rim)">
+    <ellipse class="ripple" cx="970" cy="432" rx="80" ry="17" style="--d:10.4s"/>
+    <ellipse class="ripple" cx="970" cy="432" rx="80" ry="17" style="--d:11s"/>
+  </g>
+
+  <!-- well: front half of the rim, the 井桁 beams and the wall (drawn over the ledger) -->
+  <path class="ink draw" pathLength="1" style="--d:1.2s;--t:2.4s" d="
+    M886,430 A84,19 0 0 0 1054,430 M862,420 H1078 M862,446 H1078 M902,408 L884,456 M1038,408 L1056,456
+    M886,446 V522 M1054,446 V522 M886,522 Q970,550 1054,522"/>
+  <path class="ink thin draw" pathLength="1" style="--d:2s;--t:1.6s" d="M914,452 V530 M942,454 V536 M970,455 V538 M998,454 V536 M1026,452 V530"/>
+</svg>
+<script>
+  // 18 sparks, positions and timings from a fixed formula (reproducible stills).
+  const g = document.getElementById("sparks");
+  for (let i = 0; i < 18; i++) {
+    const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    c.setAttribute("cx", String(90 + ((i * 137) % 700)));
+    c.setAttribute("cy", String(338 + ((i * 29) % 40)));
+    c.setAttribute("r", String(2 + (i % 3) * 0.8));
+    c.setAttribute("class", "spark");
+    c.style.cssText = `--d:${(2.4 + ((i * 0.37) % 2.6)).toFixed(2)}s;--t:${(2.2 + (i % 5) * 0.3).toFixed(1)}s;--dx:${((i % 7) - 3) * 14}px`;
+    g.appendChild(c);
+  }
+</script>
+</body></html>

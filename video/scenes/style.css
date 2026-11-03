@@ -1,5 +1,8 @@
-/* Video scenes share the app's look: paper, ink, indigo; vermilion only for the master's marks; Mincho for reading. */
-:root { --kami:#f3f2ee; --kami-2:#e9e7e1; --sumi:#1f2328; --nibi:#5f646b; --ai:#2b4a6f; --shu:#b5402f; --keisen:#cfccc4; }
+/* Video scenes share the app's look: paper, ink, indigo; vermilion only for the master's marks; Mincho for reading.
+   All motion is CSS animation (no timers, no randomness) so video/stills.ts can pause every scene at an exact time.
+   Keep content above y≈600: record.ts draws the subtitle overlay at the bottom. */
+:root { --kami:#f3f2ee; --kami-2:#e9e7e1; --sumi:#1f2328; --nibi:#5f646b; --usuzumi:#9a9ea4; --ai:#2b4a6f; --shu:#b5402f; --keisen:#cfccc4;
+  --kaki:#9a6a3a; /* muted ochre, used only for the sparks in s02 */ }
 * { box-sizing: border-box; margin: 0; }
 html, body { width: 1280px; height: 720px; overflow: hidden; background: var(--kami); color: var(--sumi);
   font-family: "Hiragino Mincho ProN", "Yu Mincho", serif; }
@@ -7,4 +10,11 @@ html, body { width: 1280px; height: 720px; overflow: hidden; background: var(--k
 .gothic { font-family: "Hiragino Sans", "Yu Gothic", sans-serif; }
 .fade-in { opacity: 0; animation: fade 1.2s ease forwards; }
 @keyframes fade { to { opacity: 1; } }
+@keyframes fade-out { to { opacity: 0; } }
+/* Line drawing: give the path pathLength="1" and class="draw"; set --d (delay) and --t (duration). */
+.draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw var(--t, 2s) var(--d, 0s) ease-in-out both; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+svg .ink { fill: none; stroke: var(--sumi); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+svg .thin { stroke-width: 1.4; }
+.corner-note { position: absolute; left: 56px; top: 44px; font-size: 20px; color: var(--nibi); letter-spacing: .1em; }
 @media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; } }

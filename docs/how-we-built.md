@@ -123,3 +123,10 @@ Short entries, appended every work session. Source material for the README secti
 - **The demo video as code** — `video/` holds the scene table, HTML/CSS animation pages in the app's look, a Playwright recorder
   (subtitles drawn as an overlay, since this ffmpeg build has no subtitle filter) and an ffmpeg assembler. A draft with placeholders
   rendered end to end (2:49.7); Claude reviewed extracted frames and listed what must change before the final render.
+- **Animation as reviewable stills** — the four explanation scenes (s02 well, s03 head, s07 diagram, s10 end card) are hand-written
+  SVG line drawings and CSS animations only, so `video/stills.ts` can pause every animation at the same instant and write
+  reproducible frames for review. Claude iterated on the frames (a ledger clipped by the ground line, a dotted "read only" path
+  rendered solid, a brush crossing the quote) and on real recordings, which showed a 5-line subtitle hiding the read-only path —
+  subtitles now advance one sentence at a time. Product names in the diagram are slots, filled after D-002.
+- **A safer default for local servers** — Kento noticed the dev server had been reachable from the LAN for hours (it can call Claude
+  with the dev key); CLAUDE.md now requires `--hostname 127.0.0.1` and stopping servers after checks.

@@ -14,19 +14,27 @@ const ROOT = path.resolve(__dirname, "..");
 const OUT = path.join(__dirname, "out");
 const { values } = parseArgs({ options: { base: { type: "string", default: "http://localhost:3000" }, only: { type: "string" } } });
 const plan = JSON.parse(readFileSync(path.join(__dirname, "scenes.json"), "utf8")) as {
-  scenes: { id: string; kind: "screen" | "anim"; seconds: number; page: string; narration: string }[];
+  scenes: { id: string; kind: "screen" | "anim"; seconds: number; page: string; narration: string; subtitle?: false }[];
 };
 const results = readFileSync(path.join(ROOT, "data/demo/results.json"), "utf8");
 
-const SUBTITLE = (text: string) => `
+/** Subtitle overlay: one sentence at a time, each shown for a share of the scene proportional to its length
+ *  (an approximation until the narration audio exists; then cue times come from the audio). */
+const SUBTITLE = (text: string, seconds: number) => `
   window.addEventListener("DOMContentLoaded", () => {
-    if (!${JSON.stringify(text)}) return;
+    const cues = ${JSON.stringify(text)}.split(/(?<=。)/).map((x) => x.trim()).filter(Boolean);
+    if (!cues.length) return;
     const el = document.createElement("div");
-    el.textContent = ${JSON.stringify(text)};
-    el.style.cssText = "position:fixed;left:50%;bottom:28px;transform:translateX(-50%);max-width:1100px;padding:10px 22px;" +
+    el.style.cssText = "position:fixed;left:50%;bottom:28px;transform:translateX(-50%);max-width:1100px;padding:8px 22px;" +
       "background:rgba(31,35,40,.82);color:#f3f2ee;font:500 26px/1.6 'Hiragino Sans','Yu Gothic',sans-serif;border-radius:4px;" +
       "text-align:center;z-index:2147483647;pointer-events:none";
     document.body.appendChild(el);
+    const total = cues.reduce((n, c) => n + c.length, 0);
+    let at = 0;
+    for (const c of cues) {
+      setTimeout(() => { el.textContent = c; }, at);
+      at += (${seconds} * 1000 * c.length) / total;
+    }
   });`;
 
 /** Scripted steps for real-screen scenes (kept short; finalized with the narration after the feature freeze). */
@@ -46,13 +54,13 @@ const STEPS: Record<string, (p: Page, base: string) => Promise<void>> = {
   const browser = await chromium.launch();
   const only = values.only?.split(",");
   for (const s of plan.scenes.filter((x) => !only || only.includes(x.id))) {
-    const subtitle = s.narration.startsWith("（") ? "" : s.narration; // drafts in （…） are placeholders
+    const subtitle = s.subtitle === false || s.narration.startsWith("（") ? "" : s.narration; // （…） = placeholder; text-led cards have none
     const ctx = await browser.newContext({
       viewport: { width: 1280, height: 720 }, locale: "ja-JP", colorScheme: "light",
       recordVideo: { dir: OUT, size: { width: 1280, height: 720 } },
     });
     await ctx.addInitScript(`window.RESULTS = ${results};`);
-    await ctx.addInitScript(SUBTITLE(subtitle));
+    await ctx.addInitScript(SUBTITLE(subtitle, s.seconds));
     const p = await ctx.newPage();
     const t0 = Date.now();
     if (s.kind === "anim") {

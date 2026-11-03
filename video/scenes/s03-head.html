@@ -1,3 +1,87 @@
 <!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css"></head>
-<body><div class="stage"><p class="fade-in" style="font-size:40px;color:var(--nibi)">（s03-head：アニメーションは 11/6〜7 に作成）</p></div></body></html>
+<html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<!-- s03 (15 s), three beats timed to the three narration sentences:
+     0–4.5 s  the ledger's words move into a veteran's head;
+     4.5–9.5 s  51.2% of SMEs have no successor yet — the person leaves and the words fade;
+     9.5–15 s  "書いて残して" — the brush comes down to a blank sheet and stops (one ink dot). -->
+<style>
+  .book { animation: fade .9s ease both, fade-out .8s 4s ease forwards; opacity: 0; }
+  .line { position: absolute; writing-mode: vertical-rl; font-size: 26px; line-height: 1; letter-spacing: 4px; animation: dim 1.8s 1.8s ease forwards, fade-out .8s 4s ease forwards; }
+  @keyframes dim { to { opacity: .12; } }
+  .fly { position: absolute; font-size: 26px; line-height: 1; opacity: 0;
+    animation: fly 1.7s var(--d1) cubic-bezier(.45,.05,.3,1) both, vanish 1.6s var(--d2) ease-in forwards; }
+  @keyframes fly { 0% { opacity: 1; transform: none; } 100% { opacity: 1; transform: translate(var(--dx), var(--dy)); } }
+  @keyframes vanish { to { opacity: 0; filter: blur(3px); } }
+  .person { animation: leave 2s 7.4s ease-in forwards; }
+  @keyframes leave { to { transform: translateX(140px); opacity: 0; } }
+  .stat { position: absolute; left: 120px; top: 200px; opacity: 0; animation: fade 1s 4.8s ease forwards, fade-out .6s 9s ease forwards; }
+  .stat .label { font-size: 28px; }
+  .stat .num { font-size: 120px; line-height: 1.15; color: var(--ai); font-variant-numeric: tabular-nums; }
+  .stat .src { font-size: 16px; color: var(--nibi); margin-top: 8px; }
+  .ask { position: absolute; left: 372px; top: 190px; writing-mode: vertical-rl; font-size: 40px; letter-spacing: .14em; opacity: 0;
+    animation: fade 1s 9.8s ease forwards; }
+  .sheet { opacity: 0; animation: fade 1s 9.6s ease forwards; }
+  .brush { animation: brush 1.4s 10.6s ease-in-out both, hesitate .9s 12s ease-in-out both; }
+  @keyframes brush { from { opacity: 0; transform: translate(80px, -150px); } 30% { opacity: 1; } to { opacity: 1; transform: translate(0, -10px); } }
+  @keyframes hesitate { 0% { transform: translate(0, -10px); } 40% { transform: translate(0, -2px); } 100% { transform: translate(-2px, -14px); } }
+  .blot { transform-box: fill-box; transform-origin: center; animation: blot 1.4s 12.4s ease-out both; }
+  @keyframes blot { from { opacity: 0; transform: scale(0); } to { opacity: 1; transform: scale(1); } }
+</style></head>
+<body>
+<svg width="1280" height="720" viewBox="0 0 1280 720" style="position:absolute;inset:0">
+  <!-- open ledger -->
+  <g class="book">
+    <path d="M130,170 H330 Q340,176 350,170 H550 V500 H350 Q340,506 330,500 H130 Z" fill="#faf9f6" stroke="var(--sumi)" stroke-width="2"/>
+    <path class="ink thin" d="M340,174 V502"/>
+  </g>
+  <!-- the veteran, in profile, facing the ledger -->
+  <g class="person">
+    <path class="ink draw" pathLength="1" style="--d:.4s;--t:2.4s" d="
+      M780,600 Q800,500 872,476 L872,440 Q852,432 848,414 L842,404 Q846,396 840,390 L846,378 Q834,366 830,352
+      L846,338 Q846,316 852,300 Q866,200 960,196 Q1046,200 1054,292 Q1058,372 1016,420 L1012,476 Q1090,494 1120,600"/>
+    <path class="ink thin draw" pathLength="1" style="--d:1.6s;--t:.6s" d="M868,318 Q876,314 884,318"/>
+  </g>
+  <!-- blank sheet and brush (third beat) -->
+  <g class="sheet">
+    <rect x="470" y="190" width="340" height="340" fill="#faf9f6" stroke="var(--keisen)" stroke-width="1.5"/>
+    <path stroke="var(--keisen)" stroke-width="1" d="M512,206 V514 M554,206 V514 M596,206 V514 M638,206 V514 M680,206 V514 M722,206 V514 M764,206 V514"/>
+  </g>
+  <circle class="blot" cx="702" cy="292" r="5" fill="var(--sumi)"/>
+  <g transform="translate(702,290) rotate(24)"><g class="brush">
+    <path d="M-6,-44 Q-9,-16 0,0 Q9,-16 6,-44 Z" fill="var(--sumi)"/>
+    <rect x="-8" y="-62" width="16" height="18" fill="var(--kami-2)" stroke="var(--sumi)" stroke-width="2"/>
+    <rect x="-6" y="-230" width="12" height="168" fill="var(--kami)" stroke="var(--sumi)" stroke-width="2"/>
+  </g></g>
+</svg>
+<div id="words"></div>
+<div class="stat">
+  <p class="label">後継ぎが決まっていない中小企業</p>
+  <p class="num">51.2%</p>
+  <p class="src gothic">出典：帝国データバンク「全国『後継者不在率』動向調査（2025年）」</p>
+</div>
+<p class="ask">「書いて残して」</p>
+<script>
+  // Ledger lines (generic etiquette, not any client's); some characters fly into the head, the rest dim.
+  const LINES = ["お詫びは顔を見て", "表は窓口、裏に一言", "繁忙の月は避ける", "値の話は親方へ", "書式は先方の型"];
+  const X = [496, 446, 396, 286, 236], TOP = 206, STEP = 30;
+  const FLY = { 0: [1, 4], 1: [0, 5, 7, 8], 2: [0, 5], 3: [0, 4], 4: [0, 6] };
+  const DEST = [[930, 236], [972, 262], [904, 290], [948, 300], [990, 318], [916, 336], [962, 350], [1006, 372], [936, 384], [980, 402], [900, 400], [1010, 236]];
+  const root = document.getElementById("words");
+  let k = 0;
+  LINES.forEach((text, i) => {
+    const el = document.createElement("div");
+    el.className = "line"; el.textContent = text;
+    el.style.left = X[i] - 13 + "px"; el.style.top = TOP + "px";
+    root.appendChild(el);
+    for (const j of FLY[i]) {
+      const [dx, dy] = DEST[k];
+      const f = document.createElement("div");
+      f.className = "fly"; f.textContent = text[j];
+      const x = X[i] - 13, y = TOP + j * STEP;
+      f.style.cssText = `left:${x}px;top:${y}px;--dx:${dx - x}px;--dy:${dy - y}px;--d1:${(1.8 + k * 0.14).toFixed(2)}s;--d2:${(6.4 + k * 0.12).toFixed(2)}s`;
+      root.appendChild(f);
+      k++;
+    }
+  });
+</script>
+</body></html>
