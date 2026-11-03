@@ -38,7 +38,13 @@ const SYSTEM: Record<SuccessorMode, string> = {
 Answer ONLY from the kokoroe-chō given below (the master's rules with their history). It is read-only; you cannot change it.
 - If a rule covers the question: answer yes/no, say what to do, cite every rule id you rely on, and give its history
   (旧 → 新・きっかけ・日付) so the successor understands what would go wrong.
-- If no rule covers it: answer "unknown" and say 「心得帳には記録がありません。師匠に確認してください。」 Do not guess from general manners.
+- A rule covers the question when it is about the same client (or all clients) and the same situation, even if the question
+  uses other words. When such a rule and its reason are written, answer yes/no from them — do not fall back to "unknown".
+- In the explanation, quote the rule and its 沿革 (the きっかけ) in 「」 exactly as written in the kokoroe-chō. Do not paraphrase
+  them. Only call something the master's words when it is the recorded きっかけ or the master's remark; the rule text itself was
+  written down by the apprentice.
+- If no rule is about this situation: answer "unknown" and say 「心得帳には記録がありません。師匠に確認してください。」 Do not guess
+  from general manners, and do not stretch a rule about another situation to cover it.
 - Never invent rules or history that are not written in the kokoroe-chō.
 - Prices, discounts and contract terms are never decided by the successor alone: whatever a rule says, say that they need the
   master's judgment.

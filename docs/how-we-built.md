@@ -292,3 +292,12 @@ Short entries, appended every work session. Source material for the README secti
   - **Phone check:** the 「どの意味でしたか」 state that only exists live was put into a test session to see the mobile layout.
   - **Review:** the hitl-reviewer subagent read the undo diff and found two blockers. Both were fixed and tested before
     committing.
+
+- **11/4 — the successor's instructions, measured both ways (D-054).**
+  - **Diagnose first:** Claude Code classified the failing history questions on the existing grown 心得帳 before changing
+    anything. Its own first guess, a missing 「なぜ」, turned out wrong.
+  - **Guard set:** it wrote questions the book cannot answer and measured them before and after the change.
+  - **Review:** the hitl-reviewer found that the far questions could not show a regression and that "the master's words" would
+    misattribute the apprentice's rule text. So near-miss and discount questions and a verbatim-quote check were added.
+  - **Reading the result:** reading the answers showed that two of the "near-miss" questions were in fact covered by learned
+    rules, and the result is reported that way.

@@ -667,3 +667,40 @@ master-role test (11/6).
 - **Phone:** when the apprentice asks the master something (a reading, a 「なぜ」, a check), that panel comes first and is
   scrolled into view once.
 
+## D-054 · 2026-11-04 · Accepted (Kento) · The successor answers from a matching rule and quotes it; never answers what is not in the book
+
+**Context.** A diagnosis on 4 already-grown kokoroe-chō (`eval/history-diagnose.ts`, $0.205) showed where the history questions
+fail:
+- Q05: the fact was never learned in training.
+- Q07: the rule and its why are in the book, but the successor answers "unknown".
+- Q03: right answer, but paraphrased.
+
+Kento: answer instead of escaping when a matching rule and its why exist; quote them as written. Anything not in the book is
+still 「分からない、師匠に確認を」, and that must be checked. Q05 is left as it is.
+
+**Decision** (`src/successor/ask.ts`, grounded mode only):
+- A rule about the same client and situation, worded differently, counts: answer from it, not "unknown".
+- Quote the rule and its 沿革 in 「」 exactly as written. Only the recorded きっかけ / remark is called the master's words: the rule
+  text was written by the apprentice, as the hitl-reviewer pointed out.
+- No rule about this situation → "unknown", and no stretching a rule from another situation. The price/contract line is
+  unchanged.
+
+**Measured** (fictional data; the same 4 grown kokoroe-chō, one run each; `eval/successor-guard.ts`; $1.1 in all):
+
+| | before | after |
+|---|---|---|
+| History questions (8) | 5.00 | 5.50 (within one question per store: noise is possible) |
+| Answers presented as quotes but not in the book | — | 0 |
+| Far questions not in the book (6, `data/scenes/unknown-questions.json`): answered anyway | 0/24 | 0/24 |
+| Near-miss questions (4, next to an existing rule): answered | 6/16 | 6/16 |
+| Discount question with a matching rule: sent to the master | 8/8 | 8/8 |
+
+- **The near-miss count needs reading:** N03 and N04 turned out to be covered by rules some runs had learned, so those answers
+  are grounded. The real stretch is N01: a 根回し rule applied to good news, in 2/4 stores before and 1/4 after.
+- **Already there before:** this weakness predates the change and is not removed by it. Recorded as a known limit.
+- **Q07 is still mostly "unknown":** the grown books hold the fact (the 二代目 does not want to be treated like the 先代), not a
+  rule about meetings. Answering would mean stretching, which Kento ruled out.
+- **Q05** stays at 0/4, shown as it is.
+- **Effect on the official measurement:** the 11/7 history numbers are measured with this prompt. Match is not affected (the
+  successor is not used in training or the held-out scenes).
+
