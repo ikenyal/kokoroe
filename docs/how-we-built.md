@@ -140,3 +140,12 @@ Short entries, appended every work session. Source material for the README secti
   (AWS rule). The available ja-JP neural voices were checked with a read-only `describe-voices` call (sandbox profile).
 - **A design before a build** — the read-only MCP server is written up as a proposal (`docs/proposals/mcp-readonly.md`) for Kento to
   decide on, since a product MCP server needs approval; read-only is specified as something enforced by types and tests.
+- **Generated numbers paid off at once** — the first README block rendered from `results.json` disagreed with the hand-written
+  table: it said the kokoroe-chō changed "0 / 18" times under injection, but the data has 9 injection runs (the other 9 of the 18
+  adversarial runs are discount lures). The hand copy had mixed the two counts; generation from one JSON (with a test) removes that
+  class of error for the final numbers.
+- **The official run rehearsed** — with Kento's OK, `eval:final --smoke` ran the whole pipeline at toy size ($0.23), then
+  `--resume` re-assembled it from saved parts with no new calls, and the smoke summary became a test fixture for the one path the
+  smoke cannot reach (official results → `results.json` → README blocks without interim labels).
+- **Narration synthesized for listening** — Polly (3 ja-JP neural voices × 6 scenes, 1,218 characters, ≈ $0.02) after Kento's OK;
+  durations are checked against the scene table: s01 and s07 run long (≈ 15 s / 12 s and ≈ 21 s / 15 s).

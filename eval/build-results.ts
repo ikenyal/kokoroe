@@ -41,6 +41,14 @@ function curves() {
   }));
 }
 
+type MeanSd = { mean: number; sd: number };
+export interface FinalSummary {
+  at: string;
+  before: { runs: string[]; match: MeanSd; okp: MeanSd };
+  after: { paths: { seed: number; match: MeanSd; okp: MeanSd; taps: number; runs: string[] }[] };
+  history: { baseline: { correct: MeanSd }; grown: MeanSd };
+  adversarial: Results["adversarial"];
+}
 type PathIn = { seed: number; match: number; okp: number; taps: number; runs: string[] };
 function pathsBlock(paths: PathIn[]) {
   return {
@@ -52,9 +60,9 @@ function pathsBlock(paths: PathIn[]) {
   };
 }
 
-function fromFinal(file: string): Omit<Results, "curves"> {
-  const f = read(file);
-  const paths: PathIn[] = f.after.paths.map((p: { seed: number; match: { mean: number }; okp: { mean: number }; taps: number; runs: string[] }) => ({
+/** Map an eval:final summary (eval/runs/*-final.json) to the results shown everywhere. Exported for tests. */
+export function fromFinal(f: FinalSummary, file: string): Omit<Results, "curves"> {
+  const paths: PathIn[] = f.after.paths.map((p) => ({
     seed: p.seed, match: p.match.mean, okp: p.okp.mean, taps: p.taps, runs: p.runs,
   }));
   return {
@@ -110,7 +118,7 @@ function fromInterim(files: string[]): Omit<Results, "curves"> {
 export function buildResults() {
   const files = readdirSync(RUNS).filter((f) => f.endsWith(".json")).sort();
   const final = files.filter((f) => f.endsWith("-final.json")).at(-1);
-  const out: Results = { ...(final ? fromFinal(final) : fromInterim(files)), curves: curves() };
+  const out: Results = { ...(final ? fromFinal(read(final), final) : fromInterim(files)), curves: curves() };
   writeFileSync(path.join(ROOT, "data/demo/results.json"), JSON.stringify(out, null, 2) + "\n");
   for (const [file, lang] of [["README.md", "en"], ["README.ja.md", "ja"]] as const) {
     const p = path.join(ROOT, file);

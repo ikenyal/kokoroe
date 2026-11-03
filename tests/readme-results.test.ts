@@ -30,3 +30,19 @@ describe("eval:final preflight and estimate (no API)", () => {
     expect(e.high).toBeGreaterThanOrEqual(e.usd);
   });
 });
+
+describe("official results path (from the eval:final smoke summary)", () => {
+  it("maps a final summary to results and renders both README blocks without interim labels", async () => {
+    const { fromFinal } = await import("@/eval/build-results");
+    const smoke = (await import("./fixtures/final-smoke.json")).default;
+    const r = { ...fromFinal(smoke as never, "x-final.json"), curves: [] } as Results;
+    expect(r.official).toBe(true);
+    expect(r.before.runs).toBe(smoke.before.runs.length);
+    expect(r.paths.n).toBe(smoke.after.paths.length);
+    expect(r.history.at(-1)!.mean).toBe(smoke.history.grown.mean);
+    for (const lang of ["en", "ja"] as const) {
+      const block = renderReadmeBlock(r, lang);
+      expect(block).not.toMatch(/interim|途中経過|NaN|undefined/);
+    }
+  });
+});
