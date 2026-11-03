@@ -10,7 +10,7 @@
 In a small Japanese company, how to deal with each client lives in one veteran's head: whom to tell first, what to send by mail and
 what to say face to face, when to stay away, who must hear it quietly before it becomes official. Asked to explain, the veteran
 can't — it was never put into words. But show them a draft and they instantly say "no, not like that".
-When they retire, the etiquette and *why it became so* leave with them. Over half of Japan's small and medium companies have no successor lined up (Teikoku Databank, 2025: 51.2%),
+When they retire, the etiquette and *why it became so* leave with them. In Teikoku Databank's 2025 survey, 51.2% of the small and medium companies it covered had no successor lined up,
 and the successor is increasingly an employee or an acquirer, not family who watched for years.
 
 ## What Kokoroe does
