@@ -132,6 +132,16 @@ function sweep(previousSid?: string) {
   }
 }
 
+/**
+ * Demo-video recording only (video/shoot.ts, local): KOKOROE_VIDEO_QUEUE="T05,T13" makes お試し start with just those scenes, in
+ * that order, so the video can show △ on T05 and the changed draft on the next similar scene (T13). Never set in public.
+ */
+function videoQueue(mode: Mode, queue: Snapshot["queue"]): Snapshot["queue"] {
+  const ids = process.env.KOKOROE_VIDEO_QUEUE?.split(",").map((x) => x.trim()).filter(Boolean);
+  if (mode !== "trial" || !ids?.length) return queue;
+  return ids.map((id) => queue.find((q) => q.scene.id === id)).filter((q): q is Snapshot["queue"][number] => !!q);
+}
+
 /** Create (or reset) a session from its snapshot. Called from a Server Action, which may set cookies. */
 export async function startSession(mode: Mode): Promise<void> {
   const jar = await cookies();
@@ -142,7 +152,7 @@ export async function startSession(mode: Mode): Promise<void> {
   const f = files(mode, sid);
   mkdirSync(path.dirname(f.store), { recursive: true });
   writeFileSync(f.store, JSON.stringify(snap.store, null, 2));
-  const meta: SessionMeta = { mode, createdAt: new Date().toISOString(), queue: snap.queue, pos: 0, pending: [] };
+  const meta: SessionMeta = { mode, createdAt: new Date().toISOString(), queue: videoQueue(mode, snap.queue), pos: 0, pending: [] };
   writeFileSync(f.meta, JSON.stringify(meta, null, 2));
   const opts = { httpOnly: true, sameSite: "lax" as const, secure: process.env.NODE_ENV === "production", path: "/", maxAge: 60 * 60 * 24 };
   jar.set("kokoroe_sid", sid, opts);

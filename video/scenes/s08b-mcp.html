@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<!-- s08b (5 s): the same question to the successor's Claude Code — Skill only (a copy) vs Skill + read-only MCP (the living book).
+     Text comes from demo/successor-mcp/answers.json (window.MCP, injected by video/record.ts), recorded with that folder's
+     run.sh in empty directories outside the repo. Nothing is typed here by hand. -->
+<style>
+  .wrap { width: 1160px; }
+  .q { font-size: 24px; text-align: center; opacity: 0; animation: fade .6s .1s ease both; }
+  .q small { display: block; font-size: 15px; color: var(--nibi); margin-bottom: 6px; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 26px; }
+  .col { border-top: 3px solid var(--sumi); padding-top: 14px; opacity: 0; animation: fade .7s var(--d) ease both; }
+  .col.mcp { border-color: var(--ai); }
+  .col h2 { font-size: 20px; font-weight: 600; }
+  .col h2 span { font-size: 15px; font-weight: 400; color: var(--nibi); margin-left: 8px; }
+  .lead { font-size: 26px; line-height: 1.55; margin-top: 12px; }
+  .mcp .lead { color: var(--ai); }
+  .why { font-size: 17px; line-height: 1.7; color: var(--nibi); margin-top: 10px; }
+</style></head>
+<body><div class="stage"><div class="wrap">
+  <p class="q"><small>後任の手元の Claude Code に、同じ質問</small><span id="q"></span></p>
+  <div class="cols">
+    <div class="col" style="--d:.7s"><h2>Skill だけ<span>ある時点の心得帳の写し</span></h2><p class="lead" id="a1"></p><p class="why" id="w1"></p></div>
+    <div class="col mcp" style="--d:1.5s"><h2>Skill ＋ MCP<span>育ち続ける心得帳に問い合わせる</span></h2><p class="lead" id="a2"></p><p class="why" id="w2"></p></div>
+  </div>
+</div></div>
+<script>
+  const M = window.MCP;
+  const plain = (s) => s.replace(/\*\*/g, "").replace(/^#+\s*/gm, "");
+  const lead = (s) => plain(s.split("\n").find((l) => l.trim()) ?? "");
+  const rule = (s) => (plain(s).match(/K-\d{3}[^\n（]*/) ?? [""])[0].replace(/[：:]\s*$/, "").slice(0, 48);
+  if (M) {
+    document.getElementById("q").textContent = M.question;
+    const a = M.answers["skill-only"].result, b = M.answers["with-mcp"].result;
+    document.getElementById("a1").textContent = lead(a);
+    document.getElementById("w1").textContent = "根拠: " + rule(a);
+    document.getElementById("a2").textContent = lead(b);
+    document.getElementById("w2").textContent = "根拠: " + rule(b);
+  }
+</script></body></html>
