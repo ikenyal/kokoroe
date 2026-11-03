@@ -64,7 +64,7 @@ const STEPS: Record<string, (p: Page, base: string, live: boolean) => Promise<vo
         const kura = picks.filter({ hasText: "蔵元" });
         await ((await kura.count()) ? kura.first() : picks.first()).click();
         if (await shown(p.locator('aside button[name="skip"]'), 20000)) await p.locator('aside button[name="skip"]').first().click();
-        if (await shown(p.locator('aside button[aria-label="○"]'), 45000)) await p.locator('aside button[aria-label="○"]').first().click();
+        if (await shown(p.locator('aside button[name="verdict"][value="○"]'), 45000)) await p.locator('aside button[name="verdict"][value="○"]').first().click();
       }
     }
     await p.waitForTimeout(2000);

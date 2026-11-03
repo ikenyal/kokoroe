@@ -55,7 +55,9 @@ export function CurveChart({
   const nCheckpoints = curves[0].points.length;
 
   return (
-    <figure className="relative">
+    // On a phone the 720-wide chart would shrink its labels to ~6px: keep a readable minimum width and let it scroll sideways.
+    <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="学習曲線（横にスクロールできます）">
+    <figure className="relative min-w-[560px]">
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className="h-auto w-full"
@@ -151,5 +153,6 @@ export function CurveChart({
       )}
       <figcaption className="sr-only">{nCheckpoints} つの時点で、評価用20場面を3回ずつ測った平均。</figcaption>
     </figure>
+    </div>
   );
 }

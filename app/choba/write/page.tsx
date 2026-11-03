@@ -23,13 +23,14 @@ export default async function WritePage() {
           <input type="hidden" name="sceneId" value={next.sceneId} />
           <TimedFields />
           <p className="text-[13px] text-nibi">{getClient(TRAIN_SCENES.find((t) => t.id === next.sceneId)!.clientId).name}</p>
-          <h2 className="yomi mt-1 text-[19px]">{next.prompt}</h2>
+          <h2 id="write-q" className="yomi mt-1 text-[19px]">{next.prompt}</h2>
           <textarea
             name="text"
+            aria-labelledby="write-q"
             required
             rows={8}
             maxLength={2000}
-            className="yomi mt-4 block w-full rounded-[3px] border border-keisen bg-kami p-3 text-[16px]"
+            className="yomi mt-4 block w-full rounded-[3px] border border-waku bg-kami p-3 text-[16px] placeholder:text-nibi"
             placeholder="誰に・何で・いつ・どう伝えるか。なぜそうするのかも。"
           />
           <button className="mt-3 h-12 rounded-[3px] bg-sumi px-6 text-[15px] text-kami">記録する</button>

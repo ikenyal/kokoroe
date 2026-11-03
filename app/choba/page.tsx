@@ -8,7 +8,7 @@ import { draftLive } from "@/src/server/background";
 import { getSession, liveEnabled, type Pending } from "@/src/server/session";
 import { answerWhy, choose, verifyCheck } from "../actions";
 import { TimedFields } from "./timed";
-import { Mark } from "../marks";
+import { Mark, VERDICT_WORD } from "../marks";
 import { AutoRefresh } from "./auto-refresh";
 import { JudgeForm } from "./judge-form";
 
@@ -107,10 +107,10 @@ function CheckCard({ p, step, sceneId, proposal, before }: { p: Pending; step: "
           </div>
         ))}
       </dl>
-      <input name="remark" maxLength={120} autoComplete="off" placeholder="一言（任意）" className="mt-2 block h-9 w-full rounded-[3px] border border-keisen bg-kami px-2 font-mincho text-[14px]" />
+      <input name="remark" maxLength={120} autoComplete="off" aria-label="一言（任意）" placeholder="一言（任意）" className="mt-2 block h-9 w-full rounded-[3px] border border-waku bg-kami px-2 font-mincho text-[14px]" />
       <div className="mt-2 flex gap-2">
         {(["○", "△", "×"] as const).map((v) => (
-          <button key={v} name="verdict" value={v} aria-label={v} className="flex h-10 w-12 items-center justify-center rounded-[3px] border border-keisen text-shu hover:border-shu hover:bg-shu-soft">
+          <button key={v} name="verdict" value={v} aria-label={`${v} ${VERDICT_WORD[v]}`} className="flex h-10 w-12 items-center justify-center rounded-[3px] border border-keisen text-shu hover:border-shu hover:bg-shu-soft">
             <Mark v={v} size={24} />
           </button>
         ))}
@@ -166,7 +166,7 @@ function PendingItem({ p, beforeOf }: { p: Pending; beforeOf: (judgmentId: strin
               maxLength={120}
               autoComplete="off"
               placeholder="例：2024年に先方の規程が変わった"
-              className="mt-1 block h-11 w-full rounded-[3px] border border-keisen bg-kami px-3 font-mincho text-[15px] placeholder:text-nibi/60"
+              className="mt-1 block h-11 w-full rounded-[3px] border border-waku bg-kami px-3 font-mincho text-[15px] placeholder:text-nibi"
             />
           </label>
           <div className="flex gap-3">

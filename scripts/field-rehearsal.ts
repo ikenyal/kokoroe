@@ -34,7 +34,7 @@ async function tendPanel(p: Page): Promise<boolean> {
     await aside.locator('button:has-text("わけを残す")').first().click();
     return true;
   }
-  const ok = aside.locator('button[aria-label="○"]');
+  const ok = aside.locator('button[name="verdict"][value="○"]');
   if (await ok.count()) {
     await ok.first().click();
     return true;

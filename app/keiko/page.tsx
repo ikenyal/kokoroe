@@ -47,10 +47,11 @@ export default function KeikoPage() {
       </section>
 
       <section aria-labelledby="curve-h" className="mt-10 grid gap-8 lg:grid-cols-[1fr_17rem]">
-        <div>
+        <div className="min-w-0">
           <h2 id="curve-h" className="text-[15px] font-bold">学習曲線</h2>
           <p className="mt-1 text-[13px] text-nibi">どれだけ師匠の手を借りて、どこまで一致するようになったか。灰色の線は改良の途中の版、藍の点と縦線は今の構成（v1）を学習{paths?.n ?? 0}本で測った平均と幅{results.official ? "（正式な計測）" : "（途中経過）"}です。</p>
           <div className="mt-4">
+            <p className="mb-1 text-[12px] text-nibi sm:hidden">図は横にずらせます。右端が今の構成（v1）の結果です。</p>
             <CurveChart curves={curves} emphasis={paths ? null : latest.key} before={results.before} paths={paths} />
           </div>
           <details className="mt-3 text-[13.5px]">

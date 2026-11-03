@@ -14,6 +14,7 @@
   --shu: #b5402f;
   --shu-soft: #f3dcd6;
   --keisen: #cfccc4; /* ruled lines */
+  --waku: #88847b; /* edges of fields you type into: 3:1 against paper (WCAG 1.4.11) */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -27,6 +28,7 @@
     --shu: #e07a64;
     --shu-soft: #3a2420;
     --keisen: #2e333a;
+    --waku: #6a7078;
   }
 }
 
@@ -40,6 +42,7 @@
   --color-shu: var(--shu);
   --color-shu-soft: var(--shu-soft);
   --color-keisen: var(--keisen);
+  --color-waku: var(--waku);
   --font-mincho: var(--font-shippori), "Hiragino Mincho ProN", "Yu Mincho", serif;
   --font-gothic: var(--font-zenkaku), "Hiragino Sans", "Yu Gothic", sans-serif;
 }

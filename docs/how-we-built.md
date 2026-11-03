@@ -177,3 +177,11 @@ Short entries, appended every work session. Source material for the README secti
   `eval:quick`. Everything worked on recorded data with no key. The README was changed in three places: `npm ci` instead of
   `npm install`, `--hostname 127.0.0.1` with the matching URL, and no hand-written test count (it had gone stale at "150+").
   The check also found a server Claude had left running from an earlier step (127.0.0.1 only); it was stopped, and the clone deleted.
+- **Usability checked by measurement, not by eye alone** — Claude computed WCAG contrast for every color token in light and dark
+  (body and muted text pass; the placeholder at 60% ink was 2.4:1 and the edges of text fields 1.4:1 — both fixed, the latter with
+  a new `--waku` token at 3.3:1), then drove the app with Playwright at phone (375) and tablet (820) widths in both color schemes,
+  flagging any element wider than the screen. Only the learning curve broke: its labels shrank to ~6px on a phone, so it now keeps
+  a readable width inside a sideways-scrolling region (a grid item needed `min-w-0` before that worked). Keyboard only: Tab reaches
+  the ○△× marks in 9 stops, arrows choose, Enter records; the hidden radios now show a focus ring. The accessibility tree showed
+  what a screen reader hears: the check-card buttons were named just "○" — now "○ よい / △ 条件つき / × ちがう", the prose box is
+  labelled by its question, and the visible word under each mark no longer doubles the name. Screenshots: `docs/screens/a11y-*.png`.

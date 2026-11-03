@@ -64,7 +64,7 @@ export default async function NorenPage() {
         <form action={ask} className="mt-6 grid gap-3 sm:grid-cols-[11rem_1fr_auto] sm:items-end">
           <label>
             <span className="text-[13px] text-nibi">取引先</span>
-            <select name="clientId" className="mt-1 block h-12 w-full rounded-[3px] border border-keisen bg-kami px-2 text-[15px]">
+            <select name="clientId" className="mt-1 block h-12 w-full rounded-[3px] border border-waku bg-kami px-2 text-[15px]">
               {CLIENTS.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.name}
@@ -80,7 +80,7 @@ export default async function NorenPage() {
               required
               autoComplete="off"
               placeholder="例：この手順、省いてもいいですか？"
-              className="mt-1 block h-12 w-full rounded-[3px] border border-keisen bg-kami px-3 font-mincho text-[16px] placeholder:text-nibi/60"
+              className="mt-1 block h-12 w-full rounded-[3px] border border-waku bg-kami px-3 font-mincho text-[16px] placeholder:text-nibi"
             />
           </label>
           <button className="h-12 rounded-[3px] bg-ai px-5 text-[15px] text-kami">尋ねる</button>
