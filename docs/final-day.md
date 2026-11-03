@@ -58,7 +58,7 @@
 1. 撮影: 先に `npx tsx video/narration.ts --yes --only s08b-keiko` で数字のナレーションを正式な results.json から作り直し（出力の文に「途中経過」が入っていないこと）、続けて `npm run video:shoot -- --live --voice Takumi --mcp` が 0 で終わった。サーバーは 127.0.0.1 だけで動かし、`lsof -nP -iTCP:3123 -sTCP:LISTEN` が何も出さない（止まっている）。
 2. 長さと形式: `ffprobe -v error -show_entries format=duration:stream=width,height -of default=nw=1 video/out/kokoroe-demo.mp4` の duration が 180.0 以下で、width=1280、height=720。
 3. 新しさ: `stat -f '%m %N' data/demo/results.json video/out/kokoroe-demo.mp4` で、mp4 の時刻のほうが新しい。
-4. 数字の場面: `ffmpeg -ss <s08b の開始+5秒（今は 151.9 + 5 = 156.9 秒）> -i video/out/kokoroe-demo.mp4 -frames:v 1` で s08b-keiko の1枚を書き出し、Read で開いた。上の「途中経過」の帯が出ておらず、画面とナレーションの数字が results.json と同じだと、値を並べて示した。`npx tsx video/stills.ts --only s07b-mcp` の静止画も開いた。
+4. 数字の場面: `ffmpeg -ss <s08b の開始+5秒（今は 154.0 + 5 = 159.0 秒）> -i video/out/kokoroe-demo.mp4 -frames:v 1` で s08b-keiko の1枚を書き出し、Read で開いた。上の「途中経過」の帯が出ておらず、画面とナレーションの数字が results.json と同じだと、値を並べて示した。`npx tsx video/stills.ts --only s07b-mcp` の静止画も開いた。
 5. 因果の場面: s05 で、T05 への △ のあとに T13 の案が変わっている静止画（または録画の書き出し）を Read で開き、変わった一文を示した。
 6. 保存: docs/screens の静止画と video/README.md のチェックをコミットして push した（mp4 は gitignore のまま）。`git status --short` が空。
 守ること: 計測（eval:final）はやり直さない。data/、src/、app/ は変えない。動画のアップロードや公開はしない（Kento が見てから）。Polly を呼び直すときは --profile brightflow-sandbox-ikeda で、事前に Kento の OK を取る。20ターンで止める。
@@ -66,7 +66,7 @@
 
 **補足**
 - 4 と 5 は、Claude が画像を開いて「何が写っているか」を言葉にします。判定役は画像を見られないので、その言葉が材料になります。機械では確かめにくい部分なので、ゴールのあとで Kento が通しで見ます。
-- 2 の 180 秒は応募の上限（3分）です。構成 v3 の仮の版は 2:59（178.9 秒）で、3分までの余裕は約1秒です。場面の秒数はナレーションの実際の長さから決めています（`video/out/audio/Takumi/<id>.marks.json`）。
+- 2 の 180 秒は応募の上限（3分）です。構成 v4 の仮の版は 2:59.7（179.7 秒）で、3分までの余裕は約0.3秒です。場面の秒数はナレーションの実際の長さから決めています（`video/out/audio/Takumi/<id>.marks.json`）。
 
 ## ゴールのあと（人がすること）
 

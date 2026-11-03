@@ -42,6 +42,8 @@ export const READINGS: [string, string][] = [
   ["Zoom", "ズーム"],
   ["AI", "エーアイ"],
   ["△", "さんかく"],
+  ["1行", "いちぎょう"],
+  ["2通", "につう"],
 ];
 
 /**
@@ -102,7 +104,11 @@ export function fillNumbers(text: string, r: Results): string {
     .replace("{taps}", r.paths ? String(Math.round(r.paths.taps.mean)) : "–");
 }
 
-export type Scene = { id: string; kind: "screen" | "anim"; seconds: number; page: string; narration: string; pauseMs?: number; subtitle?: false };
+export type Scene = {
+  id: string; kind: "screen" | "anim"; seconds: number; page: string; narration: string; pauseMs?: number; subtitle?: false;
+  /** chapter break: the scene opens behind a noren that parts left and right (video/record.ts) */
+  wipe?: "noren";
+};
 export function loadPlan(): { scenes: Scene[] } {
   const plan = JSON.parse(readFileSync(path.join(__dirname, "scenes.json"), "utf8")) as { scenes: Scene[] };
   const results = JSON.parse(readFileSync(path.join(__dirname, "..", "data/demo/results.json"), "utf8")) as Results;

@@ -579,3 +579,27 @@ not said at the start, and neither was why correcting works. The voices also sou
 - The first minute now says why it matters (0:08–0:30) and the problem (0:30–0:53). The solution title comes at about 1:03.
 - There is about 1 s of headroom under 3:00, so any further addition needs a cut elsewhere.
 
+## D-051 · 2026-11-04 · Accepted (Kento) · Video v4: a cold open you can see, moving forces, noren wipes
+
+**Context.** v3's cold open asked 「この案、どこが違うか、分かりますか。」. A viewer had no way to know, so it confused instead of
+pulling them in. The three forces also sat still.
+
+**Decision.**
+- **Cold open (12.9 s; Kento's draft narration):**
+  - The visible difference: two near-identical messages slide in from the left and right. The master's 朱 brush circles the one
+    extra line, the word to the 蔵元.
+  - The reason you can't see: that line glows and is drawn into the retiring director's head. A 「来春 退職」 tag drops beside him.
+  - s05 answers it: 「冒頭の1行は、蔵元への、裏の一言でした。」.
+- **Three forces move:**
+  - 51.2% counts up (CSS `@property` integers, so stills stay exact) and tags hang on half the companies.
+  - People walk out through a noren while 330万人 counts up.
+  - An AI reads a page and only the written lines light up; the bubble in a person's head stays grey.
+- **Noren wipe**, at three chapter breaks only (solution, demo, close). It is drawn by the recorder and adds no time.
+- **Time:** the cold open is 4.9 s longer than v3's.
+  - s02's first sentence no longer repeats 「来年の春…退職します」 (the cold open says it); −1.6 s.
+  - Small trims to s06, s09, the end card and scene tails (−2.5 s). s05 and s07 are untouched.
+  - Total 179.7 s.
+- **HyperFrames:** not tried. Measured on the recording, motion is smooth at Playwright's 25 fps, so it wasn't needed.
+
+**Consequences.** Readings 「1行」→いちぎょう and 「2通」→につう were added. Only about 0.3 s of headroom is left under 3:00.
+

@@ -1,45 +1,131 @@
 <!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
-<!-- s01 (v3, why now — three forces; 22.3 s). Each force drops onto the stack with its sentence (+0.3 s lead):
-     0.3  中小企業の、半数あまりで、跡継ぎが決まっていません。 → 51.2%  帝国データバンク「全国『後継者不在率』動向調査（2025年）」
-                                                              （調査対象の中小企業）
-     5.1  仕事を変える人は、一年に三百三十万人。               → 330万人  総務省統計局「労働力調査（詳細集計）2025年（令和7年）
-                                                              平均結果」の転職者数
-     9.5  異動も、当たり前です。                              → (added to the same block: 異動も)
-     11.9 そしてAIは、書かれたものしか使えません。             → AI: 書かれたものだけ
-     15.9 頭の中にしかない知恵を、渡せる形にする。 / 20.1 いま、それが必要です。 → the stack dims; the conclusion in ink
-     Numbers are typed from the two public sources above (checked 11/4); no number for job transfers (no clear public figure). -->
+<!-- s01 (v4, why now — three forces, each one moving; 22.3 s). Panels open with the narration's sentences (+0.3 s lead):
+     0.3  中小企業の、半数あまりで、跡継ぎが決まっていません。 → the number counts up to 51.2%; a tag hangs on half of the companies
+          (帝国データバンク「全国『後継者不在率』動向調査（2025年）」, of the small and medium firms surveyed)
+     5.1  仕事を変える人は、一年に三百三十万人。 / 9.5 異動も、当たり前です。
+          → people walk out one after another through a noren; 330万人 counts up
+          (総務省統計局「労働力調査（詳細集計）2025年（令和7年）平均結果」, 転職者数; job transfers have no clear public figure)
+     11.9 そしてAIは、書かれたものしか使えません。 → an AI reads a page: only the written lines light up; the words in a person's
+          head stay grey
+     15.9 頭の中にしかない知恵を、渡せる形にする。 / 20.1 いま、それが必要です。 → the panels step back; the conclusion in ink
+     Numbers count with CSS (@property integers), so stills can stop at any moment. Colors: 墨, 藍; no 朱 (no master here). -->
 <style>
-  .stack { position: absolute; left: 160px; width: 960px; bottom: 150px; display: flex; flex-direction: column-reverse; gap: 14px;
-    animation: fade-out .6s 15.8s ease forwards; }
-  .blk { position: relative; height: 112px; padding: 16px 28px; background: #faf9f6; border: 1.5px solid var(--sumi); display: grid;
-    grid-template-columns: 1fr auto; align-items: center; opacity: 0; transform: translateY(-70px);
-    animation: drop .55s var(--d) cubic-bezier(.3,.6,.4,1.15) forwards; }
-  @keyframes drop { to { opacity: 1; transform: none; } }
-  .what { font-size: 27px; letter-spacing: .04em; line-height: 1.45; }
-  .what small { display: block; font-size: 15px; color: var(--nibi); letter-spacing: 0; margin-top: 6px; }
-  .num { font-size: 60px; color: var(--ai); font-variant-numeric: tabular-nums; letter-spacing: .02em; }
-  .num.words { font-size: 34px; }
-  .also { color: var(--ai); opacity: 0; animation: fade .4s 9.6s ease forwards; }
-  .end { position: absolute; left: 0; right: 0; top: 270px; text-align: center; font-size: 44px; letter-spacing: .1em; line-height: 1.7;
+  @property --n { syntax: "<integer>"; inherits: false; initial-value: 0; }
+  .panels { position: absolute; left: 26px; top: 84px; zoom: 1.08; display: grid; grid-template-columns: repeat(3, 360px); gap: 30px;
+    animation: back .7s 15.8s ease forwards; }
+  @keyframes back { to { opacity: 0; transform: translateY(-14px); } }
+  .p { height: 470px; border-top: 3px solid var(--sumi); padding-top: 12px; opacity: 0; animation: fade .5s var(--d) ease forwards; }
+  .stage2 { position: relative; height: 230px; overflow: hidden; }
+  .what { font-size: 22px; line-height: 1.5; margin-top: 14px; }
+  .what .also { color: var(--ai); opacity: 0; animation: fade .4s 9.6s ease forwards; }
+  .num { font-size: 58px; line-height: 1.15; color: var(--ai); font-variant-numeric: tabular-nums; }
+  .num.words { font-size: 34px; line-height: 1.6; }
+  .src { font-size: 14px; line-height: 1.5; color: var(--nibi); margin-top: 6px; }
+  .count { counter-reset: n var(--n); }
+  .count::before { content: counter(n); }
+  .c51 { animation: c51 1.6s .7s cubic-bezier(.2,.6,.3,1) forwards; }
+  @keyframes c51 { to { --n: 51; } }
+  .dec { display: inline-block; max-width: 0; overflow: hidden; vertical-align: bottom; animation: open .25s 2.3s ease-out forwards; }
+  @keyframes open { to { max-width: 1.4em; } }
+  .c330 { animation: c330 1.5s 5.5s cubic-bezier(.2,.6,.3,1) forwards; }
+  @keyframes c330 { to { --n: 330; } }
+
+  /* panel 1: ten companies; a tag hangs on five */
+  .co { position: absolute; width: 56px; height: 56px; }
+  .co svg { overflow: visible; }
+  .tagc { position: absolute; left: 34px; top: -6px; transform-origin: 6px 0; opacity: 0; animation: hang .9s var(--t) cubic-bezier(.3,.7,.4,1) forwards; }
+  .tagc i { display: block; width: 1px; height: 16px; margin-left: 6px; background: var(--ai); }
+  .tagc b { display: block; width: 14px; height: 24px; border: 1.4px solid var(--ai); background: #faf9f6; }
+  @keyframes hang { 0% { opacity: 0; transform: translateY(-14px) rotate(14deg); } 40% { opacity: 1; } 70% { transform: rotate(-6deg); } to { opacity: 1; transform: none; } }
+
+  /* panel 2: people walk out through the noren */
+  .noren { position: absolute; left: 236px; top: 26px; width: 100px; height: 150px; z-index: 2; }
+  .noren .bar { position: absolute; left: -10px; right: -10px; top: 0; height: 6px; background: var(--sumi); border-radius: 3px; }
+  .noren .flap { position: absolute; top: 6px; width: 31px; height: 140px; background: var(--ai); transform-origin: top center;
+    animation: sway 4.4s 5.5s ease-in-out; }
+  .noren .flap:nth-child(2) { left: 0; } .noren .flap:nth-child(3) { left: 34px; animation-delay: 5.7s; } .noren .flap:nth-child(4) { left: 68px; animation-delay: 5.9s; }
+  @keyframes sway { 10%, 30%, 50%, 70%, 90% { transform: skewX(-7deg); } 20%, 40%, 60%, 80% { transform: skewX(4deg); } }
+  .walker { position: absolute; left: -40px; top: 92px; opacity: 0; animation: walk 1.7s var(--t) linear forwards; }
+  @keyframes walk { 0% { opacity: 1; transform: translateX(0); } 100% { opacity: 1; transform: translateX(330px); } }
+  .walker svg { overflow: visible; animation: bob .34s var(--t) 5 ease-in-out; }
+  @keyframes bob { 50% { transform: translateY(-4px); } }
+
+  /* panel 3: the AI reads a page; only written lines light up; the head's words stay grey */
+  .page { position: absolute; left: 6px; top: 18px; width: 170px; height: 196px; background: #faf9f6; border: 1.4px solid var(--sumi); padding: 16px 14px; }
+  .page p { font-size: 13px; line-height: 2.05; color: var(--sumi); white-space: nowrap; transition: none;
+    animation: read .35s var(--t) ease forwards; }
+  @keyframes read { to { background: rgba(43,74,111,.18); color: var(--ai); } }
+  .scan { position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--ai); box-shadow: 0 0 10px var(--ai); opacity: 0;
+    animation: scan 1.6s 12.3s linear forwards; }
+  @keyframes scan { 0% { opacity: .9; transform: translateY(10px); } 95% { opacity: .9; } 100% { opacity: 0; transform: translateY(186px); } }
+  .ai { position: absolute; left: 70px; top: -2px; font-size: 13px; color: #f3f2ee; background: var(--ai); padding: 1px 8px; border-radius: 2px;
+    opacity: 0; animation: fade .3s 12.1s forwards; }
+  .head3 { position: absolute; left: 214px; top: 86px; }
+  .bubble { position: absolute; left: 196px; top: 10px; width: 140px; padding: 8px 10px; border: 1.4px dashed var(--usuzumi); border-radius: 14px;
+    font-size: 14px; line-height: 1.6; color: var(--usuzumi); background: #f6f5f1; }
+
+  .end { position: absolute; left: 0; right: 0; top: 250px; text-align: center; font-size: 46px; letter-spacing: .1em; line-height: 1.7;
     opacity: 0; animation: fade .8s 16.1s ease forwards; }
   .end .now { display: block; font-size: 40px; color: var(--ai); letter-spacing: .3em; opacity: 0; animation: fade .6s 20.2s ease forwards; }
 </style></head>
 <body>
 <p class="corner-note gothic">なぜ、いま</p>
-<div class="stack">
-  <div class="blk" style="--d:.4s">
-    <p class="what">跡継ぎが決まっていない中小企業<small class="gothic">出典：帝国データバンク「全国『後継者不在率』動向調査（2025年）」、調査対象の中小企業</small></p>
-    <p class="num">51.2%</p>
+<div class="panels">
+  <div class="p" style="--d:.3s">
+    <div class="stage2" id="cos"></div>
+    <p class="what">跡継ぎが決まっていない中小企業</p>
+    <p class="num"><span class="count c51"></span><span class="dec">.2</span>%</p>
+    <p class="src gothic">出典：帝国データバンク「全国『後継者不在率』動向調査（2025年）」、調査対象の中小企業</p>
   </div>
-  <div class="blk" style="--d:5.2s">
-    <p class="what">1年のあいだに仕事を変えた人<span class="also">　異動も、当たり前に</span><small class="gothic">出典：総務省統計局「労働力調査（詳細集計）2025年平均結果」、転職者数</small></p>
-    <p class="num">330万人</p>
+  <div class="p" style="--d:5.1s">
+    <div class="stage2" id="walk">
+      <div class="noren"><div class="bar"></div><div class="flap"></div><div class="flap"></div><div class="flap"></div></div>
+    </div>
+    <p class="what">1年のあいだに仕事を変えた人<br><span class="also">異動も、当たり前に</span></p>
+    <p class="num"><span class="count c330"></span>万人</p>
+    <p class="src gothic">出典：総務省統計局「労働力調査（詳細集計）2025年平均結果」、転職者数</p>
   </div>
-  <div class="blk" style="--d:12.0s">
-    <p class="what">AIが使える知恵<small class="gothic">頭の中にあるものは、使えない</small></p>
+  <div class="p" style="--d:11.9s">
+    <div class="stage2">
+      <div class="page">
+        <div class="scan"></div>
+        <p style="--t:12.5s">丸新酒造</p>
+        <p style="--t:12.8s">窓口は奥様</p>
+        <p style="--t:13.1s">集計は月末に</p>
+        <p style="--t:13.4s">見積りは書式A</p>
+      </div>
+      <span class="ai gothic">AI</span>
+      <div class="bubble">蔵元にも、<br>そっと一言。</div>
+      <svg class="head3" width="150" height="150" viewBox="0 0 150 150">
+        <path d="M30,150 Q34,118 58,110 L58,98 Q50,95 49,89 L47,85 Q49,83 47,80 L49,76 Q45,72 44,67 L49,62 Q49,55 51,50 Q56,22 86,20 Q114,22 116,52 Q118,78 104,94 L102,110 Q128,116 136,150"
+          fill="var(--kami-2)" stroke="var(--sumi)" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <p class="what">AIが使える知恵</p>
     <p class="num words">書かれたものだけ</p>
+    <p class="src gothic">頭の中にあるものは、使えない</p>
   </div>
 </div>
 <p class="end">頭の中にしかない知恵を、<br>渡せる形にする。<span class="now">いま</span></p>
+<script>
+  // Panel 1: ten companies in two rows; every other one gets a tag (5 of 10 ≈ 51.2%), one after another.
+  const cos = document.getElementById("cos");
+  for (let i = 0; i < 10; i++) {
+    const c = document.createElement("div");
+    c.className = "co";
+    c.style.left = 14 + (i % 5) * 68 + "px"; c.style.top = 36 + Math.floor(i / 5) * 96 + "px";
+    c.innerHTML = '<svg width="46" height="56" viewBox="0 0 46 56"><path d="M4,54 V22 L23,8 L42,22 V54 Z M16,54 V38 H30 V54" fill="#faf9f6" stroke="var(--sumi)" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+    if ([0, 2, 4, 6, 8].includes(i)) c.innerHTML += `<span class="tagc" style="--t:${(2.4 + [0, 2, 4, 6, 8].indexOf(i) * 0.22).toFixed(2)}s"><i></i><b></b></span>`;
+    cos.appendChild(c);
+  }
+  // Panel 2: five people walk out through the noren, one after another.
+  const walk = document.getElementById("walk");
+  for (let i = 0; i < 5; i++) {
+    const w = document.createElement("div");
+    w.className = "walker"; w.style.setProperty("--t", (5.4 + i * 0.85).toFixed(2) + "s");
+    w.innerHTML = '<svg width="30" height="70" viewBox="0 0 30 70"><circle cx="15" cy="10" r="8" fill="var(--sumi)"/><path d="M5,70 V34 Q5,22 15,22 Q25,22 25,34 V70 Z" fill="var(--sumi)"/></svg>';
+    walk.appendChild(w);
+  }
+</script>
 </body></html>

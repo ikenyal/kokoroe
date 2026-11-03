@@ -59,6 +59,34 @@ const SUBTITLE = (cues: string[], at: number[], end: number, t0: number, px: num
     setTimeout(() => show(""), Math.max(0, ${end} * 1000 - now()));
   });`;
 
+/** Chapter break (scenes.json "wipe": "noren", used three times only): the scene opens behind a noren — four 藍 flaps on a bar,
+ *  the 心得 crest across the middle — that parts to the left and right, as if the viewer walks through it. Drawn over the page
+ *  (works the same on anim and screen scenes); only on the first load of the clip, never after a navigation inside it. */
+const WIPE = (t0: number) => `
+  window.addEventListener("DOMContentLoaded", () => {
+    if (Date.now() - ${t0} > 1500) return;
+    const st = document.createElement("style");
+    st.textContent = \`
+      #noren { position: fixed; inset: 0; z-index: 2147483646; pointer-events: none; }
+      #noren .bar { position: absolute; left: 0; right: 0; top: 0; height: 2.2vh; background: #1f2328; animation: nbar .35s .75s ease forwards; }
+      #noren .f { position: absolute; top: 2.2vh; bottom: -2vh; width: calc(25% - .4vw); background: #2b4a6f;
+        animation: var(--k) .8s var(--d) cubic-bezier(.55,0,.35,1) forwards; transform-origin: top center; }
+      #noren .mon { position: absolute; left: 50%; top: 42%; width: 18vh; height: 18vh; margin: -9vh 0 0 -9vh; border-radius: 50%;
+        border: .5vh solid #f3f2ee; color: #f3f2ee; display: grid; place-items: center; font: 600 6vh/1 "Hiragino Mincho ProN", serif;
+        letter-spacing: .1em; animation: nmon .25s .12s ease forwards; }
+      @keyframes nL { to { transform: translateX(-60vw) skewX(8deg); } }
+      @keyframes nR { to { transform: translateX(60vw) skewX(-8deg); } }
+      @keyframes nmon { to { opacity: 0; } }
+      @keyframes nbar { to { transform: translateY(-3vh); } }\`;
+    document.head.appendChild(st);
+    const n = document.createElement("div");
+    n.id = "noren";
+    n.innerHTML = '<div class="bar"></div>' +
+      [0, 1, 2, 3].map((i) => \`<div class="f" style="left:calc(\${i * 25}% + .2vw);--k:\${i < 2 ? "nL" : "nR"};--d:\${[0.22, 0.16, 0.16, 0.22][i]}s"></div>\`).join("") +
+      '<div class="mon">心得</div>';
+    document.body.appendChild(n);
+  });`;
+
 /** While the numbers are interim, s08b says so at the top of the screen (not only in the page's small print). */
 const INTERIM = `
   window.addEventListener("DOMContentLoaded", () => {
@@ -148,6 +176,7 @@ const STEPS: Record<string, (p: Page, base: string, live: boolean) => Promise<vo
     // Screen scenes are recorded at 1536 px and scaled to 1280, so their subtitles are drawn larger to look the same.
     await ctx.addInitScript(SUBTITLE(cues, at, end, t0, s.kind === "screen" ? 31 : 26));
     if (s.id === "s08b-keiko" && !official) await ctx.addInitScript(INTERIM);
+    if (s.wipe === "noren") await ctx.addInitScript(WIPE(t0));
     const p = await ctx.newPage();
     if (s.kind === "anim") {
       await p.goto("file://" + path.join(ROOT, s.page));

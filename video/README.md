@@ -1,9 +1,17 @@
 # Demo video — built as code
 
-Max 3:00, Japanese. Plan: [scenes.json](scenes.json) — **structure v3** (11/4). v2 followed Kento's first review: the problem,
-why it never gets written down, and the solution are said in the first minute, and the Edo story closes the video. v3 follows his
-second review: push why it matters now, and give the viewer a reason to keep watching. It adds a cold-open question (answered in
-帳場), the three forces, and two questions between parts. 16 scenes, 2:59. Everything is generated here during the hackathon — no outside footage, images or music:
+Max 3:00, Japanese. Plan: [scenes.json](scenes.json) — **structure v4** (11/4):
+- **v2** (after Kento's first review): the problem, why it never gets written down, and the solution are said in the first minute;
+  the Edo story closes the video.
+- **v3** (second review): adds why it matters now (three forces) and two questions between parts that give the viewer a reason to
+  keep watching.
+- **v4** (third review):
+  - The cold open is now a difference you can *see* (two messages, one extra line circled in 朱) and a reason you can't (only
+    the retiring director knows why).
+  - The three forces move.
+  - A noren wipe marks the three chapter breaks.
+
+16 scenes, 2:59.7. Everything is generated here during the hackathon — no outside footage, images or music:
 - **screen** scenes are recordings of the real app (the features shown were built during the hackathon),
 - **anim** scenes are HTML/CSS pages in [scenes/](scenes/) recorded the same way (explanations only).
 Remotion was not used (separate license terms for company use); Playwright + ffmpeg only.
@@ -16,18 +24,24 @@ npx tsx video/stills.ts                                  # → docs/screens/vide
 video/assemble.sh                                        # → video/out/kokoroe-demo.mp4 (1280×720, 30 fps, H.264/AAC)
 ```
 
-| v3 part | Scene | Kind | Seconds | Narration |
+| Starts at | Scene | Kind | Seconds | Narration |
 |---|---|---|---|---|
-| Cold open: a question | `s00-open` | anim (new) | 8.0 | 7.3 s |
-| Why now (three forces) | `s01-why` | anim (new) | 22.3 | 21.7 s |
-| The problem and what goes wrong | `s02-problem` | anim (v2's two scenes merged) | 22.7 | 22.0 s |
-| Why it isn't written down | `s03-head` | anim (first beat only) | 4.4 | 3.5 s |
-| Solution and title | `s04-title`, `s04b-flow` | anim | 10.6 + 11.0 | 9.9 + 10.3 s |
-| 帳場 (answers the cold open) | `s05-choba` | screen | 22.0 | 20.9 s |
-| 心得帳 | `s06-kokoroe` | screen | 8.5 | 7.7 s |
-| Question → 暖簾を継ぐ | `s06b-ask`, `s07-noren`, `s07b-mcp` | anim + screen + anim | 5.4 + 10.5 + 10.5 | 4.5 + 5.7 + 7.6 s |
-| Question → why it works | `s07c-ask`, `s08-pile`, `s08b-keiko` | anim + anim + screen | 4.2 + 11.8 + 9.6 | 3.2 + 11.1 + 8.7 s |
-| Close | `s09-edo`, `s09b-end` | anim | 7.4 + 10.0 | 6.0 + 9.0 s |
+| 0:00.0 | `s00-open` — two messages, one line circled, drawn into the director's head, 「来春 退職」 | anim | 12.9 | 12.4 s |
+| 0:12.9 | `s01-why` — 51.2% counts up, tags on half the companies / people walk out through a noren / the AI lights only written lines | anim | 22.2 | 21.7 s |
+| 0:35.1 | `s02-problem` | anim | 21.1 | 20.4 s |
+| 0:56.2 | `s03-head` | anim | 4.1 | 3.5 s |
+| 1:00.3 | `s04-title` (noren wipe) | anim | 10.6 | 9.9 s |
+| 1:10.9 | `s04b-flow` | anim | 10.8 | 10.3 s |
+| 1:21.7 | `s05-choba` (noren wipe; answers the cold open) | screen | 22.0 | 20.9 s |
+| 1:43.7 | `s06-kokoroe` | screen | 8.1 | 7.7 s |
+| 1:51.8 | `s06b-ask` | anim | 5.4 | 4.5 s |
+| 1:57.2 | `s07-noren` | screen | 10.5 | 5.7 s |
+| 2:07.7 | `s07b-mcp` | anim | 10.5 | 7.6 s |
+| 2:18.2 | `s07c-ask` | anim | 4.2 | 3.2 s |
+| 2:22.4 | `s08-pile` | anim | 11.6 | 11.1 s |
+| 2:34.0 | `s08b-keiko` | screen | 9.3 | 8.7 s |
+| 2:43.3 | `s09-edo` (noren wipe) | anim | 6.8 | 6.0 s |
+| 2:50.1 | `s09b-end` | anim | 9.6 | 9.0 s |
 
 Sources on screen (s01-why):
 - 51.2%: 帝国データバンク「全国『後継者不在率』動向調査（2025年）」, of the small and medium firms surveyed.
@@ -49,6 +63,16 @@ Sources on screen (s01-why):
 - Not in the video: `s01-hook` (the glimpse) and `s07-how` (how it works; its points are in s04b-flow and s07b). Also cut, for
   v3's time: s03's interview-memo and 「違う」 beats. `scenes/s07-how.html` and `scenes/s09-numbers.html` are kept but unused.
 - Text-led cards (`ask.html#…`, `"subtitle": false`) have no subtitle: the question is the picture.
+- Chapter breaks (`"wipe": "noren"` on s04-title, s05-choba, s09-edo only):
+  - The scene opens behind a 藍 noren with the 心得 crest, which parts left and right.
+  - It is drawn by the recorder over the page, so it works the same on anim and screen scenes.
+  - It takes no extra time. Stills: `docs/screens/video-wipe-noren-*.png` (frames from the video).
+- Smoothness (11/4):
+  - Playwright records at 25 fps. In continuous motion nearly every frame is new (cards sliding in: 22/22; people walking:
+    75/75; the AI's scan: 40/40).
+  - The remaining repeats are at the slow ends of eased motions.
+  - HyperFrames (deterministic rendering) was not tried, since nothing stuttered; it remains the option if a higher frame rate
+    is wanted.
 
 ## Before the final render (11/7–8)
 - [x] Real screens from the production bundle (`.image/`, same as the container) on 127.0.0.1, stopped after shooting — no dev indicator.

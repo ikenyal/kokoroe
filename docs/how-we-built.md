@@ -268,3 +268,11 @@ Short entries, appended every work session. Source material for the README secti
   - **Bug found in review:** the stills tool showed the wrong question card. Two pages that differ only by `#…` don't reload, so a
     blank page now goes in between.
   - **Polly:** 2,864 billed characters, about $0.046 (three passes: the v3 text, then 0.3 s pauses, then the s03 → s04 move).
+
+- **11/4 — video v4 (D-051).**
+  - **Scenes:** the cold open and the three forces were rebuilt as animation; the noren wipe was added as a recorder overlay.
+  - **Stills:** every new scene was checked as stills before recording. Three rounds on the cold open: lines that wrapped, the
+    face overlapping a card, and a copy of the line that left before its card stopped.
+  - **Smoothness, measured:** to decide about HyperFrames, Claude Code counted unique frames in windows of continuous motion
+    (ffmpeg `mpdecimate`) instead of judging by eye. Nearly every frame was new, so HyperFrames was not needed.
+  - **Polly:** 558 billed characters, about $0.009.
