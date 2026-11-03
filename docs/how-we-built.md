@@ -247,3 +247,14 @@ Short entries, appended every work session. Source material for the README secti
   proved each tag's effect by hashing PCM output with one tag changed at a time (Polly returned byte-identical audio for
   identical input, which made that test possible). Characters and cost were shown before any synthesis; ~$0.03.
   Notes: `docs/voice-trial-2026-11-04.md`. The choice is Kento's, by ear.
+
+- **11/4 — the video rebuilt to structure v2 (D-049).**
+  - **Voice:** Kento chose the voice by ear from the trial page (Takumi, 105%, accents).
+  - **Narration:** Claude Code rewrote the v2 narration for speech and synthesized it with Polly (about 1,700 billed characters,
+    about $0.03). It also asked Polly for sentence speech marks.
+  - **Timing:** every scene's seconds, subtitle cues and animation beats come from those marks. Nothing is timed by guesswork.
+  - **Scenes:** three new anim scenes (problem, what goes wrong, the flow); s03 and s08 were reworked around the narration.
+    Each was checked as stills before recording.
+  - **One bug:** an AWS CLI list option (`--speech-mark-types`) swallowed the output filename. Found by running the failing call
+    by hand.
+  - **Recording:** screen scenes now start their session off camera, so each clip opens on its own page. Rough cut: 170.0 s.

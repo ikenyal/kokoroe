@@ -27,7 +27,8 @@
 
 - [ ] **費用の OK（Kento）:** 今の見積りは $9.75、多めに見て $12.23。`--max-usd` の既定は $15.90（多めの見積りの1.3倍）です。1日の上限 $35 の内に収まるかを確かめます。動画の `--live --mcp` の分は、ゴール B の前に見積りを出します。
 - [ ] 11/6 の師匠役テストの結果が `docs/results/master-role-test-2026-11-06.json` にあります。
-- [ ] 声が決まり、Polly のナレーション（`video/out/audio/`）ができています。AWS を使うので、コマンドを見せて OK を取ってから作ります。s01・s07 の長さもこのときに合わせます。
+- [x] 声は Takumi（neural、105%、アクセント指定あり）に決定（11/4）。構成 v2 のナレーションは数字の場面以外できています（`video/out/audio/Takumi/`）。
+- [ ] 数字の場面（s08b）のナレーションは、正式な `results.json` から作り直します（ゴール B の 1）。Polly を呼ぶので、文字数と費用を見せてから。
 - [ ] 機能の凍結。計測するコミットの上で `git status --short` が空になっています。計測を始めたあとは `src/`・`app/`・プロンプト・`data/` を変えません。
 - [ ] `/goal` は auto mode で使います（ターンごとに止まらないように）。ただし公開・AWS・削除は、auto mode でもゴールの外で OK を取ります。
 
@@ -54,10 +55,10 @@
 
 ```text
 /goal 正式な数字で撮った動画を video/out/kokoroe-demo.mp4 に書き出す。次をすべて、コマンドの出力で示すこと。
-1. 撮影: `npm run video:shoot -- --live --voice <声> --mcp` が 0 で終わった。サーバーは 127.0.0.1 だけで動かし、`lsof -nP -iTCP:3123 -sTCP:LISTEN` が何も出さない（止まっている）。
+1. 撮影: 先に `npx tsx video/narration.ts --yes --only s08b-keiko` で数字のナレーションを正式な results.json から作り直し（出力の文に「途中経過」が入っていないこと）、続けて `npm run video:shoot -- --live --voice Takumi --mcp` が 0 で終わった。サーバーは 127.0.0.1 だけで動かし、`lsof -nP -iTCP:3123 -sTCP:LISTEN` が何も出さない（止まっている）。
 2. 長さと形式: `ffprobe -v error -show_entries format=duration:stream=width,height -of default=nw=1 video/out/kokoroe-demo.mp4` の duration が 180.0 以下で、width=1280、height=720。
 3. 新しさ: `stat -f '%m %N' data/demo/results.json video/out/kokoroe-demo.mp4` で、mp4 の時刻のほうが新しい。
-4. 数字の場面: `npx tsx video/stills.ts --only s09-numbers,s08b-mcp` で静止画を作り、Read で開いた。s09 に「途中経過」が出ておらず、数字が results.json と同じだと、値を並べて示した。
+4. 数字の場面: `ffmpeg -ss <s08b の開始+5秒> -i video/out/kokoroe-demo.mp4 -frames:v 1` で s08b-keiko の1枚を書き出し、Read で開いた。上の「途中経過」の帯が出ておらず、画面とナレーションの数字が results.json と同じだと、値を並べて示した。`npx tsx video/stills.ts --only s07b-mcp` の静止画も開いた。
 5. 因果の場面: s05 で、T05 への △ のあとに T13 の案が変わっている静止画（または録画の書き出し）を Read で開き、変わった一文を示した。
 6. 保存: docs/screens の静止画と video/README.md のチェックをコミットして push した（mp4 は gitignore のまま）。`git status --short` が空。
 守ること: 計測（eval:final）はやり直さない。data/、src/、app/ は変えない。動画のアップロードや公開はしない（Kento が見てから）。Polly を呼び直すときは --profile brightflow-sandbox-ikeda で、事前に Kento の OK を取る。20ターンで止める。
@@ -65,7 +66,7 @@
 
 **補足**
 - 4 と 5 は、Claude が画像を開いて「何が写っているか」を言葉にします。判定役は画像を見られないので、その言葉が材料になります。機械では確かめにくい部分なので、ゴールのあとで Kento が通しで見ます。
-- 2 の 180 秒は応募の上限（3分）です。目標は 2:45 で、今の仮の版は 2:50（170.0 秒）です。
+- 2 の 180 秒は応募の上限（3分）です。構成 v2 の目標は 2:50〜2:55 で、今の仮の版は 2:50（170.0 秒）です。場面の秒数はナレーションの実際の長さから決めています（`video/out/audio/Takumi/<id>.marks.json`）。
 
 ## ゴールのあと（人がすること）
 

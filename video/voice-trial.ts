@@ -9,14 +9,15 @@
  *
  *   npx tsx video/voice-trial.ts --voices Tomoko:neural,Takumi:neural          # dry run: SSML, characters, cost; no call
  *   npx tsx video/voice-trial.ts --voices … --yes                               # synthesize → video/out/audio/trial/
- * Polly is called through the AWS CLI with the sandbox profile only (CLAUDE.md). Output is gitignored.
+ * Accents and readings are shared with video/narration.ts (the decided voice uses the same lists). Polly is called through the AWS CLI with the sandbox profile only (CLAUDE.md). Output is gitignored.
  */
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
-import { READINGS, billedChars } from "./narration";
+import { ACCENTS, billedChars, ssmlBody as body } from "./narration";
+export { ACCENTS };
 
 const PROFILE = "brightflow-sandbox-ikeda";
 const REGION = "ap-northeast-1";
@@ -40,46 +41,7 @@ export const PASSAGES: { id: string; seconds: number; a: string; b: string }[] =
   },
 ];
 
-/**
- * d: accents (Tokyo-style dictionary accents, my reading — not yet checked by ear). ' follows the accented mora;
- * no mark = flat. Longest first; these win over the <sub> readings.
- */
-export const ACCENTS: [string, string][] = [
-  ["営業部長", "エーギョーブ'チョー"],
-  ["取引先", "トリヒキサキ"],
-  ["ダメ出し", "ダメダシ"],
-  ["解釈役", "カイシャクヤク"],
-  ["ココロエ", "ココロ'エ"],
-  ["一言", "ヒト'コト"],
-  ["師匠", "シ'ショー"],
-  ["弟子", "デシ'"],
-  ["後任", "コーニン"],
-  ["作法", "サ'ホー"],
-];
-
-const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-
 type Step = "a" | "b" | "c" | "d";
-/** Text → SSML body: accents (pron-kana) first, then the <sub> readings, then escaped characters. */
-function body(text: string, accents: [string, string][]): string {
-  let out = "";
-  for (let i = 0; i < text.length; ) {
-    const acc = accents.find(([w]) => text.startsWith(w, i));
-    const sub = READINGS.find(([w]) => text.startsWith(w, i));
-    if (acc) {
-      out += `<phoneme alphabet="x-amazon-pron-kana" ph="${esc(acc[1])}">${esc(acc[0])}</phoneme>`;
-      i += acc[0].length;
-    } else if (sub) {
-      out += `<sub alias="${esc(sub[1])}">${esc(sub[0])}</sub>`;
-      i += sub[0].length;
-    } else {
-      out += esc(text[i]);
-      i++;
-    }
-  }
-  return out;
-}
-
 /** Round 2: accents on, a given rate (%) and a pause (ms) between sentences. */
 export function tunedSsml(text: string, rate: number, breakMs: number, accents = ACCENTS): string {
   return `<speak><prosody rate="${rate}%">${body(text, accents).replace(/。(?!$)/g, `。<break time="${breakMs}ms"/>`)}</prosody></speak>`;

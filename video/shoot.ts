@@ -79,7 +79,7 @@ async function main() {
     if (!existsSync(from)) throw new Error(`no narration for ${values.voice} — run video/narration.ts --yes --voices ${values.voice}`);
     mkdirSync(path.join(ROOT, "video/out/audio"), { recursive: true });
     for (const f of readdirSync(from)) copyFileSync(path.join(from, f), path.join(ROOT, "video/out/audio", f));
-    console.log(`narration: ${values.voice} (${readdirSync(from).length} scenes; others silent)`);
+    console.log(`narration: ${values.voice} (${readdirSync(from).filter((f) => f.endsWith(".mp3")).length} scenes; others silent)`);
   }
   if (!values.only) run(path.join(ROOT, "video/assemble.sh"), []);
 }

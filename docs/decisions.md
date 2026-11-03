@@ -527,3 +527,27 @@ Known models are priced exactly as before, so no recorded number changes. Judgin
 error, the highest-price fallback, and that the daily guard still trips on an unknown model. `eval:quick` is unchanged: match 0%,
 ○+△ 45% (fictional 10 clients / 20 held-out scenes).
 
+## D-049 · 2026-11-04 · Accepted (Kento) · Demo video: structure v2, Takumi narration, seconds from the audio
+
+**Context.** Kento scored the first rough cut 10/100: the Edo story was good, but the problem, the solution and what you get were
+not said at the start, and neither was why correcting works. The voices also sounded synthetic (docs/voice-trial-2026-11-04.md).
+
+**Decision.**
+- **Structure v2** (drafted in-period with Claude in chat after Kento's review): problem → what goes wrong → why it never gets
+  written down → solution and title → 帳場 → 心得帳 → 暖簾を継ぐ + Skill/MCP → why it works (numbers) → close with Edo.
+- **Narration:** the v2 draft rewritten for speech, meaning unchanged; part 4 uses Kento's shorter version.
+  - In part 2, the person who was scolded is called 部長 (not 師匠), because the master role is introduced only in part 4.
+  - Numbers are filled from `results.json`; interim numbers are said to be interim.
+- **Voice:** Polly Takumi (neural), 105%, accents via `x-amazon-pron-kana`, 0.5 s between sentences. 110% sounded fast; 0.3 s
+  pauses were allowed only where a scene ran short, and none needed it.
+- **Timing:**
+  - Scene seconds = 0.3 s lead + the narration's measured length + room for the picture. Total 170.0 s.
+  - Subtitles and animations follow Polly's sentence speech marks.
+- **Dropped from the video:** the opening glimpse (s01-hook), the how-it-works diagram (s07-how; replaced by a simpler flow and the
+  Skill/MCP comparison) and the 51.2% successor statistic (not in v2's narration).
+
+**Consequences.**
+- The first minute now carries the problem and why it is never written down. The solution title starts at 0:47.
+- Part 4's last sentence ends at about 1:06. To end it by 1:00, parts 1–3 would need shorter text.
+- s08b's narration must be re-synthesized after the official measurement (docs/final-day.md, goal B).
+

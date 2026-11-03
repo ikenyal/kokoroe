@@ -1,6 +1,11 @@
 <!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
-<!-- s09a (7 s, text only — no narration or subtitle; Kento 11/4): just before the numbers.
+<!-- s08 (v2 part 8, why it works; 15.8 s). On the narration's sentences (+0.3 s lead):
+     0.3  なぜ、直すだけで伝わるのでしょう。 / 4.0 AIは、平均的な答えを出すのが得意です。
+          → the AI's draft, labelled as the average answer (it would fit any client)
+     8.3  ベテランの知恵は、その平均との、ずれにあります。 → the master's 朱 correction on that draft: the gap from the average
+     13.0 だから、ずれだけを集めればいい。 → (from 9.3 s) the corrections settle onto the ruled ledger and become the kokoroe-chō
+     The ledger part was s09a of the first cut (text only, Kento 11/4): just before the numbers.
      The letters' job: the master's one-liners settle onto the ruled lines and *become* the kokoroe-chō.
      Each spoken one-liner appears in vermilion (the master's hand), lands at the head of a column as a small note, and the
      rule it became is written below it in ink; columns fill right → left like a merchant's ledger (vertical writing).
@@ -8,10 +13,10 @@
      Colors: 墨, 朱 (and the ruled lines). Faces: Mincho for the ledger, Klee (handwritten) for the master's words. -->
 <style>
   .page { position: absolute; left: 400px; top: 70px; width: 560px; height: 520px; background: #faf9f6;
-    border: 1.5px solid var(--keisen); opacity: 0; animation: fade .7s ease forwards; }
+    border: 1.5px solid var(--keisen); opacity: 0; animation: fade .7s 9.3s ease forwards; }
   .ledger { position: absolute; inset: 24px 28px; writing-mode: vertical-rl; font-size: 22px; line-height: 38px; letter-spacing: .06em;
     background: repeating-linear-gradient(to left, transparent 0 37px, var(--keisen) 37px 38px); }
-  .head { font-size: 30px; line-height: 76px; letter-spacing: .3em; background: #faf9f6; opacity: 0; animation: fade .7s .2s ease forwards; }
+  .head { font-size: 30px; line-height: 76px; letter-spacing: .3em; background: #faf9f6; opacity: 0; animation: fade .7s 9.5s ease forwards; }
   .head small { font-size: 17px; letter-spacing: .1em; color: var(--nibi); margin-top: 18px; }
   .entry { display: block; clip-path: inset(0 0 100% 0); } /* revealed column by column, top → bottom (script below) */
   .entry .note { color: var(--shu); font-family: "Klee", "Hiragino Mincho ProN", serif; font-weight: 600; font-size: 18px; opacity: 0;
@@ -22,8 +27,26 @@
     animation: say .3s var(--s) ease forwards, land .5s var(--f) cubic-bezier(.45,.05,.3,1) forwards; }
   @keyframes say { to { opacity: 1; } }
   @keyframes land { to { transform: translate(var(--tx), var(--ty)) scale(.53); opacity: 0; } }
+  /* the average answer and the master's correction (before the ledger) */
+  .avg { position: absolute; left: 330px; top: 200px; width: 620px; padding: 26px 36px 66px; background: #faf9f6; border: 1.5px solid var(--usuzumi);
+    font-size: 27px; line-height: 1.75; opacity: 0; animation: fade .6s .5s ease forwards, fade-out .5s 9.1s ease forwards; }
+  .avg .h { font-size: 16px; color: var(--nibi); letter-spacing: .06em; }
+  .avg .lab { position: absolute; right: 18px; top: -38px; font-size: 18px; color: var(--nibi); opacity: 0; animation: fade .5s 4.1s ease forwards; }
+  .avg .x { position: relative; }
+  .avg .strike { position: absolute; left: -2px; top: 52%; height: 3px; width: 0; background: var(--shu); animation: strike .3s 8.3s ease-out forwards; }
+  @keyframes strike { to { width: calc(100% + 4px); } }
+  .fix { position: absolute; left: 380px; top: 344px; color: var(--shu); font-family: "Klee", "Hiragino Mincho ProN", serif; font-weight: 600; font-size: 27px;
+    transform: rotate(-3deg); clip-path: inset(0 100% 0 0); animation: write .7s 8.6s steps(8, end) forwards, fade-out .5s 9.1s ease forwards; }
+  @keyframes write { to { clip-path: inset(0 0 0 0); } }
 </style></head>
 <body>
+<div class="avg">
+  <p class="lab gothic">AIの案（平均的な答え）</p>
+  <p class="h gothic">浜風運輸 配車課長 様</p>
+  <p>改修の納期が、遅れる見込みです。</p>
+  <p><span class="x">確定しだい、メールで<span class="strike"></span></span>ご連絡いたします。</p>
+</div>
+<p class="fix">早めに配車課長へ</p>
 <div class="page"><div class="ledger" id="ledger">
   <div class="head">心得帳<small>だいだい工房</small></div>
 </div></div>
@@ -37,7 +60,7 @@
   ];
   const ledger = document.getElementById("ledger"), said = document.getElementById("said");
   E.forEach(([w, rule], i) => {
-    const t = 0.9 + i * 1.6; // said → land → write
+    const t = 9.8 + i * 1.35; // said → land → write
     const en = document.createElement("div");
     en.className = "entry";
     en.style.cssText = `--w:${(t + 0.95).toFixed(2)}s;--land:${(t + 1.15).toFixed(2)}s`;

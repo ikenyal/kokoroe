@@ -10,13 +10,15 @@ import { chromium } from "playwright";
 
 const ROOT = path.resolve(__dirname, "..");
 const FRAMES: Record<string, number[]> = {
-  "s02-ledger": [2.2, 4.8, 7.4, 10.6],
-  "s03-head": [3.2, 7.4, 11.2, 12.9, 13.9, 14.9],
-  "s04-title": [2.8, 4.8, 5.8, 6.4, 9.0],
-  "s07-how": [3.6, 7.2, 10.2, 14.0],
-  "s09a-pile": [1.3, 1.8, 2.4, 4.6, 6.9],
-  "s08b-mcp": [1.0, 4.5],
-  "s10-end": [1.4, 4.0, 9.0],
+  "s01-problem": [2.6, 6.8, 11.2, 15.8],
+  "s02-failure": [3.4, 5.0, 8.0, 12.6],
+  "s03-head": [2.6, 3.9, 7.8, 11.0, 13.6, 15.0],
+  "s04-title": [1.8, 3.0, 4.1, 6.8],
+  "s04b-flow": [2.2, 5.2, 8.2, 11.2],
+  "s07b-mcp": [2.6, 6.8, 11.2],
+  "s08-pile": [2.6, 5.0, 8.9, 10.6, 12.4, 15.6],
+  "s09-edo": [2.2, 4.6, 6.8, 9.0],
+  "s09b-end": [3.2, 6.2, 11.8],
 };
 const { values } = parseArgs({ options: { only: { type: "string" } } });
 

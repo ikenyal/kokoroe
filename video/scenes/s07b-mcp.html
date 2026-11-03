@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
-<!-- s08b (5 s): the same question to the successor's Claude Code — Skill only (a copy) vs Skill + read-only MCP (the living book).
+<!-- s07b (v2 part 7b, 11.5 s; each column appears with its sentence: 0.3 「心得帳は、手元のClaudeにも渡せます。」 → Skill;
+     4.2 「育ち続ける心得帳に、問い合わせることもできます。」 → Skill + MCP): the same question to the successor's Claude Code — Skill only (a copy) vs Skill + read-only MCP (the living book).
      Text comes from demo/successor-mcp/answers.json (window.MCP, injected by video/record.ts), recorded with that folder's
      run.sh in empty directories outside the repo. Nothing is typed here by hand. -->
 <style>
@@ -16,16 +17,16 @@
   .mcp .lead { color: var(--ai); }
   /* The sentence only the Skill + MCP answer says — marked like a brush underline, appearing a beat after its column. */
   .diff { background: linear-gradient(transparent 62%, rgba(43,74,111,.18) 62%); font-weight: 600; padding: 0 2px;
-          background-size: 0% 100%; background-repeat: no-repeat; animation: mark .8s 2.6s ease forwards; }
+          background-size: 0% 100%; background-repeat: no-repeat; animation: mark .8s 5.4s ease forwards; }
   @keyframes mark { to { background-size: 100% 100%; } }
-  .note { font-size: 15px; color: var(--nibi); text-align: center; margin-top: 22px; opacity: 0; animation: fade .6s 3.2s ease both; }
+  .note { font-size: 15px; color: var(--nibi); text-align: center; margin-top: 22px; opacity: 0; animation: fade .6s 6.6s ease both; }
   .why { font-size: 17px; line-height: 1.7; color: var(--nibi); margin-top: 10px; }
 </style></head>
 <body><div class="stage"><div class="wrap">
   <p class="q"><small>後任の手元の Claude Code に、同じ質問</small><span id="q"></span></p>
   <div class="cols">
-    <div class="col" style="--d:.7s"><h2>Skill だけ<span>ある時点の心得帳の写し</span></h2><p class="lead" id="a1"></p><p class="why" id="w1"></p></div>
-    <div class="col mcp" style="--d:1.5s"><h2>Skill ＋ MCP<span>育ち続ける心得帳に問い合わせる</span></h2><p class="lead" id="a2"></p><p class="why" id="w2"></p></div>
+    <div class="col" style="--d:.6s"><h2>Skill だけ<span>ある時点の心得帳の写し</span></h2><p class="lead" id="a1"></p><p class="why" id="w1"></p></div>
+    <div class="col mcp" style="--d:4.2s"><h2>Skill ＋ MCP<span>育ち続ける心得帳に問い合わせる</span></h2><p class="lead" id="a2"></p><p class="why" id="w2"></p></div>
   </div>
   <p class="note">右は、写しの後に師匠が加えた心得（<span id="newrule"></span>）を、問い合わせ口から見つけています。</p>
 </div></div>
