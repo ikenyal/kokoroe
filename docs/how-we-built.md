@@ -135,3 +135,8 @@ Short entries, appended every work session. Source material for the README secti
   part so an interrupted run resumes, and stops before passing a budget. Every number shown anywhere (稽古の記録, the video, both
   READMEs) is now generated from one JSON, and a test fails if a README table drifts. Generating the table immediately caught a
   hand-copied number (0 / 18 where the data has 9 injection runs).
+- **Narration prepared, not yet synthesized** — `video/narration.ts` builds SSML from the scene table with forced readings
+  (`<sub>` for 心得帳, 暖簾, 沿革, ○△× …), counts billed characters and prints the cost; the Polly call waits for Kento's OK
+  (AWS rule). The available ja-JP neural voices were checked with a read-only `describe-voices` call (sandbox profile).
+- **A design before a build** — the read-only MCP server is written up as a proposal (`docs/proposals/mcp-readonly.md`) for Kento to
+  decide on, since a product MCP server needs approval; read-only is specified as something enforced by types and tests.
