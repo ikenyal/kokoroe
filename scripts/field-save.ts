@@ -1,5 +1,5 @@
 /**
- * After the field test (11/6): save its result into the repo — docs/results/field-<date>.json. No API calls.
+ * After the master-role test (11/6; internally "field"): save its result into the repo — docs/results/master-role-test-<date>.json. No API calls.
  *   npm run -s field:save                      # newest field session under .data (or KOKOROE_DATA_DIR)
  *   npm run -s field:save -- --no-text         # leave out the prose you wrote (timings and counts only)
  * Contents: medians per action, counts (cards, corrections, rules learned from the master), the rules' text, and — unless
@@ -26,7 +26,7 @@ const kinds = [...new Set(timings.map((t) => t.kind))];
 const learned = store.rules.filter((r: { origin?: string }) => r.origin !== "ledger");
 const date = meta.createdAt.slice(0, 10);
 const out = {
-  note: "実地テスト (D-031, D-041): one person (the author) as the master, fictional data. Timings in ms; medians per action.",
+  note: "師匠役テスト / master-role test (D-031, D-041, D-046): one person (the author) as the master, fictional data. Timings in ms; medians per action.",
   date,
   cards: meta.queue.length,
   judged: meta.pos,
@@ -37,6 +37,6 @@ const out = {
   proseEtiquetteCount: null,
 };
 mkdirSync(path.join(ROOT, "docs/results"), { recursive: true });
-const file = path.join(ROOT, "docs/results", `field-${date}.json`);
+const file = path.join(ROOT, "docs/results", `master-role-test-${date}.json`);
 writeFileSync(file, JSON.stringify(out, null, 2) + "\n");
 console.log(`saved ${path.relative(ROOT, file)} — ${out.judged}/${out.cards} cards, ${out.corrections} corrections, ${out.rulesLearned.length} rules learned, ${out.prose.length} prose answers`);

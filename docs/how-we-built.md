@@ -89,7 +89,7 @@ Short entries, appended every work session. Source material for the README secti
   Claude then ran `claude -p` in an empty directory holding only that skill, with MCP disabled (`--strict-mcp-config`) and
   `--setting-sources project`, and asked the successor's question: it answered Teams-not-Zoom with K-004 and the 2024 reason.
   A first run picked up the author's user-level output style — caught by reading the answer, and re-run clean (`demo/successor-claude-code/`).
-- **Field test made measurable** — the 帳場 got a 実地テスト mode that timestamps each of the master's actions (hidden form fields,
+- **Master-role test made measurable** — the 帳場 got a 師匠役テスト (master-role test; first called 実地テスト / field test, renamed in D-046) mode that timestamps each of the master's actions (hidden form fields,
   durations computed and clamped server-side) plus a prose-writing page for t_write, so the impact estimate uses Kento's own
   measured times. The whole flow was driven once with Playwright before handing it over.
 - **Public-demo guards and README skeleton** — live calls from the UI pass per-session / per-IP / daily spend limits (tested), with a
@@ -162,11 +162,11 @@ Short entries, appended every work session. Source material for the README secti
   same operations (no model tokens) and laid the evidence out under D-002 with one recommendation; the decision itself waits for
   Kento. The official docs (via the claude-api skill) settled the workspace question: memory stores are
   workspace-scoped, so anything shared in public must be created with the public workspace's key.
-- **Rehearsing the human test with a robot** — Claude drove the field-test mode live with Playwright (20 cards, three corrections,
+- **Rehearsing the human test with a robot** — Claude drove the master-role test mode live with Playwright (20 cards, three corrections,
   "why?" answers, verification taps, 5 prose answers, report; ≈ $0.18). The first attempts found two script bugs (cards are drafted
   while the page loads; a second `<aside>` on the page) and one real flaw: verification taps were counted as "judging" time, which
   would have skewed the judge-vs-write comparison — they are now a separate timing kind. The procedure for Kento's 30 minutes is in
-  `docs/field-test.md`, with `npm run field:save` to put the result into the repo.
+  `docs/master-role-test.md`, with `npm run field:save` to put the result into the repo.
 - **The video as one command** — `npm run video:shoot` builds the same bundle as the container, serves it on 127.0.0.1 only with a
   throwaway data dir, records every scene with Playwright (screen scenes scripted, including the T05 → T13 queue for 帳場), stops the
   server, and assembles with ffmpeg. A rough cut with fixed data and a placeholder voice exists; frames from it led to two fixes
@@ -190,7 +190,7 @@ Short entries, appended every work session. Source material for the README secti
   number comes from. The main session re-checked each finding against code and data before acting — which also caught one of its
   own errors: it first wrote that the repo was already public, because the test clone had succeeded; an unauthenticated request
   returned 404 (the clone had used saved credentials). Fixed: scope guards in the compiler (D-043, then hitl-reviewer, whose two
-  narrowing suggestions went in), field mode refused unless enabled, a per-IP start limit, a stricter boundary test (which at once
+  narrowing suggestions went in), master-role test mode refused unless enabled, a per-IP start limit, a stricter boundary test (which at once
   flagged a comment), five more secret-scan patterns, and ten documentation/number fixes, including recording that the interim
   64% file was assembled by hand from console output. Ten items that need Kento are listed in `docs/audits/2026-11-03.md`.
 - **The submission form as a draft with number slots** — `docs/submission-draft.md` (Japanese) answers the form's known items and

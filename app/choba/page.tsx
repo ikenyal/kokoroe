@@ -202,7 +202,7 @@ export default async function ChobaPage() {
       <div className="lg:col-span-2 -mb-6 empty:hidden"><LimitNote reason={meta.limit} /></div>
       <section aria-labelledby="card-h">
         <p className="text-[13px] text-nibi">
-          {s.mode === "demo" ? "デモの続き" : s.mode === "field" ? "実地テスト" : "お試し"}　{meta.pos + 1} / {meta.queue.length} 件目
+          {s.mode === "demo" ? "デモの続き" : s.mode === "field" ? "師匠役テスト" : "お試し"}　{meta.pos + 1} / {meta.queue.length} 件目
           {!live && "　記録済みの案を表示しています"}
         </p>
         {item ? (

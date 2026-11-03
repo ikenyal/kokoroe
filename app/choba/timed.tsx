@@ -3,8 +3,8 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Hidden timing fields for the 実地テスト: when this form appeared (shownAt) and when it was submitted (submitAt).
- * The server computes durations and keeps them only in field-test mode. Times are local clock ms; only differences are used.
+ * Hidden timing fields for the 師匠役テスト: when this form appeared (shownAt) and when it was submitted (submitAt).
+ * The server computes durations and keeps them only in master-role test (field) mode. Times are local clock ms; only differences are used.
  */
 export function TimedFields() {
   const shown = useRef<HTMLInputElement>(null);

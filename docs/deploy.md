@@ -1,7 +1,7 @@
 # Deploying the public demo — Amazon Lightsail container service (target: 2026-11-06)
 
 The public demo runs two modes only: **デモの続き** (a recorded mid-training state, shipped in the image) and **お試し**
-(the visitor is the master; a fresh session each time). The field-test mode is never enabled in public (`KOKOROE_FIELD` unset).
+(the visitor is the master; a fresh session each time). The master-role test (師匠役テスト; internally `field`) is never enabled in public (`KOKOROE_FIELD` unset).
 All data is fictional. The Anthropic API key exists only on the server.
 
 **Hosting decision (D-034):** one Lightsail container service node. App Runner is closed to new customers since 2026-04-30;
@@ -58,7 +58,7 @@ or node restart clears them:
 | お試し sessions | a visitor mid-trial starts over | お試し is initialized per session by design |
 | デモの続き sessions | same | the starting state is fixed data in the image (`data/demo/`) |
 | Daily limit counters (calls, estimated spend) | the day's cap restarts from 0 | **the Claude Console spend limit is the hard backstop** — set it; avoid many redeploys in one day |
-| Field-test timings | — | the field test runs locally, never on the public server |
+| Master-role test timings | — | the master-role test runs locally, never on the public server |
 
 Nothing permanent lives in the container. Evaluation results, decision records and the recorded demo are in the repository.
 

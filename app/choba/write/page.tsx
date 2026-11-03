@@ -6,7 +6,7 @@ import { getSession } from "@/src/server/session";
 import { submitWrite } from "../../actions";
 import { TimedFields } from "../timed";
 
-/** 実地テスト, part 2: write the same etiquette as prose — timed, to compare with judging (t_write vs t_judge). */
+/** 師匠役テスト, part 2: write the same etiquette as prose — timed, to compare with judging (t_write vs t_judge). */
 export default async function WritePage() {
   const s = await getSession();
   if (!s || s.mode !== "field") redirect("/");

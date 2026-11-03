@@ -26,7 +26,7 @@
 ## ゴールの前に（人がすること）
 
 - [ ] **費用の OK（Kento）:** 今の見積りは $9.75、多めに見て $12.23。`--max-usd` の既定は $15.90（多めの見積りの1.3倍）です。1日の上限 $35 の内に収まるかを確かめます。動画の `--live --mcp` の分は、ゴール B の前に見積りを出します。
-- [ ] 11/6 の実地テストの結果が `docs/results/field-2026-11-06.json` にあります。
+- [ ] 11/6 の師匠役テストの結果が `docs/results/master-role-test-2026-11-06.json` にあります。
 - [ ] 声が決まり、Polly のナレーション（`video/out/audio/`）ができています。AWS を使うので、コマンドを見せて OK を取ってから作ります。s01・s07 の長さもこのときに合わせます。
 - [ ] 機能の凍結。計測するコミットの上で `git status --short` が空になっています。計測を始めたあとは `src/`・`app/`・プロンプト・`data/` を変えません。
 - [ ] `/goal` は auto mode で使います（ターンごとに止まらないように）。ただし公開・AWS・削除は、auto mode でもゴールの外で OK を取ります。
@@ -38,7 +38,7 @@
 1. 計測は一度だけ: `npm run eval:final -- --yes` を、git status が空の状態から1回だけ実行した。中断したら `--resume <dir>` で続けるだけで、最初からはやり直さない。`--max-usd` は上げない。上限に当たったら止めて Kento に聞く。
 2. 結果: `ls eval/runs/*-final.json` で今日の日付のファイルがあり、`npm run demo:results` を実行した。続けて `node -e 'const r=require("./data/demo/results.json");console.log(r.official,r.before.runs,r.paths.n)'` が `true 6 5` を出す。
 3. README・画面の数字: `npm test` が 0 で終わる（README の表が results.json と一致するテストを含む）。`npm run typecheck` も 0 で終わる。
-4. 応募フォームの下書き: `grep -nE "〔(before|paths|history|adversarial|正式|field)" docs/submission-draft.md` が何も出さない。末尾の枠の表は「数字の出どころ」の表に書き換えてある。
+4. 応募フォームの下書き: `grep -nE "〔(before|paths|history|adversarial|正式|師匠役)" docs/submission-draft.md` が何も出さない。末尾の枠の表は「数字の出どころ」の表に書き換えてある。
 5. 記録: `docs/how-we-built.md` と `docs/decisions.md` に正式な計測の項がある（数字には「架空の取引先10社・評価用20場面」と書き添える）。`git diff --stat` で、変えたのが docs/、README*、data/demo/、eval/runs/ だけだと示す。
 6. 保存: コミットして push した。`git status --short` が空で、`git rev-parse HEAD origin/main` の2行が同じ。
 守ること: data/hidden、src/、app/、プロンプトは変えない。公開環境の更新・AWS・MCP ツールは使わない。数字が想定と大きく違っても、計測をやり直さずに止めて報告する。30ターンで止める。

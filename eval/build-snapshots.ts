@@ -76,7 +76,7 @@ function main() {
     queue: queueOf(TRAIN_SCENES.map((s) => s.id)),
   };
   const field = {
-    note: "実地テスト: 台帳の制約だけから、学習用の固定20場面（各社2つ）を判定する（架空データ）。案は記録済みのもの",
+    note: "師匠役テスト: 台帳の制約だけから、学習用の固定20場面（各社2つ）を判定する（架空データ）。案は記録済みのもの",
     store: { rules: ledgerOnly, judgments: [] },
     queue: queueOf(FIELD_SCENES),
   };

@@ -477,3 +477,21 @@ general result.
 - **Effect on numbers:** measured in the official run (11/7). Up to two more taps per failed confirmation; one check tap can
   trigger several Claude calls (a re-read and a draft, or the remainder's interpretation plus regression drafts), all counted
   by the spend tracker.
+
+## D-046 · 2026-11-03 · Accepted (Kento) · 「実地テスト」→「師匠役テスト」 (master-role test)
+The 11/6 test of D-031 is renamed **師匠役テスト** (English: **master-role test**). Its content is unchanged: the author plays the
+master on fictional scenes in the 帳場 and the app times each action.
+**Why:** 「実地テスト」/"field test" reads as a trial with real clients or in a real workplace, which it is not.
+**What changed:**
+- **Names:** screens, README (en/ja), docs and the submission draft.
+- **Procedure file:** `docs/field-test.md` → `docs/master-role-test.md`.
+- **Result file:** `docs/results/field-<date>.json` → `docs/results/master-role-test-<date>.json`.
+- **Submission-draft slots:** `〔field: …〕` → `〔師匠役: …〕`.
+
+**Kept on purpose:** internal names stay `field`, so nothing that works breaks. This covers:
+- `KOKOROE_FIELD`, the session mode `"field"` and its session-file prefix
+- `src/server/field.ts`, `scripts/field-*.ts`, `npm run field:save`
+- `data/demo/field-snapshot.json`
+- the `field-rehearsal-*.png` screenshots
+
+The README and the procedure say so in one line. Earlier records (D-031, D-040, the 11/3 audit) keep the old name as written.

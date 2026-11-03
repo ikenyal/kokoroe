@@ -23,7 +23,7 @@ import recorded from "@/data/demo/recorded-answers.json";
 export async function start(formData: FormData) {
   const mode = formData.get("mode");
   if (mode !== "demo" && mode !== "trial" && mode !== "field") throw new Error("invalid mode");
-  if (mode === "field" && !fieldEnabled()) throw new Error("invalid mode"); // the field test exists only where KOKOROE_FIELD=1
+  if (mode === "field" && !fieldEnabled()) throw new Error("invalid mode"); // the master-role test exists only where KOKOROE_FIELD=1
   if (!(await allowStart())) throw new Error("too many sessions from this address; try again later");
   await startSession(mode as Mode);
   redirect("/choba");
@@ -46,7 +46,7 @@ export async function retireRule(formData: FormData) {
 
 const VERDICTS = new Set(["○", "△", "×"]);
 
-/** Client-measured durations (ms) from hidden fields; clamped so a bad value can't poison the field-test numbers. */
+/** Client-measured durations (ms) from hidden fields; clamped so a bad value can't poison the master-role test numbers. */
 function ms(formData: FormData, from: string, to: string): number | null {
   const a = Number(formData.get(from));
   const b = Number(formData.get(to));
@@ -238,7 +238,7 @@ export async function verifyCheck(formData: FormData) {
   revalidatePath("/choba");
 }
 
-/** 実地テスト: the same etiquette written as prose, timed (for t_write). Field mode only. */
+/** 師匠役テスト: the same etiquette written as prose, timed (for t_write). Field mode only. */
 export async function submitWrite(formData: FormData) {
   const s = await getSession();
   if (!s || s.mode !== "field") redirect("/");

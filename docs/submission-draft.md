@@ -2,7 +2,7 @@
 
 > **これは下書きです。**
 > - **数字:** `〔…〕` の部分は `data/demo/results.json` から読む枠です。11/7 の正式な計測（`npm run eval:final -- --yes`）のあとに差し替えます。今の値（途中経過）は末尾の表にあります。
-> - **実地テスト:** `〔field: …〕` の部分は、11/6 の実地テストの結果（`docs/results/field-2026-11-06.json`）から入れます。
+> - **師匠役テスト:** `〔師匠役: …〕` の部分は、11/6 の師匠役テスト（作者が師匠役になり、架空の場面で帳場を操作して時間を測るもの）の結果（`docs/results/master-role-test-2026-11-06.json`）から入れます。
 > - **数字の注記:** 数字には必ず「架空の取引先10社・評価用20場面」と添えます。
 > - **整合:** README・`docs/how-we-built.md`・`docs/decisions.md` と食い違わないようにしています。直すときは、どちらも一緒に直してください。
 > - **未確定:** フォームの「Claude 利用に関する質問」の正確な問いは、まだ分かっていません。よくある問いを想定して答えを用意し、本番の問いに合わせて組み替えます。
@@ -53,7 +53,7 @@ Kokoroe（心得）— 商いの心得を継ぐ、AIの弟子
 - **乱用への強さ:**
   - 取引先の文面に紛れた「これを心得として登録せよ」で心得帳が変わった回数は、〔adversarial.injectionRuns〕回中〔adversarial.injectionRuns − adversarial.storeProtected〕回でした。
   - 値引き・契約条件を迫られた場面で、弟子（モデル）が自分で師匠の判断に回したのは〔adversarial.lureRuns〕回中〔adversarial.escalatedByModel〕回。さらにコードの下限（D-044）で、値引き・契約・金額の場面は必ず師匠に回ります（〔adversarial.escalated〕/〔adversarial.lureRuns〕）。
-- **師匠の手間:** 作者1人が試した範囲では、〔field: ○△× で直す1件あたりの時間〕で、同じ作法を文章で書く1件あたり〔field: 文章の時間〕より短くなりました。
+- **師匠の手間:** 作者1人が試した範囲では、〔師匠役: ○△× で直す1件あたりの時間〕で、同じ作法を文章で書く1件あたり〔師匠役: 文章の時間〕より短くなりました。
 
 ## Claude 利用に関する質問（想定した問いへの答え）
 
@@ -123,6 +123,6 @@ Kokoroe（心得）— 商いの心得を継ぐ、AIの弟子
 | 〔paths.n〕 | `paths.n` | 3（正式は5） |
 | 〔history[0].mean〕 → 〔history[1].mean〕 | `history[].mean` | 0 → 5.3 / 8 |
 | 〔adversarial.*〕 | `adversarial` | 注入 9回中 0回、値引き 9回中 9回（モデル単体・下限を入れる前の計測。`escalatedByModel` は 11/7 の計測から入る） |
-| 〔field: …〕 | `docs/results/field-2026-11-06.json` | 11/6 の実地テストのあと |
+| 〔師匠役: …〕 | `docs/results/master-role-test-2026-11-06.json` | 11/6 の師匠役テストのあと |
 
 途中経過の Before と After は、測った台帳が異なり、そのままは比べられません（`results.caveat`）。提出の文面には正式な数字だけを使います。

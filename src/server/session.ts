@@ -15,7 +15,7 @@ import { createSeededStore, MemoryStoreKokoroe } from "@/src/learning/memory-sto
 import { getClaude } from "@/src/lib/claude";
 import type { Candidate, JudgmentRecord, KokoroeRule } from "@/src/learning/types";
 
-export type Mode = "demo" | "trial" | "field"; // field = 実地テスト (the author as the master, timings recorded)
+export type Mode = "demo" | "trial" | "field"; // field = 師匠役テスト (the author as the master, timings recorded)
 export const MODES: Mode[] = ["demo", "trial", "field"];
 
 export interface QueueItem {
@@ -62,7 +62,7 @@ export interface SuccessorTurn {
   source: "live" | "recorded";
 }
 
-/** 実地テスト: how long each master action took (ms). Content stays in the store; this is timing only. */
+/** 師匠役テスト: how long each master action took (ms). Content stays in the store; this is timing only. */
 export interface Timing {
   kind: "judge" | "check" | "remark" | "choose" | "why" | "write"; // check = 確かめ稽古 / regression tap
   sceneId: string;

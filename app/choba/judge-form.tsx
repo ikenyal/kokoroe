@@ -21,7 +21,7 @@ function Send({ verdict }: { verdict: Verdict | null }) {
 
 export function JudgeForm({ sceneId }: { sceneId: string }) {
   const [verdict, setVerdict] = useState<Verdict | null>(null);
-  const [markedAt, setMarkedAt] = useState<number | null>(null); // first tap on a mark (実地テスト: time to judge)
+  const [markedAt, setMarkedAt] = useState<number | null>(null); // first tap on a mark (師匠役テスト: time to judge)
   return (
     <form action={judge} className="mt-8" onSubmit={() =>
         setTimeout(() => {

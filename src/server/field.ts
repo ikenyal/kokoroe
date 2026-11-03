@@ -1,5 +1,5 @@
 /**
- * 実地テスト (field test, 11/6): the author plays the master on a fixed set of 20 training scenes (2 per client, training order),
+ * 師匠役テスト (master-role test, 11/6; internally "field"): the author plays the master on a fixed set of 20 training scenes (2 per client, training order),
  * then writes the same etiquette as prose for 5 of them. Designed to fit in 30 minutes: ~20 × 45 s judging + 5 × ~2–3 min writing.
  * Measures t_judge (time to mark), remark / choice / "why?" time, and t_write (time to write the same thing).
  */

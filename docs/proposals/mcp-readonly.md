@@ -66,11 +66,11 @@ The Skill would carry its `exportedAt` and one instruction: *if the kokoroe MCP 
 - **Build:** ~half a day — server (~150 lines), the read-only store interface, tests (tool list fixed; no write path; output
   matches the Skill rendering; `changes_since` on a store with a revision and a rollback), demo variant, README section.
 - **Running cost:** zero model calls; no AWS changes.
-- **Risks:** time before the 11/7 freeze (the field test 11/6 and `eval:final` come first); one more surface to explain in a
+- **Risks:** time before the 11/7 freeze (the master-role test 11/6 and `eval:final` come first); one more surface to explain in a
   3-minute video (it would appear only as one box in s07, "育ち続ける心得帳に問い合わせる口"); judges may read "MCP" as the core of
   the entry — the README would present it as an add-on for the overlap period.
 
 ## Recommendation
 
-Build it **only if** it can be done by 11/6 without displacing the field test — with the four tools above, stdio only, and the
+Build it **only if** it can be done by 11/6 without displacing the master-role test — with the four tools above, stdio only, and the
 demo variant. Otherwise leave this proposal in the repo as the next step and keep the Skill as the hand-over.

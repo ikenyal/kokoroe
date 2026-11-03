@@ -38,12 +38,12 @@ export default async function Home() {
         {fieldEnabled() && (
           <form action={start} className="mt-4">
             <input type="hidden" name="mode" value="field" />
-            <button className="text-[14px] text-ai underline-offset-4 hover:underline">実地テストを始める（作者用・所要時間を記録します）</button>
+            <button className="text-[14px] text-ai underline-offset-4 hover:underline">師匠役テストを始める（作者用・所要時間を記録します）</button>
           </form>
         )}
         {s && (
           <p className="mt-4 text-[13px] text-nibi">
-            続きがあります（{s.mode === "demo" ? "デモの続き" : s.mode === "field" ? "実地テスト" : "お試し"}）。<Link className="underline" href="/choba">帳場に戻る</Link>
+            続きがあります（{s.mode === "demo" ? "デモの続き" : s.mode === "field" ? "師匠役テスト" : "お試し"}）。<Link className="underline" href="/choba">帳場に戻る</Link>
             。上のボタンを押すと、最初からやり直します。
           </p>
         )}

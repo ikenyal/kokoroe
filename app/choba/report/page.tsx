@@ -16,7 +16,7 @@ const median = (xs: number[]) => {
   return s.length ? (s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2) : 0;
 };
 
-/** 実地テストのまとめ — medians per action, for the impact estimate (t_judge vs t_write). Timings only; no content. */
+/** 師匠役テストのまとめ — medians per action, for the impact estimate (t_judge vs t_write). Timings only; no content. */
 export default async function ReportPage() {
   const s = await getSession();
   if (!s || s.mode !== "field") redirect("/");
@@ -27,7 +27,7 @@ export default async function ReportPage() {
   const writeMed = median(t.filter((x) => x.kind === "write").map((x) => x.ms));
   return (
     <div className="max-w-3xl">
-      <h1 className="font-mincho text-[24px] tracking-[0.06em]">実地テストのまとめ</h1>
+      <h1 className="font-mincho text-[24px] tracking-[0.06em]">師匠役テストのまとめ</h1>
       <p className="mt-2 text-[13px] text-nibi">作者が師匠役を務めた範囲の実測です（架空データ）。中央値で示します。</p>
       <table className="mt-6 w-full border-collapse text-[15px] tabular-nums">
         <thead>

@@ -1,7 +1,7 @@
 /**
- * Rehearse the 11/6 field test end to end in a browser, live (Claude drafts and interprets), so the real run has no surprises.
+ * Rehearse the 11/6 master-role test (師匠役テスト; internally "field") end to end in a browser, live (Claude drafts and interprets), so the real run has no surprises.
  *   npx tsx scripts/field-rehearsal.ts --base http://127.0.0.1:3100 --shots docs/screens
- * The server must run with KOKOROE_FIELD=1 KOKOROE_LIVE=1 (see docs/field-test.md). Fictional data only.
+ * The server must run with KOKOROE_FIELD=1 KOKOROE_LIVE=1 (see docs/master-role-test.md). Fictional data only.
  * Plays a quick master: ○ on most cards, △/× with a one-liner on three, taps the reading that matches, answers or skips "why?",
  * confirms the re-solved scene; then writes the 5 prose answers (short) and opens the report. Prints wall-clock per stage.
  */
