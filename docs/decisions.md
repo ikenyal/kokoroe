@@ -320,3 +320,29 @@ Approved by Kento; same environment as deployment 2. Verified on the public URL:
 確かめ card (~7 s) → ○ → 確かめ済み. The image unintentionally included the draft video renders under `video/` (13 MB, fictional
 footage only, nothing sensitive); deployed as approved, and `video/**` is now excluded from file tracing for the next build.
 Podman: the 13 approved images were removed (HODOKU's 17 unchanged); the rebuild re-pulled the amd64 `node:22-slim` base.
+
+## D-040 · 2026-11-03 · Accepted · The official measurement is one command (`npm run eval:final`), and every number is generated from its JSON
+- **What runs** (all fictional data): Before = apprentice v0 × 6 on the 20 held-out scenes; After = **5 training paths** (seeds
+  101–505), each from an empty kokoroe-chō → 〔台帳〕 seeding with one "why?" each → 40 training scenes through the v1 loop (D-029)
+  → held-out × 3; history questions × 3 on each path's grown kokoroe-chō, plus × 3 without one; adversarial set × 3 on the first
+  path's kokoroe-chō (copies). After is reported as the mean of the 5 path means with min–max; taps include the 台帳 "why?" prompts.
+- **Refuses to run** unless `data/hidden` matches its frozen checksums (D-017), the public ledger is the corrected one (D-033), the
+  git tree is clean (the commit hash goes into the result) and a key is set. Without `--yes` it prints the checks and a **cost
+  estimate from the unit costs of the latest measured runs** (today: ≈ $9.75, up to $12.23) and stops. During the run it stops before
+  any part that would push the total past `--max-usd` (default 1.3 × the high estimate); parts are saved as they finish, so
+  `--resume <dir>` continues after an interruption. `--smoke` runs the same path at toy size (≈ $0.4) and writes nothing official.
+- **One source for numbers:** `eval/runs/<stamp>-final.json` → `npm run demo:results` → `data/demo/results.json`, which the
+  稽古の記録 screen and the video's numbers scene read, and from which the README "Before / After" blocks (EN/JA) are generated
+  between markers. A test fails if a README block differs from the JSON. Labels switch from 途中経過 to the official wording when a
+  final run exists. Generating the block found one hand-copied error: the injection row said 0 / 18; the data has 9 injection runs
+  (the other 9 of the 18 adversarial runs are discount lures).
+- Today: estimate only. The real run is 11/7, after the feature freeze.
+
+## D-041 · 2026-11-03 · Accepted · No "interview-style vs Kokoroe" comparison in the simulator evaluation
+Kento: a simulated master cannot measure this fairly. Whether a veteran can put tacit knowledge into words is exactly the question;
+in a simulator we would have to decide how much of the hidden ground truth the "interviewed" master can verbalize, which fixes the
+conclusion in advance. So the evaluation compares only things the simulator can judge with code (the same apprentice before and
+after corrections, history answers, adversarial cases). The comparison with writing things down is made by a person instead, in
+the 11/6 field test (D-031): Kento's time to write the etiquette as prose for 5 scenes vs. the time to mark ○△× (with a one-liner)
+on the same scenes, and how many distinct pieces of etiquette each produced. It is reported as one person's measurement, not as a
+general result.

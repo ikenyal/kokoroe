@@ -130,3 +130,8 @@ Short entries, appended every work session. Source material for the README secti
   subtitles now advance one sentence at a time. Product names in the diagram are slots, filled after D-002.
 - **A safer default for local servers** — Kento noticed the dev server had been reachable from the LAN for hours (it can call Claude
   with the dev key); CLAUDE.md now requires `--hostname 127.0.0.1` and stopping servers after checks.
+- **The official run as one guarded command** — `npm run eval:final` checks the frozen hidden data, the corrected ledger and a clean
+  tree, prints a cost estimate built from the unit costs of earlier measured runs, and stops unless given `--yes`; it saves each
+  part so an interrupted run resumes, and stops before passing a budget. Every number shown anywhere (稽古の記録, the video, both
+  READMEs) is now generated from one JSON, and a test fails if a README table drifts. Generating the table immediately caught a
+  hand-copied number (0 / 18 where the data has 9 injection runs).

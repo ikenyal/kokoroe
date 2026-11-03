@@ -21,6 +21,7 @@
     "eval:cache-ab": "tsx --env-file-if-exists=.env.local eval/cache-ab.ts",
     "demo:snapshots": "tsx eval/build-snapshots.ts",
     "demo:results": "tsx eval/build-results.ts",
+    "eval:final": "tsx --env-file-if-exists=.env.local eval/final.ts",
     "export:skill": "tsx eval/export-skill.ts"
   },
   "dependencies": {

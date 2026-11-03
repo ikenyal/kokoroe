@@ -26,7 +26,7 @@ export default function KeikoPage() {
             <dd className="mt-1 text-[13px] text-nibi">評価用20場面の一致率（○）、{results.before.runs}回平均 ±{Math.round(results.before.sd * 100)}</dd>
           </div>
           <div>
-            <dt className="text-[13px] text-nibi">ダメ出し40場面のあと（途中経過）</dt>
+            <dt className="text-[13px] text-nibi">ダメ出し40場面のあと{results.official ? "" : "（途中経過）"}</dt>
             <dd className="mt-1 font-mincho text-[40px] leading-none tabular-nums text-ai">
               {paths ? pct(paths.mean) : pct(end.match)}
             </dd>
@@ -49,7 +49,7 @@ export default function KeikoPage() {
       <section aria-labelledby="curve-h" className="mt-10 grid gap-8 lg:grid-cols-[1fr_17rem]">
         <div>
           <h2 id="curve-h" className="text-[15px] font-bold">学習曲線</h2>
-          <p className="mt-1 text-[13px] text-nibi">どれだけ師匠の手を借りて、どこまで一致するようになったか。灰色の線は改良の途中の版、藍の点と縦線は今の構成（v1）を学習3本で測った平均と幅です。</p>
+          <p className="mt-1 text-[13px] text-nibi">どれだけ師匠の手を借りて、どこまで一致するようになったか。灰色の線は改良の途中の版、藍の点と縦線は今の構成（v1）を学習{paths?.n ?? 0}本で測った平均と幅{results.official ? "（正式な計測）" : "（途中経過）"}です。</p>
           <div className="mt-4">
             <CurveChart curves={curves} emphasis={paths ? null : latest.key} before={results.before} paths={paths} />
           </div>
