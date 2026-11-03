@@ -37,3 +37,31 @@ All motion is CSS animation (no timers/randomness), so stills are reproducible. 
       s08b compares Skill only vs Skill + MCP from `demo/successor-mcp/answers.json` (re-recorded by `--mcp`).
 - [ ] Narration lengths: s01 (~15 s / 12 s) and s07 (~21 s / 15 s) run long — rebalance after the voice is chosen.
 - [ ] Polly narration per scene (read-only API call with `--profile brightflow-sandbox-ikeda`).
+
+## Backlog: letters with a job (from 11/4; Kento's request on 11/3, not started)
+The idea: kinetic typography made entirely in code, with no assets. Showiness is not the point. Three ideas are taken, kept inside Kokoroe's world (帳面, 明朝, 墨/藍/朱):
+1. **Give each piece of text a job.** Specify what the letters *do* (get corrected, come undone, pile up as a ledger), not that
+   they look good.
+2. **Decide what changes line by line, within tight limits.**
+   - Colors: only 墨 (`--sumi`), 藍 (`--ai`) and 朱 (`--shu`). 朱 stays the master's mark.
+   - Typefaces: only 明朝 and a brush face.
+3. **Check key moments as stills** (`video/stills.ts`) for overlap, overflow and readability, then show the stills to Kento.
+
+**Candidates** (pick 1–2; at most 10–15 s in total out of 3:00):
+- **s04 title 「教えなくていい。直すだけで。」** The master's 朱 brush marks a △ and a one-line correction over 「教えなくていい」, and it
+  becomes 「直すだけで。」. The letters play the part of *being corrected*, which is the core idea of the work.
+  This is the first choice.
+- **s03 「書いて残して」** The letters someone tries to write come undone on the paper without taking shape (tacit knowledge that
+  won't go into words).
+- **Just before the numbers in s09** The master's one-line corrections settle one line at a time onto the ledger's ruled lines
+  and become the 心得帳 (the letters turn into the ledger itself).
+- Use **vertical writing** wherever a scene allows it (it reads at once as a Japanese merchant's ledger).
+
+**Rules that stay:**
+- Real screens remain the main content.
+- Reading speed comes first: no flashy 3D, no shaders, no strong color changes.
+- CSS animation only (reproducible stills).
+- The whole video stays within 3:00.
+  - It is now 170 s.
+  - s01 and s07 narration already run long.
+  - Any added seconds come from shortening other scenes; s02 and s03 are the first places to look.
