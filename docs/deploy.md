@@ -139,7 +139,7 @@ Locally verified 11/3 with the same file layout: home 200, a デモの続き ses
 - [ ] `KOKOROE_FIELD` unset; `KOKOROE_LIVE=1`; limits as above.
 - [ ] Console spend limit on `kokoroe-public` + AWS Budgets alert in place.
 - [ ] Scale = 1 node.
-- [ ] D-028: the live 帳場 path does not yet run 確かめ稽古 / regression — stated in the README, or added before 11/6.
+- [x] D-028: the live 帳場 path runs 確かめ稽古 / regression (D-037) — needs a redeploy to reach the public URL.
 - [ ] Keep the URL up until the final judging ends (11/10), then disable the key and delete the service.
 
 Fallback: ECS Express Mode can run the same image (`docker buildx … --platform linux/amd64`) with one task; keep the task count at 1

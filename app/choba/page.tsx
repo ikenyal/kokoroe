@@ -3,10 +3,10 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { CHANNEL_JA, FORMAT_JA, MEETING_JA, POSTURE_JA, TIMING_JA, who } from "@/src/core/labels";
 import { SCENE_TYPE_LABELS, type Client, type Proposal } from "@/src/core/types";
-import { getClient } from "@/src/core/world";
+import { getClient, TRAIN_SCENES } from "@/src/core/world";
 import { draftLive } from "@/src/server/background";
 import { getSession, liveEnabled, type Pending } from "@/src/server/session";
-import { answerWhy, choose } from "../actions";
+import { answerWhy, choose, verifyCheck } from "../actions";
 import { TimedFields } from "./timed";
 import { Mark } from "../marks";
 import { AutoRefresh } from "./auto-refresh";
@@ -63,6 +63,10 @@ const STATUS: Record<Pending["status"], string> = {
   interpreting: "どこが違ったか読み取っています",
   "needs-choice": "どの意味でしたか",
   choosing: "選んだ読み方を心得帳に書いています",
+  verifying: "新しい心得で解き直して、確かめています",
+  "needs-confirm": "確かめ：直した場面を、新しい心得で解き直しました",
+  "needs-regression": "回帰の確認：以前は ○ だった場面の案が変わりました",
+  "rolled-back": "差し戻しました",
   "needs-why": "心得帳に書きました。よければ、わけを一言",
   applied: "心得帳に書きました",
   "nothing-learned": "今回は何も覚えていません",
@@ -70,21 +74,66 @@ const STATUS: Record<Pending["status"], string> = {
   error: "解釈できませんでした",
 };
 
-function PendingItem({ p }: { p: Pending }) {
+const DECISION_ROWS: [keyof Proposal, string, (p: Proposal, c: Client) => string][] = [
+  ["channel", "表の連絡", (p, c) => (p.channel === "none" ? "連絡しない" : `${who(c, p.formalTo)}へ ${CHANNEL_JA[p.channel]}${p.meeting !== "none" ? `、${MEETING_JA[p.meeting]}` : ""}`)],
+  ["backchannelTo", "裏の一言", (p, c) => (p.backchannelTo ? `${who(c, p.backchannelTo)}にも一言` : "なし")],
+  ["timing", "時期", (p) => TIMING_JA[p.timing]],
+  ["followUp", "後日のあいさつ", (p) => (p.followUp ? "入れる" : "入れない")],
+  ["format", "書式", (p) => FORMAT_JA[p.format] || "—"],
+  ["escalateToMaster", "師匠の確認", (p) => (p.escalateToMaster ? "要る" : "—")],
+];
+
+/** One-tap check of a re-solved scene. For regression, only the decision fields that changed are shown. */
+function CheckCard({ p, step, sceneId, proposal, before }: { p: Pending; step: "confirm" | "regression"; sceneId: string; proposal: Proposal; before?: Proposal }) {
+  const scene = TRAIN_SCENES.find((t) => t.id === sceneId);
+  const client = getClient(scene?.clientId ?? "C01");
+  const rows = DECISION_ROWS.filter(([k, , f]) => !before || f(before, client) !== f(proposal, client) || k === "channel");
+  return (
+    <form action={verifyCheck} className="mt-2 rounded-[3px] border border-keisen p-3">
+      <input type="hidden" name="judgmentId" value={p.judgmentId} />
+      <input type="hidden" name="step" value={step} />
+      <TimedFields />
+      <p className="text-[13px]">
+        {client.name}　{scene ? `${SCENE_TYPE_LABELS[scene.type]}・${scene.month}月` : sceneId}
+      </p>
+      <dl className="mt-1 text-[14px]">
+        {rows.map(([k, label, f]) => (
+          <div key={k} className="grid grid-cols-[6em_1fr] gap-2">
+            <dt className="text-nibi">{label}</dt>
+            <dd className="yomi">
+              {before && f(before, client) !== f(proposal, client) && <del className="mr-1 text-nibi">{f(before, client)}</del>}
+              {f(proposal, client)}
+            </dd>
+          </div>
+        ))}
+      </dl>
+      <input name="remark" maxLength={120} autoComplete="off" placeholder="一言（任意）" className="mt-2 block h-9 w-full rounded-[3px] border border-keisen bg-kami px-2 font-mincho text-[14px]" />
+      <div className="mt-2 flex gap-2">
+        {(["○", "△", "×"] as const).map((v) => (
+          <button key={v} name="verdict" value={v} aria-label={v} className="flex h-10 w-12 items-center justify-center rounded-[3px] border border-keisen text-shu hover:border-shu hover:bg-shu-soft">
+            <Mark v={v} size={24} />
+          </button>
+        ))}
+      </div>
+    </form>
+  );
+}
+
+function PendingItem({ p, beforeOf }: { p: Pending; beforeOf: (judgmentId: string) => Proposal | undefined }) {
   return (
     <li className="border-t border-keisen py-3 first:border-t-0">
       <p className="text-[13px] text-nibi">
         {p.sceneId}・{p.judgmentId}　{STATUS[p.status]}
         {p.round === 2 && p.status === "needs-choice" ? "（別の読み方）" : ""}
-        {p.ruleId && (
-          <>
-
-            <Link className="text-ai underline-offset-4 hover:underline" href={`/kokoroe#${p.ruleId}`}>
-              {p.ruleId}
-            </Link>
-          </>
-        )}
       </p>
+      {p.ruleId && (
+        <p className="text-[13px] text-nibi">
+          書いた心得：
+          <Link className="text-ai underline-offset-4 hover:underline" href={`/kokoroe#${p.ruleId}`}>
+            {p.ruleId}
+          </Link>
+        </p>
+      )}
       {p.status === "needs-choice" && p.candidates && (
         <form action={choose} className="mt-2 space-y-2">
           <input type="hidden" name="judgmentId" value={p.judgmentId} />
@@ -100,6 +149,12 @@ function PendingItem({ p }: { p: Pending }) {
           </button>
         </form>
       )}
+      {p.status === "needs-confirm" && p.verify?.confirm && <CheckCard p={p} step="confirm" sceneId={p.sceneId} proposal={p.verify.confirm.proposal} />}
+      {p.status === "needs-regression" && p.verify?.current && (
+        <CheckCard p={p} step="regression" sceneId={p.verify.current.sceneId} proposal={p.verify.current.proposal} before={beforeOf(p.verify.current.pastJudgmentId)} />
+      )}
+      {(p.status === "applied" || p.status === "rolled-back") && p.note?.startsWith("確かめ済み") && <p className="text-[13px] text-nibi">{p.note}</p>}
+      {p.status === "rolled-back" && p.note && <p className="text-[13px] text-shu">{p.note}</p>}
       {p.status === "needs-why" && (
         <form action={answerWhy} className="mt-2 space-y-2">
           <input type="hidden" name="judgmentId" value={p.judgmentId} />
@@ -133,8 +188,9 @@ export default async function ChobaPage() {
   if (live && s.meta.queue[s.meta.pos] && !s.meta.queue[s.meta.pos].live) await draftLive(s, s.meta.pos);
   const meta = (await getSession())!.meta;
   const item = meta.queue[meta.pos];
-  const busy = meta.pending.some((p) => p.status === "queued" || p.status === "interpreting" || p.status === "choosing");
+  const busy = meta.pending.some((p) => ["queued", "interpreting", "choosing", "verifying"].includes(p.status));
   const recent = meta.pending.slice(0, 6);
+  const judgments = await s.store.listJudgments();
 
   return (
     <div className="grid gap-10 lg:grid-cols-[1fr_19rem]">
@@ -177,7 +233,7 @@ export default async function ChobaPage() {
         <h2 id="bg-h" className="text-[15px] font-bold">裏での作業</h2>
         <p className="mt-1 text-[13px] text-nibi">△・× の意味を読み取り、心得帳に書きます。待たずに次の案へ進めます。</p>
         {recent.length ? (
-          <ul className="mt-3">{recent.map((p) => <PendingItem key={p.judgmentId} p={p} />)}</ul>
+          <ul className="mt-3">{recent.map((p) => <PendingItem key={p.judgmentId} p={p} beforeOf={(id) => judgments.find((j) => j.id === id)?.proposal} />)}</ul>
         ) : (
           <p className="mt-4 flex items-center gap-2 text-[14px] text-nibi">
             <Mark v="○" size={20} className="text-shu" />

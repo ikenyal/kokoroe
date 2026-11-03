@@ -30,10 +30,38 @@ export interface Verification {
   taps: number;
 }
 
-const MAX_REGRESSION = 3;
+export const MAX_REGRESSION = 3;
+
+/** 差し戻し: an added rule is retired, a revised rule is restored to its snapshot — recorded in the 沿革. Shared by eval and UI. */
+export async function rollbackChange(args: {
+  store: KokoroeStore;
+  change: Pick<AppliedChange, "ruleId" | "action">;
+  snapshot: KokoroeRule | undefined;
+  judgmentId: string;
+  brokenSceneId: string;
+  verdict: JudgmentRecord["verdict"];
+  remark: string;
+  at: string;
+}): Promise<void> {
+  const now = (await args.store.getRule(args.change.ruleId))!;
+  const note = {
+    date: jstDate(args.at),
+    before: now.when ? `${now.text}（${now.when}）` : now.text,
+    after: args.change.action === "add" ? "（差し戻し: 廃止）" : `（差し戻し）${args.snapshot!.text}`,
+    trigger: null,
+    judgmentId: args.judgmentId,
+    masterWords: args.remark,
+    reason: `回帰テストで ${args.brokenSceneId}（以前は○）が ${args.verdict} になったため差し戻し`,
+  };
+  const restored: KokoroeRule =
+    args.change.action === "add"
+      ? { ...now, status: "retired", history: [...now.history, note] }
+      : { ...args.snapshot!, sources: now.sources, history: [...now.history, note] };
+  await args.store.saveRule(restored);
+}
 
 /** Latest ○ judgment per scene for this client (drafts, confirmations and earlier regression checks), newest first. */
-async function okScenes(store: KokoroeStore, clientId: string, excludeSceneId: string): Promise<JudgmentRecord[]> {
+export async function okScenes(store: KokoroeStore, clientId: string, excludeSceneId: string): Promise<JudgmentRecord[]> {
   const latest = new Map<string, JudgmentRecord>();
   for (const j of await store.listJudgments()) if (j.clientId === clientId) latest.set(j.sceneId, j);
   return [...latest.values()].filter((j) => j.verdict === "○" && j.sceneId !== excludeSceneId).reverse();
@@ -105,21 +133,10 @@ export async function verifyChange(args: {
     // 3b. 差し戻し
     v.rolledBack = true;
     v.brokenSceneId = failure.broken.sceneId;
-    const now = (await store.getRule(change.ruleId))!;
-    const note = {
-      date: jstDate(at()),
-      before: now.when ? `${now.text}（${now.when}）` : now.text,
-      after: change.action === "add" ? "（差し戻し: 廃止）" : `（差し戻し）${args.snapshot!.text}`,
-      trigger: null,
-      judgmentId: args.judgment.id,
-      masterWords: failure.remark,
-      reason: `回帰テストで ${failure.broken.sceneId}（以前は○）が ${failure.verdict} になったため差し戻し`,
-    };
-    const restored: KokoroeRule =
-      change.action === "add"
-        ? { ...now, status: "retired", history: [...now.history, note] }
-        : { ...args.snapshot!, sources: now.sources, history: [...now.history, note] };
-    await store.saveRule(restored);
+    await rollbackChange({
+      store, change, snapshot: args.snapshot, judgmentId: args.judgment.id,
+      brokenSceneId: failure.broken.sceneId, verdict: failure.verdict, remark: failure.remark, at: at(),
+    });
   }
   return v;
 }

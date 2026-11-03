@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Build/runtime artifacts (container context, sessions, eval outputs)
+    ".image/**",
+    ".data/**",
+    "eval/runs/raw/**",
   ]),
 ]);
 

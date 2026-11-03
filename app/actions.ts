@@ -9,6 +9,7 @@ import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 import { getSession, liveEnabled, readMeta, startSession, type Mode } from "@/src/server/session";
 import { applyChoice, interpretInBackground } from "@/src/server/background";
+import { afterConfirm, afterRegression, startVerification } from "@/src/server/verify-ui";
 import { recordTrigger } from "@/src/learning/compile";
 import type { SessionMeta, SuccessorTurn, Timing } from "@/src/server/session";
 import { askSuccessor } from "@/src/successor/ask";
@@ -184,8 +185,45 @@ export async function answerWhy(formData: FormData) {
   if (why) await recordTrigger(s.store, p.ruleId, why);
   const t = ms(formData, "shownAt", "submitAt");
   if (t !== null) addTimings(meta, [{ kind: "why", sceneId: p.sceneId, ms: t, chars: why.length }]);
-  meta.pending = meta.pending.map((x) => (x.judgmentId === judgmentId ? { ...x, status: "applied", note: why ? `わけ：${why}` : x.note } : x));
+  // Then 確かめ稽古 + regression (live only, within the limits); otherwise the rule stays as written.
+  const refused = liveEnabled() && p.verify ? await allowLive(s.sid) : "daily";
+  const verifyNow = liveEnabled() && !!p.verify && !refused;
+  if (liveEnabled() && refused && p.verify) meta.limit = refused;
+  meta.pending = meta.pending.map((x) =>
+    x.judgmentId === judgmentId ? { ...x, status: verifyNow ? "verifying" : "applied", note: why ? `わけ：${why}` : x.note } : x,
+  );
   s.saveMeta(meta);
+  if (verifyNow) after(() => startVerification(s.mode, s.sid, judgmentId));
+  revalidatePath("/choba");
+}
+
+/** 確かめ稽古 / 回帰の確認 — the master judges a re-solved scene (one tap; remark optional). */
+export async function verifyCheck(formData: FormData) {
+  const s = await getSession();
+  if (!s) redirect("/");
+  const judgmentId = String(formData.get("judgmentId") ?? "");
+  const step = String(formData.get("step") ?? "");
+  const verdict = String(formData.get("verdict") ?? "");
+  const remark = String(formData.get("remark") ?? "").trim().slice(0, 120);
+  if (!/^J-\d{4}$/.test(judgmentId) || !VERDICTS.has(verdict) || (step !== "confirm" && step !== "regression")) throw new Error("invalid check");
+  if (!liveEnabled()) return;
+  const meta = readMeta(s.mode, s.sid);
+  const p = meta.pending.find((x) => x.judgmentId === judgmentId);
+  if (!p || p.status !== (step === "confirm" ? "needs-confirm" : "needs-regression")) return; // stale or double submit
+  const t = ms(formData, "shownAt", "submitAt");
+  if (t !== null) addTimings(meta, [{ kind: "judge", sceneId: p.sceneId, ms: t, verdict }]);
+  const refused = await allowLive(s.sid);
+  if (refused) {
+    meta.limit = refused;
+    meta.pending = meta.pending.map((x) => (x.judgmentId === judgmentId ? { ...x, status: "applied", note: "お試し上限のため、確かめはここまでにしました" } : x));
+    s.saveMeta(meta);
+    revalidatePath("/choba");
+    return;
+  }
+  meta.pending = meta.pending.map((x) => (x.judgmentId === judgmentId ? { ...x, status: "verifying" } : x));
+  s.saveMeta(meta);
+  const v = verdict as "○" | "△" | "×";
+  after(() => (step === "confirm" ? afterConfirm(s.mode, s.sid, judgmentId, v, remark) : afterRegression(s.mode, s.sid, judgmentId, v, remark)));
   revalidatePath("/choba");
 }
 

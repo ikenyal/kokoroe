@@ -11,6 +11,7 @@ import { guardScope } from "@/src/learning/scope";
 import type { Usage } from "@/src/lib/claude";
 import { allowLive, recordSpend } from "./limits";
 import { openSession, readMeta, type Mode, type Pending, type Session } from "./session";
+import { newVerification, startVerification } from "./verify-ui";
 
 function update(s: Session, judgmentId: string, patch: Partial<Pending>) {
   const meta = readMeta(s.mode, s.sid);
@@ -44,9 +45,13 @@ export async function interpretInBackground(mode: Mode, sid: string, judgmentId:
     // Round 2 always asks (D-025): after "none of these", nothing is written without the master's tap.
     if (round === 2 || interp.ambiguous || cands.length > 1)
       return update(s, judgmentId, { status: "needs-choice", candidates: cands, note: interp.diagnosis });
-    const change = await applyCandidate(s.store, judgment, guardScope(cands[0], judgment.remark), interp);
-    // A new rule: ask the master "why?" once (optional). A revision: done.
-    update(s, judgmentId, { status: change.action === "add" ? "needs-why" : "applied", ruleId: change.ruleId, candidates: cands, note: interp.diagnosis });
+    const pick = guardScope(cands[0], judgment.remark);
+    const snapshot = pick.action === "revise" && pick.targetRuleId ? await s.store.getRule(pick.targetRuleId) : undefined;
+    const change = await applyCandidate(s.store, judgment, pick, interp);
+    const verify = newVerification({ ruleId: change.ruleId, action: change.action }, snapshot);
+    // A new rule: ask "why?" once (optional), then verify. A revision: verify now.
+    update(s, judgmentId, { status: change.action === "add" ? "needs-why" : "verifying", ruleId: change.ruleId, candidates: cands, note: interp.diagnosis, verify });
+    if (change.action === "revise") await startVerification(mode, sid, judgmentId);
   } catch (e) {
     update(s, judgmentId, { status: "error", note: e instanceof Error ? e.message.slice(0, 120) : "解釈に失敗しました" });
   }
@@ -66,8 +71,12 @@ export async function applyChoice(mode: Mode, sid: string, judgmentId: string, i
     const c = p.candidates[index];
     if (!c) return update(s, judgmentId, { status: "error", note: "選ばれた読み方が見つかりません" });
     const { judgment } = await context(s, judgmentId);
-    const change = await applyCandidate(s.store, judgment, guardScope(c, judgment.remark), { diagnosis: p.note ?? "", confidence: "medium" });
-    update(s, judgmentId, { status: change.action === "add" ? "needs-why" : "applied", ruleId: change.ruleId });
+    const pick = guardScope(c, judgment.remark);
+    const snapshot = pick.action === "revise" && pick.targetRuleId ? await s.store.getRule(pick.targetRuleId) : undefined;
+    const change = await applyCandidate(s.store, judgment, pick, { diagnosis: p.note ?? "", confidence: "medium" });
+    const verify = newVerification({ ruleId: change.ruleId, action: change.action }, snapshot);
+    update(s, judgmentId, { status: change.action === "add" ? "needs-why" : "verifying", ruleId: change.ruleId, verify });
+    if (change.action === "revise") await startVerification(mode, sid, judgmentId);
   } catch (e) {
     update(s, judgmentId, { status: "error", note: e instanceof Error ? e.message.slice(0, 120) : "心得帳に書けませんでした" });
   }

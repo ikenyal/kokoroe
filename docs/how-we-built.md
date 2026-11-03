@@ -116,3 +116,7 @@ Short entries, appended every work session. Source material for the README secti
 - **Holding an approved deployment** — Kento approved the live deployment and, in the same message, asked to check how the per-IP
   limit reads X-Forwarded-For. It used the spoofable first entry. Claude did not deploy the approved (now known-flawed) image; it fixed
   and tested the IP logic first and brought the changed deployment back for approval.
+- **Same logic, two shapes** — verification in the evaluation loop is one function; in the UI it must wait for the master between
+  steps. Claude extracted the shared pieces (regression set, rollback) and rebuilt the flow as a small state machine in the pending
+  item, then pinned it with tests that mock Claude. A wrong timestamp in the test data surfaced as a clean `error` status — the
+  failure path worked too.

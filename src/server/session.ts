@@ -26,7 +26,21 @@ export interface QueueItem {
 export interface Pending {
   judgmentId: string;
   sceneId: string;
-  status: "queued" | "interpreting" | "needs-choice" | "choosing" | "needs-why" | "applied" | "nothing-learned" | "offline" | "error";
+  status:
+    | "queued"
+    | "interpreting"
+    | "needs-choice"
+    | "choosing"
+    | "needs-why"
+    | "verifying" // 確かめ稽古 / regression running in the background
+    | "needs-confirm" // the master checks the re-solved corrected scene (確かめ稽古)
+    | "needs-regression" // the master checks a past ○ scene whose decision changed
+    | "applied" // written (and verified, when verification ran)
+    | "rolled-back" // 差し戻し
+    | "nothing-learned"
+    | "offline"
+    | "error";
+  verify?: UiVerification;
   pick?: number | null; // the master's tap while status is "choosing" (null = none of these)
   candidates?: Candidate[];
   round?: 1 | 2;
@@ -57,6 +71,19 @@ export interface FieldWrite {
   sceneId: string;
   text: string;
   ms: number;
+}
+
+/** 確かめ稽古 + regression in the UI (D-028 → D-037): the same steps as the evaluation loop, one master tap at a time. */
+export interface UiVerification {
+  change: { ruleId: string; action: "add" | "revise" };
+  snapshot?: KokoroeRule; // the rule before a revise
+  confirm?: { proposal: Proposal }; // re-solved corrected scene, waiting for the master
+  fixedSet: { sceneId: string; pastJudgmentId: string }[]; // past ○ scenes, fixed before any check
+  remaining: { sceneId: string; pastJudgmentId: string }[];
+  current?: { sceneId: string; pastJudgmentId: string; proposal: Proposal }; // waiting for the master
+  narrowed: boolean;
+  checked: number;
+  asked: number;
 }
 
 export interface SessionMeta {

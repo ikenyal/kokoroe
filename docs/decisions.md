@@ -295,3 +295,13 @@ visitor controls — sending a new fake value each time would bypass it. Now `tr
 last trusted hop, counted from the end (`KOKOROE_TRUSTED_PROXY_HOPS`, default 1 = Lightsail's load balancer); X-Real-IP is ignored.
 Tests cover spoofed leading entries and rotating fake values (still limited). The live deployment was held until this was fixed,
 because fixing it changes the image that had been approved.
+
+## D-037 · 2026-11-03 · Accepted · 確かめ稽古 + regression in the 帳場 (closes the first item of D-028)
+The UI path now runs the same verification as the evaluation loop, one master tap at a time (`src/server/verify-ui.ts`):
+rule written → (new rule: optional "why?") → re-solve the corrected scene → **確かめ** card (○△×) → fix the regression set
+(this client's past ○, ≤ 3) → re-solve each; unchanged decisions pass silently, changed ones become a **回帰の確認** card showing only
+the fields that changed → ○ continues; △/× narrows the rule once with that scene as evidence and re-checks the whole set; a second
+failure rolls the rule back (`rollbackChange`, shared with the evaluation loop) and records it in the 沿革. Each step that calls
+Claude is reserved against the public-demo limits first; when a limit is hit, verification stops and the rule stays as written,
+with a note. Tests (apprentice and interpreter mocked): the full narrow-then-rollback path and the silent-pass path.
+Also: the side panel no longer runs the status text into the rule id (「書いた心得：K-011」 on its own line).
