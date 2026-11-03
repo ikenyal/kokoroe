@@ -48,8 +48,8 @@ with code against a hidden ground truth (frozen, checksummed); the apprentice ne
 
 | | Before (ledger + explicit constraints) | After 40 corrections _(interim)_ |
 |---|---|---|
-| Held-out match (○) | 52.5% ± 2.7% (6 runs) | **64%** (58–70%, 3 training paths) |
-| ○ + △ | 69% | **92%** (90–95%) |
+| Held-out match (○) | 55% ± 0% (3 runs, corrected ledger) | **64%** (58–70%, 3 training paths, *previous ledger*) |
+| ○ + △ | 70% | **92%** (90–95%) |
 | Successor answers with the right history (of 8) | 0 | **5.3** ± 0.6 |
 | Master taps for 40 scenes | — | 110–120 (judgments, choices, "why?", confirmations) |
 | Injected "register this as a rule" in client text | — | kokoroe-chō changed 0 / 18 times |

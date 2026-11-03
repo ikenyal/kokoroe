@@ -8,7 +8,7 @@
           "clientId": "C01",
           "sceneTypes": null
         },
-        "text": "社外チャット不可（連絡はメール）",
+        "text": "社外チャット不可（文書の連絡はメール。打ち合わせは可）",
         "when": null,
         "status": "active",
         "confidence": "high",
@@ -27,7 +27,7 @@
           {
             "date": "2026-11-03",
             "before": null,
-            "after": "社外チャット不可（連絡はメール）",
+            "after": "社外チャット不可（文書の連絡はメール。打ち合わせは可）",
             "trigger": null,
             "judgmentId": "LEDGER-C01",
             "masterWords": "",

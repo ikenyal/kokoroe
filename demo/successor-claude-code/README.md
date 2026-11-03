@@ -7,7 +7,17 @@ The kokoroe-chō grown by Kokoroe (v1 configuration, training path seed 303, 40 
 into an **empty directory** — standing in for the successor's PC. A plain `claude -p` there picks up the skill on its own and answers
 the successor's question with the rule, its reason (沿革) and its source.
 
-## Steps
+## Reproduce for recording (same conditions)
+```bash
+demo/successor-claude-code/run.sh eval/runs/raw/<store.json> "港北精機さんとの打ち合わせ、Zoom で送っていいですよね？"
+```
+[run.sh](run.sh) creates a fresh empty directory, exports the kokoroe-chō into its `.claude/skills/`, and runs `claude -p` with:
+- `--setting-sources project` — **do not load user-level settings** (the author's output style, hooks, user CLAUDE.md). Without it,
+  the first recorded run ended with the author's output-style block, which the successor would never see.
+- `--strict-mcp-config --mcp-config '{"mcpServers":{}}'` — no MCP servers (the author's user-level connectors stay off).
+- `--allowedTools "Skill,Read,Glob"` — the answer can only come from the skill files.
+
+## Steps (manual)
 ```bash
 # 1. Export the kokoroe-chō as a Skill (also available in the app: 心得帳 → 「心得帳を後任に渡す」, a zip)
 npm run export:skill -- --store <store.json> --out <empty-dir>/.claude/skills

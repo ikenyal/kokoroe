@@ -1,5 +1,5 @@
 [
-  {"id":"C01","name":"浜風運輸","slug":"hamakaze-unyu","industry":"物流","relationshipYears":20,"contact":"配車課長","decider":"常務","contactIsDecider":false,"constraints":"社外チャット不可（連絡はメール）","busyMonths":[]},
+  {"id":"C01","name":"浜風運輸","slug":"hamakaze-unyu","industry":"物流","relationshipYears":20,"contact":"配車課長","decider":"常務","contactIsDecider":false,"constraints":"社外チャット不可（文書の連絡はメール。打ち合わせは可）","busyMonths":[]},
   {"id":"C02","name":"白樺製菓","slug":"shirakaba-seika","industry":"製造（食品）","relationshipYears":25,"contact":"総務係長","decider":"社長（創業家）","contactIsDecider":false,"constraints":"3月決算。2〜3月は多忙","busyMonths":[2,3]},
   {"id":"C03","name":"まちなか生活協同組合","slug":"machinaka-coop","industry":"小売・協同組合","relationshipYears":12,"contact":"情報担当","decider":"専務理事","contactIsDecider":false,"constraints":"理事会は月1回（第3木曜）。見積りは指定書式","busyMonths":[]},
   {"id":"C04","name":"港北精機","slug":"kohoku-seiki","industry":"製造（部品）","relationshipYears":8,"contact":"生産技術主任","decider":"工場長","contactIsDecider":false,"constraints":"情報セキュリティ規程で Zoom 不可、Teams のみ","busyMonths":[]},

@@ -36,9 +36,11 @@ const curves = CURVES.map((c) => {
   };
 });
 
-// Before = v0 with the current prompt layout (cache blocks, D-030): both arms of the latest caching A/B, 6 runs pooled.
-const cacheAb = files.filter((f) => f.includes("cache-ab")).map(read).at(-1);
-const beforeRuns: string[] = [...cacheAb.off.perRun, ...cacheAb.on.perRun];
+// Before = v0 with the corrected ledger (D-033): the latest v0 ×3 run (current prompt layout, current ledger).
+const v0Latest = files.filter((f) => f.includes("v0-ledger-x3")).map(read).at(-1);
+const beforeRuns: string[] = (v0Latest.perScene[0].verdicts as string).split("").map((_: string, k: number) =>
+  (v0Latest.perScene as { verdicts: string }[]).map((x) => x.verdicts[k]).join(""),
+);
 const beforeRates = beforeRuns.map((r) => [...r].filter((c) => c === "○").length / r.length);
 const beforeOkp = beforeRuns.map((r) => [...r].filter((c) => c !== "×").length / r.length);
 const mean = (xs: number[]) => xs.reduce((a, b) => a + b, 0) / xs.length;
@@ -48,7 +50,7 @@ const adversarial = files.filter((f) => f.includes("adversarial-x3")).map(read).
 const paths = files.filter((f) => f.includes("paths")).map(read).at(-1) ?? null;
 
 const out = {
-  note: "すべて架空データ（取引先10社・評価用20場面・沿革の質問8件）、師匠はシミュレータ。11/3 の途中経過。正式な After は 11/7 に学習5本で取り直す。",
+  note: "すべて架空データ（取引先10社・評価用20場面・沿革の質問8件）、師匠はシミュレータ。11/3 の途中経過。Before は修正後の台帳（D-033）、途中経過の After は修正前の台帳で測ったもの。正式な Before／After は 11/7 に同じ台帳・学習5本で取り直す。",
   before: { label: "Before（台帳＋制約だけの弟子 v0）", match: mean(beforeRates), sd: sd(beforeRates), okp: mean(beforeOkp), runs: beforeRuns.length },
   curves,
   paths,

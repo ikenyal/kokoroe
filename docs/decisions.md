@@ -260,3 +260,24 @@ round in `choose`, drafts and successor answers before calling. Over a limit →
 **Open — hosting (needs Kento):** Amplify Hosting documents SSR for Next.js 12–15 and its compute is per-request, which breaks the
 file-based sessions/counters. Recommended: App Runner with exactly one instance (works as is); Amplify only after a DynamoDB
 store adapter. Details and the list of resources to create: docs/deploy.md.
+
+## D-033 · 2026-11-03 · Accepted · Ledger wording for 浜風運輸 fixed (resolves the E11 part of D-026); Before re-measured
+The public ledger said 浜風運輸's constraint was 「社外チャット不可（連絡はメール）」. The hidden truth (unchanged, frozen) only bans
+external chat; meetings are fine. The wording pulled the apprentice to mail-only even where a live conversation is needed — E11 was
+× in all 9 evaluations of the v1 configuration. Per Kento, the **public ledger** now reads 「社外チャット不可（文書の連絡はメール。
+打ち合わせは可）」 (`data/world/clients.json`; `data/hidden/` untouched — the checksum test still passes). 〔台帳〕 rules in the demo
+snapshots are refreshed from the ledger; rules learned from the master stay as recorded.
+**Before re-measured (v0 × 3, current layout + corrected ledger): 55% ± 0%, ○+△ 70%** — E11 is now ○ in all 3 runs. This replaces
+D-030's 52.5% as the Before. The interim After (64%, D-029) was measured with the old ledger, so the two are **not** directly
+comparable; the official Before and After are both re-taken on 11/7 with this ledger (5 training paths).
+Lesson: a ledger line written loosely ("連絡はメール") becomes a rule the apprentice obeys too literally — the explicit part of
+the knowledge needs the same care as the tacit part.
+
+## D-034 · 2026-11-03 · Accepted · Hosting: Amazon Lightsail container service, one node (supersedes the open part of D-032)
+Kento: App Runner is closed to new customers since 2026-04-30 and the Sandbox account has never used it; Lightsail is familiar and
+has a fixed monthly price. One node keeps file-based sessions and limit counters working. A redeploy clears them — acceptable:
+お試し is per-session by design, デモの続き starts from fixed data in the image, and the Claude Console spend limit is the hard cap
+when daily counters reset. The key is passed as a deployment environment variable (Lightsail containers have no IAM role for
+Secrets Manager), mitigated by a dedicated spend-capped workspace key disabled after judging. Fallback: ECS Express Mode, same image.
+The build uses Next.js `standalone` output; tracing excludes sessions, docs, evals, hidden data and `.env*` (checked: no env file
+in the output). Dockerfile + `.dockerignore` added; the image layout was smoke-tested locally (Docker itself is not installed here).

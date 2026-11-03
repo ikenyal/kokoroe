@@ -1,79 +1,108 @@
-# Deploying the public demo (target: 2026-11-06)
+# Deploying the public demo — Amazon Lightsail container service (target: 2026-11-06)
 
-The public demo runs two modes only: **デモの続き** (a recorded mid-training state) and **お試し** (the visitor is the master;
-reset per session). The field-test mode is never enabled in public (`KOKOROE_FIELD` unset).
+The public demo runs two modes only: **デモの続き** (a recorded mid-training state, shipped in the image) and **お試し**
+(the visitor is the master; a fresh session each time). The field-test mode is never enabled in public (`KOKOROE_FIELD` unset).
 All data is fictional. The Anthropic API key exists only on the server.
 
-## Decision needed: where it runs
+**Hosting decision (D-034):** one Lightsail container service node. App Runner is closed to new customers since 2026-04-30;
+Amplify Hosting documents SSR for Next.js 12–15 and runs per-request compute, which doesn't fit file-based sessions.
+Fallback if Lightsail causes trouble: **Amazon ECS Express Mode** (AWS's recommended successor path) with the same image.
 
-The app keeps each visitor's session (kokoroe-chō, judgments) and the public-demo limit counters in small JSON files
-(`KOKOROE_DATA_DIR`). That needs **one long-lived instance** (or shared storage).
+## What is lost on a redeploy — and why that's fine
 
-| | A. AWS App Runner, 1 instance (recommended) | B. AWS Amplify Hosting (SSR) |
+The container keeps visitor sessions and the public-demo limit counters under `KOKOROE_DATA_DIR` (`/tmp/kokoroe`), so a redeploy
+or node restart clears them:
+
+| Lost | Effect | OK because |
 |---|---|---|
-| Next.js 16 | runs `next start` from a container — any version | documented SSR support is Next.js 12–15; 16 needs checking at setup (see sources) |
-| Session files / limits | work as is (min = max = 1 instance; files live while the instance lives) | SSR compute is per-request/ephemeral → sessions and counters would be lost between requests; needs a DynamoDB adapter first |
-| `after()` background interpretation | runs in the server process | may be cut when the request's compute ends |
-| Work left | Dockerfile (below), service setup | storage adapter (≈ half a day), version check |
-| Cost | ~ $5–10 / month at 1 small instance + data | pay per request |
+| お試し sessions | a visitor mid-trial starts over | お試し is initialized per session by design |
+| デモの続き sessions | same | the starting state is fixed data in the image (`data/demo/`) |
+| Daily limit counters (calls, estimated spend) | the day's cap restarts from 0 | **the Claude Console spend limit is the hard backstop** — set it; avoid many redeploys in one day |
+| Field-test timings | — | the field test runs locally, never on the public server |
 
-Recommendation: **A (App Runner, 1 instance)** for the hackathon demo; keep Amplify as an option once the store has a
-DynamoDB adapter (the `KokoroeStore` interface is already swappable). Sources:
-[Amplify support for Next.js](https://docs.aws.amazon.com/amplify/latest/userguide/ssr-amplify-support.html),
-[amplify-js #14600 (Next.js 16)](https://github.com/aws-amplify/amplify-js/issues/14600).
+Nothing permanent lives in the container. Evaluation results, decision records and the recorded demo are in the repository.
 
-## What Kento needs to create (either option)
+## What Kento creates
 
-1. **Anthropic (Claude Console)**
-   - A dedicated workspace for the public demo, e.g. `kokoroe-public`, with a **monthly spend limit** (suggested: $30).
-   - An API key in that workspace (separate from the development key `kokoroe-hackathon`).
+1. **Claude Console** (BrightFlow LLC organization)
+   - A workspace for the public demo, e.g. `kokoroe-public`, with a **monthly spend limit** (suggested: $30).
+   - An API key in that workspace — separate from the development key (`kokoroe-hackathon`). Disable it after the final judging (11/10).
 2. **AWS (BrightFlow Sandbox account), region ap-northeast-1**
-   - A secret for the key: AWS Secrets Manager (or SSM Parameter Store SecureString) `kokoroe/anthropic-api-key`.
-   - **AWS Budgets** alert on the account (to the BrightFlow address used for the AWS hackathon), e.g. $20/month.
-   - Option A: an ECR repository `kokoroe` and an App Runner service (1 vCPU / 2 GB, **min = max = 1 instance**), with an
-     instance role allowed to read the secret. Or point App Runner at the GitHub repo with the Dockerfile.
-   - Option B: an Amplify app connected to `ikenyal/kokoroe` (branch `main`), plus a DynamoDB table (pk `id`, on-demand) for
-     sessions — only after the adapter exists.
-3. **GitHub**: the repository can stay private until submission; App Runner/Amplify need read access (GitHub connection).
+   - **Lightsail container service** `kokoroe`: power **micro or larger** (≥ 1 GB memory; check current pricing in the Lightsail
+     console), **scale = 1** (one node — sessions are in that node's memory/disk).
+   - **AWS Budgets** alert for the account (to the BrightFlow address used for the AWS hackathon), e.g. $20/month.
+   - Locally: AWS CLI v2 + the `lightsailctl` plugin (needed by `push-container-image`), and Docker with `buildx`.
+3. **How the API key reaches the container:** as an environment variable in the Lightsail deployment (Lightsail containers have
+   no IAM role to read Secrets Manager at runtime). Mitigations: a dedicated, spend-capped workspace key; only people with access
+   to the Sandbox account can see deployment settings; the key is disabled after judging. Never put it in the image or the repo
+   (`.dockerignore` excludes `.env*`; the standalone build excludes `.env*` too — checked 11/3).
 
-## Environment variables
+## Environment variables (deployment)
 
-| Name | Public value | Meaning |
+| Name | Value | Meaning |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | from the secret | server-side only |
-| `KOKOROE_LIVE` | `1` | use Claude for drafts / interpretation / successor; unset = recorded data only |
-| `KOKOROE_DAILY_USD` | `5` | estimated daily spend cap; above it the app falls back to recorded data and says so |
+| `ANTHROPIC_API_KEY` | the `kokoroe-public` key | server-side only |
+| `KOKOROE_LIVE` | `1` | Claude for drafts / interpretation / successor; unset = recorded data only |
+| `KOKOROE_DAILY_USD` | `5` | estimated daily spend cap → falls back to recorded data with a notice |
 | `KOKOROE_SESSION_CALLS` | `40` | live calls per session |
-| `KOKOROE_IP_CALLS_PER_HOUR` | `60` | live calls per IP per hour |
+| `KOKOROE_IP_CALLS_PER_HOUR` | `60` | live calls per IP per hour (uses `X-Forwarded-For` from the Lightsail endpoint) |
 | `KOKOROE_GLOBAL_CALLS_PER_DAY` | `1500` | live calls per day, all visitors |
-| `KOKOROE_DATA_DIR` | `/tmp/kokoroe` (A) | sessions + counters |
-| `NODE_ENV` | `production` | also turns on the `secure` cookie flag |
+| `KOKOROE_DATA_DIR` | `/tmp/kokoroe` | set in the Dockerfile |
 | `KOKOROE_FIELD` | *(unset)* | never enable in public |
 
-## Option A — build & run
+## Build and deploy
 
-```Dockerfile
-# Dockerfile (to be added with the deployment)
-FROM node:22-slim AS build
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
+```bash
+# 1. Build for Lightsail (x86_64) — on Apple Silicon use --platform
+docker buildx build --platform linux/amd64 -t kokoroe:latest .
 
-FROM node:22-slim
-WORKDIR /app
-ENV NODE_ENV=production
-COPY --from=build /app ./
-EXPOSE 3000
-CMD ["npx", "next", "start", "-p", "3000"]
+# 2. Push the image to the container service
+aws lightsail push-container-image --region ap-northeast-1 --service-name kokoroe --label web --image kokoroe:latest
+#    → prints an image reference like ":kokoroe.web.1"
+
+# 3. Deploy (containers.json / endpoint.json below)
+aws lightsail create-container-service-deployment --region ap-northeast-1 --service-name kokoroe \
+  --containers file://containers.json --public-endpoint file://endpoint.json
 ```
-Health check: `GET /` (200). After deploy: open the URL, start お試し, judge one card, ask one 暖簾 question, and check the
-spend counter stays under the cap.
+
+`containers.json` (fill the key at deploy time; do not commit this file with a key in it):
+```json
+{
+  "web": {
+    "image": ":kokoroe.web.1",
+    "ports": { "3000": "HTTP" },
+    "environment": {
+      "ANTHROPIC_API_KEY": "<kokoroe-public key>",
+      "KOKOROE_LIVE": "1",
+      "KOKOROE_DAILY_USD": "5",
+      "KOKOROE_SESSION_CALLS": "40",
+      "KOKOROE_IP_CALLS_PER_HOUR": "60",
+      "KOKOROE_GLOBAL_CALLS_PER_DAY": "1500"
+    }
+  }
+}
+```
+`endpoint.json`:
+```json
+{ "containerName": "web", "containerPort": 3000, "healthCheck": { "path": "/", "successCodes": "200-399" } }
+```
+
+The image: `Dockerfile` builds Next.js in `standalone` mode and copies `data/demo/` (the recorded snapshots read at runtime).
+Locally verified 11/3 with the same file layout: home 200, a デモの続き session with 16 rules, 心得帳 export as a zip.
+
+## After deploy — smoke test
+1. Open the Lightsail public URL (HTTPS). The banner 「案は AI の弟子（橙丸）が作り、判断は師匠が行います」 is on every page.
+2. Start お試し, judge one card with △ and a remark → the right panel shows interpretation, then a rule.
+3. 暖簾を継ぐ: ask one preset question → answer with rule id and 沿革.
+4. 心得帳 → 「心得帳を後任に渡す」 downloads a zip.
+5. In the Claude Console, the workspace's usage moved by cents, not dollars.
 
 ## Before going public (checklist)
-- [ ] `KOKOROE_FIELD` unset; `KOKOROE_LIVE=1`; limits set as above.
-- [ ] The UI shows 「案は AI の弟子（橙丸）が作り、判断は師匠が行います」 on every page; the start page explains data handling.
-- [ ] Console spend limit + AWS Budgets alert both in place.
-- [ ] Keep the URL up until the final judging ends (11/10), then disable the key.
-- [ ] D-028: live 帳場 path does not yet run 確かめ稽古 / regression — say so in the README, or add it before 11/6.
+- [ ] `KOKOROE_FIELD` unset; `KOKOROE_LIVE=1`; limits as above.
+- [ ] Console spend limit on `kokoroe-public` + AWS Budgets alert in place.
+- [ ] Scale = 1 node.
+- [ ] D-028: the live 帳場 path does not yet run 確かめ稽古 / regression — stated in the README, or added before 11/6.
+- [ ] Keep the URL up until the final judging ends (11/10), then disable the key and delete the service.
+
+Fallback: ECS Express Mode can run the same image (`docker buildx … --platform linux/amd64`) with one task; keep the task count at 1
+for the same reason (file-based sessions).

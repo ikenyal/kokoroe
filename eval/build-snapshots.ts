@@ -54,9 +54,20 @@ function main() {
 
   const outDir = path.resolve(__dirname, "../data/demo");
   mkdirSync(outDir, { recursive: true });
+  // 〔台帳〕-only rules mirror the current ledger (maintained data, not something the master taught) — refresh their text.
+  // Rules learned from the master's judgments stay exactly as recorded.
+  const syncLedger = (store: StoreFile): StoreFile => ({
+    ...store,
+    rules: store.rules.map((r) => {
+      const pure = r.sources.length > 0 && r.sources.every((x) => x.kind === "ledger");
+      const c = CLIENTS.find((x) => x.id === r.scope.clientId);
+      if (!pure || !c || r.text === c.constraints) return r;
+      return { ...r, text: c.constraints, history: r.history.map((h, i) => (i === 0 ? { ...h, after: c.constraints } : h)) };
+    }),
+  });
   const demo = {
     note: `デモの続き: ${path.basename(values["demo-store"]!)} の心得帳から、学習用 T${String(from).padStart(2, "0")} 以降を続ける（架空データ）`,
-    store: demoStore,
+    store: syncLedger(demoStore),
     queue: queueOf(TRAIN_SCENES.slice(from - 1).map((s) => s.id)),
   };
   const trial = {

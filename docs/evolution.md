@@ -86,4 +86,7 @@ Short summary only. No code or data was produced before kickoff; planning notes 
 - **Interim After with three training paths: 64% (58–70%) vs. Before 48%; ○+△ 92%.** The second round and the scope guard did not
   make runs more alike, but they made them reliably *less wrong*: clearly wrong drafts almost disappeared. The one scene still wrong in
   every run (浜風's spec change) points back at the ledger line 「連絡はメール」 — a written constraint quietly overriding a tacit one.
+- **A loosely written ledger line was the cause of the one scene always wrong.** 「連絡はメール」 for 浜風運輸 made the apprentice
+  refuse a meeting the client would have welcomed. Rewriting the public ledger to 「文書の連絡はメール。打ち合わせは可」 fixed it even
+  for the Before (52.5% → 55%). The explicit half of the knowledge needs as much care as the tacit half.
 

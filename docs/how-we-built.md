@@ -96,3 +96,11 @@ Short entries, appended every work session. Source material for the README secti
   fallback notice; docs/deploy.md lists what Kento must create. Checking Amplify's documented Next.js support (12–15) and its
   per-request compute surfaced a hosting decision (D-032) instead of a late surprise. README (EN + JA) drafted with interim numbers
   clearly marked for replacement on 11/7.
+- **Hosting checked against reality, not assumptions** — Kento corrected the plan (App Runner closed to new customers; Lightsail
+  preferred). Claude rewrote the deploy guide, added a standalone Dockerfile, and noticed Next's file tracing was pulling the whole
+  repo (incl. local session files) into the server bundle; excluded explicitly and re-checked that no `.env*` file is included.
+  The image layout was smoke-tested locally without Docker by assembling the same files and running `server.js`.
+- **A loosely written ledger line, found by evaluation** — the one scene wrong in every run traced back to 「連絡はメール」 in the
+  public ledger; fixed per Kento (hidden data untouched), Before re-measured (55%), both recorded (D-033).
+- **Reproducible demo recording** — `demo/successor-claude-code/run.sh` recreates the successor's Claude Code exactly: empty
+  directory, only the exported skill, `--setting-sources project`, no MCP.
