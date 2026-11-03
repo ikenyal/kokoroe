@@ -116,7 +116,7 @@ const SNAPSHOTS: Record<Mode, string> = {
 const SID = /^[0-9a-f-]{36}$/;
 
 /** D-002 candidate: KOKOROE_STORE=memory keeps each session's kokoroe-chō in a memory store (needs a key). Default: local JSON. */
-export const useMemoryStore = () => process.env.KOKOROE_STORE === "memory" && !!process.env.ANTHROPIC_API_KEY;
+export const memoryStoreEnabled = () => process.env.KOKOROE_STORE === "memory" && !!process.env.ANTHROPIC_API_KEY;
 
 export const liveEnabled = () => process.env.KOKOROE_LIVE === "1" && !!process.env.ANTHROPIC_API_KEY;
 
@@ -169,7 +169,7 @@ export async function startSession(mode: Mode): Promise<void> {
   mkdirSync(path.dirname(f.store), { recursive: true });
   writeFileSync(f.store, JSON.stringify(snap.store, null, 2));
   const meta: SessionMeta = { mode, createdAt: new Date().toISOString(), queue: videoQueue(mode, snap.queue), pos: 0, pending: [] };
-  if (useMemoryStore()) meta.memoryStoreId = await createSeededStore(`kokoroe-${mode}-${sid.slice(0, 8)}`, snap.store);
+  if (memoryStoreEnabled()) meta.memoryStoreId = await createSeededStore(`kokoroe-${mode}-${sid.slice(0, 8)}`, snap.store);
   writeFileSync(f.meta, JSON.stringify(meta, null, 2));
   const opts = { httpOnly: true, sameSite: "lax" as const, secure: process.env.NODE_ENV === "production", path: "/", maxAge: 60 * 60 * 24 };
   jar.set("kokoroe_sid", sid, opts);
