@@ -3,7 +3,8 @@
 <!-- s03 (15 s), three beats timed to the three narration sentences:
      0–4.5 s  the ledger's words move into a veteran's head;
      4.5–9.5 s  51.2% of SMEs have no successor yet — the person leaves and the words fade;
-     9.5–15 s  "書いて残して" — the brush comes down to a blank sheet and stops (one ink dot). -->
+     9.5–15 s  "書いて残して" — the brush comes down and starts to write (「あの方には、」), but the letters come undone on the
+               paper — drifting, tilting, fading — and the brush stops: tacit knowledge that won't take the shape of words. -->
 <style>
   .book { animation: fade .9s ease both, fade-out .8s 4s ease forwards; opacity: 0; }
   .line { position: absolute; writing-mode: vertical-rl; font-size: 26px; line-height: 1; letter-spacing: 4px; animation: dim 1.8s 1.8s ease forwards, fade-out .8s 4s ease forwards; }
@@ -21,10 +22,23 @@
   .ask { position: absolute; left: 372px; top: 190px; writing-mode: vertical-rl; font-size: 40px; letter-spacing: .14em; opacity: 0;
     animation: fade 1s 9.8s ease forwards; }
   .sheet { opacity: 0; animation: fade 1s 9.6s ease forwards; }
-  .brush { animation: brush 1.4s 10.6s ease-in-out both, hesitate .9s 12s ease-in-out both; }
-  @keyframes brush { from { opacity: 0; transform: translate(80px, -150px); } 30% { opacity: 1; } to { opacity: 1; transform: translate(0, -10px); } }
-  @keyframes hesitate { 0% { transform: translate(0, -10px); } 40% { transform: translate(0, -2px); } 100% { transform: translate(-2px, -14px); } }
-  .blot { transform-box: fill-box; transform-origin: center; animation: blot 1.4s 12.4s ease-out both; }
+  /* one path (the brush sits in a group rotated 24°, so moving straight down the column by d is translate(.407d, .914d)) */
+  .brush { animation: brush 4.2s 10.4s both; }
+  @keyframes brush {
+    0%    { opacity: 0; transform: translate(80px, -150px); animation-timing-function: ease-out; }
+    10%   { opacity: 1; }
+    24%   { opacity: 1; transform: translate(0, -2px); }            /* 11.4 s: touches the paper */
+    29%   { transform: translate(0, 0); animation-timing-function: linear; }
+    57%   { transform: translate(72px, 164px); }                    /* 12.8 s: six letters written, tip just below */
+    67%   { transform: translate(72px, 164px); animation-timing-function: ease-in-out; }
+    86%   { transform: translate(130px, 100px); }                   /* lifts off and away to the right, hesitates */
+    100%  { opacity: 1; transform: translate(128px, 104px); } }
+  .blot { transform-box: fill-box; transform-origin: center; animation: blot .8s 11.4s ease-out both; }
+  /* the letters it tries to write: inked one by one, then they come undone */
+  .w { position: absolute; left: 688px; width: 28px; text-align: center; font-size: 26px; line-height: 28px; writing-mode: vertical-rl; color: var(--sumi); opacity: 0;
+    animation: ink .15s var(--a) steps(2, end) forwards, undo 1.4s var(--u) cubic-bezier(.4,0,.6,1) forwards; }
+  @keyframes ink { to { opacity: 1; } }
+  @keyframes undo { to { opacity: .08; transform: translate(var(--x), var(--y)) rotate(var(--r)); filter: blur(2.2px); } }
   @keyframes blot { from { opacity: 0; transform: scale(0); } to { opacity: 1; transform: scale(1); } }
 </style></head>
 <body>
@@ -59,12 +73,22 @@
   <p class="src gothic">出典：帝国データバンク「全国『後継者不在率』動向調査（2025年）」</p>
 </div>
 <p class="ask">「書いて残して」</p>
+<div id="writing"></div>
 <script>
   // Ledger lines (generic etiquette, not any client's); some characters fly into the head, the rest dim.
   const LINES = ["お詫びは顔を見て", "表は窓口、裏に一言", "繁忙の月は避ける", "値の話は親方へ", "書式は先方の型"];
   const X = [496, 446, 396, 286, 236], TOP = 206, STEP = 30;
   const FLY = { 0: [1, 4], 1: [0, 5, 7, 8], 2: [0, 5], 3: [0, 4], 4: [0, 6] };
   const DEST = [[930, 236], [972, 262], [904, 290], [948, 300], [990, 318], [916, 336], [962, 350], [1006, 372], [936, 384], [980, 402], [900, 400], [1010, 236]];
+  // s03 beat 3: the letters the brush writes, and how each one comes undone (fixed values: stills are reproducible)
+  const WRITE = "あの方には、", UNDO = [[-9, 6, -14], [12, 10, 18], [-16, 14, -22], [10, 8, 11], [-6, 16, -26], [14, 12, 20]];
+  [...WRITE].forEach((ch, i) => {
+    const w = document.createElement("div");
+    const [x, y, r] = UNDO[i];
+    w.className = "w"; w.textContent = ch;
+    w.style.cssText = `top:${300 + i * 28}px;--a:${(11.6 + i * 0.2).toFixed(2)}s;--u:${(13.2 + i * 0.09).toFixed(2)}s;--x:${x}px;--y:${y}px;--r:${r}deg`;
+    document.getElementById("writing").appendChild(w);
+  });
   const root = document.getElementById("words");
   let k = 0;
   LINES.forEach((text, i) => {
