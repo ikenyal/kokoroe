@@ -267,4 +267,4 @@ Short entries, appended every work session. Source material for the README secti
   - **Scenes:** s00 and s01 are new; s02 merges v2's two scenes (retimed by script).
   - **Bug found in review:** the stills tool showed the wrong question card. Two pages that differ only by `#…` don't reload, so a
     blank page now goes in between.
-  - **Polly:** about 1,500 billed characters, about $0.025.
+  - **Polly:** 2,864 billed characters, about $0.046 (three passes: the v3 text, then 0.3 s pauses, then the s03 → s04 move).
