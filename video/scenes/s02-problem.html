@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<!-- s02 (v3: the problem and what goes wrong, one scene; 22.7 s). Built from v2's s01-problem and s02-failure, retimed to the
+     narration's sentences (+0.3 s lead):
+     0.3  来年の春、三十年、取引先を見てきた営業部長が、退職します。 → the director from behind; the client ledger fills (2.0 s)
+     6.4  どの取引先に、何を、どう伝えるか。                         → 「誰に」「何を」「どう」
+     10.4 その作法は、部長の頭の中にしかありません。                 → the three words go into his head
+     14.6 後任が、悪い知らせを、決まってからメールで送る。           → (phase B) the week on a line; the mail goes out on Thursday
+     19.1 それだけで、長年の段取りが、崩れます。                     → 浜風運輸's switch-over plan comes apart
+     Clients are the fictional ones of data/world/clients.json. Colors: 墨 and 藍 only (no master in the room). -->
+<style>
+  .pa { animation: fade-out .5s 14.0s ease forwards; }
+  .pb { opacity: 0; animation: fade .3s 14.3s ease forwards; }
+
+  .person .draw { --t: 2.2s; }
+  .who { position: absolute; left: 820px; top: 590px; width: 170px; text-align: center; font-size: 19px; color: var(--nibi); letter-spacing: .08em;
+    opacity: 0; animation: fade .8s 1.6s ease forwards; }
+  .book { opacity: 0; animation: fade .7s 2.0s ease forwards; }
+  
+  .name { position: absolute; top: 186px; writing-mode: vertical-rl; font-size: 25px; letter-spacing: .18em; line-height: 1;
+    clip-path: inset(0 0 100% 0); animation: write .45s var(--d) steps(6, end) forwards; }
+  @keyframes write { to { clip-path: inset(0 0 0 0); } }
+  .q { position: absolute; top: 520px; font-size: 38px; color: var(--ai); letter-spacing: .1em; opacity: 0; transform-origin: center;
+    animation: fade .5s var(--d) ease forwards, into 1.6s var(--m) cubic-bezier(.45,.05,.3,1) forwards; }
+  @keyframes into { to { transform: translate(var(--dx), var(--dy)) scale(.48); } }
+  .ring { opacity: 0; animation: fade 1s 11.9s ease forwards; }
+
+  .axis { position: absolute; left: 110px; top: 156px; width: 520px; }
+  .axis .line { position: absolute; left: 0; right: 0; top: 34px; height: 2px; background: var(--sumi); transform-origin: left; transform: scaleX(0);
+    animation: grow .9s 14.6s ease forwards; }
+  @keyframes grow { to { transform: scaleX(1); } }
+  .day { position: absolute; top: 0; width: 80px; margin-left: -40px; text-align: center; font-size: 22px; opacity: 0; animation: fade .4s var(--d) ease forwards; }
+  .tick { position: absolute; top: 28px; left: 50%; width: 2px; height: 14px; margin-left: -1px; background: var(--sumi); }
+  .ev { position: absolute; top: 58px; width: 170px; margin-left: -85px; text-align: center; font-size: 18px; color: var(--nibi); line-height: 1.4;
+    opacity: 0; animation: fade .5s var(--d) ease forwards; }
+  .gap { position: absolute; top: 31px; height: 8px; border-top: 2px dashed var(--usuzumi); opacity: 0; animation: fade .5s 16.3s ease forwards; }
+  .mail { position: absolute; left: 150px; top: 296px; width: 440px; padding: 18px 22px; background: #faf9f6; border: 1.5px solid var(--sumi);
+    font-size: 19px; line-height: 1.7; opacity: 0; animation: fade .5s 16.8s ease forwards, send 1.0s 17.9s cubic-bezier(.5,0,.6,1) forwards; }
+  .mail .h { font-size: 15px; color: var(--nibi); }
+  @keyframes send { to { transform: translate(600px, 40px) scale(.3); opacity: 0; } }
+  .board { position: absolute; left: 690px; top: 140px; width: 480px; opacity: 0; animation: fade .7s 15.2s ease forwards; }
+  .board h2 { font-size: 21px; font-weight: 600; letter-spacing: .06em; }
+  .board h2 small { font-size: 15px; font-weight: 400; color: var(--nibi); margin-left: 10px; }
+  .grid { position: relative; margin-top: 12px; height: 300px; border-top: 2px solid var(--sumi); border-bottom: 2px solid var(--sumi);
+    background: repeating-linear-gradient(to right, transparent 0 119px, var(--keisen) 119px 120px); }
+  .col { position: absolute; top: 8px; width: 120px; text-align: center; font-size: 16px; color: var(--nibi); }
+  .blk { position: absolute; height: 46px; padding: 10px 12px; font-size: 17px; line-height: 1.5; background: var(--kami-2); border: 1.5px solid var(--ai);
+    color: var(--ai); transform-origin: var(--o, left bottom); animation: fall 1.3s var(--d) cubic-bezier(.55,0,.75,.6) forwards; }
+  @keyframes fall { 30% { transform: rotate(var(--r)); } to { transform: translate(var(--x), var(--y)) rotate(calc(var(--r) * 2.4)); opacity: .25; } }
+  .slot { position: absolute; height: 46px; border: 1.5px dashed var(--usuzumi); opacity: 0; animation: fade .6s var(--d) ease forwards; }
+</style></head>
+<body>
+<p class="corner-note gothic">架空の会社・だいだい工房</p>
+<div class="pa">
+
+<svg width="1280" height="720" viewBox="0 0 1280 720" style="position:absolute;inset:0">
+  <!-- the client ledger, open -->
+  <g class="book">
+    <path d="M150,150 H380 Q390,156 400,150 H630 V500 H400 Q390,506 380,500 H150 Z" fill="#faf9f6" stroke="var(--sumi)" stroke-width="2"/>
+    <path class="ink thin" d="M390,154 V502"/>
+  </g>
+  <!-- the sales director, from behind (head, ears, collar, shoulders, arms) -->
+  <g class="person">
+    <ellipse class="ink draw" pathLength="1" style="--d:.3s" cx="905" cy="250" rx="54" ry="64"/>
+    <path class="ink draw" pathLength="1" style="--d:.7s" d="M851,246 Q842,252 849,266 M959,246 Q968,252 961,266"/>
+    <path class="ink draw" pathLength="1" style="--d:.9s" d="M792,570 Q796,404 862,366 L884,318 Q905,330 926,318 L948,366 Q1014,404 1018,570"/>
+    <path class="ink draw thin" pathLength="1" style="--d:1.4s" d="M880,328 Q905,342 930,328 M905,342 V570 M840,430 Q830,500 834,570 M970,430 Q980,500 976,570"/>
+    <path class="ink draw thin" pathLength="1" style="--d:1.1s" d="M872,301 Q905,314 938,301"/>
+  </g>
+  <ellipse class="ring" cx="905" cy="250" rx="76" ry="86" fill="none" stroke="var(--ai)" stroke-width="1.4" stroke-dasharray="3 7"/>
+</svg>
+<p class="who gothic" style="left:975px;top:160px;width:auto">営業部長</p>
+<div id="names"></div>
+<p class="q" style="left:190px;--d:6.5s;--m:10.6s;--dx:675px;--dy:-338px">誰に</p>
+<p class="q" style="left:330px;--d:7.3s;--m:10.8s;--dx:535px;--dy:-308px">何を</p>
+<p class="q" style="left:470px;--d:8.1s;--m:11.0s;--dx:395px;--dy:-278px">どう</p>
+<script>
+  // Clients from data/world/clients.json (fictional), right → left like a ledger; one column each, written in turn.
+  const NAMES = ["浜風運輸", "白樺製菓", "港北精機", "丸新酒造", "県産業振興財団", "大河原建材", "青葉ドラッグ", "ネクストリンク"];
+  const X = [580, 530, 480, 430, 340, 290, 240, 190];
+  NAMES.forEach((n, i) => {
+    const el = document.createElement("p");
+    el.className = "name"; el.textContent = n;
+    el.style.cssText = `left:${X[i] - 13}px;--d:${(2.3 + i * 0.3).toFixed(2)}s`;
+    document.getElementById("names").appendChild(el);
+  });
+</script>
+</div>
+<div class="pb">
+
+<div class="axis gothic">
+  <div class="line"></div>
+  <div class="gap" style="left:60px;width:330px"></div>
+  <div class="day" style="left:60px;--d:14.8s">月<div class="tick"></div></div>
+  <div class="day" style="left:170px;--d:15.0s">火<div class="tick"></div></div>
+  <div class="day" style="left:280px;--d:15.1s">水<div class="tick"></div></div>
+  <div class="day" style="left:390px;--d:15.2s">木<div class="tick"></div></div>
+  <div class="ev" style="left:60px;--d:15.6s">納期の遅れが<br>分かる</div>
+  <div class="ev" style="left:390px;--d:16.5s;color:var(--sumi)">遅れが決まる<br>→ メールを送る</div>
+</div>
+<div class="mail gothic">
+  <p class="h">差出人：三上（後任）　宛先：浜風運輸 配車課長 様</p>
+  <p>件名：配車システム改修の納期遅れについて</p>
+  <p>本日、納期の変更が決まりましたので…</p>
+</div>
+<div class="board">
+  <h2>浜風運輸の段取り<small>システム切り替えの週</small></h2>
+  <div class="grid gothic">
+    <div class="col" style="left:0">金</div><div class="col" style="left:120px">土</div><div class="col" style="left:240px">日</div><div class="col" style="left:360px">月</div>
+    <div class="slot" style="left:8px;top:52px;width:224px;--d:20.2s"></div>
+    <div class="slot" style="left:128px;top:128px;width:224px;--d:20.8s"></div>
+    <div class="slot" style="left:248px;top:204px;width:224px;--d:21.4s"></div>
+    <div class="blk" style="left:8px;top:52px;width:224px;--d:19.7s;--r:-4deg;--x:-30px;--y:140px">配車の組み直し</div>
+    <div class="blk" style="left:128px;top:128px;width:224px;--d:20.3s;--r:5deg;--x:40px;--y:96px;--o:right bottom">ドライバー説明会</div>
+    <div class="blk" style="left:248px;top:204px;width:224px;--d:20.9s;--r:-6deg;--x:-20px;--y:60px">旧システム停止</div>
+  </div>
+</div>
+
+</div>
+</body></html>

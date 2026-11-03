@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
-<!-- s09 (v2 part 9, the close; 10.5 s, narration 「江戸の商人は、火事になると、商品よりも先に、取引先との帳面を守ったと伝えられています。」 0.3–7.4 s).
+<!-- s09 (v3, the close; 7.4 s, narration 「江戸の商人は、火事のとき、品物より先に、帳面を守ったと伝えられています。」 0.3–6.3 s).
      Was s02 (the opening) in the first cut; v2 moves the Edo story to the end (Kento 11/4) and shortens it: an Edo townscape in line drawing, sparks rising, a ledger carried to a well and sunk into it.
      Told as a tradition ("…と伝えられています"), so the corner note says 言い伝え. -->
 <style>
-  .move { animation: move 2.8s 3.2s ease-in-out both; }
+  .move { animation: move 2.6s 2.2s ease-in-out both; }
   @keyframes move { from { opacity: 0; transform: translate(-430px, 170px); } 18% { opacity: 1; } to { opacity: 1; transform: none; } }
-  .sink { animation: sink 1.5s 6.3s ease-in both; }
+  .sink { animation: sink 1.3s 4.9s ease-in both; }
   @keyframes sink { to { transform: translate(0, 200px); } }
   .spark { fill: var(--kaki); opacity: 0; animation: rise var(--t) var(--d) ease-out 3 both; }
   @keyframes rise { 0% { opacity: 0; transform: none; } 15% { opacity: .9; } 70% { opacity: .5; } 100% { opacity: 0; transform: translate(var(--dx), -230px); } }
@@ -67,8 +67,8 @@
 
   <!-- ripples inside the rim -->
   <g clip-path="url(#in-rim)">
-    <ellipse class="ripple" cx="970" cy="432" rx="80" ry="17" style="--d:7.7s"/>
-    <ellipse class="ripple" cx="970" cy="432" rx="80" ry="17" style="--d:8.2s"/>
+    <ellipse class="ripple" cx="970" cy="432" rx="80" ry="17" style="--d:6.1s"/>
+    <ellipse class="ripple" cx="970" cy="432" rx="80" ry="17" style="--d:6.5s"/>
   </g>
 
   <!-- well: front half of the rim, the 井桁 beams and the wall (drawn over the ledger) -->

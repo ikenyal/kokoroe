@@ -258,3 +258,13 @@ Short entries, appended every work session. Source material for the README secti
   - **One bug:** an AWS CLI list option (`--speech-mark-types`) swallowed the output filename. Found by running the failing call
     by hand.
   - **Recording:** screen scenes now start their session off camera, so each clip opens on its own page. Rough cut: 170.0 s.
+
+- **11/4 — video v3 (D-050).**
+  - **Source:** Claude Code searched the web for a public job-change figure, and read the Statistics Bureau's summary PDF itself
+    instead of trusting news articles. The articles said 331万人 for 2024; the bureau's latest annual figure is 330万人 for 2025.
+  - **Time:** it worked the 3:00 limit as arithmetic from the measured narration. Kento's plan did not count the question cards
+    and the answer line (about +13 s), so it proposed the extra cuts, keeping 帳場 and 暖簾を継ぐ whole.
+  - **Scenes:** s00 and s01 are new; s02 merges v2's two scenes (retimed by script).
+  - **Bug found in review:** the stills tool showed the wrong question card. Two pages that differ only by `#…` don't reload, so a
+    blank page now goes in between.
+  - **Polly:** about 1,500 billed characters, about $0.025.

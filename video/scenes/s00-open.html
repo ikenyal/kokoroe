@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<!-- s00 (v3 cold open, 8 s). On the narration's sentences (+0.3 s lead):
+     0.3  この案、どこが違うか、分かりますか。               → the apprentice's draft for 丸新酒造 (T05, as in the demo) and, at
+                                                           once, the master's 朱 「違う」 — without saying where
+     3.8  答えは、この会社の帳面のどこにも、書かれていません。 → the company's own records appear beside it; none of them has it
+     The answer (a quiet word to the 蔵元) is given in s05 帳場. 朱 only for the master's mark. -->
+<style>
+  .card { position: absolute; left: 150px; top: 230px; width: 560px; padding: 24px 34px 30px; background: #faf9f6; border: 1.5px solid var(--sumi);
+    opacity: 0; animation: fade .4s .1s ease forwards; }
+  .card h2 { font-size: 17px; font-weight: 400; color: var(--nibi); letter-spacing: .06em; }
+  .card dl { display: grid; grid-template-columns: 5.5em 1fr; row-gap: 14px; margin-top: 16px; font-size: 26px; }
+  .card dt { color: var(--nibi); font-size: 20px; padding-top: 5px; }
+  .card dd { margin: 0; }
+  .no { position: absolute; left: 590px; top: 168px; color: var(--shu); font-family: "Klee", "Hiragino Mincho ProN", serif; font-weight: 600; font-size: 72px;
+    transform: rotate(-6deg); clip-path: inset(0 100% 0 0); animation: write .35s 1.3s steps(6, end) forwards; }
+  @keyframes write { to { clip-path: inset(0 0 0 0); } }
+  .docs { position: absolute; left: 800px; top: 222px; width: 340px; }
+  .doc { position: relative; height: 74px; margin-bottom: 18px; padding: 12px 18px; background: #faf9f6; border: 1.5px solid var(--keisen);
+    opacity: 0; animation: fade .4s var(--d) ease forwards; }
+  .doc p { font-size: 21px; letter-spacing: .06em; }
+  .doc small { position: absolute; right: 16px; bottom: 10px; font-size: 15px; color: var(--nibi); opacity: 0; animation: fade .3s calc(var(--d) + .5s) ease forwards; }
+</style></head>
+<body>
+<div class="card">
+  <h2 class="gothic">弟子の案　丸新酒造　新しい提案</h2>
+  <dl>
+    <dt class="gothic">表の連絡</dt><dd>窓口の奥様へ　メール</dd>
+    <dt class="gothic">裏の一言</dt><dd>なし</dd>
+    <dt class="gothic">時期</dt><dd>すぐ</dd>
+  </dl>
+</div>
+<p class="no">違う</p>
+<div class="docs">
+  <div class="doc" style="--d:4.0s"><p>取引先台帳</p><small class="gothic">書かれていない</small></div>
+  <div class="doc" style="--d:4.5s"><p>営業の手引き</p><small class="gothic">書かれていない</small></div>
+  <div class="doc" style="--d:5.0s"><p>引き継ぎメモ</p><small class="gothic">書かれていない</small></div>
+</div>
+</body></html>

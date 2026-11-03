@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<!-- s01 (v3, why now — three forces; 22.3 s). Each force drops onto the stack with its sentence (+0.3 s lead):
+     0.3  中小企業の、半数あまりで、跡継ぎが決まっていません。 → 51.2%  帝国データバンク「全国『後継者不在率』動向調査（2025年）」
+                                                              （調査対象の中小企業）
+     5.1  仕事を変える人は、一年に三百三十万人。               → 330万人  総務省統計局「労働力調査（詳細集計）2025年（令和7年）
+                                                              平均結果」の転職者数
+     9.5  異動も、当たり前です。                              → (added to the same block: 異動も)
+     11.9 そしてAIは、書かれたものしか使えません。             → AI: 書かれたものだけ
+     15.9 頭の中にしかない知恵を、渡せる形にする。 / 20.1 いま、それが必要です。 → the stack dims; the conclusion in ink
+     Numbers are typed from the two public sources above (checked 11/4); no number for job transfers (no clear public figure). -->
+<style>
+  .stack { position: absolute; left: 160px; width: 960px; bottom: 150px; display: flex; flex-direction: column-reverse; gap: 14px;
+    animation: fade-out .6s 15.8s ease forwards; }
+  .blk { position: relative; height: 112px; padding: 16px 28px; background: #faf9f6; border: 1.5px solid var(--sumi); display: grid;
+    grid-template-columns: 1fr auto; align-items: center; opacity: 0; transform: translateY(-70px);
+    animation: drop .55s var(--d) cubic-bezier(.3,.6,.4,1.15) forwards; }
+  @keyframes drop { to { opacity: 1; transform: none; } }
+  .what { font-size: 27px; letter-spacing: .04em; line-height: 1.45; }
+  .what small { display: block; font-size: 15px; color: var(--nibi); letter-spacing: 0; margin-top: 6px; }
+  .num { font-size: 60px; color: var(--ai); font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+  .num.words { font-size: 34px; }
+  .also { color: var(--ai); opacity: 0; animation: fade .4s 9.6s ease forwards; }
+  .end { position: absolute; left: 0; right: 0; top: 270px; text-align: center; font-size: 44px; letter-spacing: .1em; line-height: 1.7;
+    opacity: 0; animation: fade .8s 16.1s ease forwards; }
+  .end .now { display: block; font-size: 40px; color: var(--ai); letter-spacing: .3em; opacity: 0; animation: fade .6s 20.2s ease forwards; }
+</style></head>
+<body>
+<p class="corner-note gothic">なぜ、いま</p>
+<div class="stack">
+  <div class="blk" style="--d:.4s">
+    <p class="what">跡継ぎが決まっていない中小企業<small class="gothic">出典：帝国データバンク「全国『後継者不在率』動向調査（2025年）」、調査対象の中小企業</small></p>
+    <p class="num">51.2%</p>
+  </div>
+  <div class="blk" style="--d:5.2s">
+    <p class="what">1年のあいだに仕事を変えた人<span class="also">　異動も、当たり前に</span><small class="gothic">出典：総務省統計局「労働力調査（詳細集計）2025年平均結果」、転職者数</small></p>
+    <p class="num">330万人</p>
+  </div>
+  <div class="blk" style="--d:12.0s">
+    <p class="what">AIが使える知恵<small class="gothic">頭の中にあるものは、使えない</small></p>
+    <p class="num words">書かれたものだけ</p>
+  </div>
+</div>
+<p class="end">頭の中にしかない知恵を、<br>渡せる形にする。<span class="now">いま</span></p>
+</body></html>

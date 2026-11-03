@@ -551,3 +551,31 @@ not said at the start, and neither was why correcting works. The voices also sou
 - Part 4's last sentence ends at about 1:06. To end it by 1:00, parts 1–3 would need shorter text.
 - s08b's narration must be re-synthesized after the official measurement (docs/final-day.md, goal B).
 
+## D-050 · 2026-11-04 · Accepted (Kento) · Video structure v3: why now, and pull
+
+**Context.** Kento found v2 much better but still flat. It also didn't make the case for why this is needed now.
+
+**Decision** (v3 additions drafted in-period with Claude in chat; narration kept in the repo):
+- **Cold open (8 s):** T05's draft gets the master's 朱 「違う」, with the question 「この案、どこが違うか、分かりますか。」.
+  - 帳場 (s05) answers it: 「冒頭の答えは、蔵元への、裏の一言でした。」, said while the master types 「裏で蔵元に一言」.
+- **Why now (22 s):** three forces are stacked on screen, each with a public source where there is a number.
+  - Successors: 51.2%, 帝国データバンク (of the small and medium firms surveyed).
+  - Job changes: 330万人 in a year, 総務省統計局「労働力調査（詳細集計）2025年平均」転職者数. Job transfers have no clear public
+    figure, so they get words only.
+  - AI can only use what is written.
+  - The narration's first line says 「中小企業の、半数あまりで」; the screen shows the scope (the surveyed firms).
+- **Pull:** two question cards, 「では、部長がいなくなったあと、後任は、答えられるのでしょうか。」 before 暖簾を継ぐ and
+  「直すだけで、本当に、伝わるのでしょうか。」 before why it works.
+- **Time (178.9 s):**
+  - Parts 1 and 2 are merged into one 22.7 s scene. 心得帳 is cut to 8.5 s, and the Edo close to 7.4 + 10.0 s.
+  - 帳場 is not shortened; with the answer added it is longer (22.0 s).
+  - To fit under 3:00, a few further cuts were needed:
+    - 0.3 s pauses in most multi-sentence scenes.
+    - s03 keeps only its first beat. Its second sentence moved onto the red-ink title, which is itself a correction.
+    - The silent reading time after the narration in 暖簾を継ぐ and Skill/MCP went from 11.5 to 10.5 s each. Part 7 as a whole is
+      still longer than in v2, because of the question card.
+
+**Consequences.**
+- The first minute now says why it matters (0:08–0:30) and the problem (0:30–0:53). The solution title comes at about 1:03.
+- There is about 1 s of headroom under 3:00, so any further addition needs a cut elsewhere.
+

@@ -10,16 +10,22 @@ import { chromium } from "playwright";
 
 const ROOT = path.resolve(__dirname, "..");
 const FRAMES: Record<string, number[]> = {
-  "s01-problem": [2.6, 6.8, 11.2, 15.8],
-  "s02-failure": [3.4, 5.0, 8.0, 12.6],
-  "s03-head": [2.6, 3.9, 7.8, 11.0, 13.6, 15.0],
-  "s04-title": [1.8, 3.0, 4.1, 6.8],
-  "s04b-flow": [2.2, 5.2, 8.2, 11.2],
-  "s07b-mcp": [2.6, 6.8, 11.2],
-  "s08-pile": [2.6, 5.0, 8.9, 10.6, 12.4, 15.6],
-  "s09-edo": [2.2, 4.6, 6.8, 9.0],
-  "s09b-end": [3.2, 6.2, 11.8],
+  "s00-open": [1.0, 2.0, 7.6],
+  "s01-why": [3.0, 8.0, 14.0, 17.5, 21.8],
+  "s02-problem": [2.6, 7.6, 12.6, 17.4, 21.8],
+  "s03-head": [1.6, 2.6, 4.2],
+  "s04-title": [2.0, 3.4, 4.5, 6.4, 10.2],
+  "s04b-flow": [2.2, 5.2, 8.2, 10.8],
+  "s06b-ask": [5.0],
+  "s07b-mcp": [2.6, 6.8, 10.2],
+  "s07c-ask": [4.0],
+  "s08-pile": [2.4, 5.2, 7.0, 9.0, 11.6],
+  "s09-edo": [2.0, 4.2, 5.6, 7.2],
+  "s09b-end": [3.2, 5.6, 9.8],
 };
+const PAGES = Object.fromEntries(
+  (JSON.parse(readFileSync(path.join(ROOT, "video/scenes.json"), "utf8")) as { scenes: { id: string; page: string }[] }).scenes.map((s) => [s.id, s.page]),
+);
 const { values } = parseArgs({ options: { only: { type: "string" } } });
 
 (async () => {
@@ -31,7 +37,8 @@ const { values } = parseArgs({ options: { only: { type: "string" } } });
   await page.addInitScript(([m, r]) => Object.assign(window, { MCP: m, RESULTS: r }), [MCP, RESULTS] as const);
   for (const [id, times] of Object.entries(FRAMES)) {
     if (values.only && !values.only.split(",").includes(id)) continue;
-    await page.goto("file://" + path.join(ROOT, "video/scenes", `${id}.html`));
+    await page.goto("about:blank"); // ask.html#noren → ask.html#why would otherwise be a same-page hash change (no reload)
+    await page.goto("file://" + path.join(ROOT, PAGES[id] ?? `video/scenes/${id}.html`)); // ask.html#… pages share one file
     await page.evaluate(() => document.fonts.ready);
     for (const [i, t] of times.entries()) {
       await page.evaluate((ms) => document.getAnimations().forEach((a) => { a.pause(); a.currentTime = ms; }), t * 1000);

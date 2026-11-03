@@ -1,8 +1,9 @@
 # Demo video — built as code
 
-Max 3:00 (aim 2:50–2:55), Japanese. Plan: [scenes.json](scenes.json) — **structure v2** (11/4, after Kento's review of the first
-rough cut: the problem, why it never gets written down, and the solution are all said in the first minute; the Edo story moved to
-the close). 13 scenes, 2:50. Everything is generated here during the hackathon — no outside footage, images or music:
+Max 3:00, Japanese. Plan: [scenes.json](scenes.json) — **structure v3** (11/4). v2 followed Kento's first review: the problem,
+why it never gets written down, and the solution are said in the first minute, and the Edo story closes the video. v3 follows his
+second review: push why it matters now, and give the viewer a reason to keep watching. It adds a cold-open question (answered in
+帳場), the three forces, and two questions between parts. 16 scenes, 2:59. Everything is generated here during the hackathon — no outside footage, images or music:
 - **screen** scenes are recordings of the real app (the features shown were built during the hackathon),
 - **anim** scenes are HTML/CSS pages in [scenes/](scenes/) recorded the same way (explanations only).
 Remotion was not used (separate license terms for company use); Playwright + ffmpeg only.
@@ -15,21 +16,28 @@ npx tsx video/stills.ts                                  # → docs/screens/vide
 video/assemble.sh                                        # → video/out/kokoroe-demo.mp4 (1280×720, 30 fps, H.264/AAC)
 ```
 
-| v2 part | Scene | Kind | Seconds | Narration (spoken) |
+| v3 part | Scene | Kind | Seconds | Narration |
 |---|---|---|---|---|
-| 1 problem | `s01-problem` | anim (new) | 16.8 | 16.0 s |
-| 2 what goes wrong | `s02-failure` | anim (new) | 15.5 | 14.6 s |
-| 3 why it isn't written down | `s03-head` | anim (reworked) | 15.2 | 13.8 s |
-| 4 solution + title | `s04-title`, `s04b-flow` | anim (s04 retimed; flow new) | 7.2 + 11.5 | 4.6 + 10.5 s |
-| 5 帳場 | `s05-choba` | screen | 19.2 | 17.4 s |
-| 6 心得帳 | `s06-kokoroe` | screen | 11.8 | 10.1 s |
-| 7 暖簾を継ぐ | `s07-noren`, `s07b-mcp` | screen + anim | 11.5 + 11.5 | 8.7 + 7.6 s |
-| 8 why it works | `s08-pile`, `s08b-keiko` | anim + screen | 15.8 + 11.5 | 14.9 + 8.9 s |
-| 9 close | `s09-edo`, `s09b-end` | anim | 10.5 + 12 | 7.1 + 9.4 s |
+| Cold open: a question | `s00-open` | anim (new) | 8.0 | 7.3 s |
+| Why now (three forces) | `s01-why` | anim (new) | 22.3 | 21.7 s |
+| The problem and what goes wrong | `s02-problem` | anim (v2's two scenes merged) | 22.7 | 22.0 s |
+| Why it isn't written down | `s03-head` | anim (first beat only) | 4.4 | 3.5 s |
+| Solution and title | `s04-title`, `s04b-flow` | anim | 10.6 + 11.0 | 9.9 + 10.3 s |
+| 帳場 (answers the cold open) | `s05-choba` | screen | 22.0 | 20.9 s |
+| 心得帳 | `s06-kokoroe` | screen | 8.5 | 7.7 s |
+| Question → 暖簾を継ぐ | `s06b-ask`, `s07-noren`, `s07b-mcp` | anim + screen + anim | 5.4 + 10.5 + 10.5 | 4.5 + 5.7 + 7.6 s |
+| Question → why it works | `s07c-ask`, `s08-pile`, `s08b-keiko` | anim + anim + screen | 4.2 + 11.8 + 9.6 | 3.2 + 11.1 + 8.7 s |
+| Close | `s09-edo`, `s09b-end` | anim | 7.4 + 10.0 | 6.0 + 9.0 s |
+
+Sources on screen (s01-why):
+- 51.2%: 帝国データバンク「全国『後継者不在率』動向調査（2025年）」, of the small and medium firms surveyed.
+- 330万人: 総務省統計局「労働力調査（詳細集計）2025年（令和7年）平均結果」, 転職者数 (checked in the bureau's summary PDF on 11/4).
+- Job transfers within a company have no clear public figure, so they get words only.
 
 ## Narration and subtitles
 - Voice (Kento, 11/4, after [the voice trial](../docs/voice-trial-2026-11-04.md)): Amazon Polly **Takumi**, neural, rate 105%,
-  accents fixed with `x-amazon-pron-kana` (`ACCENTS` in [narration.ts](narration.ts)), 0.5 s between sentences. Readings that
+  accents fixed with `x-amazon-pron-kana` (`ACCENTS` in [narration.ts](narration.ts)), 0.5 s between sentences. In v3 most
+  multi-sentence scenes use 0.3 s (`pauseMs`), to stay under 3:00. Readings that
   must not change on screen use `<sub alias>` (`READINGS`). Add a word to `ACCENTS` when it still sounds wrong.
 - Scene seconds come from the narration's real length: each scene = 0.3 s lead + narration + room for the picture.
 - Subtitles switch on Polly's sentence speech marks (`<id>.marks.json`), so they follow the voice.
@@ -38,12 +46,13 @@ video/assemble.sh                                        # → video/out/kokoroe
   after the official measurement.
 - Animations are timed to the sentence starts (written in each scene's header comment).
 - Screen scenes start their session off camera, so each clip opens on its own page.
-- Not in v2: `s01-hook` (the glimpse), `s07-how` (how it works; its points are in s04b-flow and s07b), the 51.2% statistic of the
-  first s03. `scenes/s07-how.html` and `scenes/s09-numbers.html` are kept but unused.
+- Not in the video: `s01-hook` (the glimpse) and `s07-how` (how it works; its points are in s04b-flow and s07b). Also cut, for
+  v3's time: s03's interview-memo and 「違う」 beats. `scenes/s07-how.html` and `scenes/s09-numbers.html` are kept but unused.
+- Text-led cards (`ask.html#…`, `"subtitle": false`) have no subtitle: the question is the picture.
 
 ## Before the final render (11/7–8)
 - [x] Real screens from the production bundle (`.image/`, same as the container) on 127.0.0.1, stopped after shooting — no dev indicator.
-- [x] Structure v2 rough cut with fixed data and the Takumi narration (11/4): 2:50. In fixed mode T13's draft is a recorded one;
+- [x] Structure v3 rough cut with fixed data and the Takumi narration (11/4): 2:59 (v2 was 2:50). In fixed mode T13's draft is a recorded one;
       the causal change (△ on T05 → the quiet word on T13) is shot live on 11/7 (`--live`).
 - [ ] 11/7: re-record the demo snapshot so 心得帳 shows a rule with a multi-entry 沿革 (today every rule in it has one entry).
 - [ ] s08b: the official Before/After (same ledger, 5 training paths) → re-run `narration.ts --yes --only s08b-keiko`; the

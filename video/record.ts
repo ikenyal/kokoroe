@@ -27,6 +27,7 @@ const START: Record<string, "demo" | "trial"> = { "s05-choba": "trial" };
 
 /** Cue start times (s, from the clip's start): Polly's sentence marks + lead, or a share proportional to sentence length. */
 function cueTimes(id: string, cues: string[], seconds: number): { at: number[]; end: number } {
+  if (!cues.length) return { at: [], end: seconds }; // no subtitle (text-led cards: the words are on screen)
   const marks = path.join(__dirname, "out", "audio", VOICE.id, `${id}.marks.json`);
   if (existsSync(marks)) {
     const m = JSON.parse(readFileSync(marks, "utf8")) as { seconds: number; sentences: number[] };
@@ -75,10 +76,11 @@ const STEPS: Record<string, (p: Page, base: string, live: boolean) => Promise<vo
   // お試し with KOKOROE_VIDEO_QUEUE=T05,T13 (video/shoot.ts): △ + one line on T05, then the next similar scene (T13).
   "s05-choba": async (p, _base, live) => {
     const card = p.locator('section[aria-labelledby="card-h"]');
-    await p.waitForTimeout(8300); // read the T05 draft (表: 奥様, 裏: none) while the narration describes it; △ on 「師匠は、△。」
+    await p.waitForTimeout(8000); // read the T05 draft (表: 奥様, 裏: none) while the narration describes it; △ on 「師匠は、△。」
     await card.locator('label:has(input[value="△"])').click();
-    await card.locator('input[name="remark"]').pressSequentially("裏で蔵元に一言", { delay: 110 });
-    await p.waitForTimeout(400);
+    await p.waitForTimeout(1200); // the remark is typed while the narration answers the cold open (「答えは、蔵元への、裏の一言でした。」)
+    await card.locator('input[name="remark"]').pressSequentially("裏で蔵元に一言", { delay: 150 });
+    await p.waitForTimeout(3700);
     await card.locator('button:has-text("で記録する")').click();
     if (live) {
       // The interpreter's readings arrive in the side panel; the master taps the one about the 蔵元, skips "why?", confirms ○.
@@ -95,7 +97,7 @@ const STEPS: Record<string, (p: Page, base: string, live: boolean) => Promise<vo
     await p.mouse.wheel(0, 260);
   },
   "s06-kokoroe": async (p) => {
-    await p.waitForTimeout(2500);
+    await p.waitForTimeout(1600);
     // Open a rule whose 沿革 has more than one entry; otherwise the first rule the master gave a reason for.
     const multi = p.locator("summary", { hasText: /出典と沿革（[2-9]/ });
     const s = (await multi.count()) ? multi.first() : p.locator('p:has-text("わけ")').first().locator("xpath=following::summary[1]");

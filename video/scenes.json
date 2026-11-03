@@ -1,35 +1,160 @@
 {
-  "_note": "Kokoroe demo video, structure v2 (11/4, after Kento's review of the rough cut): problem → why it is never written down → solution and what you get → demo → the successor → why it works (numbers) → close with Edo. Max 3:00 (aim 2:50–2:55), Japanese. kind: screen = recorded from the real app (built during the hackathon); anim = HTML/CSS page in video/scenes/. Narration: spoken-style rewrite of the v2 draft (made in-period with Claude in chat after Kento's review). Scene seconds follow the narration's real length (video/out/audio/Takumi/<id>.marks.json). Numbers only from data/demo/results.json ({interim}/{before}/{after}/{taps} are filled by video/narration.ts), always labelled as fictional data.",
-  "voice": { "id": "Takumi", "engine": "neural", "rate": "105%", "pause": "0.5 s between sentences (0.3 s where a scene is short)", "decided": "Kento 11/4, docs/voice-trial-2026-11-04.md" },
+  "_note": "Kokoroe demo video, structure v3 (11/4; v2 after Kento's first review, v3 after the second: push why it matters now, and add pull). Cold open (a question answered in 帳場) → why now (three forces) → the problem → why it is never written down → solution and title → 帳場 → 心得帳 → a question → 暖簾を継ぐ + Skill/MCP → a question → why it works (numbers) → close with Edo. Max 3:00 (aim 2:50–2:55), Japanese. kind: screen = recorded from the real app (built during the hackathon); anim = HTML/CSS page in video/scenes/. Narration: spoken-style rewrite of the v2 draft (made in-period with Claude in chat after Kento's review). Scene seconds follow the narration's real length (video/out/audio/Takumi/<id>.marks.json). Numbers only from data/demo/results.json ({interim}/{before}/{after}/{taps} are filled by video/narration.ts), always labelled as fictional data.",
+  "voice": {
+    "id": "Takumi",
+    "engine": "neural",
+    "rate": "105%",
+    "pause": "0.5 s between sentences (0.3 s where a scene is short)",
+    "decided": "Kento 11/4, docs/voice-trial-2026-11-04.md"
+  },
   "lead": 0.3,
   "scenes": [
-    { "id": "s01-problem", "kind": "anim", "seconds": 16.8, "page": "video/scenes/s01-problem.html", "part": "1 課題",
-      "narration": "来年の春、営業部長が退職します。三十年、取引先とのやりとりを見てきた人です。どの取引先に、何を、どう伝えるか。その作法は、部長の頭の中にしかありません。" },
-    { "id": "s02-failure", "kind": "anim", "seconds": 15.5, "page": "video/scenes/s02-failure.html", "part": "2 何が起きるか",
-      "narration": "後任が、悪い知らせを、決まってからメールで送ります。それだけで、長年の取引先との段取りが、崩れてしまいます。部長が昔、同じことで叱られたことは、誰も知りません。" },
-    { "id": "s03-head", "kind": "anim", "seconds": 15.2, "page": "video/scenes/s03-head.html", "part": "3 なぜ残らないか",
-      "narration": "書いて残して、と頼んでも、言葉にはなりません。聞き取りをしても、出てくるのは、一般論ばかりです。でも、案を見せられれば、ベテランは一瞬で、「違う」と言えます。" },
-    { "id": "s04-title", "kind": "anim", "seconds": 7.2, "page": "video/scenes/s04-title.html", "part": "4 解決とタイトル",
-      "narration": "ココロエは、その「違う」を集める、AIの弟子です。" },
-    { "id": "s04b-flow", "kind": "anim", "seconds": 11.5, "page": "video/scenes/s04b-flow.html", "part": "4 解決とタイトル（流れ）",
-      "narration": "師匠は、弟子の案に、○△×と、一言だけ。作法は、経緯ごと心得帳に残り、後任へ渡せます。" },
-    { "id": "s05-choba", "kind": "screen", "seconds": 19.2, "page": "/choba", "part": "5 帳場",
+    {
+      "id": "s00-open",
+      "kind": "anim",
+      "seconds": 8.0,
+      "page": "video/scenes/s00-open.html",
+      "part": "0 冒頭の問い",
+      "note": "the card is T05's draft (丸新酒造, nothing to the 蔵元); answered in s05",
+      "narration": "この案、どこが違うか、分かりますか。答えは、この会社の帳面のどこにも、書かれていません。",
+      "pauseMs": 300
+    },
+    {
+      "id": "s01-why",
+      "kind": "anim",
+      "seconds": 22.3,
+      "page": "video/scenes/s01-why.html",
+      "part": "なぜ今か（3つの力）",
+      "source": "帝国データバンク「全国『後継者不在率』動向調査（2025年）」調査対象の中小企業のうち51.2%／総務省統計局「労働力調査（詳細集計）2025年平均結果」転職者数330万人",
+      "narration": "中小企業の、半数あまりで、跡継ぎが決まっていません。仕事を変える人は、一年に三百三十万人。異動も、当たり前です。そしてAIは、書かれたものしか使えません。頭の中にしかない知恵を、渡せる形にする。いま、それが必要です。",
+      "pauseMs": 300
+    },
+    {
+      "id": "s02-problem",
+      "kind": "anim",
+      "seconds": 22.7,
+      "page": "video/scenes/s02-problem.html",
+      "part": "1・2 課題と何が起きるか（統合）",
+      "narration": "来年の春、三十年、取引先を見てきた営業部長が、退職します。どの取引先に、何を、どう伝えるか。その作法は、部長の頭の中にしかありません。後任が、悪い知らせを、決まってからメールで送る。それだけで、長年の段取りが、崩れます。",
+      "pauseMs": 300
+    },
+    {
+      "id": "s03-head",
+      "kind": "anim",
+      "seconds": 4.4,
+      "page": "video/scenes/s03-head.html",
+      "part": "3 なぜ残らないか",
+      "narration": "書いて残して、と頼んでも、言葉にはなりません。"
+    },
+    {
+      "id": "s04-title",
+      "kind": "anim",
+      "seconds": 10.6,
+      "page": "video/scenes/s04-title.html",
+      "part": "4 解決とタイトル",
+      "narration": "でも、案を見せれば、ベテランは一瞬で、「違う」と言えます。ココロエは、その「違う」を集める、AIの弟子です。",
+      "pauseMs": 300
+    },
+    {
+      "id": "s04b-flow",
+      "kind": "anim",
+      "seconds": 11.0,
+      "page": "video/scenes/s04b-flow.html",
+      "part": "4 解決とタイトル（流れ）",
+      "narration": "師匠は、弟子の案に、○△×と、一言だけ。作法は、経緯ごと心得帳に残り、後任へ渡せます。",
+      "pauseMs": 300
+    },
+    {
+      "id": "s05-choba",
+      "kind": "screen",
+      "seconds": 22.0,
+      "page": "/choba",
+      "part": "5 帳場",
       "action": "お試し with KOKOROE_VIDEO_QUEUE=T05,T13: T05 △ + remark → (live) reading chosen → 確かめ ○ → T13 draft now has the quiet word to the 蔵元",
-      "narration": "丸新酒造への、新しい提案です。弟子は、窓口の奥様にだけ送る案を出しました。師匠は、△。次の根回しの場面では、弟子が自分から、蔵元への一言を添えるようになりました。" },
-    { "id": "s06-kokoroe", "kind": "screen", "seconds": 11.8, "page": "/kokoroe", "part": "6 心得帳", "action": "open a rule's 沿革 and sources",
-      "narration": "覚えた作法は、心得帳に残ります。師匠は、いつでも読んで、消せます。いつ、なぜ変わったかも、一緒に。" },
-    { "id": "s07-noren", "kind": "screen", "seconds": 11.5, "page": "/noren", "part": "7 暖簾を継ぐ", "action": "successor asks Q01 (Zoom link?) → answer with rule id + 沿革",
-      "narration": "師匠が、いなくなったあと。後任が、「Zoomで送っていいですか」と聞くと、心得帳が、理由ごと答えます。" },
-    { "id": "s07b-mcp", "kind": "anim", "seconds": 11.5, "page": "video/scenes/s07b-mcp.html", "part": "7 暖簾を継ぐ（Skill／MCP）",
+      "narration": "丸新酒造への、新しい提案です。弟子は、窓口の奥様にだけ送る案を出しました。師匠は、△。冒頭の答えは、蔵元への、裏の一言でした。次の根回しの場面では、弟子が自分から、それを添えるようになりました。",
+      "pauseMs": 300
+    },
+    {
+      "id": "s06-kokoroe",
+      "kind": "screen",
+      "seconds": 8.5,
+      "page": "/kokoroe",
+      "part": "6 心得帳",
+      "action": "open a rule's 沿革 and sources",
+      "narration": "覚えた作法は、変わった理由ごと、心得帳に残ります。師匠は、いつでも読めて、消せます。",
+      "pauseMs": 300
+    },
+    {
+      "id": "s06b-ask",
+      "kind": "anim",
+      "seconds": 5.4,
+      "page": "video/scenes/ask.html#noren",
+      "part": "引き（暖簾の前）",
+      "subtitle": false,
+      "narration": "では、部長がいなくなったあと、後任は、答えられるのでしょうか。"
+    },
+    {
+      "id": "s07-noren",
+      "kind": "screen",
+      "seconds": 10.5,
+      "page": "/noren",
+      "part": "7 暖簾を継ぐ",
+      "action": "successor asks Q01 (Zoom link?) → answer with rule id + 沿革",
+      "narration": "後任が、「Zoomで送っていいですか」と聞くと、心得帳が、理由ごと答えます。"
+    },
+    {
+      "id": "s07b-mcp",
+      "kind": "anim",
+      "seconds": 10.5,
+      "page": "video/scenes/s07b-mcp.html",
+      "part": "7 暖簾を継ぐ（Skill／MCP）",
       "narration": "心得帳は、手元のClaudeにも渡せます。育ち続ける心得帳に、問い合わせることもできます。",
-      "note": "answers from demo/successor-mcp/answers.json (record-answers.sh, empty dirs outside the repo)" },
-    { "id": "s08-pile", "kind": "anim", "seconds": 15.8, "page": "video/scenes/s08-pile.html", "part": "8 なぜ効くか",
-      "narration": "なぜ、直すだけで伝わるのでしょう。AIは、平均的な答えを出すのが得意です。ベテランの知恵は、その平均との、ずれにあります。だから、ずれだけを集めればいい。" },
-    { "id": "s08b-keiko", "kind": "screen", "seconds": 11.5, "page": "/keiko", "part": "8 なぜ効くか（数字）", "action": "稽古の記録: Before/After (reads data/demo/results.json; interim until 11/7)",
-      "narration": "{interim}台帳だけの弟子は、{before}%。師匠の{taps}回の確認で、{after}%に。" },
-    { "id": "s09-edo", "kind": "anim", "seconds": 10.5, "page": "video/scenes/s09-edo.html", "part": "9 締め",
-      "narration": "江戸の商人は、火事になると、商品よりも先に、取引先との帳面を守ったと伝えられています。" },
-    { "id": "s09b-end", "kind": "anim", "seconds": 12, "page": "video/scenes/s09b-end.html", "part": "9 締め（エンドカード）",
-      "narration": "いま守るべき帳面は、人の頭の中にあります。ココロエ。直すだけで、心得は、次の代へ。" }
+      "note": "answers from demo/successor-mcp/answers.json (record-answers.sh, empty dirs outside the repo)"
+    },
+    {
+      "id": "s07c-ask",
+      "kind": "anim",
+      "seconds": 4.2,
+      "page": "video/scenes/ask.html#why",
+      "part": "引き（なぜ効くかの前）",
+      "subtitle": false,
+      "narration": "直すだけで、本当に、伝わるのでしょうか。"
+    },
+    {
+      "id": "s08-pile",
+      "kind": "anim",
+      "seconds": 11.8,
+      "page": "video/scenes/s08-pile.html",
+      "part": "8 なぜ効くか",
+      "narration": "AIは、平均的な答えを出すのが得意です。ベテランの知恵は、その平均との、ずれにあります。だから、ずれだけを集めればいい。",
+      "pauseMs": 300
+    },
+    {
+      "id": "s08b-keiko",
+      "kind": "screen",
+      "seconds": 9.6,
+      "page": "/keiko",
+      "part": "8 なぜ効くか（数字）",
+      "action": "稽古の記録: Before/After (reads data/demo/results.json; interim until 11/7)",
+      "narration": "{interim}台帳だけの弟子は、{before}%。師匠の{taps}回の確認で、{after}%に。",
+      "pauseMs": 300
+    },
+    {
+      "id": "s09-edo",
+      "kind": "anim",
+      "seconds": 7.4,
+      "page": "video/scenes/s09-edo.html",
+      "part": "9 締め",
+      "narration": "江戸の商人は、火事のとき、品物より先に、帳面を守ったと伝えられています。"
+    },
+    {
+      "id": "s09b-end",
+      "kind": "anim",
+      "seconds": 10.0,
+      "page": "video/scenes/s09b-end.html",
+      "part": "9 締め（エンドカード）",
+      "narration": "いま守るべき帳面は、人の頭の中にあります。ココロエ。直すだけで、心得は、次の代へ。",
+      "pauseMs": 300
+    }
   ]
 }
