@@ -5,6 +5,10 @@
 > **Draft.** Numbers marked _(interim)_ are from 2026-11-03 and will be replaced on 11/7 by the official run (5 training paths).
 > All companies, people and situations are fictional (株式会社だいだい工房 and its 10 clients).
 
+**Words used below:** the *kokoroe-chō* (心得帳) is the book of client-by-client etiquette the apprentice learns into;
+each entry keeps its *沿革* (history: old → new, the trigger, the master's words, the date). The *帳場* is the master's desk
+(the review screen), and *暖簾を継ぐ* ("taking over the shop curtain") is the successor's screen.
+
 ## The problem
 
 In a small Japanese company, how to deal with each client lives in one veteran's head: whom to tell first, what to send by mail and
@@ -23,11 +27,14 @@ away from family succession.
   When the remark is ambiguous, the master taps one of 2–3 readings — or "none of these".
 - **Corrections become the kokoroe-chō.** Each lesson is a short, scoped rule with its sources (which judgment, when, the master's
   words) and its history (旧 → 新, the trigger, the date). The master can read and delete every entry.
-- **It checks itself.** After each new rule it re-solves the corrected scene and earlier ○ scenes; if the corrected scene still gets
-  △/× and the new draft does not even follow the new rule, the rule is re-read once and checked again; if it still does not take,
-  it is withdrawn (not adopted) and 「確かめで外れたため取り下げ」 is recorded in its 沿革. (If the draft does follow the rule,
-  the rest of the △/× is learned as a separate rule.) If a re-solved earlier ○ scene now gets △/×, the rule is
-  narrowed once; if it still breaks, it is rolled back (差し戻し), also recorded. In the training loop, habits seen at several clients are also proposed as company-wide rules for the master to confirm (not yet in the 帳場 screen).
+- **It checks itself.** After each new rule, the apprentice re-solves the corrected scene and earlier ○ scenes, and the master marks
+  the new drafts:
+  - *The corrected scene still gets △/× and the draft does not follow the new rule:* the rule is re-read once and checked again.
+    If it still does not take, it is withdrawn (not adopted), recorded in its 沿革 as 「確かめで外れたため取り下げ」.
+  - *The draft follows the rule but still gets △/×:* the rule stays, and the rest is learned as a separate rule.
+  - *An earlier ○ scene now gets △/×:* the rule is narrowed once; if it still breaks, it is rolled back (差し戻し), also recorded.
+  - In the training loop, habits seen at several clients are also proposed as company-wide rules for the master to confirm
+    (not yet in the 帳場).
 - **The successor inherits it.** 暖簾を継ぐ: the successor asks "can I skip this?" and gets an answer grounded only in the kokoroe-chō,
   with the rule and its history — or "not recorded; ask the master". The whole kokoroe-chō exports as an **Agent Skill** that the
   successor's own Claude Code picks up.
@@ -41,10 +48,12 @@ away from family succession.
   the successor already working — the successor's Claude asks `changes_since(<moment of the copy>)` and sees what changed after
   the copy. Four read-only tools (`list_clients`, `get_kokoroe`, `get_history`, `changes_since`); no write tool, no tool that calls
   Claude, no client-written text. Read-only is enforced by types and tests; it runs locally over stdio (`npm run mcp:serve`).
-  Example ([demo/successor-mcp](demo/successor-mcp/)): asked whether a phone call to 丸新酒造 is enough for a one-week delay, the
-  Skill alone answers from the copy: tell the 蔵元 first (K-011), and it leaves "is a phone call enough?" to the master because
-  the copy has nothing on it. With the server it finds K-018, learned after the copy ("bad news: go to the brewery in person"),
-  and answers: a call is not enough — visit the brewery.
+  Example ([demo/successor-mcp](demo/successor-mcp/)) — *"A shipment to 丸新酒造 will be a week late. Is a phone call to the
+  owner's wife enough?"*
+  - **Skill only:** answers from the copy — tell the 蔵元 (the brewery owner) first (K-011). Whether a call is enough is not in the
+    copy, so it says to ask the master.
+  - **Skill + server:** finds K-018, learned after the copy ("bad news: don't settle it by phone — go to the brewery and say it in
+    person"), and answers: a call is not enough; visit the brewery.
 
 ## Try it
 
@@ -93,10 +102,11 @@ Built in one week by one person with Claude Code at the center (full log: [docs/
 
 - **Evaluation first.** Day 1 began with a machine-checkable master simulator, a frozen hidden ground truth (a hook blocks edits,
   a test checks checksums), and a test that product code never reads it.
-- **Hooks as guardrails.** MCP calls blocked in this repo; secret scan before every commit; edits to core/prompt code run the fast tests
-  at once and block the commit until a small API eval has run.
-- **Subagents.** the `world-keeper` definition (run as general-purpose subagents) wrote the 40 training scenes in parallel; `hitl-reviewer` reviewed the UI and found three blocking bugs
-  (a master's choice never applied, a rule written without a tap, lost updates) before they shipped.
+- **Hooks as guardrails.** MCP calls are blocked in this repo; a secret scan runs before every commit; editing core or prompt code
+  runs the fast tests at once and blocks the commit until a small API eval has run.
+- **Subagents.** Subagents following the `world-keeper` definition (run as general-purpose) wrote the 40 training scenes in
+  parallel. `hitl-reviewer` reviewed the UI and found three blocking bugs before they shipped: a master's choice never applied,
+  a rule written without a tap, and lost updates.
 - **Skills.** `world-consistency` and `decision-log` for this repo; the product itself exports Agent Skills.
 - **Measured, not assumed.** Every change was measured on the held-out set with repeated runs; prompt caching was A/B-tested
   (−37% cost, verdicts unchanged); the Before was re-measured and replaced when the prompt layout changed.
