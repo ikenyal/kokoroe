@@ -60,8 +60,8 @@ export const ACCENTS: [string, string][] = [
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 type Step = "a" | "b" | "c" | "d";
-export function trialSsml(text: string, step: Step): string {
-  const accents = step === "d" ? ACCENTS : [];
+/** Text → SSML body: accents (pron-kana) first, then the <sub> readings, then escaped characters. */
+function body(text: string, accents: [string, string][]): string {
   let out = "";
   for (let i = 0; i < text.length; ) {
     const acc = accents.find(([w]) => text.startsWith(w, i));
@@ -77,9 +77,29 @@ export function trialSsml(text: string, step: Step): string {
       i++;
     }
   }
-  if (step === "a" || step === "b") return `<speak>${out.replace(/。/g, '。<break time="300ms"/>')}</speak>`; // as narration.ts
+  return out;
+}
+
+/** Round 2: accents on, a given rate (%) and a pause (ms) between sentences. */
+export function tunedSsml(text: string, rate: number, breakMs: number, accents = ACCENTS): string {
+  return `<speak><prosody rate="${rate}%">${body(text, accents).replace(/。(?!$)/g, `。<break time="${breakMs}ms"/>`)}</prosody></speak>`;
+}
+
+export function trialSsml(text: string, step: Step): string {
+  if (step === "a" || step === "b") return `<speak>${body(text, []).replace(/。/g, '。<break time="300ms"/>')}</speak>`; // as narration.ts
   // c, d: slower, and a longer pause between sentences (the prosody wraps whole sentences, as generative requires)
-  return `<speak><prosody rate="90%">${out.replace(/。(?!$)/g, '。<break time="500ms"/>')}</prosody></speak>`;
+  return tunedSsml(text, 90, 500, step === "d" ? ACCENTS : []);
+}
+
+/** Round 2 (11/4, Kento chose Takumi + accents, a little faster): rate × pause, on the spoken text (b). */
+export const ROUND2 = { voice: "Takumi", rates: [100, 105, 110], breaks: [500, 300] };
+
+/** Accent position from a pron-kana string: the mora after which the pitch falls (0 = flat). */
+export function accentOf(ph: string): { reading: string; morae: number; position: number } {
+  const mora = (s: string) => s.replace(/[ャュョァィゥェォ]/g, "").length;
+  const at = ph.indexOf("'");
+  const reading = ph.replace("'", "");
+  return { reading, morae: mora(reading), position: at < 0 ? 0 : mora(ph.slice(0, at)) };
 }
 
 /** Probe: each pair differs only in one tag. Same audio ⇒ the tag had no effect. */
@@ -106,8 +126,9 @@ function polly(voice: string, engine: string, ssml: string, file: string, format
 }
 
 function main() {
-  const { values } = parseArgs({ options: { yes: { type: "boolean", default: false }, voices: { type: "string", default: "Tomoko:neural,Takumi:neural" } } });
+  const { values } = parseArgs({ options: { yes: { type: "boolean", default: false }, round2: { type: "boolean", default: false }, voices: { type: "string", default: "Tomoko:neural,Takumi:neural" } } });
   const voices = values.voices!.split(",").map((v) => { const [id, engine] = v.split(":"); return { id, engine }; });
+  if (values.round2) return round2(values.yes!);
   const scenes = PASSAGES;
   const textOf = (id: string, step: Step) => { const p = PASSAGES.find((x) => x.id === id)!; return step === "a" ? p.a : p.b; };
 
@@ -158,6 +179,24 @@ function main() {
   }
   writeFileSync(path.join(OUT, "results.json"), JSON.stringify({ scenes: Object.fromEntries(scenes.map((s) => [s.id, s.seconds])), results }, null, 2));
   console.log(`→ ${path.relative(process.cwd(), path.join(OUT, "results.json"))}`);
+}
+
+function round2(yes: boolean) {
+  const runs = PASSAGES.flatMap((p) => ROUND2.rates.flatMap((rate) => ROUND2.breaks.map((ms) => ({ p, rate, ms, ssml: tunedSsml(p.b, rate, ms) }))));
+  const chars = runs.reduce((n, r) => n + billedChars(r.ssml), 0);
+  for (const r of runs.slice(0, 1)) console.log(r.ssml);
+  console.log(`${runs.length} files (${ROUND2.voice}, neural): ${chars} billed characters ≈ $${((chars / 1e6) * USD_PER_M.neural).toFixed(4)}`);
+  if (!yes) return console.log("Not called. Add --yes to synthesize.");
+  const dir = path.join(OUT, "round2");
+  mkdirSync(dir, { recursive: true });
+  const durations: Record<string, number> = {};
+  for (const r of runs) {
+    const name = `${r.p.id}-r${r.rate}-b${r.ms}`, file = path.join(dir, `${name}.mp3`);
+    polly(ROUND2.voice, "neural", r.ssml, file, "mp3");
+    durations[name] = Number(execFileSync("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", file]).toString());
+    console.log(`${name} ${durations[name].toFixed(2)} s / ${r.p.seconds} s`);
+  }
+  writeFileSync(path.join(dir, "results.json"), JSON.stringify({ voice: ROUND2.voice, durations }, null, 2));
 }
 
 if (require.main === module) main();
