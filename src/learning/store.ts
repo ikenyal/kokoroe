@@ -19,6 +19,16 @@ export interface KokoroeStore {
   listJudgments(): Promise<JudgmentRecord[]>;
 }
 
+/**
+ * New 沿革 entries (not already stored) get the save time (changes_since, D-042). Matched by content, not position, so a stale save
+ * can't leave a new entry unstamped. A "why" recorded later edits the last entry in place and keeps its time. Shared by all stores.
+ */
+export function stampNewEntries(stored: KokoroeRule["history"], next: KokoroeRule["history"], at = new Date().toISOString()) {
+  const key = (h: KokoroeRule["history"][number]) => `${h.date}|${h.judgmentId}|${h.before}|${h.after}`;
+  const known = new Set(stored.map(key));
+  return next.map((h) => (!h.at && !known.has(key(h)) ? { ...h, at } : h));
+}
+
 export function applies(rule: KokoroeRule, clientId: string, sceneType: SceneType): boolean {
   if (rule.status !== "active") return false;
   if (rule.scope.clientId !== null && rule.scope.clientId !== clientId) return false;
@@ -79,12 +89,7 @@ export class LocalJsonStore implements KokoroeStore {
     this.mutate((d) => {
       const i = d.rules.findIndex((x) => x.id === rule.id);
       const next = structuredClone(rule);
-      // New 沿革 entries (not already stored) get the save time (changes_since, D-042). Matched by content, not position, so a
-      // stale save can't leave a new entry unstamped. A "why" recorded later edits the last entry in place and keeps its time.
-      const key = (h: KokoroeRule["history"][number]) => `${h.date}|${h.judgmentId}|${h.before}|${h.after}`;
-      const stored = new Set(i >= 0 ? d.rules[i].history.map(key) : []);
-      const at = new Date().toISOString();
-      next.history = next.history.map((h) => (!h.at && !stored.has(key(h)) ? { ...h, at } : h));
+      next.history = stampNewEntries(i >= 0 ? d.rules[i].history : [], next.history);
       if (i >= 0) d.rules[i] = next;
       else d.rules.push(next);
     });

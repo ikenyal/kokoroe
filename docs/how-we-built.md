@@ -157,3 +157,8 @@ Short entries, appended every work session. Source material for the README secti
   because the server surfaced a rule learned after the copy. The SDK API was read from the installed package's README and types.
   hitl-reviewer found no blockers and five smaller issues, fixed before committing; one fix first tripped the hidden-data boundary
   test (the guard named the path), so it now checks the store's content instead.
+- **Preparing a decision instead of taking it** — for D-002 Claude built the memory-store adapter behind the existing store
+  interface (flag-switchable, default unchanged), proved parity with a fake API in a test, then measured the real API with the
+  same operations (no model tokens) and laid the evidence out under D-002 with one recommendation; the decision itself waits for
+  Kento. The official docs (via the claude-api skill) settled the workspace question: memory stores are
+  workspace-scoped, so anything shared in public must be created with the public workspace's key.

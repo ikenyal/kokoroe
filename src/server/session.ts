@@ -10,7 +10,9 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, wri
 import path from "node:path";
 import { cookies } from "next/headers";
 import type { Proposal, Scene } from "@/src/core/types";
-import { LocalJsonStore } from "@/src/learning/store";
+import { LocalJsonStore, type KokoroeStore } from "@/src/learning/store";
+import { createSeededStore, MemoryStoreKokoroe } from "@/src/learning/memory-store";
+import { getClaude } from "@/src/lib/claude";
 import type { Candidate, JudgmentRecord, KokoroeRule } from "@/src/learning/types";
 
 export type Mode = "demo" | "trial" | "field"; // field = 実地テスト (the author as the master, timings recorded)
@@ -96,6 +98,7 @@ export interface SessionMeta {
   queue: QueueItem[];
   pos: number; // next queue index
   pending: Pending[];
+  memoryStoreId?: string; // KOKOROE_STORE=memory: this session's kokoroe-chō lives in a Managed Agents memory store (D-002)
 }
 
 export interface Snapshot {
@@ -111,6 +114,9 @@ const SNAPSHOTS: Record<Mode, string> = {
   field: path.join(process.cwd(), "data", "demo", "field-snapshot.json"),
 };
 const SID = /^[0-9a-f-]{36}$/;
+
+/** D-002 candidate: KOKOROE_STORE=memory keeps each session's kokoroe-chō in a memory store (needs a key). Default: local JSON. */
+export const useMemoryStore = () => process.env.KOKOROE_STORE === "memory" && !!process.env.ANTHROPIC_API_KEY;
 
 export const liveEnabled = () => process.env.KOKOROE_LIVE === "1" && !!process.env.ANTHROPIC_API_KEY;
 
@@ -128,8 +134,18 @@ function sweep(previousSid?: string) {
   for (const f of readdirSync(dir)) {
     const full = path.join(dir, f);
     const stale = Date.now() - statSync(full).mtimeMs > RETAIN_MS;
-    if (stale || (previousSid && f.includes(previousSid))) rmSync(full, { force: true });
+    if (!(stale || (previousSid && f.includes(previousSid)))) continue;
+    if (f.endsWith(".meta.json")) deleteMemoryStore(full);
+    rmSync(full, { force: true });
   }
+}
+
+/** Best effort: a swept session's memory store goes with it (KOKOROE_STORE=memory). Failures only log. */
+function deleteMemoryStore(metaFile: string) {
+  try {
+    const id = (JSON.parse(readFileSync(metaFile, "utf8")) as SessionMeta).memoryStoreId;
+    if (id) getClaude().beta.memoryStores.delete(id).catch((e) => console.error("memory store cleanup failed", id, e?.status));
+  } catch {}
 }
 
 /**
@@ -153,6 +169,7 @@ export async function startSession(mode: Mode): Promise<void> {
   mkdirSync(path.dirname(f.store), { recursive: true });
   writeFileSync(f.store, JSON.stringify(snap.store, null, 2));
   const meta: SessionMeta = { mode, createdAt: new Date().toISOString(), queue: videoQueue(mode, snap.queue), pos: 0, pending: [] };
+  if (useMemoryStore()) meta.memoryStoreId = await createSeededStore(`kokoroe-${mode}-${sid.slice(0, 8)}`, snap.store);
   writeFileSync(f.meta, JSON.stringify(meta, null, 2));
   const opts = { httpOnly: true, sameSite: "lax" as const, secure: process.env.NODE_ENV === "production", path: "/", maxAge: 60 * 60 * 24 };
   jar.set("kokoroe_sid", sid, opts);
@@ -162,7 +179,7 @@ export async function startSession(mode: Mode): Promise<void> {
 export interface Session {
   sid: string;
   mode: Mode;
-  store: LocalJsonStore;
+  store: KokoroeStore;
   meta: SessionMeta;
   saveMeta(m: SessionMeta): void;
 }
@@ -183,7 +200,7 @@ export function openSession(mode: Mode, sid: string): Session | null {
   return {
     sid,
     mode,
-    store: new LocalJsonStore(f.store),
+    store: meta.memoryStoreId ? new MemoryStoreKokoroe(meta.memoryStoreId) : new LocalJsonStore(f.store),
     meta,
     saveMeta: (m) => writeFileSync(f.meta, JSON.stringify(m, null, 2)),
   };

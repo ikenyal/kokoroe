@@ -14,6 +14,31 @@ kokoroe-chō use **Managed Agents** with a memory store (Opus 5.5, async).
 versioned store. **To verify:** session latency in today's spike.
 **Alternative:** Messages API only (simpler, but loses the persisted, auditable memory store) — kept as the fallback.
 
+### D-002 — material for the decision (2026-11-03, prepared before the decision)
+**What exists now:** `src/learning/memory-store.ts` implements the same `KokoroeStore` interface on a Managed Agents memory store
+(one JSON file per rule under `/rules/` with its 沿革 in the body, one per judgment under `/judgments/`; writes with the
+`content_sha256` precondition, one retry on 409). `KOKOROE_STORE=memory` makes each 帳場 session create and seed its own store
+(deleted when the session is swept); **the default stays local JSON**, and evaluation always uses local JSON. A parity test runs
+the same operations on both stores (fake API, no network).
+
+| | Local JSON (now) | Memory store (`KOKOROE_STORE=memory`) |
+|---|---|---|
+| Speed (measured, `spikes/managed-agents/adapter-check.ts`) | ~0–2 ms per call | start a session (16 rules + 27 judgments): **2.1 s**; listRules / rulesFor ~0.23–0.25 s; addJudgment 0.73 s; saveRule ~0.5 s. A draft gets +0.25 s on ~5 s; background learning +2–3 s on ~13 s |
+| Model cost | none | none (memory-store calls use no tokens). **Storage pricing not confirmed** — check before enabling in public |
+| 沿革 | in the rule body (+ Git/Skill export) | the same body **plus automatic memory versions** per save (created/modified, who: API key or session, when; redactable) — checked: 2 versions for an add + revise |
+| Survives a redeploy | no (container `/tmp`) | yes (stored at Anthropic) |
+| Several server nodes | no (file per node) | yes (shared, with optimistic concurrency) |
+| Workspace | — | **workspace-scoped** (official docs: "a workspace-scoped collection"). A store created with the development key (`kokoroe-hackathon`) is invisible to the `kokoroe-public` key. In public, the server creates stores with the public key itself, so per-session stores work; any shared or pre-seeded store (e.g. one company kokoroe-chō for the successor demo) must be created **with the kokoroe-public key** |
+| Risk before 11/8 | none | beta API in the path of every 帳場 step; per-visitor stores to clean up; judges' Quickstart needs a key for the store |
+| What "Managed Agents" adds | — | only storage today. The real Managed Agents value would be **sessions that mount the store**: a compiler agent `read_write`, a successor agent `read_only` (the same boundary as the MCP server, D-042). Our interpreter is one structured call, so an agent loop adds latency without new capability |
+
+**Recommendation (one):** keep **local JSON as the default for the demo and all evaluation**, ship the memory-store adapter as a
+tested, flag-switchable option, and state it plainly (s07 "保存先" slot: local JSON, switchable to a Managed Agents memory store).
+Do not move the apprentice or interpreter into Managed Agents sessions before 11/8. Reason: within the demo's lifetime the gains
+(redeploy survival, multi-node, versions) don't show, while the 2 s session start and a beta dependency sit on the critical path;
+the 沿革 is already carried in the rule body and exported. The case that would change this is a
+session-mounted successor agent with the store `read_only`.
+
 ## D-003 · 2026-11-03 · Accepted · No MCP tools during development
 A PreToolUse hook (`mcp__.*`) blocks every MCP call in this repo.
 **Why:** the developer's Claude Code has work-related MCP connectors; this repo is public and hackathon materials are not confidential.
