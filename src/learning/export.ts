@@ -17,7 +17,7 @@ export function assertSkillName(name: string): void {
 const src = (s: RuleSource) =>
   s.kind === "ledger" ? `${s.date} 取引先台帳` : `${s.date} 師匠の判定 ${s.verdict}「${s.remark || "一言なし"}」（${s.sceneId}）`;
 
-function ruleBlock(r: KokoroeRule): string {
+export function ruleBlock(r: KokoroeRule): string {
   const origin = r.sources.some((s) => s.kind === "ledger") ? (r.sources.some((s) => s.kind !== "ledger") ? "台帳＋師匠" : "台帳") : "師匠";
   const lines = [`### ${r.id} ${r.text}`];
   if (r.when) lines.push(`- 条件: ${r.when}`);
@@ -52,6 +52,9 @@ export function exportSkill(rules: KokoroeRule[], clients: Client[], company: { 
     index.push(`| ${c.name} | ${c.industry} | ${c.contact} → ${c.decider} | [${file}](${file}) |`);
     files[file] = `# ${c.name}の心得\n\n業界: ${c.industry}　窓口: ${c.contact}　決裁: ${c.decider}　取引${c.relationshipYears}年\n\n${rs.map(ruleBlock).join("\n\n")}\n`;
   }
+  // The Skill is a copy at one moment; say which moment, so a connected MCP server can be asked what changed since (D-042).
+  const asOf =
+    rules.flatMap((r) => r.history.map((h) => h.at ?? `${h.date}T00:00:00+09:00`)).sort((a, b) => Date.parse(a) - Date.parse(b)).at(-1) ?? "記録なし";
   const description =
     `${company.name}（架空）の取引先ごとの付き合い方の作法と、その沿革（なぜそうなったか）。` +
     `${company.name}の取引先に連絡・相談・見積り・あいさつなどをするとき、またはその取引先について「この手順は省いていいか」「なぜこうするのか」を判断するときに使う。`;
@@ -63,12 +66,14 @@ description: ${description}
 # 心得帳 — ${company.name}
 
 師匠（${company.master.name}）のダメ出しから覚えた、取引先ごとの作法です。各項目に沿革（旧 → 新・きっかけ・日付）と出典があります。
+この写しの時点: ${asOf}
 
 ## 使い方
 1. 相手の取引先のファイル（下の表）だけを読む。全社の作法はこのファイルの下にある。
 2. 作法に従って答える。答えには、根拠の項目 ID と、沿革に書かれた「わけ」を添える。
 3. 心得帳に書かれていないことは推測しない。「心得帳には記録がない。師匠（または前任者）に確認を」と答える。
 4. 値引き・契約条件は自分で決めない。必ず人が判断する。
+5. kokoroe の MCP サーバー（読み取り専用）がつながっていれば、答える前に changes_since で「この写しの時点」以降の変化を確かめる。statusNow が「有効」の心得だけに従い、廃止・差し戻しになったものは沿革として読むだけにする。
 
 ## 取引先
 | 取引先 | 業界 | 窓口 → 決裁 | ファイル |

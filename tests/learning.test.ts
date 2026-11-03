@@ -420,3 +420,22 @@ describe("LocalJsonStore with concurrent instances (HITL review #3)", () => {
     expect((await a.listRules()).map((r) => r.id)).toEqual(["K-001"]);
   });
 });
+
+describe("store stamps new 沿革 entries with the save time (changes_since, D-042)", () => {
+  it("stamps only entries added since the last save; older entries keep what they had", async () => {
+    const { LocalJsonStore } = await import("@/src/learning/store");
+    const s = new LocalJsonStore(null);
+    const entry = (after: string) => ({ date: "2026-11-03", before: null, after, trigger: null, judgmentId: "J-1", masterWords: "", reason: "" });
+    const rule = { id: "K-001", scope: { clientId: null, sceneTypes: null }, text: "a", when: null, status: "active" as const, confidence: "low" as const, sources: [], history: [entry("a")] };
+    await s.saveRule(rule);
+    const first = (await s.getRule("K-001"))!.history[0].at;
+    expect(first).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+    const again = (await s.getRule("K-001"))!;
+    again.history.push(entry("b"));
+    await new Promise((r) => setTimeout(r, 5));
+    await s.saveRule(again);
+    const h = (await s.getRule("K-001"))!.history;
+    expect(h[0].at).toBe(first);
+    expect(Date.parse(h[1].at!)).toBeGreaterThan(Date.parse(first!));
+  });
+});

@@ -346,3 +346,22 @@ after corrections, history answers, adversarial cases). The comparison with writ
 the 11/6 field test (D-031): Kento's time to write the etiquette as prose for 5 scenes vs. the time to mark ○△× (with a one-liner)
 on the same scenes, and how many distinct pieces of etiquette each produced. It is reported as one person's measurement, not as a
 general result.
+
+## D-042 · 2026-11-03 · Accepted · Read-only MCP server for the living kokoroe-chō (Kento approved, with conditions)
+- **Role:** the Agent Skill is a **copy** of the kokoroe-chō at one moment (it now states "この写しの時点"); the MCP server is a
+  **window onto the living book** for the overlap period. Skill rule 5 tells the successor's Claude to call `changes_since(<copy
+  moment>)` when the server is connected, and to follow only rules whose status is 有効 (retired/rolled-back ones are history).
+- **Surface:** exactly four tools — `list_clients`, `get_kokoroe`, `get_history`, `changes_since` — plus `kokoroe://clients/{id}`.
+  No write tool, no tool that calls Claude, no judgments/drafts/scene text, no interpreter-internal `reason`. Output = what the Skill
+  shows, plus retired rules in history (marked 「従わない」).
+- **Read-only by construction:** the server receives a `ReadonlyKokoroeStore` (`listRules`, `getRule` only; file opened with flag
+  "r", re-read per call). Tests: fixed tool list with read-only annotations; store bytes and mtime unchanged after every tool; no
+  write/Claude/hidden imports in `src/mcp`; nothing beyond the Skill's content; the entry point refuses any file whose rules are not
+  `K-nnn` (e.g. the evaluation's ground truth). Transport: stdio, local only; no AWS.
+- **Precise "after the copy":** within one day a copy and a correction can both happen, so `LocalJsonStore.saveRule` now stamps new
+  沿革 entries with `at` (save time; matched by content, so a stale save can't leave one unstamped). Older entries fall back to
+  00:00 JST of their date. `at` never reaches any prompt (renderers pick fields explicitly), so evaluation numbers are unaffected.
+  Known gap: a "why?" recorded later edits the last entry in place and keeps its earlier time.
+- **Checked outside the repo** (`demo/successor-mcp/`): same isolation as the Skill demo; with the server, the successor's Claude
+  found a rule learned after the copy and changed its answer. hitl-reviewer: no blockers; its fixes (retired-rule wording, origin
+  label, "ask the master" when nothing is recorded, content-matched stamping, refusing non-kokoroe stores) are in.

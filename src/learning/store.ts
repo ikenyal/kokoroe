@@ -78,8 +78,15 @@ export class LocalJsonStore implements KokoroeStore {
   async saveRule(rule: KokoroeRule) {
     this.mutate((d) => {
       const i = d.rules.findIndex((x) => x.id === rule.id);
-      if (i >= 0) d.rules[i] = structuredClone(rule);
-      else d.rules.push(structuredClone(rule));
+      const next = structuredClone(rule);
+      // New 沿革 entries (not already stored) get the save time (changes_since, D-042). Matched by content, not position, so a
+      // stale save can't leave a new entry unstamped. A "why" recorded later edits the last entry in place and keeps its time.
+      const key = (h: KokoroeRule["history"][number]) => `${h.date}|${h.judgmentId}|${h.before}|${h.after}`;
+      const stored = new Set(i >= 0 ? d.rules[i].history.map(key) : []);
+      const at = new Date().toISOString();
+      next.history = next.history.map((h) => (!h.at && !stored.has(key(h)) ? { ...h, at } : h));
+      if (i >= 0) d.rules[i] = next;
+      else d.rules.push(next);
     });
   }
 

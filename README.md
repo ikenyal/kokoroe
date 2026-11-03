@@ -29,6 +29,17 @@ and the successor is increasingly an employee or an acquirer, not family who wat
 - **The master stays in charge.** The apprentice never sends anything and never commits to prices or contract terms; instructions
   hidden in client messages can't write the kokoroe-chō.
 
+### Two ways to hand it over: a copy, and a window
+- **Agent Skill = a copy of the kokoroe-chō at one moment.** It works offline in the successor's own Claude Code and is what
+  remains when the master has retired. The Skill states the moment it was copied.
+- **Read-only MCP server = a window onto the kokoroe-chō that keeps growing.** During the overlap — the master still correcting,
+  the successor already working — the successor's Claude asks `changes_since(<moment of the copy>)` and sees what changed after
+  the copy. Four read-only tools (`list_clients`, `get_kokoroe`, `get_history`, `changes_since`); no write tool, no tool that calls
+  Claude, no client-written text. Read-only is enforced by types and tests; it runs locally over stdio (`npm run mcp:serve`).
+  Example ([demo/successor-mcp](demo/successor-mcp/)): asked whether a phone call to 丸新酒造 is enough for a one-week delay, the
+  Skill alone answers from the copy (call, but tell the 蔵元 first); with the server it finds K-018, learned after the copy
+  ("bad news: go to the brewery in person"), and says a call is not enough.
+
 ## Try it
 
 - **Public demo:** _URL to be added (11/6)._ Two modes: **デモの続き** (a recorded run stopped half-way) and **お試し** (you are the master).

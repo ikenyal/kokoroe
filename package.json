@@ -22,10 +22,12 @@
     "demo:snapshots": "tsx eval/build-snapshots.ts",
     "demo:results": "tsx eval/build-results.ts",
     "eval:final": "tsx --env-file-if-exists=.env.local eval/final.ts",
+    "mcp:serve": "tsx src/mcp/main.ts",
     "export:skill": "tsx eval/export-skill.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "1.4.0",
+    "@modelcontextprotocol/sdk": "1.32.2",
     "next": "16.4.4",
     "react": "19.3.0",
     "react-dom": "19.3.0",

@@ -28,6 +28,7 @@ export interface RuleChange {
   judgmentId: string; // source judgment
   masterWords: string; // the remark on that judgment
   reason: string; // the interpreter's reading of what was different
+  at?: string; // ISO time the entry was saved (set by the store for new entries; older entries have the date only)
 }
 
 export interface KokoroeRule {

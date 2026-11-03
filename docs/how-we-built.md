@@ -149,3 +149,11 @@ Short entries, appended every work session. Source material for the README secti
   smoke cannot reach (official results → `results.json` → README blocks without interim labels).
 - **Narration synthesized for listening** — Polly (3 ja-JP neural voices × 6 scenes, 1,218 characters, ≈ $0.02) after Kento's OK;
   durations are checked against the scene table: s01 and s07 run long (≈ 15 s / 12 s and ≈ 21 s / 15 s).
+- **A product MCP server, built and checked without using MCP here** — per Kento's conditions: four read-only tools, read-only
+  enforced by a narrow store type and tests, and verification only in an empty directory outside the repo (`claude -p` with
+  `--strict-mcp-config` naming just this server), so this repo's own no-MCP rule and hook stayed untouched. The roles are written
+  down in the README: the **Skill is a copy at one moment; the MCP server is the window onto the kokoroe-chō that keeps growing** —
+  `changes_since` shows what changed after the copy. In the demo, the same question got a different, better-grounded answer
+  because the server surfaced a rule learned after the copy. The SDK API was read from the installed package's README and types.
+  hitl-reviewer found no blockers and five smaller issues, fixed before committing; one fix first tripped the hidden-data boundary
+  test (the guard named the path), so it now checks the store's content instead.
