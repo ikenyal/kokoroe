@@ -193,3 +193,6 @@ Short entries, appended every work session. Source material for the README secti
   narrowing suggestions went in), field mode refused unless enabled, a per-IP start limit, a stricter boundary test (which at once
   flagged a comment), five more secret-scan patterns, and ten documentation/number fixes, including recording that the interim
   64% file was assembled by hand from console output. Ten items that need Kento are listed in `docs/audits/2026-11-03.md`.
+- **The submission form as a draft with number slots** — `docs/submission-draft.md` (Japanese) answers the form's known items and
+  the expected "how did you use Claude" questions from what the README, decisions and this log already say; every figure is a slot
+  keyed to `results.json` (with today's interim value beside it) so 11/7's official run replaces them without retyping.
