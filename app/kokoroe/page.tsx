@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
-import { CLIENTS } from "@/src/core/world";
+import { CLIENTS, TRAIN_SCENES } from "@/src/core/world";
+import { isLedgerFact } from "@/src/learning/export";
 import { SCENE_TYPE_LABELS } from "@/src/core/types";
 import type { KokoroeRule, RuleSource } from "@/src/learning/types";
 import { getSession } from "@/src/server/session";
@@ -18,13 +19,19 @@ function Origin({ r }: { r: KokoroeRule }) {
   );
 }
 
+/** Which situation a judgment was about, in words (no internal ids on screen). */
+function sceneWords(sceneId: string) {
+  const t = TRAIN_SCENES.find((x) => x.id === sceneId);
+  return t ? `${SCENE_TYPE_LABELS[t.type]}・${t.month}月の場面` : "";
+}
+
 function SourceLine({ s }: { s: RuleSource }) {
   if (s.kind === "ledger") return <li>{s.date}　取引先台帳の明示的な制約</li>;
   return (
     <li>
       {s.date}　師匠の判定 <span className="font-mincho text-shu">{s.verdict && VERDICT_LABEL[s.verdict]}</span>
       {s.remark ? <span className="yomi">「{s.remark}」</span> : <span className="text-nibi">（一言なし）</span>}
-      <span className="text-nibi">　{s.sceneId}・{s.judgmentId}</span>
+      <span className="text-nibi">　{sceneWords(s.sceneId)}</span>
     </li>
   );
 }
@@ -32,9 +39,8 @@ function SourceLine({ s }: { s: RuleSource }) {
 function Rule({ r }: { r: KokoroeRule }) {
   const trigger = r.history.map((h) => h.trigger).filter(Boolean).at(-1);
   return (
-    <li className="border-t border-keisen py-5 first:border-t-0">
+    <li id={r.id} className="scroll-mt-6 border-t border-keisen py-5 first:border-t-0">
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-        <span className="text-[12px] tabular-nums text-nibi">{r.id}</span>
         <Origin r={r} />
         {r.scope.sceneTypes && (
           <span className="text-[12px] text-nibi">{r.scope.sceneTypes.map((t) => SCENE_TYPE_LABELS[t]).join("・")}のとき</span>
@@ -94,28 +100,49 @@ function Rule({ r }: { r: KokoroeRule }) {
   );
 }
 
+type Group = { key: string; title: string; note: string; rules: KokoroeRule[] };
+
+function groupsOf(rules: KokoroeRule[], prefix: string): Group[] {
+  return [
+    { key: `${prefix}-all`, title: "全社", note: "どの取引先にも通じる", rules: rules.filter((r) => r.scope.clientId === null) },
+    ...CLIENTS.map((c) => ({ key: `${prefix}-${c.id}`, title: c.name, note: `${c.industry}　窓口 ${c.contact}・決裁 ${c.decider}`, rules: rules.filter((r) => r.scope.clientId === c.id) })),
+  ].filter((g) => g.rules.length);
+}
+
+function Groups({ groups }: { groups: Group[] }) {
+  return (
+    <div className="space-y-10">
+      {groups.map((g) => (
+        <section key={g.key} id={g.key} aria-labelledby={`${g.key}-h`} className="scroll-mt-6">
+          <header className="border-b-2 border-sumi/80 pb-1.5">
+            <h3 id={`${g.key}-h`} className="font-mincho text-[21px] tracking-[0.04em]">{g.title}</h3>
+            <p className="text-[12.5px] text-nibi">{g.note}</p>
+          </header>
+          <ul>{g.rules.map((r) => <Rule key={r.id} r={r} />)}</ul>
+        </section>
+      ))}
+    </div>
+  );
+}
+
 export default async function KokoroePage() {
   const s = await getSession();
   if (!s) redirect("/");
   const rules = await s.store.listRules();
   const active = rules.filter((r) => r.status === "active");
-  const groups = [
-    { key: "all", title: "全社の心得", note: "どの取引先にも通じる作法", rules: active.filter((r) => r.scope.clientId === null) },
-    ...CLIENTS.map((c) => ({
-      key: c.id,
-      title: c.name,
-      note: `${c.industry}　窓口 ${c.contact}・決裁 ${c.decider}`,
-      rules: active.filter((r) => r.scope.clientId === c.id),
-    })),
-  ].filter((g) => g.rules.length);
+  // D-052: 心得 = one piece of the master's practice; facts copied from the client ledger are listed apart.
+  const kokoroe = groupsOf(active.filter((r) => !isLedgerFact(r)), "k");
+  const facts = groupsOf(active.filter(isLedgerFact), "f");
+  const nK = active.filter((r) => !isLedgerFact(r)).length;
+  const nF = active.length - nK;
   const inactive = rules.filter((r) => r.status !== "active");
 
   return (
     <div className="grid gap-10 md:grid-cols-[13rem_1fr]">
-      <nav aria-label="取引先" className="md:sticky md:top-6 md:self-start">
+      <nav aria-label="心得帳の目次" className="md:sticky md:top-6 md:self-start">
         <h1 className="font-mincho text-[24px] tracking-[0.06em]">心得帳</h1>
         <p className="mt-1 text-[13px] text-nibi">
-          {active.length} 項目。師匠の判定から覚えたものと、台帳から写したものがあります。
+          師匠から覚えた心得 {nK}・台帳から写した事実 {nF}
         </p>
         <a
           href="/kokoroe/export"
@@ -125,8 +152,9 @@ export default async function KokoroePage() {
           心得帳を後任に渡す
         </a>
         <p className="mt-1.5 text-[12px] text-nibi">Agent Skills の形（SKILL.md と取引先ごとのファイル）で書き出します。後任の Claude Code の .claude/skills/ に置くと使えます。</p>
-        <ol className="mt-5 space-y-1 text-[14px]">
-          {groups.map((g) => (
+        <p className="mt-5 text-[12px] text-nibi">心得</p>
+        <ol className="mt-1 space-y-1 text-[14px]">
+          {kokoroe.map((g) => (
             <li key={g.key}>
               <a href={`#${g.key}`} className="flex justify-between gap-2 hover:text-ai">
                 <span>{g.title}</span>
@@ -135,20 +163,28 @@ export default async function KokoroePage() {
             </li>
           ))}
         </ol>
+        {facts.length > 0 && (
+          <p className="mt-3 text-[14px]">
+            <a href="#facts" className="hover:text-ai">台帳から写した事実 <span className="tabular-nums text-nibi">{nF}</span></a>
+          </p>
+        )}
       </nav>
-      <div className="space-y-12">
-        {groups.map((g) => (
-          <section key={g.key} id={g.key} aria-labelledby={`${g.key}-h`} className="scroll-mt-6">
-            <header className="border-b-2 border-sumi/80 pb-1.5">
-              <h2 id={`${g.key}-h`} className="font-mincho text-[21px] tracking-[0.04em]">{g.title}</h2>
-              <p className="text-[12.5px] text-nibi">{g.note}</p>
-            </header>
-            <ul>{g.rules.map((r) => <Rule key={r.id} r={r} />)}</ul>
+      <div className="space-y-14">
+        <section aria-labelledby="k-h">
+          <h2 id="k-h" className="font-mincho text-[22px] tracking-[0.06em]">師匠から覚えた心得</h2>
+          <p className="mt-1 mb-6 text-[13px] text-nibi">心得は、師匠の作法の一つ一つ。それを、なぜそうなったか（沿革）と一緒に綴ったものが心得帳です。</p>
+          {kokoroe.length ? <Groups groups={kokoroe} /> : <p className="yomi text-nibi">まだありません。帳場で ○・△・× を付けると、直したところがここに残ります。</p>}
+        </section>
+        {facts.length > 0 && (
+          <section id="facts" aria-labelledby="f-h" className="scroll-mt-6">
+            <h2 id="f-h" className="font-mincho text-[22px] tracking-[0.06em]">台帳から写した事実</h2>
+            <p className="mt-1 mb-6 text-[13px] text-nibi">取引先台帳に書かれていたこと。師匠の作法ではなく、作法の前提になる事実です。師匠が直すと、心得に移ります。</p>
+            <Groups groups={facts} />
           </section>
-        ))}
+        )}
         {inactive.length > 0 && (
           <details className="text-[14px]">
-            <summary className="cursor-pointer text-nibi">消した・まとめた心得（{inactive.length}）</summary>
+            <summary className="cursor-pointer text-nibi">消した・まとめた・取り消した項目（{inactive.length}）</summary>
             <ul className="mt-2">{inactive.map((r) => <Rule key={r.id} r={r} />)}</ul>
           </details>
         )}

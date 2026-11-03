@@ -11,7 +11,7 @@ import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mc
 import { z } from "zod";
 import { CLIENTS, getClient } from "@/src/core/world";
 import { SCENE_TYPE_LABELS, type SceneType } from "@/src/core/types";
-import { ruleBlock } from "@/src/learning/export";
+import { isLedgerFact, rulesMarkdown } from "@/src/learning/export";
 import type { KokoroeRule } from "@/src/learning/types";
 import type { ReadonlyKokoroeStore } from "./readonly-store";
 
@@ -45,11 +45,11 @@ async function clientMarkdown(store: ReadonlyKokoroeStore, clientId: string, sce
     `心得帳の時点: ${lastDate(all) ?? "記録なし"}（読み取り専用。書き換えは師匠の○△×からだけ）`,
     `業界: ${c.industry}　窓口: ${c.contact}　決裁: ${c.decider}　取引${c.relationshipYears}年`,
     "",
-    "## この取引先の作法",
-    own.length ? own.map((r) => ruleBlock(r as KokoroeRule)).join("\n\n") : "（記録なし。推測せず師匠に確認してください）",
+    "## この取引先",
+    own.length ? rulesMarkdown(own as KokoroeRule[], "###", "（記録なし。推測せず師匠に確認してください）") : "（記録なし。推測せず師匠に確認してください）",
     "",
-    "## 全社の作法",
-    common.length ? common.map((r) => ruleBlock(r as KokoroeRule)).join("\n\n") : "（記録なし。推測せず師匠に確認してください）",
+    "## 全社",
+    common.length ? rulesMarkdown(common as KokoroeRule[], "###", "（記録なし。推測せず師匠に確認してください）") : "（記録なし。推測せず師匠に確認してください）",
   ].join("\n");
 }
 
@@ -60,7 +60,7 @@ export function createKokoroeServer(store: ReadonlyKokoroeStore) {
     "list_clients",
     {
       title: "取引先の一覧（読み取り専用）",
-      description: "株式会社だいだい工房（架空）の取引先と、それぞれの心得の数・最後に変わった日。心得帳の時点（asOf）も返す。",
+      description: "株式会社だいだい工房（架空）の取引先と、それぞれの心得（師匠の作法）の数・台帳から写した事実の数・最後に変わった日。心得帳の時点（asOf）も返す。",
       annotations: READ_ONLY,
     },
     async () => {
@@ -70,7 +70,8 @@ export function createKokoroeServer(store: ReadonlyKokoroeStore) {
         companyWide: rules.filter((r) => r.status === "active" && r.scope.clientId === null).length,
         clients: CLIENTS.map((c) => {
           const own = rules.filter((r) => r.scope.clientId === c.id);
-          return { id: c.id, name: c.name, industry: c.industry, activeRules: own.filter((r) => r.status === "active").length, lastChange: lastDate(own) };
+          const act = own.filter((r) => r.status === "active");
+          return { id: c.id, name: c.name, industry: c.industry, kokoroe: act.filter((r) => !isLedgerFact(r)).length, ledgerFacts: act.filter(isLedgerFact).length, lastChange: lastDate(own) };
         }),
       });
     },
@@ -107,6 +108,7 @@ export function createKokoroeServer(store: ReadonlyKokoroeStore) {
         status: r.status,
         mergedInto: r.mergedInto ?? null,
         ...(r.status === "retired" ? { note: "廃止（差し戻し・統合・師匠が削除）。従わない。沿革として読むだけ" } : {}),
+        kind: isLedgerFact(r) ? "台帳から写した事実" : "師匠から覚えた心得",
         origin: r.sources.some((s) => s.kind === "ledger") ? (r.sources.some((s) => s.kind !== "ledger") ? "台帳＋師匠" : "台帳") : "師匠",
         history: r.history.map((h) => ({ date: h.date, before: h.before, after: h.after, trigger: h.trigger, masterWords: h.masterWords })),
         sources: r.sources.map((s) => ({ date: s.date, from: s.kind === "ledger" ? "取引先台帳" : "師匠の判定", verdict: s.verdict, remark: s.remark, sceneId: s.sceneId || null })),

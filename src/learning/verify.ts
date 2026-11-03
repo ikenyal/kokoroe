@@ -50,8 +50,8 @@ export async function rollbackChange(args: {
   verdict: JudgmentRecord["verdict"];
   remark: string;
   at: string;
-  /** D-045: a withdrawal after a failed 確かめ稽古 (default: a regression 差し戻し). */
-  kind?: "regression" | "confirm";
+  /** D-045: a withdrawal after a failed 確かめ稽古 (default: a regression 差し戻し); "undo": the master took the judgment back. */
+  kind?: "regression" | "confirm" | "undo";
   reread?: boolean; // confirm: whether the rule was re-read before the withdrawal (for an accurate 沿革)
 }): Promise<void> {
   const now = (await args.store.getRule(args.change.ruleId))!;
@@ -59,21 +59,25 @@ export async function rollbackChange(args: {
     date: jstDate(args.at),
     before: now.when ? `${now.text}（${now.when}）` : now.text,
     after:
-      args.kind === "confirm"
+      args.kind === "undo"
+        ? args.change.action === "add" ? "（取り消し: 廃止）" : `（取り消し）${args.snapshot!.text}`
+        : args.kind === "confirm"
         ? args.change.action === "add" ? "（取り下げ: 採用しない）" : `（取り下げ）${args.snapshot!.text}`
         : args.change.action === "add" ? "（差し戻し: 廃止）" : `（差し戻し）${args.snapshot!.text}`,
     trigger: null,
     judgmentId: args.judgmentId,
     masterWords: args.remark,
     reason:
-      args.kind === "confirm"
+      args.kind === "undo"
+        ? "師匠が直前の判定を取り消したため、その判定から書いた変更を戻した"
+        : args.kind === "confirm"
         ? `確かめで外れたため取り下げ（${args.brokenSceneId} を解き直した案が心得どおりにならず、${args.reread ? "読み直したあとも " : ""}${args.verdict}）`
         : `回帰テストで ${args.brokenSceneId}（以前は○）が ${args.verdict} になったため差し戻し`,
   };
   const restored: KokoroeRule =
     args.change.action === "add"
       ? { ...now, status: "retired", history: [...now.history, note] }
-      : { ...args.snapshot!, sources: now.sources, history: [...now.history, note] };
+      : { ...args.snapshot!, sources: args.kind === "undo" ? args.snapshot!.sources : now.sources, history: [...now.history, note] };
   await args.store.saveRule(restored);
 }
 
@@ -110,7 +114,7 @@ async function learnRemainder(args: {
 /** Latest ○ judgment per scene for this client (drafts, confirmations and earlier regression checks), newest first. */
 export async function okScenes(store: KokoroeStore, clientId: string, excludeSceneId: string): Promise<JudgmentRecord[]> {
   const latest = new Map<string, JudgmentRecord>();
-  for (const j of await store.listJudgments()) if (j.clientId === clientId) latest.set(j.sceneId, j);
+  for (const j of await store.listJudgments()) if (j.clientId === clientId && !j.undone) latest.set(j.sceneId, j);
   return [...latest.values()].filter((j) => j.verdict === "○" && j.sceneId !== excludeSceneId).reverse();
 }
 

@@ -84,6 +84,19 @@ export class MemoryStoreKokoroe implements KokoroeStore {
   async listJudgments(): Promise<JudgmentRecord[]> {
     return (await this.items(JUDGMENTS)).map((m) => JSON.parse(m.content) as JudgmentRecord).sort((a, b) => num(a.id) - num(b.id));
   }
+
+  async markUndone(id: string, at: string, retry = true): Promise<void> {
+    const m = (await this.items(JUDGMENTS)).find((x) => x.path === `${JUDGMENTS}${id}.json`);
+    if (!m) return;
+    const j = JSON.parse(m.content) as JudgmentRecord;
+    if (j.undone) return;
+    try {
+      await this.api.update(m.id, { memory_store_id: this.storeId, content: JSON.stringify({ ...j, undone: at }, null, 2), precondition: { type: "content_sha256", content_sha256: m.sha } });
+    } catch (e) {
+      if (retry && isConflict(e)) return this.markUndone(id, at, false); // written in between: re-read and try once more
+      throw e;
+    }
+  }
 }
 
 /** Create a store for one session and seed it with a snapshot (parallel writes). Returns the store id. */

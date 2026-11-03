@@ -102,9 +102,13 @@ export function CurveChart({
               {c.points.map((p, i) => (
                 <circle key={i} cx={x(p.taps)} cy={y(p.match)} r={em ? 4.5 : 3} strokeWidth={2} className={em ? "fill-ai stroke-kami" : "fill-nibi/60 stroke-kami"} />
               ))}
-              <text x={x(last.taps) + 8} y={y(last.match) + 4} className={`text-[11.5px] ${em ? "fill-sumi font-bold" : "fill-nibi"}`}>
-                {c.label} {pct(last.match)}
-              </text>
+              {/* End labels only when there is no multi-path result to show: otherwise they pile up at the right end
+                  (the table below names every curve). */}
+              {!paths && (
+                <text x={x(last.taps) + 8} y={y(last.match) + 4} className={`text-[11.5px] ${em ? "fill-sumi font-bold" : "fill-nibi"}`}>
+                  {c.label} {pct(last.match)}
+                </text>
+              )}
             </g>
           );
         })}
@@ -114,10 +118,10 @@ export function CurveChart({
             {/* current setup: several training paths — mean dot and min–max bar */}
             <line x1={x(paths.taps)} x2={x(paths.taps)} y1={y(paths.max)} y2={y(paths.min)} className="stroke-ai" strokeWidth={3} strokeLinecap="round" />
             <circle cx={x(paths.taps)} cy={y(paths.mean)} r={6} strokeWidth={2} className="fill-ai stroke-kami" />
-            <text x={x(paths.taps) + 10} y={y(paths.mean) - 4} className="fill-sumi text-[11.5px] font-bold">
-              v1構成 {pct(paths.mean)}
+            <text x={x(paths.taps) - 12} y={y(paths.max) - 10} textAnchor="end" className="fill-sumi text-[11.5px] font-bold">
+              今の構成 {pct(paths.mean)}
             </text>
-            <text x={x(paths.taps) + 10} y={y(paths.mean) + 11} className="fill-nibi text-[10.5px]">
+            <text x={x(paths.taps) - 12} y={y(paths.max) + 5} textAnchor="end" className="fill-nibi text-[10.5px]">
               学習{paths.n}本 {pct(paths.min)}〜{pct(paths.max)}
             </text>
           </g>

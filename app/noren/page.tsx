@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { CLIENTS, COMPANY, getClient, HISTORY_QUESTIONS } from "@/src/core/world";
 import { getSession, liveEnabled, type SuccessorTurn } from "@/src/server/session";
 import { ask } from "../actions";
+import { citationParts, plainText } from "@/src/lib/plain";
 
 const ANSWER: Record<SuccessorTurn["answer"], { word: string; tone: string }> = {
   yes: { word: "はい", tone: "text-ai" },
@@ -11,7 +12,7 @@ const ANSWER: Record<SuccessorTurn["answer"], { word: string; tone: string }> = 
   unknown: { word: "心得帳に記録がありません", tone: "text-nibi" },
 };
 
-function Turn({ t }: { t: SuccessorTurn }) {
+function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => string | undefined }) {
   const a = ANSWER[t.answer];
   return (
     <article className="border-t-2 border-sumi/80 pt-4">
@@ -20,24 +21,31 @@ function Turn({ t }: { t: SuccessorTurn }) {
       </p>
       <p className="yomi mt-1 text-[17px]">{t.question}</p>
       <p className={`mt-4 font-mincho text-[22px] ${a.tone}`}>{a.word}</p>
-      <p className="yomi mt-1 text-[16px]">{t.explanation}</p>
+      <p className="yomi mt-1 text-[16px]">{plainText(t.explanation)}</p>
       {t.answer === "unknown" && t.source === "live" && <p className="mt-2 text-[14px]">師匠（{COMPANY.master.name}）に確認してください。</p>}
       {t.citations.length > 0 && (
         <div className="mt-4 border-l-2 border-ai pl-4">
           <h3 className="text-[12.5px] text-nibi">根拠にした心得と沿革</h3>
           <ul className="mt-1 space-y-2">
-            {t.citations.map((c, i) => (
-              <li key={i} className="text-[14px]">
-                {t.source === "live" ? (
-                  <Link className="text-ai underline-offset-4 hover:underline" href={`/kokoroe#${c.ruleId}`}>
-                    {c.ruleId}
-                  </Link>
-                ) : (
-                  <span className="text-nibi">{c.ruleId}</span>
-                )}
-                <p className="yomi text-[14.5px]">{c.history}</p>
-              </li>
-            ))}
+            {t.citations.map((c, i) => {
+              const h = citationParts(c.history);
+              const live = t.source === "live" && ruleText(c.ruleId);
+              return (
+                <li key={i} className="text-[14.5px]">
+                  {live ? (
+                    <Link className="yomi text-ai underline-offset-4 hover:underline" href={`/kokoroe#${c.ruleId}`}>{h.rule}</Link>
+                  ) : (
+                    <p className="yomi">{h.rule}</p>
+                  )}
+                  {h.before && <p className="yomi text-[14px] text-nibi">前は：<del className="decoration-shu/70">{h.before}</del></p>}
+                  {h.why && <p className="yomi text-[14px]"><span className="text-nibi">わけ：</span>{h.why}</p>}
+                  <p className="text-[12.5px] text-nibi">
+                    {h.source && <>出どころ：{h.source}　</>}
+                    {h.written && <>心得帳に書いた日：{h.written}</>}
+                  </p>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}
@@ -53,6 +61,8 @@ export default async function NorenPage() {
   if (!s) redirect("/");
   const live = liveEnabled();
   const answers = s.meta.answers ?? [];
+  const rules = await s.store.listRules();
+  const ruleText = (id: string) => rules.find((r) => r.id === id)?.text;
   return (
     <div className="grid gap-10 lg:grid-cols-[1fr_20rem]">
       <div className="lg:col-span-2 -mb-6 empty:hidden"><LimitNote reason={s.meta.limit} /></div>
@@ -64,7 +74,7 @@ export default async function NorenPage() {
         <form action={ask} className="mt-6 grid gap-3 sm:grid-cols-[11rem_1fr_auto] sm:items-end">
           <label>
             <span className="text-[13px] text-nibi">取引先</span>
-            <select name="clientId" className="mt-1 block h-12 w-full rounded-[3px] border border-waku bg-kami px-2 text-[15px]">
+            <select name="clientId" key={answers[0]?.clientId ?? "none"} defaultValue={answers[0]?.clientId} className="mt-1 block h-12 w-full rounded-[3px] border border-waku bg-kami px-2 text-[15px]">
               {CLIENTS.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.name}
@@ -87,7 +97,7 @@ export default async function NorenPage() {
         </form>
         {!live && <p className="mt-2 text-[13px] text-nibi">いまは記録済みデータで動いています。自由な質問にはライブ版で答えます。</p>}
         <div className="mt-10 space-y-10">
-          {answers.length ? answers.map((t, i) => <Turn key={i} t={t} />) : <p className="text-[14px] text-nibi">右の質問例から選ぶか、質問を入れてください。</p>}
+          {answers.length ? answers.map((t, i) => <Turn key={i} t={t} ruleText={ruleText} />) : <p className="text-[14px] text-nibi">右の質問例から選ぶか、質問を入れてください。</p>}
         </div>
       </section>
       <aside aria-labelledby="ex-h" className="lg:border-l-2 lg:border-keisen lg:pl-6">

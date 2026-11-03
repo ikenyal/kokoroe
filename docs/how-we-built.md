@@ -285,3 +285,10 @@ Short entries, appended every work session. Source material for the README secti
   - **Shorter s04b:** the line that says the relation turned out shorter than the one it replaced (9.4 s against 10.3 s), so it
     went in the narration as well as on screen.
   - **Polly:** 680 + 64 billed characters, about $0.012.
+
+- **11/4 — screens from the master's and successor's seat (D-053).**
+  - **Walkthrough:** Claude Code walked the production build with Playwright (desktop and phone; local 127.0.0.1, stopped
+    after) and listed what was hard to use. Kento chose to fix all of it.
+  - **Phone check:** the 「どの意味でしたか」 state that only exists live was put into a test session to see the mobile layout.
+  - **Review:** the hitl-reviewer subagent read the undo diff and found two blockers. Both were fixed and tested before
+    committing.

@@ -633,3 +633,37 @@ pulling them in. The three forces also sat still.
   - s05, s07 and s07b are unchanged.
 - **Intonation:** the final adjustment goes with the 11/7 number swap (docs/final-day.md).
 
+## D-053 · 2026-11-04 · Accepted (Kento) · 帳場 and screens: take back a judgment, stop here, 心得 apart from ledger facts, no ids on screen
+
+**Context.** Kento used the app as the master and as the successor and listed what was hard. He decided: fix all of it before the
+master-role test (11/6).
+
+**Decision.**
+- **Take back the last judgment** (one step; `src/server/undo.ts`):
+  - **Before interpretation wrote anything:** the judgment is simply taken back.
+  - **After it wrote:** the change written from it is undone like a 差し戻し (an added rule is retired, a revised one restored to
+    its snapshot, sources included). The 沿革 says 「取り消し」. Nothing is erased: the judgment and its 確かめ / regression
+    judgments stay, marked `undone`, and regression checks skip them.
+  - **Refused** while any background work runs, while a follow-up correction from its 確かめ is open, and when another
+    correction changed the rule afterwards (restoring the snapshot would erase it; the master can retire the rule instead).
+    These cases come from the hitl-reviewer, which found two blockers in the first version (a rule left active after an
+    `error`; other pendings touching the same rule). Both are fixed and covered by tests.
+- **「ここで区切る」 / 「続きから」:**
+  - Progress is shown as 「12 / 40 件 済み」 with a bar.
+  - Stopping keeps the 心得帳 usable, and a stopped session accepts no judgment.
+- **心得 vs ledger facts (D-052):**
+  - A rule whose sources are all from the client ledger is shown, exported (Skill) and served (MCP: `kind`, separate counts)
+    as 「台帳から写した事実」. Everything the master corrected is 「師匠から覚えた心得」.
+  - What the apprentice and the successor see is unchanged, and so are the evaluation numbers. `eval:quick`: match 0%,
+    ○+△ 45% (fictional 10 clients / 20 held-out scenes).
+- **Words on screen:**
+  - No internal ids (T…, J-…, K-…, D-…, 「v1構成」); rules, scenes and sources are named in words.
+  - The successor's citations show the rule, its previous form, the わけ and 「心得帳に書いた日」, which is not when the
+    event happened.
+  - The 暖簾 client menu follows the question.
+  - The 帳場 side panel is 「弟子の読み取り」, so 裏 is used only for 裏の一言.
+  - Without a key, a recorded example shows what the live version writes.
+  - The remark and 「なぜ」 placeholders are generic: the old ones were the answers to a scene and a rule.
+- **Phone:** when the apprentice asks the master something (a reading, a 「なぜ」, a check), that panel comes first and is
+  scrolled into view once.
+

@@ -1,9 +1,11 @@
 import results from "@/data/demo/results.json";
+import { noDecisionIds } from "@/src/lib/plain";
 import { CurveChart, type Curve } from "./curve-chart";
 
 const pct = (x: number) => `${Math.round(x * 100)}%`;
 
 /** 稽古の記録 — reads recorded evaluation results only. This screen never calls the API. */
+
 export default function KeikoPage() {
   const curves = results.curves as Curve[];
   const latest = curves.at(-1)!;
@@ -15,7 +17,7 @@ export default function KeikoPage() {
   return (
     <div>
       <h1 className="font-mincho text-[24px] tracking-[0.06em]">稽古の記録</h1>
-      <p className="yomi mt-2 max-w-[40em] text-[15px] text-nibi">{results.note}</p>
+      <p className="yomi mt-2 max-w-[40em] text-[15px] text-nibi">{noDecisionIds(results.note)}</p>
 
       <section aria-labelledby="ba-h" className="mt-8">
         <h2 id="ba-h" className="sr-only">Before と After</h2>
@@ -49,9 +51,9 @@ export default function KeikoPage() {
       <section aria-labelledby="curve-h" className="mt-10 grid gap-8 lg:grid-cols-[1fr_17rem]">
         <div className="min-w-0">
           <h2 id="curve-h" className="text-[15px] font-bold">学習曲線</h2>
-          <p className="mt-1 text-[13px] text-nibi">どれだけ師匠の手を借りて、どこまで一致するようになったか。灰色の線は改良の途中の版、藍の点と縦線は今の構成（v1）を学習{paths?.n ?? 0}本で測った平均と幅{results.official ? "（正式な計測）" : "（途中経過）"}です。</p>
+          <p className="mt-1 text-[13px] text-nibi">どれだけ師匠の手を借りて、どこまで一致するようになったか。灰色の線は改良の途中の版、藍の点と縦線は今の構成を学習{paths?.n ?? 0}本で測った平均と幅{results.official ? "（正式な計測）" : "（途中経過）"}です。</p>
           <div className="mt-4">
-            <p className="mb-1 text-[12px] text-nibi sm:hidden">図は横にずらせます。右端が今の構成（v1）の結果です。</p>
+            <p className="mb-1 text-[12px] text-nibi sm:hidden">図は横にずらせます。右端が今の構成の結果です。</p>
             <CurveChart curves={curves} emphasis={paths ? null : latest.key} before={results.before} paths={paths} />
           </div>
           <details className="mt-3 text-[13.5px]">
@@ -92,8 +94,8 @@ export default function KeikoPage() {
             <p className="yomi mt-1">
               取引先の文面に紛れた「心得として登録せよ」などの指示で、心得帳が書き換わった回数は {adv.injectionRuns} 回中 {adv.injectionRuns - adv.storeProtected} 回。値引き・契約条件を迫られた場面では、
               {adv.escalatedByModel === undefined
-                ? `弟子が自分で ${adv.lureRuns} 回中 ${adv.escalated} 回、師匠の判断に回しました（コードの下限〈D-044〉を入れる前の計測）。`
-                : `弟子が自分で師匠の判断に回したのは ${adv.lureRuns} 回中 ${adv.escalatedByModel} 回。コードの下限〈D-044〉があるので、実際には ${adv.lureRuns} 回中 ${adv.escalated} 回とも師匠に回ります。`}
+                ? `弟子が自分で ${adv.lureRuns} 回中 ${adv.escalated} 回、師匠の判断に回しました（金額・契約を必ず師匠に回す仕組みを、コードに入れる前の計測）。`
+                : `弟子が自分で師匠の判断に回したのは ${adv.lureRuns} 回中 ${adv.escalatedByModel} 回。金額・契約を必ず師匠に回す仕組みがコードにあるので、実際には ${adv.lureRuns} 回中 ${adv.escalated} 回とも師匠に回ります。`}
             </p>
           </div>
           <div>

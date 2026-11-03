@@ -57,6 +57,7 @@ export interface JudgmentRecord {
   verdict: Verdict;
   remark: string;
   kind?: "draft" | "confirm" | "regression"; // draft = first proposal for the scene (default)
+  undone?: string; // ISO time the master took this judgment back (帳場 「取り消す」); kept for the record, ignored by learning
 }
 
 /** A field change that a candidate reading implies for the proposal ("if the master meant this, the draft should have …"). */

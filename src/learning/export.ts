@@ -17,6 +17,21 @@ export function assertSkillName(name: string): void {
 const src = (s: RuleSource) =>
   s.kind === "ledger" ? `${s.date} 取引先台帳` : `${s.date} 師匠の判定 ${s.verdict}「${s.remark || "一言なし"}」（${s.sceneId}）`;
 
+/**
+ * D-052: a 心得 is one piece of the master's practice; a fact copied from the client ledger (台帳) is not, until the master has
+ * corrected something about it. The 心得帳 screen, the Skill and the MCP server all split the two the same way.
+ */
+export const isLedgerFact = (r: Pick<KokoroeRule, "sources">) => r.sources.length > 0 && r.sources.every((s) => s.kind === "ledger");
+
+/** One client's (or the company's) entries as markdown: 心得 first, then the ledger facts, each under its own heading. */
+export function rulesMarkdown(rules: KokoroeRule[], level = "##", none = "（まだない）"): string {
+  const kokoroe = rules.filter((r) => !isLedgerFact(r));
+  const facts = rules.filter(isLedgerFact);
+  const out = [`${level} 師匠から覚えた心得`, kokoroe.length ? kokoroe.map(ruleBlock).join("\n\n") : none];
+  if (facts.length) out.push("", `${level} 台帳から写した事実`, "取引先台帳に明記されていたこと（師匠の作法ではなく、前提となる事実）。", "", facts.map(ruleBlock).join("\n\n"));
+  return out.join("\n");
+}
+
 export function ruleBlock(r: KokoroeRule): string {
   const origin = r.sources.some((s) => s.kind === "ledger") ? (r.sources.some((s) => s.kind !== "ledger") ? "台帳＋師匠" : "台帳") : "師匠";
   const lines = [`### ${r.id} ${r.text}`];
@@ -50,7 +65,7 @@ export function exportSkill(rules: KokoroeRule[], clients: Client[], company: { 
     if (!rs.length) continue;
     const file = `clients/${c.slug}.md`;
     index.push(`| ${c.name} | ${c.industry} | ${c.contact} → ${c.decider} | [${file}](${file}) |`);
-    files[file] = `# ${c.name}の心得\n\n業界: ${c.industry}　窓口: ${c.contact}　決裁: ${c.decider}　取引${c.relationshipYears}年\n\n${rs.map(ruleBlock).join("\n\n")}\n`;
+    files[file] = `# ${c.name}\n\n業界: ${c.industry}　窓口: ${c.contact}　決裁: ${c.decider}　取引${c.relationshipYears}年\n\n${rulesMarkdown(rs)}\n`;
   }
   // The Skill is a copy at one moment; say which moment, so a connected MCP server can be asked what changed since (D-042).
   const asOf =
@@ -65,7 +80,8 @@ description: ${description}
 
 # 心得帳 — ${company.name}
 
-師匠（${company.master.name}）のダメ出しから覚えた、取引先ごとの作法です。各項目に沿革（旧 → 新・きっかけ・日付）と出典があります。
+師匠（${company.master.name}）のダメ出しから覚えた、取引先ごとの作法（心得）と、取引先台帳から写した事実です。各項目に沿革（旧 → 新・きっかけ・日付）と出典があります。
+心得＝師匠の作法の一つ一つ。心得帳＝それを、なぜそうなったかと一緒に綴ったもの。台帳から写した事実は、作法の前提として別に並べています。
 この写しの時点: ${asOf}
 
 ## 使い方
@@ -81,7 +97,7 @@ description: ${description}
 ${index.join("\n")}
 
 ## 全社の作法
-${common.length ? common.map(ruleBlock).join("\n\n") : "（まだない）"}
+${rulesMarkdown(common, "###")}
 `;
   return { name: SKILL_NAME, files };
 }

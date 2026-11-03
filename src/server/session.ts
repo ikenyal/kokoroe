@@ -93,6 +93,7 @@ export interface UiVerification {
 }
 
 export interface SessionMeta {
+  paused?: boolean; // 帳場 「ここで区切る」: the queue stops here; the kokoroe-chō so far stays usable; 「続きから」 resumes
   mode: Mode;
   limit?: "session" | "ip" | "daily"; // set when a live call was refused; the UI says so and falls back to recorded data
   timings?: Timing[];

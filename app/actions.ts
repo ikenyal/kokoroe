@@ -10,6 +10,7 @@ import { after } from "next/server";
 import { getSession, liveEnabled, readMeta, startSession, type Mode } from "@/src/server/session";
 import { applyChoice, interpretInBackground } from "@/src/server/background";
 import { afterConfirm, afterRegression, confirmWithoutLive, startVerification } from "@/src/server/verify-ui";
+import { undoLast } from "@/src/server/undo";
 import { recordTrigger } from "@/src/learning/compile";
 import type { SessionMeta, SuccessorTurn, Timing } from "@/src/server/session";
 import { askSuccessor } from "@/src/successor/ask";
@@ -67,7 +68,7 @@ export async function judge(formData: FormData) {
   const remark = String(formData.get("remark") ?? "").trim().slice(0, 120);
   const sceneId = String(formData.get("sceneId") ?? "");
   if (!VERDICTS.has(verdict)) throw new Error("invalid verdict");
-  const item = s.meta.queue[s.meta.pos];
+  const item = s.meta.paused ? undefined : s.meta.queue[s.meta.pos]; // 「ここで区切る」: nothing is judged until 「続きから」
   if (!item || item.scene.id !== sceneId) return; // stale form (double submit) — ignore
   const j = await s.store.addJudgment({
     at: new Date().toISOString(),
@@ -93,6 +94,27 @@ export async function judge(formData: FormData) {
   if (verdict !== "○") meta.pending.unshift({ judgmentId: j.id, sceneId: item.scene.id, status: live ? "queued" : "offline" });
   s.saveMeta(meta);
   if (live) after(() => interpretInBackground(s.mode, s.sid, j.id));
+  revalidatePath("/choba");
+}
+
+/** 直前の判定を取り消す (one step). Undoes the kokoroe-chō change written from it, if any, with a 沿革 entry. */
+export async function undo(formData: FormData) {
+  const s = await getSession();
+  if (!s) redirect("/");
+  const judgmentId = String(formData.get("judgmentId") ?? "");
+  if (!/^J-\d{4}$/.test(judgmentId)) throw new Error("invalid judgment");
+  await undoLast(s, judgmentId);
+  revalidatePath("/choba");
+  revalidatePath("/kokoroe");
+}
+
+/** 「ここで区切る」 / 「続きから」: stop the queue here (or resume). The kokoroe-chō so far stays as it is. */
+export async function pause(formData: FormData) {
+  const s = await getSession();
+  if (!s) redirect("/");
+  const meta = readMeta(s.mode, s.sid);
+  meta.paused = formData.get("resume") !== "1";
+  s.saveMeta(meta);
   revalidatePath("/choba");
 }
 
@@ -157,10 +179,14 @@ export async function ask(formData: FormData) {
       turn = { at: new Date().toISOString(), clientId, question, answer: "unknown", explanation: "心得帳には記録がありません。師匠に確認してください。", citations: [], source: "live" };
     } else {
       // Show the 沿革 as stored in the kokoroe-chō, not as paraphrased by the model.
+      // Same shape as the recorded answers (新「…」・きっかけ: …・日付: …・出典: …), so the page shows both the same way.
       const citations = a.citations.map((c) => {
         const r = rules.find((x) => x.id === c.ruleId)!;
-        const hist = r.history.map((h) => `${h.date} ${h.before ? `「${h.before}」→「${h.after}」` : `「${h.after}」`}${h.trigger ? `（きっかけ：${h.trigger}）` : ""}`).join(" ／ ");
-        return { ruleId: c.ruleId, history: `${r.text}${r.when ? `（${r.when}）` : ""}　沿革：${hist}` };
+        const last = r.history.at(-1);
+        const why = r.history.map((h) => h.trigger).filter(Boolean).at(-1);
+        const from = r.sources.some((x) => x.kind !== "ledger") ? "師匠の判定" : "取引先台帳";
+        const prev = [...r.history].reverse().find((h) => h.before)?.before;
+        return { ruleId: c.ruleId, history: `${prev ? `旧「${prev}」→ ` : ""}新「${r.text}${r.when ? `（${r.when}）` : ""}」${why ? `・きっかけ: ${why}` : ""}${last ? `・日付: ${last.date}` : ""}・出典: ${from}` };
       });
       turn = { at: new Date().toISOString(), clientId, question, answer: a.answer, explanation: a.explanation, citations, source: "live" };
     }

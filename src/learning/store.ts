@@ -17,6 +17,8 @@ export interface KokoroeStore {
   nextRuleId(): Promise<string>;
   addJudgment(j: Omit<JudgmentRecord, "id">): Promise<JudgmentRecord>;
   listJudgments(): Promise<JudgmentRecord[]>;
+  /** The master took a judgment back (帳場). The record stays, marked; learning and regression checks skip it. */
+  markUndone(id: string, at: string): Promise<void>;
 }
 
 /**
@@ -109,5 +111,12 @@ export class LocalJsonStore implements KokoroeStore {
 
   async listJudgments() {
     return structuredClone(this.load().judgments);
+  }
+
+  async markUndone(id: string, at: string) {
+    this.mutate((d) => {
+      const j = d.judgments.find((x) => x.id === id);
+      if (j && !j.undone) j.undone = at;
+    });
   }
 }
