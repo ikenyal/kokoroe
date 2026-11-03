@@ -220,3 +220,10 @@ Short entries, appended every work session. Source material for the README secti
   condition in `docs/final-day.md` names the command whose output proves it (results.json values, `npm test`, `ffprobe` ≤ 180 s).
   The day is split into two goals so a video retry can never loop back into the paid measurement, and "run eval:final once" is
   written into the condition itself.
+- **Keeping session content out of a public repo** — after the organizers' notice that nothing from the sessions may be published,
+  Claude searched the repo for session/workshop references (separating them from the app's own 帳場 sessions and from fictional data),
+  rewrote the reasons to rest on our measurements and official docs (D-047), and — with Kento's OK — rewrote the history with
+  `git filter-repo --replace-text` (16 text rules + 1 message rule). The rules were rehearsed on a throwaway clone first; the real run
+  was checked before pushing: 0 hits across all history, the same final tree hash, noreply-only authors, tests passing. One attribution
+  Claude had removed to be safe (ARIA's milestone audits) turned out to come from a public repo and was restored with its URL.
+  The force push itself was stopped by the auto-mode safety check, so Kento ran it.
