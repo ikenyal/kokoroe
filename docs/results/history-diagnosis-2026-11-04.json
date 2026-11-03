@@ -1,0 +1,567 @@
+{
+  "at": "2026-11-03T23:05:19.565Z",
+  "note": "fictional data; 8 history questions on already-grown kokoroe-chō (no training); one grounded run per store",
+  "usd": 0.20546059999999997,
+  "byQuestion": [
+    {
+      "id": "Q01",
+      "question": "港北精機さんとの打ち合わせ、Zoom のリンクを送っておけばいいですよね？",
+      "ok": 4,
+      "of": 4,
+      "causes": {
+        "ok": 4
+      }
+    },
+    {
+      "id": "Q02",
+      "question": "大河原建材さん、先代のときみたいに社長に電話して決めてしまっていいですか？",
+      "ok": 4,
+      "of": 4,
+      "causes": {
+        "ok": 4
+      }
+    },
+    {
+      "id": "Q03",
+      "question": "浜風運輸さんへの遅延の連絡、確定してからまとめて伝えればいいですよね？",
+      "ok": 2,
+      "of": 4,
+      "causes": {
+        "not-said": 2,
+        "ok": 2
+      }
+    },
+    {
+      "id": "Q04",
+      "question": "まちなか生協さんの見積り、うちのいつもの書式で出してもいいですか？",
+      "ok": 4,
+      "of": 4,
+      "causes": {
+        "ok": 4
+      }
+    },
+    {
+      "id": "Q05",
+      "question": "まちなか生協さんの見積り、理事会の前の週に出せば間に合いますか？",
+      "ok": 0,
+      "of": 4,
+      "causes": {
+        "wrong-answer": 3,
+        "not-in-book": 1
+      }
+    },
+    {
+      "id": "Q06",
+      "question": "港北精機さんって、昔から Teams しか使えなかったんですか？",
+      "ok": 4,
+      "of": 4,
+      "causes": {
+        "ok": 4
+      }
+    },
+    {
+      "id": "Q07",
+      "question": "大河原建材の社長、電話の方が早いって言いそうですけど、それでも打ち合わせを入れた方がいいんですか？",
+      "ok": 1,
+      "of": 4,
+      "causes": {
+        "wrong-answer": 3,
+        "ok": 1
+      }
+    },
+    {
+      "id": "Q08",
+      "question": "浜風運輸さん、まだ決まってない話を先に伝えると混乱させませんか？",
+      "ok": 3,
+      "of": 4,
+      "causes": {
+        "ok": 3,
+        "wrong-answer": 1
+      }
+    }
+  ],
+  "rows": [
+    {
+      "store": "store-2026-11-02T21-25-43-800Z.json",
+      "id": "Q01",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T21-25-43-800Z.json",
+      "id": "Q02",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T21-25-43-800Z.json",
+      "id": "Q03",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": false,
+      "cause": "not-said",
+      "missing": [
+        {
+          "need": [
+            "決まる前",
+            "確定前",
+            "早め"
+          ],
+          "inBook": true
+        }
+      ],
+      "citedHaveWhy": [
+        false,
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T21-25-43-800Z.json",
+      "id": "Q04",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T21-25-43-800Z.json",
+      "id": "Q05",
+      "expected": "no",
+      "answer": "unknown",
+      "historyOk": false,
+      "cause": "wrong-answer",
+      "missing": [
+        {
+          "need": [
+            "2週間"
+          ],
+          "inBook": false
+        },
+        {
+          "need": [
+            "差し戻",
+            "逃した"
+          ],
+          "inBook": true
+        }
+      ],
+      "citedHaveWhy": []
+    },
+    {
+      "store": "store-2026-11-02T21-25-43-800Z.json",
+      "id": "Q06",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T21-25-43-800Z.json",
+      "id": "Q07",
+      "expected": "yes",
+      "answer": "unknown",
+      "historyOk": false,
+      "cause": "wrong-answer",
+      "missing": [
+        {
+          "need": [
+            "先代と同じ"
+          ],
+          "inBook": true
+        }
+      ],
+      "citedHaveWhy": []
+    },
+    {
+      "store": "store-2026-11-02T21-25-43-800Z.json",
+      "id": "Q08",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        false,
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T22-36-36-219Z.json",
+      "id": "Q01",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T22-36-36-219Z.json",
+      "id": "Q02",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        true,
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T22-36-36-219Z.json",
+      "id": "Q03",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        false,
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T22-36-36-219Z.json",
+      "id": "Q04",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T22-36-36-219Z.json",
+      "id": "Q05",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": false,
+      "cause": "not-in-book",
+      "missing": [
+        {
+          "need": [
+            "2週間"
+          ],
+          "inBook": false
+        }
+      ],
+      "citedHaveWhy": [
+        true,
+        false,
+        false
+      ]
+    },
+    {
+      "store": "store-2026-11-02T22-36-36-219Z.json",
+      "id": "Q06",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T22-36-36-219Z.json",
+      "id": "Q07",
+      "expected": "yes",
+      "answer": "unknown",
+      "historyOk": false,
+      "cause": "wrong-answer",
+      "missing": [
+        {
+          "need": [
+            "先代と同じ"
+          ],
+          "inBook": true
+        },
+        {
+          "need": [
+            "2025",
+            "二代目"
+          ],
+          "inBook": true
+        }
+      ],
+      "citedHaveWhy": []
+    },
+    {
+      "store": "store-2026-11-02T22-36-36-219Z.json",
+      "id": "Q08",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        false,
+        true,
+        false
+      ]
+    },
+    {
+      "store": "store-2026-11-02T22-47-46-866Z.json",
+      "id": "Q01",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T22-47-46-866Z.json",
+      "id": "Q02",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        true,
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T22-47-46-866Z.json",
+      "id": "Q03",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": false,
+      "cause": "not-said",
+      "missing": [
+        {
+          "need": [
+            "決まる前",
+            "確定前",
+            "早め"
+          ],
+          "inBook": true
+        }
+      ],
+      "citedHaveWhy": [
+        false,
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T22-47-46-866Z.json",
+      "id": "Q04",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T22-47-46-866Z.json",
+      "id": "Q05",
+      "expected": "no",
+      "answer": "unknown",
+      "historyOk": false,
+      "cause": "wrong-answer",
+      "missing": [
+        {
+          "need": [
+            "2週間"
+          ],
+          "inBook": false
+        },
+        {
+          "need": [
+            "差し戻",
+            "逃した"
+          ],
+          "inBook": true
+        }
+      ],
+      "citedHaveWhy": []
+    },
+    {
+      "store": "store-2026-11-02T22-47-46-866Z.json",
+      "id": "Q06",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T22-47-46-866Z.json",
+      "id": "Q07",
+      "expected": "yes",
+      "answer": "yes",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T22-47-46-866Z.json",
+      "id": "Q08",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        false,
+        true,
+        false
+      ]
+    },
+    {
+      "store": "store-2026-11-02T22-59-29-831Z.json",
+      "id": "Q01",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T22-59-29-831Z.json",
+      "id": "Q02",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        true,
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T22-59-29-831Z.json",
+      "id": "Q03",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        false,
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T22-59-29-831Z.json",
+      "id": "Q04",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T22-59-29-831Z.json",
+      "id": "Q05",
+      "expected": "no",
+      "answer": "unknown",
+      "historyOk": false,
+      "cause": "wrong-answer",
+      "missing": [
+        {
+          "need": [
+            "2週間"
+          ],
+          "inBook": false
+        }
+      ],
+      "citedHaveWhy": []
+    },
+    {
+      "store": "store-2026-11-02T22-59-29-831Z.json",
+      "id": "Q06",
+      "expected": "no",
+      "answer": "no",
+      "historyOk": true,
+      "cause": "ok",
+      "missing": [],
+      "citedHaveWhy": [
+        true
+      ]
+    },
+    {
+      "store": "store-2026-11-02T22-59-29-831Z.json",
+      "id": "Q07",
+      "expected": "yes",
+      "answer": "unknown",
+      "historyOk": false,
+      "cause": "wrong-answer",
+      "missing": [
+        {
+          "need": [
+            "先代と同じ"
+          ],
+          "inBook": true
+        },
+        {
+          "need": [
+            "2025",
+            "二代目"
+          ],
+          "inBook": true
+        }
+      ],
+      "citedHaveWhy": []
+    },
+    {
+      "store": "store-2026-11-02T22-59-29-831Z.json",
+      "id": "Q08",
+      "expected": "no",
+      "answer": "yes",
+      "historyOk": false,
+      "cause": "wrong-answer",
+      "missing": [],
+      "citedHaveWhy": [
+        false,
+        true
+      ]
+    }
+  ]
+}
