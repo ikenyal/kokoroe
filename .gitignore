@@ -34,3 +34,6 @@ npm-debug.log*
 
 # demo sessions (per visitor, never committed)
 .data/
+
+# container build context (scripts/prepare-image.sh)
+.image/

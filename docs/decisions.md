@@ -281,3 +281,10 @@ when daily counters reset. The key is passed as a deployment environment variabl
 Secrets Manager), mitigated by a dedicated spend-capped workspace key disabled after judging. Fallback: ECS Express Mode, same image.
 The build uses Next.js `standalone` output; tracing excludes sessions, docs, evals, hidden data and `.env*` (checked: no env file
 in the output). Dockerfile + `.dockerignore` added; the image layout was smoke-tested locally (Docker itself is not installed here).
+
+## D-035 · 2026-11-03 · Accepted · First public deployment (no API key) and how the image is built
+Created with Kento's approval: Lightsail container service `kokoroe` (micro, scale 1) and Budgets `kokoroe-guard` ($20, Lightsail
+only, 80% / 100% email alerts). First deployment runs on recorded data only (no key). Building Next.js under linux/amd64 emulation
+segfaulted, so the app is built on the host and the image only copies files (`scripts/prepare-image.sh`, `Dockerfile.prebuilt`;
+`sharp` excluded with `images.unoptimized`). lightsailctl + Podman needed `DOCKER_API_VERSION=1.46`. The shared Podman VM
+(another project's) gained only kokoroe images; nothing else changed (checked before/after by image list and storage timestamps).

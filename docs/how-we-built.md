@@ -108,3 +108,8 @@ Short entries, appended every work session. Source material for the README secti
   added `guard-aws.sh`: every `aws` command must carry `--profile brightflow-sandbox-ikeda`; other profiles, the default profile and
   inline `AWS_PROFILE`/keys are blocked, read-only calls included (13 allow/block cases tested, then verified live by a blocked call).
   The first real call found the SSO session expired, so work stopped there until Kento logged in.
+- **AWS work with a human gate at every change** — Claude showed the account ID, did read-only checks (no existing container
+  service; budgets per project scoped by service), listed the exact create commands, and ran them only after Kento's OK. Two
+  surprises were handled without bypassing anything: Next.js segfaulting under amd64 emulation (→ build on the host, copy-only image)
+  and lightsailctl needing a newer Docker API than Podman reports (→ `DOCKER_API_VERSION=1.46`). The public URL was then checked with
+  Playwright, and the shared Podman VM was audited afterwards (only kokoroe images added).

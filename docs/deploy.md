@@ -8,6 +8,36 @@ All data is fictional. The Anthropic API key exists only on the server.
 Amplify Hosting documents SSR for Next.js 12–15 and runs per-request compute, which doesn't fit file-based sessions.
 Fallback if Lightsail causes trouble: **Amazon ECS Express Mode** (AWS's recommended successor path) with the same image.
 
+## Resources created (2026-11-03, by Claude Code with Kento's approval)
+
+Account: BrightFlow Sandbox (ID not recorded here). Profile `brightflow-sandbox-ikeda`, region ap-northeast-1.
+
+| Resource | Name | ARN (account masked) | Monthly estimate |
+|---|---|---|---|
+| Lightsail container service | `kokoroe` — power **micro** (0.25 vCPU, 1 GB), scale 1, tag `project=kokoroe` | `arn:aws:lightsail:ap-northeast-1:<account>:ContainerService/…` | **$10** (Lightsail price list, from `get-container-service-powers`) |
+| Container image | `:kokoroe.web.1` (linux/amd64, ~267 MB) | — | included |
+| AWS Budgets | `kokoroe-guard` — $20/month, cost filter Service = Amazon Lightsail (no other Lightsail use in the account), email alerts at actual > 80% and > 100% to <email> | `arn:aws:budgets::<account>:budget/kokoroe-guard` | ~$0.6 (the account already has more than two budgets; each additional budget is billed per day — check the Budgets pricing page) |
+
+Public URL: `https://kokoroe.xzan0gz3dgpb8.ap-northeast-1.cs.amazonlightsail.com/` — first deployment **without an API key**
+(recorded data only; `KOKOROE_LIVE` unset). Verified 11/3 with Playwright: AI banner on every page, data-handling text,
+デモの続き (16 rules, card 1/20), お試し (judging records; the side panel says interpretation does not run on recorded data).
+Screenshots: `docs/screens/public-*.png`. Adding the `kokoroe-public` key is a separate deployment, shown to Kento first.
+
+## How the image was actually built and pushed (Podman, Apple Silicon)
+
+Building Next.js inside an emulated linux/amd64 container **segfaulted** (Turbopack's native binary under qemu). So the app is
+built on the host and the image only copies files (no `RUN` → no emulation):
+```bash
+scripts/prepare-image.sh                                   # host build → .image/ (sharp removed; checks: no *.node, no .env*)
+podman build --platform linux/amd64 -t localhost/kokoroe:latest .image   # uses Dockerfile.prebuilt
+# lightsailctl talks to the Docker API; point it at Podman's socket and pin the API version (Podman reports 1.44,
+# lightsailctl needs 1.46 for `platform`):
+DOCKER_API_VERSION=1.46 DOCKER_HOST=unix://$(podman machine inspect --format '{{.ConnectionInfo.PodmanSocket.Path}}') \
+  aws lightsail push-container-image --profile brightflow-sandbox-ikeda --region ap-northeast-1 \
+  --service-name kokoroe --label web --image localhost/kokoroe:latest
+```
+The multi-stage `Dockerfile` remains for machines that build natively on x86_64 (or Docker with working emulation).
+
 ## What is lost on a redeploy — and why that's fine
 
 The container keeps visitor sessions and the public-demo limit counters under `KOKOROE_DATA_DIR` (`/tmp/kokoroe`), so a redeploy
@@ -53,7 +83,7 @@ Nothing permanent lives in the container. Evaluation results, decision records a
 ## Build and deploy
 
 ```bash
-# 1. Build for Lightsail (x86_64) — on Apple Silicon use --platform
+# 1. Build for Lightsail (x86_64). On Apple Silicon see "How the image was actually built" above (host build + Podman).
 docker buildx build --platform linux/amd64 -t kokoroe:latest .
 
 # 2. Push the image to the container service
