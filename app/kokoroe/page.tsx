@@ -117,6 +117,14 @@ export default async function KokoroePage() {
         <p className="mt-1 text-[13px] text-nibi">
           {active.length} 項目。師匠の判定から覚えたものと、台帳から写したものがあります。
         </p>
+        <a
+          href="/kokoroe/export"
+          download
+          className="mt-4 block rounded-[3px] bg-ai px-3 py-2.5 text-center text-[14px] text-kami hover:opacity-95"
+        >
+          心得帳を後任に渡す
+        </a>
+        <p className="mt-1.5 text-[12px] text-nibi">Agent Skills の形（SKILL.md と取引先ごとのファイル）で書き出します。後任の Claude Code の .claude/skills/ に置くと使えます。</p>
         <ol className="mt-5 space-y-1 text-[14px]">
           {groups.map((g) => (
             <li key={g.key}>

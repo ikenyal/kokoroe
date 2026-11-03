@@ -20,7 +20,8 @@
     "eval:smoke": "tsx --env-file-if-exists=.env.local eval/run.ts --disciple v0 --scenes E01,E06,E10,E13,E19",
     "eval:cache-ab": "tsx --env-file-if-exists=.env.local eval/cache-ab.ts",
     "demo:snapshots": "tsx eval/build-snapshots.ts",
-    "demo:results": "tsx eval/build-results.ts"
+    "demo:results": "tsx eval/build-results.ts",
+    "export:skill": "tsx eval/export-skill.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "1.4.0",

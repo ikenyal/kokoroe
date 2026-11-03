@@ -84,3 +84,8 @@ Short entries, appended every work session. Source material for the README secti
   on, sequential calls) that reports uncached/write/read tokens, cost, latency percentiles and verdicts. Result: −37% cost on the
   apprentice, latency unchanged, verdicts unchanged; no gain for parallel successor questions. The same A/B doubled as the check
   Kento asked for — it showed the Before had moved by ~5 points with the new layout, so the Before was replaced (D-030).
+- **Handing the kokoroe-chō to the successor's own Claude Code** — the grown kokoroe-chō is exported as an Agent Skill
+  (SKILL.md index + clients/*.md with 沿革; name/description per the Skills spec, unit-tested) and as a zip from the 心得帳 screen.
+  Claude then ran `claude -p` in an empty directory holding only that skill, with MCP disabled (`--strict-mcp-config`) and
+  `--setting-sources project`, and asked the successor's question: it answered Teams-not-Zoom with K-004 and the 2024 reason.
+  A first run picked up the author's user-level output style — caught by reading the answer, and re-run clean (`demo/successor-claude-code/`).
