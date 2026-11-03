@@ -108,7 +108,7 @@ export function reserveStart(ip: string): boolean {
 export function recordSpend(usage: Usage[]) {
   if (!usage.length) return;
   const c = load();
-  c.usd += estimateUsd(usage);
+  c.usd += estimateUsd(usage, "max"); // an unknown model is counted at the highest price, never as $0
   save(c);
 }
 

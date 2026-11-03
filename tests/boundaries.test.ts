@@ -148,8 +148,18 @@ describe("estimateUsd — the daily spend guard's arithmetic", () => {
     expect(estimateUsd([{ model: "claude-sonnet-5-5-20261101", input_tokens: 1_000_000, output_tokens: 0 }])).toBeCloseTo(2);
     expect(estimateUsd([])).toBe(0);
   });
-  it("current behavior: an unknown model is counted as $0 (the daily guard would not see it — see the night notes)", () => {
-    expect(estimateUsd([{ model: "some-other-model", input_tokens: 1_000_000, output_tokens: 1_000_000 }])).toBe(0);
+  it("an unknown model stops an evaluation's estimate with an error that names it (never a silent $0)", () => {
+    expect(() => estimateUsd([{ model: "some-other-model", input_tokens: 1, output_tokens: 1 }])).toThrow(/unknown model "some-other-model"/);
+    expect(() => estimateUsd([{ model: "some-other-model", input_tokens: 1, output_tokens: 1 }], "throw")).toThrow();
+  });
+  it("the public guard counts an unknown model at the highest price in the table (the safe side)", () => {
+    const usd = estimateUsd([{ model: "some-other-model", input_tokens: 1_000_000, output_tokens: 1_000_000 }], "max");
+    expect(usd).toBeCloseTo(4 + 20); // Opus 5.5's input and output prices are the highest
+    expect(usd).toBeGreaterThanOrEqual(
+      estimateUsd([{ model: "claude-opus-5-5", input_tokens: 1_000_000, output_tokens: 1_000_000 }]),
+    );
+    // a known model is priced the same either way
+    expect(estimateUsd([{ model: "claude-sonnet-5-5", input_tokens: 1_000_000, output_tokens: 0 }], "max")).toBeCloseTo(2);
   });
 });
 
@@ -192,6 +202,11 @@ describe("public-demo limits across time boundaries (D-032)", () => {
     expect(reserve("s1", "1.1.1.1")).toBe("session"); // refused: must not use up the global budget
     expect(reserve("s2", "1.1.1.1")).toBeNull(); // the 3rd counted call
     expect(reserve("s3", "1.1.1.1")).toBe("daily");
+  });
+  it("spend from an unknown model is counted at the highest price, so the daily guard still trips", async () => {
+    const { recordSpend, dailyExhausted } = await fresh({ KOKOROE_DAILY_USD: "0.01" });
+    recordSpend([{ model: "some-future-model", input_tokens: 0, output_tokens: 1000 }]); // $0.02 at the highest output price
+    expect(dailyExhausted()).toBe(true);
   });
   it("recording an empty usage list changes nothing", async () => {
     const { recordSpend, dailyExhausted } = await fresh({ KOKOROE_DAILY_USD: "0.000001" });

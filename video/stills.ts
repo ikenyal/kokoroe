@@ -10,11 +10,11 @@ import { chromium } from "playwright";
 
 const ROOT = path.resolve(__dirname, "..");
 const FRAMES: Record<string, number[]> = {
-  "s02-ledger": [2.2, 5.6, 8.6, 11.6],
+  "s02-ledger": [2.2, 4.8, 7.4, 10.6],
   "s03-head": [3.2, 7.4, 11.2, 12.9, 13.9, 14.9],
   "s04-title": [2.8, 4.8, 5.8, 6.4, 9.0],
   "s07-how": [3.6, 7.2, 10.2, 14.0],
-  "s09a-pile": [1.3, 1.8, 2.4, 4.6, 7.9],
+  "s09a-pile": [1.3, 1.8, 2.4, 4.6, 6.9],
   "s08b-mcp": [1.0, 4.5],
   "s10-end": [1.4, 4.0, 9.0],
 };

@@ -1,6 +1,6 @@
 # Demo video — built as code
 
-Target 2:45 (max 3:00), Japanese. Plan: [scenes.json](scenes.json) (10 scenes, 2:50). Everything is generated here during the
+Target 2:45 (max 3:00), Japanese. Plan: [scenes.json](scenes.json) (12 scenes, 2:53). Everything is generated here during the
 hackathon — no outside footage, images or music:
 - **screen** scenes are recordings of the real app (the features shown were built during the hackathon),
 - **anim** scenes are HTML/CSS pages in [scenes/](scenes/) recorded the same way (explanations only).
@@ -39,7 +39,8 @@ All motion is CSS animation (no timers/randomness), so stills are reproducible. 
 - [ ] Polly narration per scene (read-only API call with `--profile brightflow-sandbox-ikeda`).
 
 ## Letters with a job (Kento's request on 11/3; built on the night of 11/3 → see docs/night-2026-11-03.md)
-**Status:** s04 and s03 done (same lengths); s09a built as a candidate, not yet in scenes.json (needs a length decision).
+**Status (11/4, Kento):** s04 and s03 done (same lengths). s09a is in the video at 7 s, text only (no narration or subtitle), with
+three entries. To keep under 3:00, s02 13→11 s and s06 20→18 s; s08 (the demo's peak) is not shortened. Rough cut: 173.0 s.
 
 The idea: kinetic typography made entirely in code, with no assets. Showiness is not the point. Three ideas are taken, kept inside Kokoroe's world (帳面, 明朝, 墨/藍/朱):
 1. **Give each piece of text a job.** Specify what the letters *do* (get corrected, come undone, pile up as a ledger), not that
@@ -64,6 +65,6 @@ The idea: kinetic typography made entirely in code, with no assets. Showiness is
 - Reading speed comes first: no flashy 3D, no shaders, no strong color changes.
 - CSS animation only (reproducible stills).
 - The whole video stays within 3:00.
-  - It is now 170 s.
+  - It was 170 s; with s09a and the cuts above it is 173 s.
   - s01 and s07 narration already run long.
   - Any added seconds come from shortening other scenes; s02 and s03 are the first places to look.

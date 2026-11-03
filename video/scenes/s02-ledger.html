@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
-<!-- s02 (13 s): an Edo townscape in line drawing, sparks rising, a ledger carried to a well and sunk into it.
+<!-- s02 (11 s; was 13 s — shortened 11/4 to make room for s09a): an Edo townscape in line drawing, sparks rising, a ledger carried to a well and sunk into it.
      Told as a tradition ("…と伝えられています"), so the corner note says 言い伝え. -->
 <style>
-  .move { animation: move 3.3s 5s ease-in-out both; }
+  .move { animation: move 3s 4s ease-in-out both; }
   @keyframes move { from { opacity: 0; transform: translate(-430px, 170px); } 18% { opacity: 1; } to { opacity: 1; transform: none; } }
-  .sink { animation: sink 1.8s 8.8s ease-in both; }
+  .sink { animation: sink 1.6s 7.3s ease-in both; }
   @keyframes sink { to { transform: translate(0, 200px); } }
   .spark { fill: var(--kaki); opacity: 0; animation: rise var(--t) var(--d) ease-out 3 both; }
   @keyframes rise { 0% { opacity: 0; transform: none; } 15% { opacity: .9; } 70% { opacity: .5; } 100% { opacity: 0; transform: translate(var(--dx), -230px); } }
@@ -66,8 +66,8 @@
 
   <!-- ripples inside the rim -->
   <g clip-path="url(#in-rim)">
-    <ellipse class="ripple" cx="970" cy="432" rx="80" ry="17" style="--d:10.4s"/>
-    <ellipse class="ripple" cx="970" cy="432" rx="80" ry="17" style="--d:11s"/>
+    <ellipse class="ripple" cx="970" cy="432" rx="80" ry="17" style="--d:8.7s"/>
+    <ellipse class="ripple" cx="970" cy="432" rx="80" ry="17" style="--d:9.2s"/>
   </g>
 
   <!-- well: front half of the rim, the 井桁 beams and the wall (drawn over the ledger) -->

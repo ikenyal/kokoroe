@@ -516,3 +516,14 @@ subtitle in the repo comes from a session (all 61 PNGs are produced by this repo
 **Open:** older commits still contain the removed text. Whether to rewrite history before publishing is Kento's decision
 (see `docs/publishing.md`).
 
+## D-048 · 2026-11-04 · Accepted (Kento) · An unknown model name never costs $0
+`estimateUsd` (`src/lib/cost.ts`) used to price a model missing from its table at $0. Now:
+- **Evaluation** (the default): it stops with an error that names the model ("add its price to src/lib/cost.ts"), so a run can
+  never report a cost that silently left calls out.
+- **The public demo's daily spend guard** (`recordSpend` in `src/server/limits.ts`): it counts the call at the highest prices in
+  the table (input and output separately), the safe side.
+
+Known models are priced exactly as before, so no recorded number changes. Judging and learning are untouched. Tests pin down the
+error, the highest-price fallback, and that the daily guard still trips on an unknown model. `eval:quick` is unchanged: match 0%,
+○+△ 45% (fictional 10 clients / 20 held-out scenes).
+

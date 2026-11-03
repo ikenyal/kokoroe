@@ -227,3 +227,15 @@ Short entries, appended every work session. Source material for the README secti
   was checked before pushing: 0 hits across all history, the same final tree hash, noreply-only authors, tests passing. One attribution
   Claude had removed to be safe (ARIA's milestone audits) turned out to come from a public repo and was restored with its URL.
   The force push itself was stopped by the auto-mode safety check, so Kento ran it.
+- **An overnight run on a branch** — Kento left four tasks for the night with explicit limits: no changes to learning, judging or
+  evaluation code, no deploys, at most $3 of API spend, and stop and write it down when unsure. Claude worked on its own branch,
+  pushed after each step, and kept `docs/night-2026-11-03.md` with what was done, what was checked and what needed a decision.
+  - **Video:** the title's letters are "corrected" (s04), the brush's letters come undone (s03), and the master's words pile up
+    into a vertical ledger (s09a). Every version was checked as stills; the first version of each had an overlap the stills showed.
+  - **README:** the English version was made easier to read.
+  - **Screens:** Japanese error and not-found screens were added, and a start limit became an explanation instead of an error.
+  - **Tests:** 26 boundary tests. One of them surfaced that an unknown model would have cost $0 in the spend guard.
+
+  The API was not used. In the morning Kento decided five questions; the cost fix (D-048) and putting s09a into the video
+  (shortening s02 and s06, not the demo's peak) followed, and the branch was merged with a normal push.
+

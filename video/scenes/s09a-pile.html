@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
-<!-- s09a (8 s, NOT yet in scenes.json — a candidate; see docs/night-2026-11-03.md): just before the numbers.
+<!-- s09a (7 s, text only — no narration or subtitle; Kento 11/4): just before the numbers.
      The letters' job: the master's one-liners settle onto the ruled lines and *become* the kokoroe-chō.
      Each spoken one-liner appears in vermilion (the master's hand), lands at the head of a column as a small note, and the
      rule it became is written below it in ink; columns fill right → left like a merchant's ledger (vertical writing).
-     Words and rules are from the demo's kokoroe-chō (data/demo/demo-snapshot.json: K-016, K-015, K-013, K-014; fictional).
+     Words and rules are from the demo's kokoroe-chō (data/demo/demo-snapshot.json: K-016, K-015, K-014; fictional).
      Colors: 墨, 朱 (and the ruled lines). Faces: Mincho for the ledger, Klee (handwritten) for the master's words. -->
 <style>
   .page { position: absolute; left: 400px; top: 70px; width: 560px; height: 520px; background: #faf9f6;
@@ -33,7 +33,6 @@
   const E = [
     ["そこはいらん", "季節のあいさつは送らなくてよい。"],
     ["早めに配車課長へ", "悪い知らせは確定を待たず、早めに配車課長へ本題まで伝える。"],
-    ["今は向こう忙しい", "二〜三月は依頼を受けたら受領の一言だけ先に返し、本題は落ち着いてから送る。"],
     ["表は窓口だ", "正式な連絡の宛先は窓口の主査にし、事務局長へ直接出さない。"],
   ];
   const ledger = document.getElementById("ledger"), said = document.getElementById("said");
