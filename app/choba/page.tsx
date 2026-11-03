@@ -261,9 +261,9 @@ export default async function ChobaPage() {
             {undoable.block === "busy" ? (
               <span>（弟子が読み取り中です。終わると取り消せます）</span>
             ) : undoable.block === "changed-since" ? (
-              <span>（この心得は、そのあと別の直しでも変わったため、ここからは取り消せません。心得帳で消せます）</span>
+              <span>（この判定の後に別の直しが入ったため、取り消せません。心得帳から消すことはできます）</span>
             ) : undoable.block === "follow-up" ? (
-              <span>（確かめから別の直しが続いているため、ここからは取り消せません）</span>
+              <span>（この判定の後に別の直しが入ったため、取り消せません）</span>
             ) : (
               <button className="ml-2 text-ai underline-offset-4 hover:underline">
                 取り消す{undoable.writes ? "（心得帳に書いた分も戻し、沿革に残します）" : ""}
