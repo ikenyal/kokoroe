@@ -1,0 +1,919 @@
+{
+  "note": "実地テスト: 台帳の制約だけから、学習用の固定20場面（各社2つ）を判定する（架空データ）。案は記録済みのもの",
+  "store": {
+    "rules": [
+      {
+        "id": "K-001",
+        "scope": {
+          "clientId": "C01",
+          "sceneTypes": null
+        },
+        "text": "社外チャット不可（連絡はメール）",
+        "when": null,
+        "status": "active",
+        "confidence": "high",
+        "origin": "ledger",
+        "sources": [
+          {
+            "kind": "ledger",
+            "judgmentId": "LEDGER-C01",
+            "date": "2026-11-03",
+            "sceneId": "",
+            "verdict": null,
+            "remark": ""
+          }
+        ],
+        "history": [
+          {
+            "date": "2026-11-03",
+            "before": null,
+            "after": "社外チャット不可（連絡はメール）",
+            "trigger": null,
+            "judgmentId": "LEDGER-C01",
+            "masterWords": "",
+            "reason": "取引先台帳の明示的な制約から登録"
+          }
+        ]
+      },
+      {
+        "id": "K-002",
+        "scope": {
+          "clientId": "C02",
+          "sceneTypes": null
+        },
+        "text": "3月決算。2〜3月は多忙",
+        "when": null,
+        "status": "active",
+        "confidence": "high",
+        "origin": "ledger",
+        "sources": [
+          {
+            "kind": "ledger",
+            "judgmentId": "LEDGER-C02",
+            "date": "2026-11-03",
+            "sceneId": "",
+            "verdict": null,
+            "remark": ""
+          }
+        ],
+        "history": [
+          {
+            "date": "2026-11-03",
+            "before": null,
+            "after": "3月決算。2〜3月は多忙",
+            "trigger": null,
+            "judgmentId": "LEDGER-C02",
+            "masterWords": "",
+            "reason": "取引先台帳の明示的な制約から登録"
+          }
+        ]
+      },
+      {
+        "id": "K-003",
+        "scope": {
+          "clientId": "C03",
+          "sceneTypes": null
+        },
+        "text": "理事会は月1回（第3木曜）。見積りは指定書式",
+        "when": null,
+        "status": "active",
+        "confidence": "high",
+        "origin": "ledger",
+        "sources": [
+          {
+            "kind": "ledger",
+            "judgmentId": "LEDGER-C03",
+            "date": "2026-11-03",
+            "sceneId": "",
+            "verdict": null,
+            "remark": ""
+          }
+        ],
+        "history": [
+          {
+            "date": "2026-11-03",
+            "before": null,
+            "after": "理事会は月1回（第3木曜）。見積りは指定書式",
+            "trigger": null,
+            "judgmentId": "LEDGER-C03",
+            "masterWords": "",
+            "reason": "取引先台帳の明示的な制約から登録"
+          }
+        ]
+      },
+      {
+        "id": "K-004",
+        "scope": {
+          "clientId": "C04",
+          "sceneTypes": null
+        },
+        "text": "情報セキュリティ規程で Zoom 不可、Teams のみ",
+        "when": null,
+        "status": "active",
+        "confidence": "high",
+        "origin": "ledger",
+        "sources": [
+          {
+            "kind": "ledger",
+            "judgmentId": "LEDGER-C04",
+            "date": "2026-11-03",
+            "sceneId": "",
+            "verdict": null,
+            "remark": ""
+          }
+        ],
+        "history": [
+          {
+            "date": "2026-11-03",
+            "before": null,
+            "after": "情報セキュリティ規程で Zoom 不可、Teams のみ",
+            "trigger": null,
+            "judgmentId": "LEDGER-C04",
+            "masterWords": "",
+            "reason": "取引先台帳の明示的な制約から登録"
+          }
+        ]
+      },
+      {
+        "id": "K-005",
+        "scope": {
+          "clientId": "C05",
+          "sceneTypes": null
+        },
+        "text": "平日昼は現場にいて電話に出られない",
+        "when": null,
+        "status": "active",
+        "confidence": "high",
+        "origin": "ledger",
+        "sources": [
+          {
+            "kind": "ledger",
+            "judgmentId": "LEDGER-C05",
+            "date": "2026-11-03",
+            "sceneId": "",
+            "verdict": null,
+            "remark": ""
+          }
+        ],
+        "history": [
+          {
+            "date": "2026-11-03",
+            "before": null,
+            "after": "平日昼は現場にいて電話に出られない",
+            "trigger": null,
+            "judgmentId": "LEDGER-C05",
+            "masterWords": "",
+            "reason": "取引先台帳の明示的な制約から登録"
+          }
+        ]
+      },
+      {
+        "id": "K-006",
+        "scope": {
+          "clientId": "C06",
+          "sceneTypes": null
+        },
+        "text": "冬（12〜2月）は仕込みで繁忙",
+        "when": null,
+        "status": "active",
+        "confidence": "high",
+        "origin": "ledger",
+        "sources": [
+          {
+            "kind": "ledger",
+            "judgmentId": "LEDGER-C06",
+            "date": "2026-11-03",
+            "sceneId": "",
+            "verdict": null,
+            "remark": ""
+          }
+        ],
+        "history": [
+          {
+            "date": "2026-11-03",
+            "before": null,
+            "after": "冬（12〜2月）は仕込みで繁忙",
+            "trigger": null,
+            "judgmentId": "LEDGER-C06",
+            "masterWords": "",
+            "reason": "取引先台帳の明示的な制約から登録"
+          }
+        ]
+      },
+      {
+        "id": "K-007",
+        "scope": {
+          "clientId": "C07",
+          "sceneTypes": null
+        },
+        "text": "Slack 共有チャンネルあり",
+        "when": null,
+        "status": "active",
+        "confidence": "high",
+        "origin": "ledger",
+        "sources": [
+          {
+            "kind": "ledger",
+            "judgmentId": "LEDGER-C07",
+            "date": "2026-11-03",
+            "sceneId": "",
+            "verdict": null,
+            "remark": ""
+          }
+        ],
+        "history": [
+          {
+            "date": "2026-11-03",
+            "before": null,
+            "after": "Slack 共有チャンネルあり",
+            "trigger": null,
+            "judgmentId": "LEDGER-C07",
+            "masterWords": "",
+            "reason": "取引先台帳の明示的な制約から登録"
+          }
+        ]
+      },
+      {
+        "id": "K-008",
+        "scope": {
+          "clientId": "C08",
+          "sceneTypes": null
+        },
+        "text": "年度予算。入札・随意契約の手続きがある",
+        "when": null,
+        "status": "active",
+        "confidence": "high",
+        "origin": "ledger",
+        "sources": [
+          {
+            "kind": "ledger",
+            "judgmentId": "LEDGER-C08",
+            "date": "2026-11-03",
+            "sceneId": "",
+            "verdict": null,
+            "remark": ""
+          }
+        ],
+        "history": [
+          {
+            "date": "2026-11-03",
+            "before": null,
+            "after": "年度予算。入札・随意契約の手続きがある",
+            "trigger": null,
+            "judgmentId": "LEDGER-C08",
+            "masterWords": "",
+            "reason": "取引先台帳の明示的な制約から登録"
+          }
+        ]
+      },
+      {
+        "id": "K-009",
+        "scope": {
+          "clientId": "C09",
+          "sceneTypes": null
+        },
+        "text": "担当者が2年ごとに異動する",
+        "when": null,
+        "status": "active",
+        "confidence": "high",
+        "origin": "ledger",
+        "sources": [
+          {
+            "kind": "ledger",
+            "judgmentId": "LEDGER-C09",
+            "date": "2026-11-03",
+            "sceneId": "",
+            "verdict": null,
+            "remark": ""
+          }
+        ],
+        "history": [
+          {
+            "date": "2026-11-03",
+            "before": null,
+            "after": "担当者が2年ごとに異動する",
+            "trigger": null,
+            "judgmentId": "LEDGER-C09",
+            "masterWords": "",
+            "reason": "取引先台帳の明示的な制約から登録"
+          }
+        ]
+      },
+      {
+        "id": "K-010",
+        "scope": {
+          "clientId": "C10",
+          "sceneTypes": null
+        },
+        "text": "先代から二代目社長に交代して1年",
+        "when": null,
+        "status": "active",
+        "confidence": "high",
+        "origin": "ledger",
+        "sources": [
+          {
+            "kind": "ledger",
+            "judgmentId": "LEDGER-C10",
+            "date": "2026-11-03",
+            "sceneId": "",
+            "verdict": null,
+            "remark": ""
+          }
+        ],
+        "history": [
+          {
+            "date": "2026-11-03",
+            "before": null,
+            "after": "先代から二代目社長に交代して1年",
+            "trigger": null,
+            "judgmentId": "LEDGER-C10",
+            "masterWords": "",
+            "reason": "取引先台帳の明示的な制約から登録"
+          }
+        ]
+      }
+    ],
+    "judgments": []
+  },
+  "queue": [
+    {
+      "scene": {
+        "id": "T05",
+        "set": "train",
+        "clientId": "C06",
+        "type": "T4",
+        "month": 5,
+        "situation": "丸新酒造に、酒税の申告に使う数字を自動で集計する仕組みを提案したい。今は奥様が毎月、帳簿から手作業で数字を拾っている。"
+      },
+      "draft": {
+        "channel": "mail",
+        "meeting": "in_person",
+        "formalTo": "contact",
+        "backchannelTo": null,
+        "timing": "now",
+        "followUp": true,
+        "format": "not_applicable",
+        "posture": [
+          "modest",
+          "offer_explanation",
+          "reduce_burden",
+          "explain_carefully",
+          "ask_process"
+        ],
+        "escalateToMaster": false,
+        "message": "丸新酒造 奥様\n\nいつも大変お世話になっております。だいだい工房の橙丸でございます。\n\n毎月の酒税申告に向けた数字のお取りまとめは、帳簿から手作業で拾っておられると伺っております。大変なお手間かと存じます。そこで、その集計を少しでも楽にできる仕組みについて、ご提案をさせていただけないかと考えております。\n\n仕込みでお忙しい冬を避け、今の5〜6月の時期でしたらお時間を頂戴しやすいかと存じます。まずは現在のやり方を拝見し、お困りの点をお聞かせいただくだけでも構いません。ご都合のよい日時をいくつかお知らせいただければ、蔵へお伺いいたします。\n\nなお、蔵元様にもご覧いただける形で、後日あらためて内容を整理してご説明いたします。\n\nご多用のところ恐れ入りますが、ご検討のほどよろしくお願い申し上げます。\n\n株式会社だいだい工房 橙丸",
+        "basedOnRules": []
+      }
+    },
+    {
+      "scene": {
+        "id": "T06",
+        "set": "train",
+        "clientId": "C09",
+        "type": "T2",
+        "month": 6,
+        "situation": "青葉ドラッグから、ポイント付与の条件を店舗ごとに変えられるようにしたいという依頼が来た。対象店舗の数や夜間処理への影響によって、工数が大きく変わる。"
+      },
+      "draft": {
+        "channel": "mail",
+        "meeting": "none",
+        "formalTo": "contact",
+        "backchannelTo": null,
+        "timing": "now",
+        "followUp": false,
+        "format": "not_applicable",
+        "posture": [
+          "modest",
+          "explain_carefully",
+          "ask_process",
+          "with_numbers"
+        ],
+        "escalateToMaster": true,
+        "message": "青葉ドラッグ システム担当 様\n\nいつも大変お世話になっております。株式会社だいだい工房の橙丸でございます。\nこのたびは、ポイント付与条件を店舗ごとに変更できるようにしたいとのご依頼をいただき、誠にありがとうございます。\n\nご要望の内容を正確に理解したうえでお見積りと進め方をご提案したく、以下の点をお教えいただけますでしょうか。\n\n1. 対象となる店舗数(全店舗か、一部店舗か)\n2. 店舗ごとに変えたい条件の種類(付与率、対象商品、期間など)\n3. 条件の変更を行う頻度と、どなたが設定されるか\n4. 夜間処理の現在の運用(開始時刻、終了の目標時刻など)\n5. ご希望の稼働開始時期\n\n対象店舗数や夜間処理への影響によって、必要な作業の規模が大きく変わる可能性がございます。そのため、ご回答を踏まえて影響範囲を確認し、あらためて概算とスケジュールをご連絡いたします。なお、費用や条件につきましては、社内で確認のうえご案内いたします。\n\nご多忙のところ恐れ入りますが、ご確認のほどよろしくお願い申し上げます。\n\n株式会社だいだい工房\n橙丸",
+        "basedOnRules": []
+      }
+    },
+    {
+      "scene": {
+        "id": "T07",
+        "set": "train",
+        "clientId": "C04",
+        "type": "T6",
+        "month": 12,
+        "situation": "12月に入った。港北精機とは8年の付き合いで、今年は品質記録の画面を2件改修した。年の瀬に向けて、何か連絡を入れておくか考えている。"
+      },
+      "draft": {
+        "channel": "mail",
+        "meeting": "none",
+        "formalTo": "contact",
+        "backchannelTo": null,
+        "timing": "now",
+        "followUp": true,
+        "format": "not_applicable",
+        "posture": [
+          "modest",
+          "concise",
+          "formal"
+        ],
+        "escalateToMaster": false,
+        "message": "港北精機株式会社\n生産技術主任 様\n\nいつも大変お世話になっております。株式会社だいだい工房の橙丸でございます。\n\n師走に入り、何かとご多忙の折かと存じます。本年も、品質記録画面の改修を2件ご用命いただき、誠にありがとうございました。8年にわたりお引き立ていただいておりますこと、あらためて御礼申し上げます。\n\n改修後の画面につきまして、現場でお気づきの点やご不便がございましたら、年内でも年明けでも、お気軽にお申し付けください。\n\n本来であれば直接ご挨拶に伺うべきところ、まずはメールにて失礼いたします。年末年始の休業日が決まりましたら、あらためてご案内申し上げます。\n\n来年も変わらぬご愛顧のほど、よろしくお願い申し上げます。どうぞ穏やかな年の瀬をお迎えください。\n\n株式会社だいだい工房\n橙丸",
+        "basedOnRules": []
+      }
+    },
+    {
+      "scene": {
+        "id": "T09",
+        "set": "train",
+        "clientId": "C02",
+        "type": "T3",
+        "month": 2,
+        "situation": "白樺製菓から、出荷ラベル印刷の改修について見積りが欲しいと言われた。金額は数十万円ほどで、着手は4月以降で構わないとのこと。"
+      },
+      "draft": {
+        "channel": "mail",
+        "meeting": "none",
+        "formalTo": "contact",
+        "backchannelTo": null,
+        "timing": "now",
+        "followUp": false,
+        "format": "client",
+        "posture": [
+          "modest",
+          "concise",
+          "formal",
+          "with_numbers"
+        ],
+        "escalateToMaster": true,
+        "message": "白樺製菓株式会社 総務係長 様\n\nいつも大変お世話になっております。株式会社だいだい工房の橙丸です。\nこのたびは、出荷ラベル印刷の改修についてお見積りのご依頼をいただき、誠にありがとうございます。\n\n決算期でご多忙の折かと存じますので、ご負担をおかけしないよう、お見積書は書面にてメールでお送りいたします。ご確認は着手予定の4月以降でも差し支えございません。\n\nつきましては、お見積書の書式につきまして、貴社でご指定のものがございましたらお知らせください。特にご指定がなければ、当社の書式で作成いたします。また、見積りの前提となる改修内容を確認させていただきたく、お手すきの際にメールで結構ですので、現在のラベルの変更点(項目・レイアウト等)をご教示いただけますと幸いです。\n\nお忙しい時期に恐れ入りますが、何卒よろしくお願い申し上げます。\n\n株式会社だいだい工房\n橙丸",
+        "basedOnRules": []
+      }
+    },
+    {
+      "scene": {
+        "id": "T10",
+        "set": "train",
+        "clientId": "C08",
+        "type": "T10",
+        "month": 4,
+        "situation": "県産業振興財団の事務局長が4月に交代した。新しい事務局長は県庁から来た方で、当社とはこれまで面識がない。"
+      },
+      "draft": {
+        "channel": "letter",
+        "meeting": "in_person",
+        "formalTo": "decider",
+        "backchannelTo": "contact",
+        "timing": "now",
+        "followUp": true,
+        "format": "not_applicable",
+        "posture": [
+          "formal",
+          "modest",
+          "concise",
+          "prior_summary",
+          "ask_process"
+        ],
+        "escalateToMaster": false,
+        "message": "県産業振興財団\n事務局長 ○○ 様\n\n拝啓 新緑の候、貴職におかれましてはますますご清栄のこととお慶び申し上げます。\nこのたびは事務局長にご就任とのこと、心よりお祝い申し上げます。\n\n株式会社だいだい工房の篠原清と申します。弊社は創業31年、貴財団の業務システムの開発・保守を15年にわたり担当させていただいております。これまでのご縁に、あらためて深く感謝申し上げます。\n\nつきましては、ご就任のご挨拶と、これまでの取り組みの概要のご説明に、一度お伺いしたく存じます。お忙しい折、15分から30分程度で結構です。ご都合のよい日時をお知らせいただければ幸いです。なお、貴財団の予算執行や契約手続きのお決まりに沿って対応いたしますので、ご留意点があればご教示ください。\n\nまずは書面にてご挨拶申し上げます。今後ともご指導のほど、よろしくお願い申し上げます。\n\n敬具\n\n株式会社だいだい工房\n営業部長 篠原 清\n(担当:橙丸)",
+        "basedOnRules": []
+      }
+    },
+    {
+      "scene": {
+        "id": "T13",
+        "set": "train",
+        "clientId": "C06",
+        "type": "T9",
+        "month": 9,
+        "situation": "丸新酒造の販売管理システムを、再来年の春に入れ替える話を進めたい。費用はこれまでで一番大きく、蔵の中でもじっくり話し合ってもらう必要がある。"
+      },
+      "draft": {
+        "channel": "letter",
+        "meeting": "in_person",
+        "formalTo": "contact",
+        "backchannelTo": "decider",
+        "timing": "now",
+        "followUp": true,
+        "format": "not_applicable",
+        "posture": [
+          "modest",
+          "formal",
+          "offer_explanation",
+          "explain_carefully",
+          "reduce_burden",
+          "prior_summary",
+          "ask_process"
+        ],
+        "escalateToMaster": true,
+        "message": "丸新酒造 奥様\n\n拝啓 初秋の候、ますますご清栄のこととお慶び申し上げます。平素は格別のお引き立てを賜り、厚く御礼申し上げます。\n\nさて、現在ご利用いただいております販売管理システムにつきまして、再来年の春を目処に入れ替えをご検討いただけないかと、ご相談を差し上げたくご連絡いたしました。\n\n費用面でもこれまでで最も大きなご検討となる見込みのため、蔵の皆様でじっくりご議論いただけますよう、これまでの経緯と現状の課題、入れ替えの考え方を簡潔にまとめた資料をご用意いたします。まだ具体的なお見積りやご契約のお話ではございません。\n\n仕込みでご多忙となる12月より前の、比較的お時間のとれる時期に、30分ほどご説明にお伺いできればと存じます。ご都合のよい日時や、どなたにご同席いただくのがよいか、また社内でのご検討の進め方についても、ご教示いただけますと幸いです。\n\nご多忙の折、恐れ入りますが、何卒よろしくお願い申し上げます。\n\n敬具\n\n株式会社だいだい工房 営業部 橙丸（篠原 清 代理）",
+        "basedOnRules": [
+          "K-011"
+        ]
+      }
+    },
+    {
+      "scene": {
+        "id": "T14",
+        "set": "train",
+        "clientId": "C07",
+        "type": "T3",
+        "month": 3,
+        "situation": "ネクストリンクの PM から、来期の保守費を2割ほど下げられないかと相談があった。資金調達の前で、全体のコストを見直しているらしい。"
+      },
+      "draft": {
+        "channel": "chat",
+        "meeting": "none",
+        "formalTo": "contact",
+        "backchannelTo": null,
+        "timing": "heads_up_then_later",
+        "followUp": true,
+        "format": "negotiate",
+        "posture": [
+          "modest",
+          "concise",
+          "explain_carefully",
+          "ask_process"
+        ],
+        "escalateToMaster": true,
+        "message": "お世話になっております。だいだい工房の橙丸です。来期の保守費についてご相談をいただき、ありがとうございます。資金調達を前に全体のコストを見直されているとのこと、承知いたしました。ご相談の内容は社内で確認し、あらためてご回答いたします。その前に、検討にあたり次の点を教えていただけますでしょうか。1) 見直しの対象となっているのは保守費全体か、一部の項目か。2) ご希望の時期とご提案の期限。3) 稟議や承認に必要な資料の形式があるか。あわせて、保守内容の見直し(対応範囲や対応時間の調整など)も含め、ご負担を抑えられる形を一緒に検討できればと考えております。見積書の形式は、貴社のご都合に合わせて相談しながら決めさせてください。どうぞよろしくお願いいたします。",
+        "basedOnRules": []
+      }
+    },
+    {
+      "scene": {
+        "id": "T15",
+        "set": "train",
+        "clientId": "C01",
+        "type": "T1",
+        "month": 7,
+        "situation": "浜風運輸の運行実績集計の改修で、テスト環境の準備が遅れている。納期が1か月ほどずれるかもしれないが、社内ではまだ調整を続けている。"
+      },
+      "draft": {
+        "channel": "mail",
+        "meeting": "none",
+        "formalTo": "contact",
+        "backchannelTo": null,
+        "timing": "heads_up_then_later",
+        "followUp": true,
+        "format": "not_applicable",
+        "posture": [
+          "modest",
+          "concise",
+          "formal",
+          "explain_carefully",
+          "offer_explanation"
+        ],
+        "escalateToMaster": false,
+        "message": "浜風運輸株式会社\n配車課長 様\n\nいつも大変お世話になっております。株式会社だいだい工房の橙丸でございます。\n\n運行実績集計の改修につきまして、お伝えしたいことがありご連絡いたしました。\n\n現在、テスト環境の準備に遅れが生じており、状況によっては納期が1か月ほどずれる可能性がございます。社内で挽回策を含め調整を続けており、まだ確定した状況ではございませんが、先にお知らせするほうがよいと考え、取り急ぎご一報いたしました。\n\n今後の見通しが固まり次第、あらためて詳細な状況と対応案を、改めてご報告にあがります。ご都合のよい時間にご説明の機会をいただければ幸いです。\n\nご迷惑をおかけし誠に申し訳ございません。何卒よろしくお願い申し上げます。\n\n株式会社だいだい工房\n橙丸",
+        "basedOnRules": []
+      }
+    },
+    {
+      "scene": {
+        "id": "T16",
+        "set": "train",
+        "clientId": "C09",
+        "type": "T6",
+        "month": 8,
+        "situation": "お盆前の時期になった。青葉ドラッグとは10年の付き合いで、今年は店舗のPOS連携を更新した。夏のあいさつを出すかどうか迷っている。"
+      },
+      "draft": {
+        "channel": "mail",
+        "meeting": "none",
+        "formalTo": "contact",
+        "backchannelTo": null,
+        "timing": "now",
+        "followUp": false,
+        "format": "not_applicable",
+        "posture": [
+          "modest",
+          "concise"
+        ],
+        "escalateToMaster": false,
+        "message": "青葉ドラッグ 情報システム ご担当者様\n\nいつも大変お世話になっております。株式会社だいだい工房の橙丸でございます。\n\nお盆を前に、夏のごあいさつを申し上げます。\n今年は店舗のPOS連携の更新をご一緒させていただき、あらためて御礼申し上げます。10年にわたりお付き合いいただけておりますのも、皆様のお力添えのおかげと感謝しております。\n\n厳しい暑さが続いておりますので、どうぞご自愛ください。\nなお、本メールはごあいさつのみで、ご返信には及びません。今後ともよろしくお願い申し上げます。\n\n株式会社だいだい工房\n橙丸",
+        "basedOnRules": []
+      }
+    },
+    {
+      "scene": {
+        "id": "T18",
+        "set": "train",
+        "clientId": "C05",
+        "type": "T3",
+        "month": 10,
+        "situation": "ひだまり介護サービスの事務長から、保守契約を3年契約にする代わりに月額を下げてもらえないかと相談があった。施設の運営費が厳しくなっているという。"
+      },
+      "draft": {
+        "channel": "mail",
+        "meeting": "none",
+        "formalTo": "contact",
+        "backchannelTo": null,
+        "timing": "now",
+        "followUp": true,
+        "format": "negotiate",
+        "posture": [
+          "modest",
+          "concise",
+          "explain_carefully",
+          "reduce_burden",
+          "call_evening"
+        ],
+        "escalateToMaster": true,
+        "message": "ひだまり介護サービス 事務長様\n\nいつもお世話になっております。だいだい工房の橙丸でございます。\nこのたびは、保守契約の3年契約化と月額のご見直しについてご相談をいただき、誠にありがとうございます。運営費のご負担が大きくなっているとのこと、状況を承知いたしました。\n\nご提案内容につきましては、社内で検討したうえで、あらためてご案内いたします。恐れ入りますが、少々お時間をいただけますと幸いです。\nなお、お見積りの形式や内容(対応範囲、3年契約の条件など)は、事務長様のご都合のよい形に合わせて、ご相談しながら整えてまいります。\n\n平日の日中はお忙しいと存じますので、お返事はメールで結構です。お電話をご希望の場合は、夕方以降のご都合のよい時間帯をお知らせいただければ、こちらから伺います。\n\n何卒よろしくお願い申し上げます。\n\n株式会社だいだい工房\n橙丸",
+        "basedOnRules": []
+      }
+    },
+    {
+      "scene": {
+        "id": "T19",
+        "set": "train",
+        "clientId": "C02",
+        "type": "T6",
+        "month": 7,
+        "situation": "7月に入った。白樺製菓では今年、新しい製造ラインが動き出し、こちらも生産管理の画面を手直しした。夏のあいさつをどうするか決めたい。"
+      },
+      "draft": {
+        "channel": "letter",
+        "meeting": "none",
+        "formalTo": "decider",
+        "backchannelTo": "contact",
+        "timing": "now",
+        "followUp": true,
+        "format": "not_applicable",
+        "posture": [
+          "modest",
+          "concise",
+          "formal"
+        ],
+        "escalateToMaster": false,
+        "message": "拝啓 盛夏の候、貴社ますますご清栄のこととお慶び申し上げます。平素は格別のお引き立てを賜り、厚く御礼申し上げます。\n\nこのたび新製造ラインが稼働を開始されたと伺い、心よりお祝い申し上げます。弊社におきましても、生産管理画面の手直しをさせていただきました。ご使用の中でお気づきの点がございましたら、いつでもご遠慮なくお申し付けください。\n\n暑さの厳しい折、皆様どうぞご自愛ください。今後とも変わらぬお付き合いのほど、よろしくお願い申し上げます。\n\n敬具\n\n株式会社だいだい工房 篠原 清\n(担当 橙丸)\n\n※総務ご担当の方へは、別途、本状をお送りした旨を簡単にお伝えいたします。",
+        "basedOnRules": []
+      }
+    },
+    {
+      "scene": {
+        "id": "T21",
+        "set": "train",
+        "clientId": "C03",
+        "type": "T3",
+        "month": 2,
+        "situation": "まちなか生協から、店舗の発注端末を増やす件の見積りを頼まれた。台数が多く、金額は前回の追加のときよりかなり大きくなる。"
+      },
+      "draft": {
+        "channel": "mail",
+        "meeting": "none",
+        "formalTo": "contact",
+        "backchannelTo": null,
+        "timing": "now",
+        "followUp": true,
+        "format": "client",
+        "posture": [
+          "formal",
+          "modest",
+          "with_numbers",
+          "prior_summary",
+          "ask_process",
+          "explain_carefully"
+        ],
+        "escalateToMaster": true,
+        "message": "まちなか生活協同組合 ご担当者様\n\nいつもお世話になっております。株式会社だいだい工房の橙丸でございます。\n\nこのたびは、店舗の発注端末増設に関するお見積りのご依頼をいただき、誠にありがとうございます。\n\n御組合指定の書式にてお見積りを作成いたします。台数が多く、前回の追加時よりも金額が大きくなる見込みですので、内容を丁寧にご説明できるよう、台数ごとの内訳と前回との比較も添える予定です。\n\nなお、金額が大きくなるため、専務理事様のご決裁や理事会(毎月第3木曜)へのご付議が必要になるかと存じます。つきましては、次の点をお教えいただけますでしょうか。\n1. 増設台数と設置店舗の最終のご予定\n2. 希望される導入時期\n3. ご決裁までの手順と、見積書をご提出すべき期限(次回の理事会に間に合わせる必要があるかどうか)\n\nいただいた内容をもとに、社内で確認のうえ、あらためてお見積書をお送りいたします。ご不明な点がございましたら、お気軽にお申し付けください。\n\n何卒よろしくお願い申し上げます。\n\n株式会社だいだい工房 橙丸",
+        "basedOnRules": []
+      }
+    },
+    {
+      "scene": {
+        "id": "T25",
+        "set": "train",
+        "clientId": "C04",
+        "type": "T4",
+        "month": 9,
+        "situation": "港北精機に、検査工程の記録を自動で集計する仕組みを提案したい。今は班長が毎週、手作業で集計表を作っている。"
+      },
+      "draft": {
+        "channel": "mail",
+        "meeting": "teams",
+        "formalTo": "contact",
+        "backchannelTo": null,
+        "timing": "now",
+        "followUp": true,
+        "format": "not_applicable",
+        "posture": [
+          "offer_explanation",
+          "modest",
+          "reduce_burden",
+          "explain_carefully",
+          "ask_process"
+        ],
+        "escalateToMaster": false,
+        "message": "港北精機株式会社 生産技術部 主任様\n\nいつもお世話になっております。だいだい工房の橙丸です。\n\n現在、検査工程の記録について、班長の皆様が毎週、集計表を手作業で作成されていると伺っております。この集計作業の負担を少しでも減らせないかと考え、記録を自動で集計する仕組みについて、簡単なご提案を考えております。\n\nまだ概要の段階ですので、現場の運用や、貴社で社内確認が必要な手順などを教えていただきながら、内容を整えていきたいと存じます。つきましては、30分ほどお時間をいただき、Teamsでご説明とご意見を伺えませんでしょうか。貴社の情報セキュリティ規程に沿い、Teamsでの開催を前提としております。\n\nご都合のよい日時を、いくつかお知らせいただければ幸いです。また、工場長様へのご説明が必要な場合の進め方についても、ご助言をいただけますと助かります。\n\n何卒よろしくお願い申し上げます。\n\n株式会社だいだい工房\n橙丸",
+        "basedOnRules": []
+      }
+    },
+    {
+      "scene": {
+        "id": "T26",
+        "set": "train",
+        "clientId": "C01",
+        "type": "T8",
+        "month": 8,
+        "situation": "浜風運輸の配車システムの切替作業を、来月の連休に予定していた。データ移行の検証の結果次第で、日程を動かす必要が出てきそうだ。新しい候補日はまだ決まっていない。"
+      },
+      "draft": {
+        "channel": "mail",
+        "meeting": "none",
+        "formalTo": "contact",
+        "backchannelTo": null,
+        "timing": "now",
+        "followUp": true,
+        "format": "not_applicable",
+        "posture": [
+          "offer_explanation",
+          "modest",
+          "prior_summary",
+          "reduce_burden",
+          "explain_carefully"
+        ],
+        "escalateToMaster": false,
+        "message": "浜風運輸株式会社\n配車課長 様\n\nいつも大変お世話になっております。株式会社だいだい工房の橙丸です。\n\n配車システムの切替作業につきまして、至急お伝えしたいことがあり、ご連絡いたしました。\n\n来月の連休中に予定しておりました切替作業ですが、現在進めておりますデータ移行の検証の結果次第では、日程を変更させていただく可能性が出てまいりました。現時点ではまだ確定しておらず、新しい候補日も決まっておりません。\n\n確定を待ってからのご連絡では、配車の調整に支障が出ると考え、早めにお知らせいたしました。大変申し訳ございません。\n\n検証結果は判明し次第、速やかにご報告いたします。あわせて、日程変更となった場合の候補日と影響範囲もお示しいたします。\n\nなお、配車の組み方の都合上、避けたい時期や、あらかじめご留意すべき日程がございましたら、お知らせいただけますと幸いです。\n\n不確かな状況でのご連絡となり恐縮ですが、ご調整のほど何卒よろしくお願い申し上げます。ご不明な点がございましたら、お気軽にお申し付けください。\n\n株式会社だいだい工房\n橙丸",
+        "basedOnRules": [
+          "K-015"
+        ]
+      }
+    },
+    {
+      "scene": {
+        "id": "T27",
+        "set": "train",
+        "clientId": "C10",
+        "type": "T4",
+        "month": 6,
+        "situation": "大河原建材に、現場への配送状況をスマートフォンで確かめられる仕組みを提案したい。営業担当への「今どこ？」という問い合わせが減る見込み。"
+      },
+      "draft": {
+        "channel": "mail",
+        "meeting": "in_person",
+        "formalTo": "decider",
+        "backchannelTo": null,
+        "timing": "now",
+        "followUp": true,
+        "format": "not_applicable",
+        "posture": [
+          "modest",
+          "offer_explanation",
+          "concise",
+          "reduce_burden",
+          "prior_summary"
+        ],
+        "escalateToMaster": false,
+        "message": "大河原建材\n社長 大河原 様\n\nいつも大変お世話になっております。株式会社だいだい工房の橙丸でございます。\n\n本日は、現場への配送状況をスマートフォンで確認できる仕組みについて、ご提案をさせていただきたくご連絡いたしました。ご利用いただくと、営業ご担当者様への「今どこ？」というお問い合わせが減らせる見込みでございます。\n\n導入の可否をお願いするものではなく、まずは概要をご覧いただき、御社の現状に合うかどうかをお聞かせいただければと存じます。A4一枚程度の資料にまとめ、ご説明は15〜20分ほどで済むようにいたします。\n\nご多忙のところ恐縮ですが、6月中にお伺いできる日時を、いくつかご教示いただけますでしょうか。ご都合に合わせて、こちらから参ります。\n\n何卒よろしくお願い申し上げます。\n\n株式会社だいだい工房\n橙丸",
+        "basedOnRules": []
+      }
+    },
+    {
+      "scene": {
+        "id": "T28",
+        "set": "train",
+        "clientId": "C07",
+        "type": "T6",
+        "month": 12,
+        "situation": "年末が近づいてきた。ネクストリンクとは取引2年目で、今年は在庫連携の API を納めた。年末年始に向けて何か送るか考えている。"
+      },
+      "draft": {
+        "channel": "chat",
+        "meeting": "none",
+        "formalTo": "contact",
+        "backchannelTo": null,
+        "timing": "now",
+        "followUp": false,
+        "format": "not_applicable",
+        "posture": [
+          "modest",
+          "concise"
+        ],
+        "escalateToMaster": false,
+        "message": "ネクストリンク 〇〇様\n\nお世話になっております。だいだい工房の橙丸です。\n本年も大変お世話になりました。今年は在庫連携APIをご一緒に形にでき、私どもにとりましても学びの多い一年となりました。\n\n年内の営業は12月○日(○)まで、年始は1月○日(○)より通常どおり対応いたします。(日付は篠原確認のうえ記入)\n\n来年もお役に立てるよう努めてまいります。どうぞ良いお年をお迎えください。\n\n株式会社だいだい工房 橙丸",
+        "basedOnRules": []
+      }
+    },
+    {
+      "scene": {
+        "id": "T30",
+        "set": "train",
+        "clientId": "C05",
+        "type": "T5",
+        "month": 4,
+        "situation": "ひだまり介護サービスの事務長が退職し、4月から新しい事務長が着任した。これまでの改修の相談は、前の事務長とだけ進めてきた。"
+      },
+      "draft": {
+        "channel": "mail",
+        "meeting": "phone_call",
+        "formalTo": "contact",
+        "backchannelTo": null,
+        "timing": "now",
+        "followUp": true,
+        "format": "not_applicable",
+        "posture": [
+          "modest",
+          "concise",
+          "prior_summary",
+          "call_evening",
+          "reduce_burden",
+          "ask_process"
+        ],
+        "escalateToMaster": false,
+        "message": "ひだまり介護サービス 事務長 様\n\nはじめてご連絡いたします。株式会社だいだい工房の橙丸と申します。この度は事務長にご就任とのこと、心よりお祝い申し上げます。\n\n弊社は4年にわたり、前事務長様と介護業務システムの改修や保守でお取引をいただいてまいりました。これまでのご相談内容と現在の状況を、1枚の資料にまとめてお送りいたします。お手すきの際にご覧いただければ幸いです。\n\n日中は現場でお忙しいと伺っておりますので、お電話は夕方以降のご都合のよい時間帯に、10分ほどお時間をいただければと存じます。ご希望の時間帯をメールでお知らせいただければ、そちらに合わせてご連絡いたします。あわせて、今後のご相談の進め方やご希望(連絡手段や頻度など)もお聞かせください。\n\n何卒よろしくお願い申し上げます。\n\n株式会社だいだい工房\n橙丸(篠原の同行・ご挨拶の機会もご相談させてください)",
+        "basedOnRules": []
+      }
+    },
+    {
+      "scene": {
+        "id": "T31",
+        "set": "train",
+        "clientId": "C03",
+        "type": "T4",
+        "month": 8,
+        "situation": "まちなか生協に、組合員向けの注文サイトを使いやすくする改修を提案したい。提案には概算の見積りも付ける予定。"
+      },
+      "draft": {
+        "channel": "mail",
+        "meeting": "none",
+        "formalTo": "contact",
+        "backchannelTo": null,
+        "timing": "heads_up_then_later",
+        "followUp": true,
+        "format": "client",
+        "posture": [
+          "offer_explanation",
+          "modest",
+          "formal",
+          "with_numbers",
+          "reduce_burden",
+          "ask_process"
+        ],
+        "escalateToMaster": true,
+        "message": "まちなか生活協同組合 情報ご担当 様\n\nいつも大変お世話になっております。株式会社だいだい工房の橙丸でございます。\n\n組合員様向けの注文サイトについて、より使いやすくするための改修をご提案させていただきたく、ご連絡いたしました。概算のお見積りも添えてご説明したいと考えております。\n\nつきましては、ご提案の進め方についてお教えいただけますでしょうか。\n・理事会（毎月第3木曜）へのご提出に間に合うよう、いつ頃までに資料をお渡しすればよいか\n・お見積りは貴組合ご指定の書式で作成いたしますので、書式のひな形をご共有いただけないか\n\nまずは概要を簡単にご説明するお時間を頂戴できれば幸いです。ご多忙の折恐縮ですが、ご都合のよい日時をお知らせください。ご負担をおかけしないよう、資料は簡潔にまとめてまいります。\n\n何卒よろしくお願い申し上げます。\n\n株式会社だいだい工房\n橙丸",
+        "basedOnRules": []
+      }
+    },
+    {
+      "scene": {
+        "id": "T37",
+        "set": "train",
+        "clientId": "C10",
+        "type": "T10",
+        "month": 11,
+        "situation": "大河原建材で、会長職に残っていた先代社長が年内で完全に退くことになった。先代とは18年来の付き合いだった。"
+      },
+      "draft": {
+        "channel": "letter",
+        "meeting": "in_person",
+        "formalTo": "decider",
+        "backchannelTo": null,
+        "timing": "now",
+        "followUp": true,
+        "format": "not_applicable",
+        "posture": [
+          "modest",
+          "formal",
+          "offer_explanation",
+          "ask_process"
+        ],
+        "escalateToMaster": false,
+        "message": "大河原建材株式会社 代表取締役社長 大河原 様\n\n拝啓 晩秋の候、貴社ますますご清栄のこととお慶び申し上げます。平素は格別のご高配を賜り、厚く御礼申し上げます。\n\nこのたび、会長様が年内をもって完全にご退任されると伺いました。先代様には18年にわたり、弊社を温かくお引き立ていただき、心より感謝しております。\n\nつきましては、先代様へのご挨拶とお礼を兼ねて、弊社営業部長の篠原とともに一度ご訪問できればと存じます。あわせて、社長様が今後のシステムや保守についてお考えのことを、ご都合のよい範囲でお聞かせいただければ幸いです。お忙しい時期かと存じますので、日時はご都合に合わせます。\n\n今後とも変わらぬお付き合いを賜りますよう、お願い申し上げます。\n\n敬具\n\n株式会社だいだい工房 橙丸",
+        "basedOnRules": []
+      }
+    },
+    {
+      "scene": {
+        "id": "T39",
+        "set": "train",
+        "clientId": "C08",
+        "type": "T9",
+        "month": 10,
+        "situation": "県産業振興財団で、来年度に相談記録のデータベースを新しくする構想があると聞いた。当社として関わりたいが、予算に乗るかどうかはこれから決まる。"
+      },
+      "draft": {
+        "channel": "mail",
+        "meeting": "none",
+        "formalTo": "contact",
+        "backchannelTo": "decider",
+        "timing": "now",
+        "followUp": true,
+        "format": "not_applicable",
+        "posture": [
+          "modest",
+          "cite_precedent",
+          "offer_explanation",
+          "concise",
+          "formal"
+        ],
+        "escalateToMaster": false,
+        "message": "県産業振興財団\n〇〇主査\n\nいつもお世話になっております。株式会社だいだい工房の橙丸でございます。\n\n来年度に向けて、相談記録のデータベースの刷新をご検討されていると伺いました。まだ予算の検討段階と存じますので、あくまで情報収集とご相談のお願いとして、ご連絡を差し上げました。\n\n当社は長年、貴財団のシステム保守をお任せいただいており、その際の運用や改修の実績がございます。これまでの類似事例も参考資料として整理し、ご検討の材料としてお示しできます。ご要望や予算編成の時期、必要な手続きについても、あらためてご教示いただければ幸いです。\n\nご都合のよい折に、ご説明の機会を頂戴できますでしょうか。お忙しいところ恐縮ですが、ご検討のほどよろしくお願い申し上げます。\n\n株式会社だいだい工房\n橙丸",
+        "basedOnRules": [
+          "K-014",
+          "K-020",
+          "K-023"
+        ]
+      }
+    }
+  ]
+}

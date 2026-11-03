@@ -9,14 +9,15 @@ import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 import { getSession, liveEnabled, readMeta, startSession, type Mode } from "@/src/server/session";
 import { applyChoice, interpretInBackground } from "@/src/server/background";
-import type { SuccessorTurn } from "@/src/server/session";
+import { recordTrigger } from "@/src/learning/compile";
+import type { SessionMeta, SuccessorTurn, Timing } from "@/src/server/session";
 import { askSuccessor } from "@/src/successor/ask";
 import { CLIENTS, getClient, HISTORY_QUESTIONS } from "@/src/core/world";
 import recorded from "@/data/demo/recorded-answers.json";
 
 export async function start(formData: FormData) {
   const mode = formData.get("mode");
-  if (mode !== "demo" && mode !== "trial") throw new Error("invalid mode");
+  if (mode !== "demo" && mode !== "trial" && mode !== "field") throw new Error("invalid mode");
   await startSession(mode as Mode);
   redirect("/choba");
 }
@@ -37,6 +38,19 @@ export async function retireRule(formData: FormData) {
 }
 
 const VERDICTS = new Set(["○", "△", "×"]);
+
+/** Client-measured durations (ms) from hidden fields; clamped so a bad value can't poison the field-test numbers. */
+function ms(formData: FormData, from: string, to: string): number | null {
+  const a = Number(formData.get(from));
+  const b = Number(formData.get(to));
+  if (!Number.isFinite(a) || !Number.isFinite(b) || b < a) return null;
+  return Math.min(b - a, 30 * 60_000);
+}
+
+function addTimings(meta: SessionMeta, t: Timing[]) {
+  if (meta.mode !== "field") return;
+  meta.timings = [...(meta.timings ?? []), ...t];
+}
 
 /** 師匠の判定. Records it at once; interpretation runs afterwards so the master never waits. */
 export async function judge(formData: FormData) {
@@ -59,6 +73,12 @@ export async function judge(formData: FormData) {
   });
   const meta = readMeta(s.mode, s.sid);
   meta.pos += 1;
+  const tJudge = ms(formData, "shownAt", "markedAt");
+  const tRemark = ms(formData, "markedAt", "submitAt");
+  addTimings(meta, [
+    ...(tJudge !== null ? [{ kind: "judge" as const, sceneId: item.scene.id, ms: tJudge, verdict }] : []),
+    ...(tRemark !== null ? [{ kind: "remark" as const, sceneId: item.scene.id, ms: tRemark, chars: remark.length, verdict }] : []),
+  ]);
   if (verdict !== "○") meta.pending.unshift({ judgmentId: j.id, sceneId: item.scene.id, status: liveEnabled() ? "queued" : "offline" });
   s.saveMeta(meta);
   if (verdict !== "○" && liveEnabled()) after(() => interpretInBackground(s.mode, s.sid, j.id));
@@ -75,6 +95,9 @@ export async function choose(formData: FormData) {
   if (!liveEnabled()) return;
   const index = pick === "none" ? null : Number(pick);
   const meta = readMeta(s.mode, s.sid);
+  const sceneId = meta.pending.find((p) => p.judgmentId === judgmentId)?.sceneId ?? "";
+  const tChoose = ms(formData, "shownAt", "submitAt");
+  if (tChoose !== null) addTimings(meta, [{ kind: "choose", sceneId, ms: tChoose }]);
   meta.pending = meta.pending.map((p) => (p.judgmentId === judgmentId && p.status === "needs-choice" ? { ...p, status: "choosing", pick: index } : p));
   s.saveMeta(meta);
   after(() => applyChoice(s.mode, s.sid, judgmentId, index));
@@ -120,4 +143,38 @@ export async function ask(formData: FormData) {
   meta.answers = [turn, ...(meta.answers ?? [])].slice(0, 6);
   s.saveMeta(meta);
   revalidatePath("/noren");
+}
+
+/** 「なぜ？」 — asked once for a newly learned rule. Optional: skipping is fine and recorded as such. */
+export async function answerWhy(formData: FormData) {
+  const s = await getSession();
+  if (!s) redirect("/");
+  const judgmentId = String(formData.get("judgmentId") ?? "");
+  if (!/^J-\d{4}$/.test(judgmentId)) throw new Error("invalid judgment");
+  const skip = formData.get("skip") === "1";
+  const why = skip ? "" : String(formData.get("why") ?? "").trim().slice(0, 120);
+  const meta = readMeta(s.mode, s.sid);
+  const p = meta.pending.find((x) => x.judgmentId === judgmentId && x.status === "needs-why");
+  if (!p?.ruleId) return;
+  if (why) await recordTrigger(s.store, p.ruleId, why);
+  const t = ms(formData, "shownAt", "submitAt");
+  if (t !== null) addTimings(meta, [{ kind: "why", sceneId: p.sceneId, ms: t, chars: why.length }]);
+  meta.pending = meta.pending.map((x) => (x.judgmentId === judgmentId ? { ...x, status: "applied", note: why ? `わけ：${why}` : x.note } : x));
+  s.saveMeta(meta);
+  revalidatePath("/choba");
+}
+
+/** 実地テスト: the same etiquette written as prose, timed (for t_write). Field mode only. */
+export async function submitWrite(formData: FormData) {
+  const s = await getSession();
+  if (!s || s.mode !== "field") redirect("/");
+  const sceneId = String(formData.get("sceneId") ?? "");
+  const text = String(formData.get("text") ?? "").trim().slice(0, 2000);
+  if (!/^T\d{2}$/.test(sceneId) || !text) throw new Error("invalid write");
+  const t = ms(formData, "shownAt", "submitAt");
+  const meta = readMeta(s.mode, s.sid);
+  meta.writes = [...(meta.writes ?? []).filter((w) => w.sceneId !== sceneId), { sceneId, text, ms: t ?? 0 }];
+  if (t !== null) addTimings(meta, [{ kind: "write", sceneId, ms: t, chars: text.length }]);
+  s.saveMeta(meta);
+  revalidatePath("/choba/write");
 }

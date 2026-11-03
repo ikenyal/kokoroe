@@ -89,3 +89,6 @@ Short entries, appended every work session. Source material for the README secti
   Claude then ran `claude -p` in an empty directory holding only that skill, with MCP disabled (`--strict-mcp-config`) and
   `--setting-sources project`, and asked the successor's question: it answered Teams-not-Zoom with K-004 and the 2024 reason.
   A first run picked up the author's user-level output style — caught by reading the answer, and re-run clean (`demo/successor-claude-code/`).
+- **Field test made measurable** — the 帳場 got a 実地テスト mode that timestamps each of the master's actions (hidden form fields,
+  durations computed and clamped server-side) plus a prose-writing page for t_write, so the impact estimate uses Kento's own
+  measured times. The whole flow was driven once with Playwright before handing it over.

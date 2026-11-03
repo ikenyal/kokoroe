@@ -244,3 +244,11 @@ when concatenated). v0 with the new layout, 6 runs (both arms of the caching A/B
 than run-to-run noise would explain comfortably, so per Kento's rule the Before is **replaced by 52.5% (6 runs)**. The interim After
 (64%, D-029) was mostly measured with the new layout (2 of 3 paths). The gap Before → After shrinks from 16 to ~12 points — the
 honest comparison uses the same prompt layout on both sides.
+
+## D-031 · 2026-11-03 · Accepted · 実地テスト (field test, 11/6) design
+Kento plays the master on a fixed set of 20 training scenes (2 per client, `src/server/field.ts`), starting from the ledger only,
+then writes the same etiquette as prose for 5 of them. The app records, in field mode only: time from card shown to the mark
+(t_judge), mark → submit (remark), candidate choice, "why?" (answer or skip), and prose writing (t_write) — durations and lengths,
+no new content beyond the fictional data. Report at /choba/report (medians). Designed for ≤ 30 minutes. Enabled only with
+`KOKOROE_FIELD=1`; never shown on the public demo. Needs KOKOROE_LIVE=1 for choices and "why?" (interpretation runs live).
+The 帳場 now also asks "なぜ？" once after a new rule is written (optional, skippable), matching the evaluation loop (D-020).

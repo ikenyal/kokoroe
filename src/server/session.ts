@@ -13,7 +13,8 @@ import type { Proposal, Scene } from "@/src/core/types";
 import { LocalJsonStore } from "@/src/learning/store";
 import type { Candidate, JudgmentRecord, KokoroeRule } from "@/src/learning/types";
 
-export type Mode = "demo" | "trial";
+export type Mode = "demo" | "trial" | "field"; // field = 実地テスト (the author as the master, timings recorded)
+export const MODES: Mode[] = ["demo", "trial", "field"];
 
 export interface QueueItem {
   scene: Scene;
@@ -25,7 +26,7 @@ export interface QueueItem {
 export interface Pending {
   judgmentId: string;
   sceneId: string;
-  status: "queued" | "interpreting" | "needs-choice" | "choosing" | "applied" | "nothing-learned" | "offline" | "error";
+  status: "queued" | "interpreting" | "needs-choice" | "choosing" | "needs-why" | "applied" | "nothing-learned" | "offline" | "error";
   pick?: number | null; // the master's tap while status is "choosing" (null = none of these)
   candidates?: Candidate[];
   round?: 1 | 2;
@@ -43,8 +44,25 @@ export interface SuccessorTurn {
   source: "live" | "recorded";
 }
 
+/** 実地テスト: how long each master action took (ms). Content stays in the store; this is timing only. */
+export interface Timing {
+  kind: "judge" | "remark" | "choose" | "why" | "write";
+  sceneId: string;
+  ms: number;
+  chars?: number; // remark / why / write length
+  verdict?: string;
+}
+
+export interface FieldWrite {
+  sceneId: string;
+  text: string;
+  ms: number;
+}
+
 export interface SessionMeta {
   mode: Mode;
+  timings?: Timing[];
+  writes?: FieldWrite[];
   answers?: SuccessorTurn[]; // 暖簾を継ぐ — newest first
   createdAt: string;
   queue: QueueItem[];
@@ -62,6 +80,7 @@ const DATA_DIR = process.env.KOKOROE_DATA_DIR ?? path.join(process.cwd(), ".data
 const SNAPSHOTS: Record<Mode, string> = {
   demo: path.join(process.cwd(), "data", "demo", "demo-snapshot.json"),
   trial: path.join(process.cwd(), "data", "demo", "trial-snapshot.json"),
+  field: path.join(process.cwd(), "data", "demo", "field-snapshot.json"),
 };
 const SID = /^[0-9a-f-]{36}$/;
 
@@ -115,8 +134,8 @@ export async function getSession(): Promise<Session | null> {
   const jar = await cookies();
   const sid = jar.get("kokoroe_sid")?.value;
   const mode = jar.get("kokoroe_mode")?.value as Mode | undefined;
-  if (!sid || !SID.test(sid) || (mode !== "demo" && mode !== "trial")) return null;
-  return openSession(mode, sid);
+  if (!sid || !SID.test(sid) || !MODES.includes(mode as Mode)) return null;
+  return openSession(mode as Mode, sid);
 }
 
 export function openSession(mode: Mode, sid: string): Session | null {

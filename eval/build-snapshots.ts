@@ -10,6 +10,7 @@ import path from "node:path";
 import { parseArgs } from "node:util";
 import { CLIENTS, TRAIN_SCENES } from "@/src/core/world";
 import { jstDate } from "@/src/learning/fix";
+import { FIELD_SCENES } from "@/src/server/field";
 import type { JudgmentRecord, KokoroeRule } from "@/src/learning/types";
 
 interface StoreFile {
@@ -63,6 +64,12 @@ function main() {
     store: { rules: ledgerOnly, judgments: [] },
     queue: queueOf(TRAIN_SCENES.map((s) => s.id)),
   };
+  const field = {
+    note: "実地テスト: 台帳の制約だけから、学習用の固定20場面（各社2つ）を判定する（架空データ）。案は記録済みのもの",
+    store: { rules: ledgerOnly, judgments: [] },
+    queue: queueOf(FIELD_SCENES),
+  };
+  writeFileSync(path.join(outDir, "field-snapshot.json"), JSON.stringify(field, null, 2) + "\n");
   writeFileSync(path.join(outDir, "demo-snapshot.json"), JSON.stringify(demo, null, 2) + "\n");
   writeFileSync(path.join(outDir, "trial-snapshot.json"), JSON.stringify(trial, null, 2) + "\n");
   console.log(`demo: ${demo.store.rules.length} rules, ${demo.queue.length} queued | trial: ${trial.store.rules.length} rules, ${trial.queue.length} queued`);

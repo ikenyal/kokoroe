@@ -42,7 +42,8 @@ export async function interpretInBackground(mode: Mode, sid: string, judgmentId:
     if (round === 2 || interp.ambiguous || cands.length > 1)
       return update(s, judgmentId, { status: "needs-choice", candidates: cands, note: interp.diagnosis });
     const change = await applyCandidate(s.store, judgment, guardScope(cands[0], judgment.remark), interp);
-    update(s, judgmentId, { status: "applied", ruleId: change.ruleId, candidates: cands, note: interp.diagnosis });
+    // A new rule: ask the master "why?" once (optional). A revision: done.
+    update(s, judgmentId, { status: change.action === "add" ? "needs-why" : "applied", ruleId: change.ruleId, candidates: cands, note: interp.diagnosis });
   } catch (e) {
     update(s, judgmentId, { status: "error", note: e instanceof Error ? e.message.slice(0, 120) : "解釈に失敗しました" });
   }
@@ -63,7 +64,7 @@ export async function applyChoice(mode: Mode, sid: string, judgmentId: string, i
     if (!c) return update(s, judgmentId, { status: "error", note: "選ばれた読み方が見つかりません" });
     const { judgment } = await context(s, judgmentId);
     const change = await applyCandidate(s.store, judgment, guardScope(c, judgment.remark), { diagnosis: p.note ?? "", confidence: "medium" });
-    update(s, judgmentId, { status: "applied", ruleId: change.ruleId });
+    update(s, judgmentId, { status: change.action === "add" ? "needs-why" : "applied", ruleId: change.ruleId });
   } catch (e) {
     update(s, judgmentId, { status: "error", note: e instanceof Error ? e.message.slice(0, 120) : "心得帳に書けませんでした" });
   }

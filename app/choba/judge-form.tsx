@@ -5,6 +5,7 @@ import { useFormStatus } from "react-dom";
 import type { Verdict } from "@/src/core/types";
 import { judge } from "../actions";
 import { Mark, VERDICT_WORD } from "../marks";
+import { TimedFields } from "./timed";
 
 function Send({ verdict }: { verdict: Verdict | null }) {
   const { pending } = useFormStatus();
@@ -20,9 +21,17 @@ function Send({ verdict }: { verdict: Verdict | null }) {
 
 export function JudgeForm({ sceneId }: { sceneId: string }) {
   const [verdict, setVerdict] = useState<Verdict | null>(null);
+  const [markedAt, setMarkedAt] = useState<number | null>(null); // first tap on a mark (実地テスト: time to judge)
   return (
-    <form action={judge} className="mt-8" onSubmit={() => setTimeout(() => setVerdict(null), 0)}>
+    <form action={judge} className="mt-8" onSubmit={() =>
+        setTimeout(() => {
+          setVerdict(null);
+          setMarkedAt(null);
+        }, 0)
+      }>
       <input type="hidden" name="sceneId" value={sceneId} />
+      <TimedFields />
+      <input type="hidden" name="markedAt" value={markedAt ?? ""} />
       <fieldset>
         <legend className="text-[13px] text-nibi">師匠の判定</legend>
         <div role="radiogroup" className="mt-2 grid grid-cols-3 gap-3 sm:max-w-md">
@@ -35,7 +44,10 @@ export function JudgeForm({ sceneId }: { sceneId: string }) {
                   on ? "border-shu bg-shu-soft text-shu" : "border-keisen text-shu/80 hover:border-shu/60"
                 }`}
               >
-                <input type="radio" name="verdict" value={v} className="sr-only" checked={on} onChange={() => setVerdict(v)} />
+                <input type="radio" name="verdict" value={v} className="sr-only" checked={on} onChange={() => {
+                    setVerdict(v);
+                    setMarkedAt((t) => t ?? Date.now());
+                  }} />
                 <Mark v={v} size={46} />
                 <span className="text-[13px] text-sumi">{VERDICT_WORD[v]}</span>
               </label>

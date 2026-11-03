@@ -5,7 +5,8 @@ import { SCENE_TYPE_LABELS, type Client, type Proposal } from "@/src/core/types"
 import { getClient } from "@/src/core/world";
 import { draftLive } from "@/src/server/background";
 import { getSession, liveEnabled, type Pending } from "@/src/server/session";
-import { choose } from "../actions";
+import { answerWhy, choose } from "../actions";
+import { TimedFields } from "./timed";
 import { Mark } from "../marks";
 import { AutoRefresh } from "./auto-refresh";
 import { JudgeForm } from "./judge-form";
@@ -61,6 +62,7 @@ const STATUS: Record<Pending["status"], string> = {
   interpreting: "どこが違ったか読み取っています",
   "needs-choice": "どの意味でしたか",
   choosing: "選んだ読み方を心得帳に書いています",
+  "needs-why": "心得帳に書きました。よければ、わけを一言",
   applied: "心得帳に書きました",
   "nothing-learned": "今回は何も覚えていません",
   offline: "記録済みデータで動いているため、解釈は実行していません",
@@ -85,6 +87,7 @@ function PendingItem({ p }: { p: Pending }) {
       {p.status === "needs-choice" && p.candidates && (
         <form action={choose} className="mt-2 space-y-2">
           <input type="hidden" name="judgmentId" value={p.judgmentId} />
+          <TimedFields />
           {p.candidates.map((c, i) => (
             <button key={i} name="pick" value={String(i)} className="yomi block w-full rounded-[3px] border border-keisen px-3 py-2 text-left text-[15px] hover:border-ai hover:bg-ai-soft">
               {c.text}
@@ -94,6 +97,28 @@ function PendingItem({ p }: { p: Pending }) {
           <button name="pick" value="none" className="text-[14px] text-nibi underline-offset-4 hover:underline">
             どれでもない
           </button>
+        </form>
+      )}
+      {p.status === "needs-why" && (
+        <form action={answerWhy} className="mt-2 space-y-2">
+          <input type="hidden" name="judgmentId" value={p.judgmentId} />
+          <TimedFields />
+          <label className="block">
+            <span className="text-[13px] text-nibi">なぜそうなったか（答えなくても大丈夫です）</span>
+            <input
+              name="why"
+              maxLength={120}
+              autoComplete="off"
+              placeholder="例：2024年に先方の規程が変わった"
+              className="mt-1 block h-11 w-full rounded-[3px] border border-keisen bg-kami px-3 font-mincho text-[15px] placeholder:text-nibi/60"
+            />
+          </label>
+          <div className="flex gap-3">
+            <button className="rounded-[3px] bg-sumi px-4 py-2 text-[14px] text-kami">わけを残す</button>
+            <button name="skip" value="1" className="text-[14px] text-nibi underline-offset-4 hover:underline">
+              今は答えない
+            </button>
+          </div>
         </form>
       )}
     </li>
@@ -115,7 +140,7 @@ export default async function ChobaPage() {
       <AutoRefresh active={busy} />
       <section aria-labelledby="card-h">
         <p className="text-[13px] text-nibi">
-          {s.mode === "demo" ? "デモの続き" : "お試し"}　{meta.pos + 1} / {meta.queue.length} 件目
+          {s.mode === "demo" ? "デモの続き" : s.mode === "field" ? "実地テスト" : "お試し"}　{meta.pos + 1} / {meta.queue.length} 件目
           {!live && "　記録済みの案を表示しています"}
         </p>
         {item ? (
@@ -129,11 +154,16 @@ export default async function ChobaPage() {
               <p className="mt-6 text-[13px] text-nibi">弟子（橙丸）の案</p>
             </header>
             <ProposalView p={item.draft} client={getClient(item.scene.clientId)} />
-            <JudgeForm sceneId={item.scene.id} />
+            <JudgeForm key={item.scene.id} sceneId={item.scene.id} />
           </article>
         ) : (
           <div className="mt-6">
             <h1 className="font-mincho text-[22px]">今日の稽古はここまでです</h1>
+            {s.mode === "field" && (
+              <p className="yomi mt-2">
+                続けて<Link className="text-ai underline" href="/choba/write">同じ作法を文章で書く</Link>へ。最後に<Link className="text-ai underline" href="/choba/report">所要時間のまとめ</Link>を見られます。
+              </p>
+            )}
             <p className="yomi mt-2">
               育った心得帳は<Link className="text-ai underline" href="/kokoroe">心得帳</Link>で読めます。後任の相談は<Link className="text-ai underline" href="/noren">暖簾を継ぐ</Link>へ。
             </p>
