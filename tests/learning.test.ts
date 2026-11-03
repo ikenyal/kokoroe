@@ -439,3 +439,55 @@ describe("store stamps new 沿革 entries with the save time (changes_since, D-0
     expect(Date.parse(h[1].at!)).toBeGreaterThan(Date.parse(first!));
   });
 });
+
+describe("compile: scope guards in code (audit 2026-11-03)", () => {
+  const j = (clientId: string) =>
+    ({ id: "J-0100", at: "2026-11-03T01:00:00Z", sceneId: "T01", clientId, sceneType: "T2", proposal, verdict: "△", remark: "" }) as const;
+  const meta = { diagnosis: "テスト", confidence: "medium" as const };
+  async function withRules() {
+    const store = new LocalJsonStore(null);
+    for (const [id, clientId] of [["K-001", "C01"], ["K-002", null]] as const) {
+      await store.saveRule({ id, scope: { clientId, sceneTypes: null }, text: `元の${id}`, when: null, status: "active", confidence: "high", sources: [], history: [] });
+    }
+    return store;
+  }
+  it("a correction about one client cannot revise another client's rule (it becomes a new rule for this client)", async () => {
+    const store = await withRules();
+    const { applyCandidate } = await import("@/src/learning/compile");
+    const ch = await applyCandidate(store, { ...j("C02") }, cand({ action: "revise", targetRuleId: "K-001", scope: { clientId: "C01", sceneTypes: null }, text: "書き換え" }), meta);
+    expect(ch.action).toBe("add");
+    expect((await store.getRule("K-001"))!.text).toBe("元のK-001");
+    expect((await store.getRule(ch.ruleId))!.scope.clientId).toBe("C02");
+  });
+  it("an add is always scoped to the judged client, even if the reading says otherwise or says all clients", async () => {
+    const store = await withRules();
+    const { applyCandidate } = await import("@/src/learning/compile");
+    for (const clientId of ["C05", null]) {
+      const ch = await applyCandidate(store, { ...j("C03") }, cand({ scope: { clientId, sceneTypes: null } }), meta);
+      expect((await store.getRule(ch.ruleId))!.scope.clientId).toBe("C03");
+    }
+  });
+  it("widening to all clients is possible only by revising an existing company-wide or same-client rule", async () => {
+    const store = await withRules();
+    const { applyCandidate } = await import("@/src/learning/compile");
+    const a = await applyCandidate(store, { ...j("C01") }, cand({ action: "revise", targetRuleId: "K-001", scope: { clientId: null, sceneTypes: null } }), meta);
+    expect(a.action).toBe("revise");
+    expect((await store.getRule("K-001"))!.scope.clientId).toBeNull();
+    const b = await applyCandidate(store, { ...j("C04") }, cand({ action: "revise", targetRuleId: "K-002", scope: { clientId: null, sceneTypes: null } }), meta);
+    expect(b.ruleId).toBe("K-002");
+    expect((await store.getRule("K-002"))!.scope.clientId).toBeNull();
+  });
+  it("a retired rule is never revised, and one client's correction cannot narrow a company-wide rule (it adds its own)", async () => {
+    const store = await withRules();
+    const { applyCandidate } = await import("@/src/learning/compile");
+    const k1 = (await store.getRule("K-001"))!;
+    await store.saveRule({ ...k1, status: "retired" });
+    const a = await applyCandidate(store, { ...j("C01") }, cand({ action: "revise", targetRuleId: "K-001", scope: { clientId: "C01", sceneTypes: null } }), meta);
+    expect(a.action).toBe("add");
+    expect((await store.getRule("K-001"))!.text).toBe("元のK-001");
+    const b = await applyCandidate(store, { ...j("C02") }, cand({ action: "revise", targetRuleId: "K-002", scope: { clientId: "C02", sceneTypes: null } }), meta);
+    expect(b.action).toBe("add");
+    expect((await store.getRule("K-002"))!.scope.clientId).toBeNull();
+    expect((await store.getRule(b.ruleId))!.scope.clientId).toBe("C02");
+  });
+});

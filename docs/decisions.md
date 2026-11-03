@@ -3,11 +3,15 @@
 Format: ID · date · status · decision · why · alternatives considered.
 
 ## D-001 · 2026-11-03 · Accepted · Stack
+
+_Hosting part superseded by D-034 (Lightsail container service instead of Amplify)._
 TypeScript (strict) + Next.js App Router + Tailwind, `@anthropic-ai/sdk`, Vitest, tsx, npm. Hosting on AWS Amplify (from 11/6).
 **Why:** one language for UI, API routes, eval scripts and spikes; one person, one week.
 **Alternatives:** Python backend + separate frontend (two toolchains, slower).
 
 ## D-002 · 2026-11-03 · Provisional · Fast apprentice vs. slow compiler
+
+_As built today: the interpreter is a Messages API call (Opus) and the kokoroe-chō is local JSON by default; the memory store is an opt-in adapter. The material and recommendation are below._
 Apprentice drafts and successor Q&A use the **Messages API** (Sonnet 5.5, seconds). Interpreting corrections and compiling the
 kokoroe-chō use **Managed Agents** with a memory store (Opus 5.5, async).
 **Why:** the master's 1-tap ○/△/× flow can't wait on a long-running session; compilation is async and benefits from a persisted,
@@ -233,6 +237,8 @@ lost updates / reused ids in session files; storage text; unverified successor c
 - Session files are swept after 24 h or when the visitor restarts; the start page says exactly that.
 
 ## D-029 · 2026-11-03 · Accepted · v1 構成 (the configuration the UI and demo build on)
+
+_Correction (audit 2026-11-03): the three paths took 110 / 112 / 120 master taps (not 112–120). The Before figure in this entry is superseded by D-030 and D-033._
 - Ledger constraints seeded as 〔台帳〕 rules with one optional "why?" each (D-020); **not shown to the apprentice** (D-022);
   kept for history and the successor.
 - Learning loop: interpretation with 1–3 readings and a one-tap choice (D-015); **second round after "none of these"** (D-025);
@@ -390,3 +396,18 @@ general result.
 - **Checked outside the repo** (`demo/successor-mcp/`): same isolation as the Skill demo; with the server, the successor's Claude
   found a rule learned after the copy and changed its answer. hitl-reviewer: no blockers; its fixes (retired-rule wording, origin
   label, "ask the master" when nothing is recorded, content-matched stamping, refusing non-kokoroe stores) are in.
+
+## D-043 · 2026-11-03 · Accepted · Where a correction may write is decided in code, not only in the prompt (audit)
+- **Context:** the milestone audit (`docs/audits/2026-11-03.md`) found that `applyCandidate` used the interpreter's
+  `targetRuleId` and `scope.clientId` as given. The prompt said "start narrow; widen only by revising", but a misreading could
+  rewrite another client's rule or create a company-wide rule from one △.
+- **Decision:** a correction about client X writes only to (a) an active rule of X, or (b) an active company-wide rule that stays
+  company-wide. Everything else — another client's rule, a retired/merged rule, narrowing a company-wide rule to X — becomes a new
+  rule scoped to X. New rules are always scoped to the judged client; widening to all clients happens only by revising (or by
+  generalization, which the master confirms). Every fallback goes in the narrower direction.
+- **Why:** regression replays only X's past ○ scenes, so any edit that reaches other clients would go unchecked.
+- **Effect on numbers:** none expected (the interpreter already followed the prompt in recorded runs); `eval:quick` (naive
+  apprentice, no API) unchanged at match 0% / ○+△ 45% — fictional 10 clients / 20 held-out scenes. The official run on 11/7
+  measures with the guard in place. hitl-reviewer: no blockers; its two narrowing suggestions are included.
+- **Not decided here** (for Kento, audit items D/E): a code floor for escalation on price/contract scenes, and what a × on
+  確かめ稽古 should do to the new rule.

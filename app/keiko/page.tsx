@@ -41,7 +41,7 @@ export default function KeikoPage() {
               <span className="text-ai">{hist.at(-1)!.mean.toFixed(1)}</span>
               <span className="text-[18px] text-nibi"> / 8</span>
             </dd>
-            <dd className="mt-1 text-[13px] text-nibi">心得帳なし → 育った心得帳、3回平均</dd>
+            <dd className="mt-1 text-[13px] text-nibi">心得帳なし → 育った心得帳、{results.official ? `学習${results.paths?.n ?? 0}本の平均` : "3回平均"}</dd>
           </div>
         </dl>
       </section>

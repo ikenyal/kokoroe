@@ -27,7 +27,7 @@
     requestAnimationFrame(step);
   }
   if (R) {
-    if (!R.official) document.querySelector(".note").textContent += "（途中経過・11/7 に差し替え）";
+    if (!R.official) document.querySelector(".note").textContent += "（途中経過・11/7 に差し替え）" + (R.caveat?.ja ? " " + R.caveat.ja : "");
     count(document.getElementById("before"), pct(R.before.match), "%", 1200);
     document.getElementById("before-sub").textContent = `一致率（○）、${R.before.runs}回平均`;
     const after = R.paths ? R.paths.mean : R.curves.at(-1).points.at(-1).match;

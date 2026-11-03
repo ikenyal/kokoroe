@@ -5,7 +5,7 @@ import historyQuestions from "@/data/scenes/history-questions.json";
 import trainScenes from "@/data/scenes/train.json";
 import type { Client, Company, HistoryQuestion, Scene } from "./types";
 
-/** Public world data: everything here may be shown to the apprentice. (Hidden data lives in eval/simulator only.) */
+/** Public world data: everything here may be shown to the apprentice. (Hidden data is read only by the evaluation simulator, never here.) */
 export const COMPANY = company as Company;
 export const CLIENTS = clients as Client[];
 export const EVAL_SCENES = evalScenes as Scene[];

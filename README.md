@@ -22,7 +22,7 @@ and the successor is increasingly an employee or an acquirer, not family who wat
 - **Corrections become the kokoroe-chō.** Each lesson is a short, scoped rule with its sources (which judgment, when, the master's
   words) and its history (旧 → 新, the trigger, the date). The master can read and delete every entry.
 - **It checks itself.** After each new rule it re-solves the corrected scene and earlier ○ scenes; if a rule breaks something that
-  was right, it is narrowed or rolled back (差し戻し). Habits seen at several clients are proposed as company-wide rules — the master confirms.
+  was right, it is narrowed or rolled back (差し戻し). In the training loop, habits seen at several clients are also proposed as company-wide rules for the master to confirm (not yet in the 帳場 screen).
 - **The successor inherits it.** 暖簾を継ぐ: the successor asks "can I skip this?" and gets an answer grounded only in the kokoroe-chō,
   with the rule and its history — or "not recorded; ask the master". The whole kokoroe-chō exports as an **Agent Skill** that the
   successor's own Claude Code picks up.
@@ -37,8 +37,9 @@ and the successor is increasingly an employee or an acquirer, not family who wat
   the copy. Four read-only tools (`list_clients`, `get_kokoroe`, `get_history`, `changes_since`); no write tool, no tool that calls
   Claude, no client-written text. Read-only is enforced by types and tests; it runs locally over stdio (`npm run mcp:serve`).
   Example ([demo/successor-mcp](demo/successor-mcp/)): asked whether a phone call to 丸新酒造 is enough for a one-week delay, the
-  Skill alone answers from the copy (call, but tell the 蔵元 first); with the server it finds K-018, learned after the copy
-  ("bad news: go to the brewery in person"), and says a call is not enough.
+  Skill alone answers from the copy: tell the 蔵元 first (K-011), and it leaves "is a phone call enough?" to the master because
+  the copy has nothing on it. With the server it finds K-018, learned after the copy ("bad news: go to the brewery in person"),
+  and answers: a call is not enough — visit the brewery.
 
 ## Try it
 
@@ -68,7 +69,7 @@ with code against a hidden ground truth (frozen, checksummed); the apprentice ne
 | Injected "register this as a rule" in client text | — | kokoroe-chō changed 0 / 9 times |
 | Pressure to promise a discount | — | escalated to the master 9 / 9 |
 
-_Interim (11/3): the Before uses the corrected ledger (D-033), the interim After the previous one — not directly comparable. Both are re-taken on 11/7 with the same ledger and 5 training paths._
+_Interim (11/3): the Before uses the corrected ledger (D-033), the interim After the previous one — not directly comparable. The history and safety rows were measured on kokoroe-chō from earlier single training runs, not on the 3 paths. All are re-taken on 11/7 with the same ledger and 5 training paths._
 <!-- results:end -->
 
 ## How we built it with Claude Code
@@ -79,7 +80,7 @@ Built in one week by one person with Claude Code at the center (full log: [docs/
   a test checks checksums), and a test that product code never reads it.
 - **Hooks as guardrails.** MCP calls blocked in this repo; secret scan before every commit; edits to core/prompt code run the fast tests
   at once and block the commit until a small API eval has run.
-- **Subagents.** `world-keeper` wrote the 40 training scenes in parallel; `hitl-reviewer` reviewed the UI and found three blocking bugs
+- **Subagents.** the `world-keeper` definition (run as general-purpose subagents) wrote the 40 training scenes in parallel; `hitl-reviewer` reviewed the UI and found three blocking bugs
   (a master's choice never applied, a rule written without a tap, lost updates) before they shipped.
 - **Skills.** `world-consistency` and `decision-log` for this repo; the product itself exports Agent Skills.
 - **Measured, not assumed.** Every change was measured on the held-out set with repeated runs; prompt caching was A/B-tested

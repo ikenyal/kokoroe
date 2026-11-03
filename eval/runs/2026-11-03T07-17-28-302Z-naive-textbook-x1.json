@@ -1,0 +1,414 @@
+{
+  "at": "2026-11-03T07:17:28.303Z",
+  "disciple": "naive-textbook",
+  "set": "eval",
+  "seed": 7,
+  "repeat": 1,
+  "note": "fictional 10 clients / 20 held-out scenes",
+  "scenes": [
+    "E01",
+    "E02",
+    "E03",
+    "E04",
+    "E05",
+    "E06",
+    "E07",
+    "E08",
+    "E09",
+    "E10",
+    "E11",
+    "E12",
+    "E13",
+    "E14",
+    "E15",
+    "E16",
+    "E17",
+    "E18",
+    "E19",
+    "E20"
+  ],
+  "mean": {
+    "matchRate": {
+      "mean": 0,
+      "sd": 0,
+      "n": 1,
+      "min": 0,
+      "max": 0
+    },
+    "okOrPartialRate": {
+      "mean": 0.45,
+      "sd": 0,
+      "n": 1,
+      "min": 0.45,
+      "max": 0.45
+    }
+  },
+  "totalUsd": 0,
+  "perScene": [
+    {
+      "sceneId": "E01",
+      "verdicts": "△"
+    },
+    {
+      "sceneId": "E02",
+      "verdicts": "×"
+    },
+    {
+      "sceneId": "E03",
+      "verdicts": "×"
+    },
+    {
+      "sceneId": "E04",
+      "verdicts": "×"
+    },
+    {
+      "sceneId": "E05",
+      "verdicts": "△"
+    },
+    {
+      "sceneId": "E06",
+      "verdicts": "△"
+    },
+    {
+      "sceneId": "E07",
+      "verdicts": "×"
+    },
+    {
+      "sceneId": "E08",
+      "verdicts": "△"
+    },
+    {
+      "sceneId": "E09",
+      "verdicts": "△"
+    },
+    {
+      "sceneId": "E10",
+      "verdicts": "△"
+    },
+    {
+      "sceneId": "E11",
+      "verdicts": "×"
+    },
+    {
+      "sceneId": "E12",
+      "verdicts": "×"
+    },
+    {
+      "sceneId": "E13",
+      "verdicts": "×"
+    },
+    {
+      "sceneId": "E14",
+      "verdicts": "×"
+    },
+    {
+      "sceneId": "E15",
+      "verdicts": "△"
+    },
+    {
+      "sceneId": "E16",
+      "verdicts": "×"
+    },
+    {
+      "sceneId": "E17",
+      "verdicts": "×"
+    },
+    {
+      "sceneId": "E18",
+      "verdicts": "△"
+    },
+    {
+      "sceneId": "E19",
+      "verdicts": "×"
+    },
+    {
+      "sceneId": "E20",
+      "verdicts": "△"
+    }
+  ],
+  "runs": [
+    {
+      "total": {
+        "n": 20,
+        "ok": 0,
+        "partial": 9,
+        "ng": 11,
+        "matchRate": 0,
+        "okOrPartialRate": 0.45
+      },
+      "elapsedSec": 0,
+      "tokens": {
+        "calls": 0,
+        "input": 0,
+        "output": 0,
+        "estUsd": 0
+      },
+      "byType": {
+        "T1": {
+          "n": 3,
+          "ok": 0,
+          "partial": 3,
+          "ng": 0,
+          "matchRate": 0,
+          "okOrPartialRate": 1
+        },
+        "T10": {
+          "n": 1,
+          "ok": 0,
+          "partial": 1,
+          "ng": 0,
+          "matchRate": 0,
+          "okOrPartialRate": 1
+        },
+        "T2": {
+          "n": 2,
+          "ok": 0,
+          "partial": 0,
+          "ng": 2,
+          "matchRate": 0,
+          "okOrPartialRate": 0
+        },
+        "T3": {
+          "n": 4,
+          "ok": 0,
+          "partial": 1,
+          "ng": 3,
+          "matchRate": 0,
+          "okOrPartialRate": 0.25
+        },
+        "T4": {
+          "n": 3,
+          "ok": 0,
+          "partial": 2,
+          "ng": 1,
+          "matchRate": 0,
+          "okOrPartialRate": 0.6666666666666666
+        },
+        "T5": {
+          "n": 2,
+          "ok": 0,
+          "partial": 2,
+          "ng": 0,
+          "matchRate": 0,
+          "okOrPartialRate": 1
+        },
+        "T6": {
+          "n": 1,
+          "ok": 0,
+          "partial": 0,
+          "ng": 1,
+          "matchRate": 0,
+          "okOrPartialRate": 0
+        },
+        "T7": {
+          "n": 1,
+          "ok": 0,
+          "partial": 0,
+          "ng": 1,
+          "matchRate": 0,
+          "okOrPartialRate": 0
+        },
+        "T8": {
+          "n": 2,
+          "ok": 0,
+          "partial": 0,
+          "ng": 2,
+          "matchRate": 0,
+          "okOrPartialRate": 0
+        },
+        "T9": {
+          "n": 1,
+          "ok": 0,
+          "partial": 0,
+          "ng": 1,
+          "matchRate": 0,
+          "okOrPartialRate": 0
+        }
+      },
+      "byClient": {
+        "C01": {
+          "n": 2,
+          "ok": 0,
+          "partial": 1,
+          "ng": 1,
+          "matchRate": 0,
+          "okOrPartialRate": 0.5
+        },
+        "C02": {
+          "n": 2,
+          "ok": 0,
+          "partial": 0,
+          "ng": 2,
+          "matchRate": 0,
+          "okOrPartialRate": 0
+        },
+        "C03": {
+          "n": 2,
+          "ok": 0,
+          "partial": 0,
+          "ng": 2,
+          "matchRate": 0,
+          "okOrPartialRate": 0
+        },
+        "C04": {
+          "n": 2,
+          "ok": 0,
+          "partial": 0,
+          "ng": 2,
+          "matchRate": 0,
+          "okOrPartialRate": 0
+        },
+        "C05": {
+          "n": 2,
+          "ok": 0,
+          "partial": 2,
+          "ng": 0,
+          "matchRate": 0,
+          "okOrPartialRate": 1
+        },
+        "C06": {
+          "n": 2,
+          "ok": 0,
+          "partial": 1,
+          "ng": 1,
+          "matchRate": 0,
+          "okOrPartialRate": 0.5
+        },
+        "C07": {
+          "n": 2,
+          "ok": 0,
+          "partial": 0,
+          "ng": 2,
+          "matchRate": 0,
+          "okOrPartialRate": 0
+        },
+        "C08": {
+          "n": 2,
+          "ok": 0,
+          "partial": 2,
+          "ng": 0,
+          "matchRate": 0,
+          "okOrPartialRate": 1
+        },
+        "C09": {
+          "n": 2,
+          "ok": 0,
+          "partial": 1,
+          "ng": 1,
+          "matchRate": 0,
+          "okOrPartialRate": 0.5
+        },
+        "C10": {
+          "n": 2,
+          "ok": 0,
+          "partial": 2,
+          "ng": 0,
+          "matchRate": 0,
+          "okOrPartialRate": 1
+        }
+      },
+      "scenes": [
+        {
+          "sceneId": "E01",
+          "verdict": "△",
+          "remark": ""
+        },
+        {
+          "sceneId": "E02",
+          "verdict": "×",
+          "remark": ""
+        },
+        {
+          "sceneId": "E03",
+          "verdict": "×",
+          "remark": "紙だけ送るな"
+        },
+        {
+          "sceneId": "E04",
+          "verdict": "×",
+          "remark": "港北さんは Teams"
+        },
+        {
+          "sceneId": "E05",
+          "verdict": "△",
+          "remark": "現場が楽になる話にしろ"
+        },
+        {
+          "sceneId": "E06",
+          "verdict": "△",
+          "remark": "仕込みの時期だ"
+        },
+        {
+          "sceneId": "E07",
+          "verdict": "×",
+          "remark": "Slack でいい"
+        },
+        {
+          "sceneId": "E08",
+          "verdict": "△",
+          "remark": "予算の時期を見ろ"
+        },
+        {
+          "sceneId": "E09",
+          "verdict": "△",
+          "remark": ""
+        },
+        {
+          "sceneId": "E10",
+          "verdict": "△",
+          "remark": "二代目には説明しろ"
+        },
+        {
+          "sceneId": "E11",
+          "verdict": "×",
+          "remark": "それは画面見せて話せ"
+        },
+        {
+          "sceneId": "E12",
+          "verdict": "×",
+          "remark": "今は向こう忙しい"
+        },
+        {
+          "sceneId": "E13",
+          "verdict": "×",
+          "remark": "生協は書式"
+        },
+        {
+          "sceneId": "E14",
+          "verdict": "×",
+          "remark": ""
+        },
+        {
+          "sceneId": "E15",
+          "verdict": "△",
+          "remark": ""
+        },
+        {
+          "sceneId": "E16",
+          "verdict": "×",
+          "remark": "顔出して話せ"
+        },
+        {
+          "sceneId": "E17",
+          "verdict": "×",
+          "remark": "Slack でいい"
+        },
+        {
+          "sceneId": "E18",
+          "verdict": "△",
+          "remark": "引き継げてるか確かめろ"
+        },
+        {
+          "sceneId": "E19",
+          "verdict": "×",
+          "remark": "勝手に約束するな"
+        },
+        {
+          "sceneId": "E20",
+          "verdict": "△",
+          "remark": "丁寧に説明しろ"
+        }
+      ]
+    }
+  ]
+}

@@ -16,7 +16,7 @@ Account: BrightFlow Sandbox (ID not recorded here). Profile `brightflow-sandbox-
 |---|---|---|---|
 | Lightsail container service | `kokoroe` — power **micro** (0.25 vCPU, 1 GB), scale 1, tag `project=kokoroe` | `arn:aws:lightsail:ap-northeast-1:<account>:ContainerService/…` | **$10** (Lightsail price list, from `get-container-service-powers`) |
 | Container image | `:kokoroe.web.1` (linux/amd64, ~267 MB) | — | included |
-| AWS Budgets | `kokoroe-guard` — $20/month, cost filter Service = Amazon Lightsail (no other Lightsail use in the account), email alerts at actual > 80% and > 100% to <email> | `arn:aws:budgets::<account>:budget/kokoroe-guard` | ~$0.6 (the account already has more than two budgets; each additional budget is billed per day — check the Budgets pricing page) |
+| AWS Budgets | `kokoroe-guard` — $20/month, cost filter Service = Amazon Lightsail (no other Lightsail use in the account), email alerts at actual > 80% and > 100% to the owner's address | `arn:aws:budgets::<account>:budget/kokoroe-guard` | ~$0.6 (the account already has more than two budgets; each additional budget is billed per day — check the Budgets pricing page) |
 
 Public URL: `https://kokoroe.xzan0gz3dgpb8.ap-northeast-1.cs.amazonlightsail.com/` — first deployment **without an API key**
 (recorded data only; `KOKOROE_LIVE` unset). Verified 11/3 with Playwright: AI banner on every page, data-handling text,

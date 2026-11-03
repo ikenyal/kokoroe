@@ -171,7 +171,7 @@ Short entries, appended every work session. Source material for the README secti
   throwaway data dir, records every scene with Playwright (screen scenes scripted, including the T05 → T13 queue for 帳場), stops the
   server, and assembles with ffmpeg. A rough cut with fixed data and a placeholder voice exists; frames from it led to two fixes
   (a larger viewport scaled down so a whole card fits; opening a rule with a reason in 心得帳) and to padding narration with silence.
-- **Trying the judges' Quickstart as a stranger** — Claude cloned the public repo into an empty directory outside this one and ran
+- **Trying the judges' Quickstart as a stranger** — Claude cloned the repo from GitHub (still private; the saved credentials were used) into an empty directory outside this one and ran
   only what the README says, with an empty environment (`env -i`, no `.env.local`): `npm ci`, the dev server, a Playwright pass
   through デモの続き and お試し (a △ on one card, 心得帳, 暖簾を継ぐ with a preset question, 稽古の記録), `npm test` (180 passed) and
   `eval:quick`. Everything worked on recorded data with no key. The README was changed in three places: `npm ci` instead of
@@ -185,3 +185,11 @@ Short entries, appended every work session. Source material for the README secti
   the ○△× marks in 9 stops, arrows choose, Enter records; the hidden radios now show a focus ring. The accessibility tree showed
   what a screen reader hears: the check-card buttons were named just "○" — now "○ よい / △ 条件つき / × ちがう", the prose box is
   labelled by its question, and the visible word under each mark no longer doubles the name. Screenshots: `docs/screens/a11y-*.png`.
+- **A milestone audit by independent subagents** (after ARIA's "have Claude audit at each milestone") — two read-only subagents,
+  briefed with angles but not with conclusions: (A) safety/HITL, evaluation fairness, secrets; (B) README vs code and where every
+  number comes from. The main session re-checked each finding against code and data before acting — which also caught one of its
+  own errors: it first wrote that the repo was already public, because the test clone had succeeded; an unauthenticated request
+  returned 404 (the clone had used saved credentials). Fixed: scope guards in the compiler (D-043, then hitl-reviewer, whose two
+  narrowing suggestions went in), field mode refused unless enabled, a per-IP start limit, a stricter boundary test (which at once
+  flagged a comment), five more secret-scan patterns, and ten documentation/number fixes, including recording that the interim
+  64% file was assembled by hand from console output. Ten items that need Kento are listed in `docs/audits/2026-11-03.md`.

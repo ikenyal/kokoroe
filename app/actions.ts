@@ -14,13 +14,16 @@ import { recordTrigger } from "@/src/learning/compile";
 import type { SessionMeta, SuccessorTurn, Timing } from "@/src/server/session";
 import { askSuccessor } from "@/src/successor/ask";
 import type { Usage } from "@/src/lib/claude";
-import { allowLive, recordSpend } from "@/src/server/limits";
+import { allowLive, allowStart, recordSpend } from "@/src/server/limits";
+import { fieldEnabled } from "@/src/server/field";
 import { CLIENTS, getClient, HISTORY_QUESTIONS } from "@/src/core/world";
 import recorded from "@/data/demo/recorded-answers.json";
 
 export async function start(formData: FormData) {
   const mode = formData.get("mode");
   if (mode !== "demo" && mode !== "trial" && mode !== "field") throw new Error("invalid mode");
+  if (mode === "field" && !fieldEnabled()) throw new Error("invalid mode"); // the field test exists only where KOKOROE_FIELD=1
+  if (!(await allowStart())) throw new Error("too many sessions from this address; try again later");
   await startSession(mode as Mode);
   redirect("/choba");
 }

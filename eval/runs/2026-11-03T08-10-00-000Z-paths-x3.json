@@ -48,5 +48,6 @@
       ]
     }
   ],
-  "totalUsd": 4.691
+  "totalUsd": 4.691,
+  "provenance": "Assembled by a one-off script from the console output of three training runs (seeds 101/202/303): the per-run verdict strings, taps and cost were copied from the run output; the raw per-path logs were not saved. The file name's time is not the run time (see `at`). Replaced on 11/7 by eval:final, which writes its own summary (audit 2026-11-03)."
 }

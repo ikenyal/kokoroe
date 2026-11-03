@@ -51,3 +51,16 @@ describe("client IP behind the load balancer (spoof-resistant)", () => {
     vi.unstubAllEnvs();
   });
 });
+
+describe("session starts per IP (audit 2026-11-03)", () => {
+  it("caps how many sessions one address can start in an hour; other addresses are unaffected", async () => {
+    vi.stubEnv("KOKOROE_DATA_DIR", mkdtempSync(path.join(tmpdir(), "kokoroe-lim-")));
+    vi.stubEnv("KOKOROE_IP_STARTS_PER_HOUR", "2");
+    vi.resetModules();
+    const { reserveStart } = await import("@/src/server/limits");
+    expect(reserveStart("9.9.9.9")).toBe(true);
+    expect(reserveStart("9.9.9.9")).toBe(true);
+    expect(reserveStart("9.9.9.9")).toBe(false);
+    expect(reserveStart("8.8.8.8")).toBe(true);
+  });
+});

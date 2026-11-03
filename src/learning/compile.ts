@@ -32,12 +32,20 @@ export async function applyCandidate(
   meta: { diagnosis: string; confidence: KokoroeRule["confidence"] },
 ): Promise<AppliedChange> {
   const date = jstDate(judgment.at);
-  const target = c.action === "revise" && c.targetRuleId ? await store.getRule(c.targetRuleId) : undefined;
+  const found = c.action === "revise" && c.targetRuleId ? await store.getRule(c.targetRuleId) : undefined;
+  // Scope guards in code, not only in the prompt (audit 2026-11-03): a correction about one client may revise only that
+  // client's rules or an existing company-wide one, and widening to all clients happens only by revising such a rule.
+  // Only active rules are revised; a company-wide rule is revised only as company-wide (narrowing it to one client would drop it
+  // for the other nine unchecked — regression replays this client's scenes only), otherwise this client gets its own rule.
+  const sameClient = found?.scope.clientId === judgment.clientId;
+  const wideStaysWide = found?.scope.clientId === null && c.scope.clientId === null;
+  const target = found && found.status === "active" && !found.mergedInto && (sameClient || wideStaysWide) ? found : undefined;
+  const scope = { ...c.scope, clientId: target && c.scope.clientId === null ? null : judgment.clientId };
   if (target) {
     const before = full(target.text, target.when);
     target.text = c.text;
     target.when = c.when;
-    target.scope = { ...c.scope };
+    target.scope = scope;
     target.confidence = meta.confidence;
     target.fix = c.fix;
     target.sources.push(sourceOf(judgment));
@@ -53,10 +61,10 @@ export async function applyCandidate(
     await store.saveRule(target);
     return { ruleId: target.id, action: "revise", before, after: full(c.text, c.when) };
   }
-  // "add", or a "revise" pointing at a rule that doesn't exist → add.
+  // "add", or a "revise" pointing at a rule that doesn't exist or belongs to another client → add, scoped to this client.
   const rule: KokoroeRule = {
     id: await store.nextRuleId(),
-    scope: { ...c.scope },
+    scope,
     text: c.text,
     when: c.when,
     status: "active",

@@ -10,7 +10,8 @@ import path from "node:path";
 const ROOT = path.resolve(__dirname, "..");
 const PRODUCT_DIRS = ["src", "app"];
 const CODE_EXT = /\.(ts|tsx|js|jsx|mjs|cjs|json)$/;
-const FORBIDDEN = /data[\\/]+hidden|hidden[\\/]+rules/;
+// The ground truth itself, and the simulator that reads it (an import of eval/ from product code would be the shortest leak).
+const FORBIDDEN = /data[\\/]+hidden|hidden[\\/]+rules|eval[\\/]+simulator|["']@\/eval\/|\.\.[\\/]+eval[\\/]/;
 
 function listFiles(dir: string): string[] {
   let out: string[] = [];
@@ -29,7 +30,7 @@ function listFiles(dir: string): string[] {
 }
 
 describe("hidden ground-truth boundary", () => {
-  it("product code (src/, app/) never references data/hidden", () => {
+  it("product code (src/, app/) never references data/hidden or imports eval/", () => {
     const offenders = PRODUCT_DIRS.flatMap((d) => listFiles(path.join(ROOT, d))).filter((f) =>
       FORBIDDEN.test(readFileSync(f, "utf8")),
     );

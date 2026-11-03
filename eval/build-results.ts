@@ -98,8 +98,8 @@ function fromInterim(files: string[]): Omit<Results, "curves"> {
     source: null,
     note: "すべて架空データ（取引先10社・評価用20場面・沿革の質問8件）、師匠はシミュレータ。11/3 の途中経過。Before は修正後の台帳（D-033）、途中経過の After は修正前の台帳で測ったもの。正式な Before／After は 11/7 に同じ台帳・学習5本で取り直す。",
     caveat: {
-      en: "Interim (11/3): the Before uses the corrected ledger (D-033), the interim After the previous one — not directly comparable. Both are re-taken on 11/7 with the same ledger and 5 training paths.",
-      ja: "途中経過（11/3）: Before は修正後の台帳（D-033）、After は修正前の台帳で測ったもので、そのままは比べられません。11/7 に同じ台帳・学習5本で取り直します。",
+      en: "Interim (11/3): the Before uses the corrected ledger (D-033), the interim After the previous one — not directly comparable. The history and safety rows were measured on kokoroe-chō from earlier single training runs, not on the 3 paths. All are re-taken on 11/7 with the same ledger and 5 training paths.",
+      ja: "途中経過（11/3）: Before は修正後の台帳（D-033）、After は修正前の台帳で測ったもので、そのままは比べられません。沿革と安全の行は、学習3本ではなく、それより前の1本の学習で育てた心得帳で測ったものです。11/7 に同じ台帳・学習5本ですべて取り直します。",
     },
     before: { label: "Before（台帳＋制約だけの弟子 v0）", match: mean(matches), sd: sd(matches), okp: mean(runs.map((r) => rate(r, (c) => c !== "×"))), runs: runs.length },
     paths: pathsBlock(p.paths),

@@ -47,7 +47,7 @@ Hackathon: Built with Claude: Japan 2026. Deadline **2026-11-08 20:00 JST**. The
 
 ## Stack
 
-TypeScript (strict) · Next.js 16 (App Router) + Tailwind 4 · `@anthropic-ai/sdk` · Vitest · tsx · npm. Hosting: AWS Amplify (later).
+TypeScript (strict) · Next.js 16 (App Router) + Tailwind 4 · `@anthropic-ai/sdk` · Vitest · tsx · npm. Hosting: Lightsail container service (D-034; Amplify was the first plan).
 Next.js 16 differs from older versions: see `AGENTS.md` and read `node_modules/next/dist/docs/` before writing Next.js code.
 Versions are exact (`.npmrc` save-exact); add deps with `npm install <pkg>` and commit `package-lock.json`.
 
@@ -55,7 +55,7 @@ Versions are exact (`.npmrc` save-exact); add deps with `npm install <pkg>` and 
 |---|---|---|
 | Apprentice drafts, successor Q&A | `claude-sonnet-5-5` | must answer in seconds (1-tap UX) |
 | Interpreting corrections, compiling the kokoroe-chō | `claude-opus-5-5` | judgment-heavy, async is fine |
-| Master simulator bulk runs | `claude-haiku-5-5` | cheap, many runs |
+| Master simulator bulk runs | `claude-haiku-5-5` (reserved; the simulator is code-only today) | cheap, many runs |
 
 Managed Agents: memory store = kokoroe-chō. The SDK sets `agent-memory-2026-07-22` on `client.beta.memoryStores.*`;
 never send it together with `managed-agents-2026-04-01` (400).

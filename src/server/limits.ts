@@ -21,6 +21,7 @@ export const LIMITS = {
   ipCallsPerHour: Number(process.env.KOKOROE_IP_CALLS_PER_HOUR ?? 60),
   globalCallsPerDay: Number(process.env.KOKOROE_GLOBAL_CALLS_PER_DAY ?? 1500),
   dailyUsd: Number(process.env.KOKOROE_DAILY_USD ?? 5),
+  ipStartsPerHour: Number(process.env.KOKOROE_IP_STARTS_PER_HOUR ?? 30), // each start copies a ~100 KB snapshot to disk
 };
 
 interface Counters {
@@ -29,6 +30,7 @@ interface Counters {
   calls: number;
   sessions: Record<string, number>;
   ips: Record<string, { hour: string; calls: number }>;
+  starts?: Record<string, { hour: string; count: number }>;
 }
 
 const jstDay = () => new Date(Date.now() + 9 * 3600_000).toISOString().slice(0, 10);
@@ -85,6 +87,21 @@ export function reserve(sid: string, ip: string): LimitReason | null {
   c.ips[ip] = { hour: ipc.hour, calls: ipc.calls + 1 };
   save(c);
   return null;
+}
+
+/** Starting a session costs no API call but writes files: limit starts per IP per hour (audit 2026-11-03). */
+export async function allowStart(): Promise<boolean> {
+  return reserveStart(await clientIp());
+}
+
+export function reserveStart(ip: string): boolean {
+  const c = load();
+  const prev = c.starts?.[ip];
+  const cur = prev?.hour === hour() ? prev : { hour: hour(), count: 0 };
+  if (cur.count >= LIMITS.ipStartsPerHour) return false;
+  c.starts = { ...c.starts, [ip]: { hour: cur.hour, count: cur.count + 1 } };
+  save(c);
+  return true;
 }
 
 /** Add the actual cost of finished calls to today's total. */
