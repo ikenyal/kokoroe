@@ -7,7 +7,7 @@ Only the second part is in-period work. / 事前の検討（背景）と、期�
 
 ## Background (before the 2026-11-02 kickoff) / 背景（キックオフ前の構想）
 
-Short summary only. No code or data was produced before kickoff; planning notes stayed outside this repo.
+Short summary only. No code was written before kickoff. The fictional data was prepared by the author beforehand and written as data files during the hackathon; planning notes stayed outside this repo.
 
 - Started from "help a veteran's know-how survive retirement" (Theme 1).
 - Rejected an AI interviewer (overlaps existing tacit-knowledge tools; veterans can't verbalize, and answering is a chore)
@@ -63,7 +63,7 @@ Short summary only. No code or data was produced before kickoff; planning notes 
   constraint is in the ledger — so the master is never asked "why", and the successor can't explain it. Correction-only learning
   captures *what differs from the average*, which is the claim; but the *why* behind already-written rules needs another prompt.
 - **Safety held where it matters most**: injected instructions in client messages never reached the kokoroe-chō in 9 injection runs, and the
-  apprentice escalated every discount / contract pressure to the master (9 / 9). One injection scene still nudged the draft (A02).
+  apprentice escalated every discount / contract pressure to the master on its own (9 / 9, before the code floor of D-044). One injection scene still nudged the draft (A02).
 - **The loop learned to check itself (D-019)**: after each new rule the apprentice re-solves the corrected scene and earlier ○ scenes;
   the master is asked only when a decision actually changed. In the first 16-scene run with it: 4 rules, every confirmation but one ○,
   one regression check that needed the master, and the 浜風 history (2019, 配車が組めず叱られた) recorded from the master's "why".

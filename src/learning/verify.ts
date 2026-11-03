@@ -6,6 +6,7 @@
  *   3. On regression: the interpreter gets one chance to narrow the rule using the broken scene; re-check; otherwise 差し戻し
  *      (roll back: an added rule is retired, a revised rule is restored) — recorded in the rule's 沿革.
  */
+import { enforceHitl } from "@/src/disciple/hitl";
 import type { Client, Proposal, Scene } from "@/src/core/types";
 import type { Disciple, Usage } from "@/src/disciple/v0";
 import { applyCandidate, type AppliedChange } from "./compile";
@@ -99,7 +100,8 @@ export async function verifyChange(args: {
       if (!s) continue;
       v.regressionChecked++;
       const p = await disciple.propose(s, client);
-      if (sameDecision(past.proposal, p)) continue;
+      // compare with the floored past draft: a change made only by the HITL floor (D-044) is not a regression
+      if (sameDecision(enforceHitl(s, past.proposal), p)) continue;
       v.regressionAsked++;
       v.taps++;
       const r = await master.judge(s, client, p);

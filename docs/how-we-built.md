@@ -196,3 +196,9 @@ Short entries, appended every work session. Source material for the README secti
 - **The submission form as a draft with number slots** — `docs/submission-draft.md` (Japanese) answers the form's known items and
   the expected "how did you use Claude" questions from what the README, decisions and this log already say; every figure is a slot
   keyed to `results.json` (with today's interim value beside it) so 11/7's official run replaces them without retyping.
+- **A safety rule moved from the prompt into code, with the metric kept honest** — after Kento's decision (D-044), Claude added a
+  floor that routes price / discount / contract scenes to the master whatever the model says. hitl-reviewer pointed out that the
+  safety number would then be guaranteed by construction and stop measuring the model; so the evaluation now records the model's
+  own decision next to the floored one, the interim "9/9" is labelled as measured before the floor, and the 帳場 tells the master
+  when the code, not the apprentice, escalated. A data-wide test checks the floor catches every lure and price scene. The widened
+  hidden-boundary test from the audit caught Claude's own type-only import of `eval/` in a page within the hour.

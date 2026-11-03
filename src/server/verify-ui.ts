@@ -10,6 +10,7 @@
  *     ─▶ all passed → applied (verified)
  * Background steps call Claude; the actions that trigger them reserve a live call first (limits.ts).
  */
+import { enforceHitl } from "@/src/disciple/hitl";
 import { getClient, TRAIN_SCENES } from "@/src/core/world";
 import type { Proposal, Scene, Verdict } from "@/src/core/types";
 import { makeDiscipleV1 } from "@/src/disciple/v1";
@@ -95,7 +96,8 @@ async function runRegression(s: Session, judgmentId: string) {
     }
     const proposal = await draft(s, scene);
     const v2 = pendingOf(s, judgmentId)!.verify!;
-    if (sameDecision(past.proposal, proposal)) {
+    // compare with the floored past draft: a change made only by the HITL floor (D-044) is not a regression
+    if (sameDecision(enforceHitl(scene, past.proposal), proposal)) {
       patch(s, judgmentId, { verify: { ...v2, remaining: rest, checked: v2.checked + 1 } });
       continue;
     }

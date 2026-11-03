@@ -4,6 +4,7 @@
  * Every scene animates with CSS only, so each frame is taken by pausing all animations at the same time (reproducible).
  */
 import path from "node:path";
+import { readFileSync } from "node:fs";
 import { parseArgs } from "node:util";
 import { chromium } from "playwright";
 
@@ -20,6 +21,10 @@ const { values } = parseArgs({ options: { only: { type: "string" } } });
 (async () => {
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 }, locale: "ja-JP" });
+  // Same data the recorder injects (video/record.ts): recorded successor answers and the generated results.
+  const MCP = JSON.parse(readFileSync(path.join(ROOT, "demo/successor-mcp/answers.json"), "utf8"));
+  const RESULTS = JSON.parse(readFileSync(path.join(ROOT, "data/demo/results.json"), "utf8"));
+  await page.addInitScript(([m, r]) => Object.assign(window, { MCP: m, RESULTS: r }), [MCP, RESULTS] as const);
   for (const [id, times] of Object.entries(FRAMES)) {
     if (values.only && !values.only.split(",").includes(id)) continue;
     await page.goto("file://" + path.join(ROOT, "video/scenes", `${id}.html`));

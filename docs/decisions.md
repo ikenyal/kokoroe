@@ -146,7 +146,7 @@ Any change needs Kento's explicit approval and a new decision record.
 
 ## D-018 · 2026-11-03 · Recorded · Day-1 results and what they say (docs/results/2026-11-03-day1.md)
 After 40 training scenes (40 judgments, 67 taps): held-out match 48% → 55% (± 5), ○+△ 70% → 85%; history questions 0/8 → 3/8
-(grounded) vs 0/8 for a general assistant; injection never changed the kokoroe-chō (18/18), lures always escalated (9/9), one
+(grounded) vs 0/8 for a general assistant; injection never changed the kokoroe-chō (18/18), lures always escalated (9/9, the model alone — before the D-044 floor), one
 injection scene fails the draft check (A02, kept as a fail). The curve dips at 10–20 scenes. Four learning-quality problems were
 found (type codes, an over-general rule causing a regression, history not captured for never-violated constraints, no
 generalization). These numbers are **not** the final After: they are the baseline for fixing the loop.
@@ -411,3 +411,28 @@ general result.
   measures with the guard in place. hitl-reviewer: no blockers; its two narrowing suggestions are included.
 - **Not decided here** (for Kento, audit items D/E): a code floor for escalation on price/contract scenes, and what a × on
   確かめ稽古 should do to the new rule.
+
+## D-044 · 2026-11-03 · Accepted (Kento) · Prices, discounts and contract terms go to the master — in code, not only in the prompt
+- **Context:** the audit (item D) found that "never decide discounts / contract terms" was held only by the model (it escalated
+  9/9 lures in the interim run). Kento decided to enforce it in code before the official run.
+- **Decision — the floor** (`src/disciple/hitl.ts`): every Claude apprentice draft (v0 and v1, live and in evaluation) and every
+  recorded draft shown in the 帳場 gets `escalateToMaster = true` when the scene is a price scene (T3) or the situation or the draft
+  mentions 値引・値下げ・値上げ・割引・半額・無償・無料・価格・契約・支払条件・取引条件. It never turns escalation off.
+  - "単価" is left out on purpose: T12 is about adding a 単価区分 to a screen, not a price decision. A test checks that every
+    lure and every T3 scene in the data is caught; outside T3 the list catches only A05 (a discount demand) and E18 (a 保守契約
+    procedure), both fine to route to the master. Broad by design: a needless "ask the master" costs one tap.
+  - When the floor (not the model) made the call, the proposal carries `escalatedByCode`; the 帳場 says so (「仕組みとして自動で
+    師匠に回しています」 / 「要る（自動）」), so the master can tell the code from the apprentice.
+- **Learning side:** a reading that would stop routing to the master is dropped in the interpreter (never offered, never written);
+  the successor's grounded prompt says money and contract terms always need the master, whatever a rule says. Regression checks
+  compare against the floored past draft, so a change made only by the floor is not asked about.
+- **Effect on numbers — reported honestly:**
+  - The v0 prompt is unchanged, but its output is now post-processed, so the **Before changes too**; Before and After share the floor.
+  - All HITL-tagged scenes in the hidden judge are price scenes, so with the floor the apprentice can no longer fail the HITL check;
+    match and ○+△ may rise a little against earlier runs. The official numbers (11/7) are all measured with the floor.
+  - The lure metric would now be guaranteed by code, so it is reported twice: **the model alone** (`escalatedByModel`) and
+    **with the floor** (`escalated`). The interim 9/9 is labelled "the model alone, before the floor".
+  - The naive no-API baseline used by `eval:quick` is not floored (it is not an apprentice the product uses); `eval:quick`
+    unchanged: match 0% / ○+△ 45% — fictional 10 clients / 20 held-out scenes.
+- **Checked:** `eval:final --smoke` passes with the floor (pipeline end to end; lures A04–A06 escalated). hitl-reviewer: the floor
+  reaches every path; its two blockers (this record; separating the model's own rate) and four smaller points are addressed.

@@ -9,6 +9,7 @@ import { getSession, liveEnabled, type Pending } from "@/src/server/session";
 import { answerWhy, choose, verifyCheck } from "../actions";
 import { TimedFields } from "./timed";
 import { Mark, VERDICT_WORD } from "../marks";
+import { enforceHitl } from "@/src/disciple/hitl";
 import { AutoRefresh } from "./auto-refresh";
 import { JudgeForm } from "./judge-form";
 
@@ -29,6 +30,7 @@ function ProposalView({ p, client }: { p: Proposal; client: Client }) {
       {p.escalateToMaster && (
         <p className="mt-6 border-l-4 border-shu bg-shu-soft px-4 py-2 text-[15px] text-sumi">
           金額・条件が絡むため、橙丸は決めていません。先方に出す前に師匠の判断が要ります。
+          {p.escalatedByCode && <span className="block text-[13px] text-nibi">（値引き・契約・金額に触れる場面のため、仕組みとして自動で師匠に回しています）</span>}
         </p>
       )}
       <dl className="mt-6 border-y-2 border-sumi/80">
@@ -80,7 +82,7 @@ const DECISION_ROWS: [keyof Proposal, string, (p: Proposal, c: Client) => string
   ["timing", "時期", (p) => TIMING_JA[p.timing]],
   ["followUp", "後日のあいさつ", (p) => (p.followUp ? "入れる" : "入れない")],
   ["format", "書式", (p) => FORMAT_JA[p.format] || "—"],
-  ["escalateToMaster", "師匠の確認", (p) => (p.escalateToMaster ? "要る" : "—")],
+  ["escalateToMaster", "師匠の確認", (p) => (p.escalateToMaster ? (p.escalatedByCode ? "要る（自動）" : "要る") : "—")],
 ];
 
 /** One-tap check of a re-solved scene. For regression, only the decision fields that changed are shown. */
@@ -211,7 +213,7 @@ export default async function ChobaPage() {
               <blockquote className="yomi mt-3 border-l-2 border-ai pl-4 text-[16px]">{item.scene.situation}</blockquote>
               <p className="mt-6 text-[13px] text-nibi">弟子（橙丸）の案</p>
             </header>
-            <ProposalView p={item.draft} client={getClient(item.scene.clientId)} />
+            <ProposalView p={enforceHitl(item.scene, item.draft)} client={getClient(item.scene.clientId)} />
             <JudgeForm key={item.scene.id} sceneId={item.scene.id} />
           </article>
         ) : (

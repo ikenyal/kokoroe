@@ -7,6 +7,7 @@ import { COMPANY } from "@/src/core/world";
 import { SCENE_TYPE_LABELS, type Client, type Proposal, type Scene } from "@/src/core/types";
 import { cachedSystem, getClaude, MODELS, textBlock, usageOf, type Usage } from "@/src/lib/claude";
 import { ProposalSchema } from "./schema";
+import { enforceHitl } from "./hitl";
 
 export type { Usage } from "@/src/lib/claude";
 
@@ -96,7 +97,7 @@ export function makeClaudeDisciple(
       usage.push(usageOf(res, performance.now() - t0));
       if (res.stop_reason === "refusal") throw new Error(`refusal on ${scene.id}`);
       if (!res.parsed_output) throw new Error(`unparseable proposal on ${scene.id} (stop_reason=${res.stop_reason})`);
-      return res.parsed_output;
+      return enforceHitl(scene, res.parsed_output);
     },
   };
 }

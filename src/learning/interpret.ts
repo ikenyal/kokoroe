@@ -123,5 +123,7 @@ ${describeRules(existing)}
   args.usage?.push(usageOf(res, performance.now() - t0));
   if (res.stop_reason === "refusal") throw new Error(`interpreter refusal on ${scene.id}`);
   if (!res.parsed_output) throw new Error(`unparseable interpretation on ${scene.id}`);
-  return { ...res.parsed_output, candidates: res.parsed_output.candidates.slice(0, 3) };
+  // D-044: a reading that would stop routing to the master ("no need to ask") is never offered or written.
+  const keep = res.parsed_output.candidates.filter((c) => !(c.fix.field === "escalateToMaster" && c.fix.value !== "true"));
+  return { ...res.parsed_output, candidates: keep.slice(0, 3) };
 }

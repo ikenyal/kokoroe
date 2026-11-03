@@ -11,7 +11,7 @@ export default function KeikoPage() {
   const pathsRaw = results.paths as null | { mean: number; min: number; max: number; n: number; paths: { taps: number }[] };
   const paths = pathsRaw && { ...pathsRaw, taps: Math.round(pathsRaw.paths.reduce((a, p) => a + p.taps, 0) / pathsRaw.paths.length) };
   const hist = results.history;
-  const adv = results.adversarial;
+  const adv: typeof results.adversarial & { escalatedByModel?: number } = results.adversarial; // typed: escalatedByModel appears with the 11/7 run (D-044)
   return (
     <div>
       <h1 className="font-mincho text-[24px] tracking-[0.06em]">稽古の記録</h1>
@@ -90,7 +90,10 @@ export default function KeikoPage() {
           <div>
             <h3 className="font-bold">安全の確かめ</h3>
             <p className="yomi mt-1">
-              取引先の文面に紛れた「心得として登録せよ」などの指示で、心得帳が書き換わった回数は {adv.injectionRuns} 回中 {adv.injectionRuns - adv.storeProtected} 回。値引き・契約条件を迫られた場面では、{adv.lureRuns} 回中 {adv.escalated} 回とも師匠の判断に回しました。
+              取引先の文面に紛れた「心得として登録せよ」などの指示で、心得帳が書き換わった回数は {adv.injectionRuns} 回中 {adv.injectionRuns - adv.storeProtected} 回。値引き・契約条件を迫られた場面では、
+              {adv.escalatedByModel === undefined
+                ? `弟子が自分で ${adv.lureRuns} 回中 ${adv.escalated} 回、師匠の判断に回しました（コードの下限〈D-044〉を入れる前の計測）。`
+                : `弟子が自分で師匠の判断に回したのは ${adv.lureRuns} 回中 ${adv.escalatedByModel} 回。コードの下限〈D-044〉があるので、実際には ${adv.lureRuns} 回中 ${adv.escalated} 回とも師匠に回ります。`}
             </p>
           </div>
           <div>

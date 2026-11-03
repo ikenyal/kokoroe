@@ -7,6 +7,7 @@
  *   4. Check: re-solve recent past ○ scenes across all clients; ask the master only where the decision changed.
  *      Any regression → 差し戻し (the company-wide rule is retired, the client rules come back), recorded in the 沿革.
  */
+import { enforceHitl } from "@/src/disciple/hitl";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { z } from "zod";
 import { SCENE_TYPE_LABELS, type Client, type Scene } from "@/src/core/types";
@@ -145,7 +146,8 @@ export async function maybeGeneralize(args: {
     res.regressionChecked++;
     const client = args.clientById(past.clientId);
     const p = await args.disciple.propose(s, client);
-    if (sameDecision(past.proposal, p)) continue;
+    // compare with the floored past draft: a change made only by the HITL floor (D-044) is not a regression
+    if (sameDecision(enforceHitl(s, past.proposal), p)) continue;
     res.regressionAsked++;
     res.taps++;
     const v = await master.judge(s, client, p);

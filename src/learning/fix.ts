@@ -7,8 +7,10 @@ export function applyFix(p: Proposal, fix: ProposalFix): Proposal {
   const v = fix.value;
   switch (fix.field) {
     case "followUp":
+      q.followUp = v === "true";
+      break;
     case "escalateToMaster":
-      q[fix.field] = v === "true";
+      if (v === "true") q.escalateToMaster = true; // simulator side; the product drops such readings in interpret.ts (D-044)
       break;
     case "backchannelTo":
       q.backchannelTo = v === "contact" || v === "decider" ? v : null;

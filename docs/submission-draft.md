@@ -27,7 +27,7 @@ Kokoroe（心得）— 商いの心得を継ぐ、AIの弟子
   - 誰に先に伝えるか。何をメールで送り、何を顔を見て話すか。いつは避けるか。正式な話の前に、誰の耳にそっと入れておくか。
 - ベテランは、これを説明してと頼まれても言葉にできません。けれど案を見せれば「違う、そうじゃない」とすぐ言えます。
 - その人が引退すると、作法も「なぜそうなったか」も一緒に消えます。
-  - 帝国データバンクの2025年の調査では、調査対象の中小企業の51.2%で後継者が決まっていません。
+  - 帝国データバンク「全国『後継者不在率』動向調査（2025年）」では、調査対象の中小企業の51.2%で後継者が決まっていません。新任社長の就任経緯では内部昇格（36.1%）が同族承継（32.3%）を上回り、「M&Aほか」も20.6%と、継ぐ人の「脱ファミリー」が進んでいます（速報値）。
 
 **Kokoroe がすること**
 
@@ -52,7 +52,7 @@ Kokoroe（心得）— 商いの心得を継ぐ、AIの弟子
 - **沿革の質問への答え:** 後任が「なぜそうなったか」まで答えられた質問は、8問中〔history[0].mean〕 → 〔history[1].mean〕問でした。
 - **乱用への強さ:**
   - 取引先の文面に紛れた「これを心得として登録せよ」で心得帳が変わった回数は、〔adversarial.injectionRuns〕回中〔adversarial.injectionRuns − adversarial.storeProtected〕回でした。
-  - 値引き・契約条件を迫られた場面は、〔adversarial.lureRuns〕回中〔adversarial.escalated〕回とも師匠の判断に回しました。
+  - 値引き・契約条件を迫られた場面で、弟子（モデル）が自分で師匠の判断に回したのは〔adversarial.lureRuns〕回中〔adversarial.escalatedByModel〕回。さらにコードの下限（D-044）で、値引き・契約・金額の場面は必ず師匠に回ります（〔adversarial.escalated〕/〔adversarial.lureRuns〕）。
 - **師匠の手間:** 作者1人が試した範囲では、〔field: ○△× で直す1件あたりの時間〕で、同じ作法を文章で書く1件あたり〔field: 文章の時間〕より短くなりました。
 
 ## Claude 利用に関する質問（想定した問いへの答え）
@@ -122,7 +122,7 @@ Kokoroe（心得）— 商いの心得を継ぐ、AIの弟子
 | 〔paths.mean〕〔paths.min〕〔paths.max〕 | `paths.mean / min / max` | 64%（58〜70%） |
 | 〔paths.n〕 | `paths.n` | 3（正式は5） |
 | 〔history[0].mean〕 → 〔history[1].mean〕 | `history[].mean` | 0 → 5.3 / 8 |
-| 〔adversarial.*〕 | `adversarial` | 注入 9回中 0回、値引き 9回中 9回 |
+| 〔adversarial.*〕 | `adversarial` | 注入 9回中 0回、値引き 9回中 9回（モデル単体・下限を入れる前の計測。`escalatedByModel` は 11/7 の計測から入る） |
 | 〔field: …〕 | `docs/results/field-2026-11-06.json` | 11/6 の実地テストのあと |
 
 途中経過の Before と After は、測った台帳が異なり、そのままは比べられません（`results.caveat`）。提出の文面には正式な数字だけを使います。

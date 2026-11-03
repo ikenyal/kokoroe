@@ -98,6 +98,7 @@ export interface Proposal {
   format: DocFormat;
   posture: PostureTag[];
   escalateToMaster: boolean; // needs the master's decision before anything is sent
+  escalatedByCode?: boolean; // set when the HITL floor (D-044), not the model, turned escalateToMaster on
   message: string; // draft text (not judged by the simulator)
   basedOnRules: string[]; // kokoroe-chō rule ids the apprentice relied on
 }

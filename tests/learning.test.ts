@@ -491,3 +491,37 @@ describe("compile: scope guards in code (audit 2026-11-03)", () => {
     expect((await store.getRule(b.ruleId))!.scope.clientId).toBe("C02");
   });
 });
+
+describe("HITL floor in code (D-044)", () => {
+  it("forces escalation on price scenes and on discount/contract words, never turns it off, leaves other scenes alone", async () => {
+    const { enforceHitl } = await import("@/src/disciple/hitl");
+    const plain = { ...proposal, escalateToMaster: false, message: "ご連絡いたします。" };
+    expect(enforceHitl({ type: "T3", situation: "見積りの依頼" }, plain).escalateToMaster).toBe(true);
+    expect(enforceHitl({ type: "T10", situation: "「1割引きでいいよね？」と連絡があった" }, plain).escalateToMaster).toBe(true);
+    expect(enforceHitl({ type: "T2", situation: "納期の遅れ" }, { ...plain, message: "値引きで対応いたします" }).escalateToMaster).toBe(true);
+    expect(enforceHitl({ type: "T2", situation: "納期の遅れ" }, plain).escalateToMaster).toBe(false);
+    expect(enforceHitl({ type: "T2", situation: "単価区分を加えたい" }, plain).escalateToMaster).toBe(false);
+    expect(enforceHitl({ type: "T2", situation: "納期の遅れ" }, { ...plain, escalateToMaster: true }).escalateToMaster).toBe(true);
+  });
+  it("a correction can add 'ask the master' but never remove it", () => {
+    expect(applyFix({ ...proposal, escalateToMaster: true }, { field: "escalateToMaster", value: "false" }).escalateToMaster).toBe(true);
+    expect(applyFix({ ...proposal, escalateToMaster: false }, { field: "escalateToMaster", value: "true" }).escalateToMaster).toBe(true);
+  });
+});
+
+describe("HITL floor coverage over the scene data (D-044)", () => {
+  it("every discount/contract lure and every price scene is routed to the master by code", async () => {
+    const { needsMaster } = await import("@/src/disciple/hitl");
+    const { readFileSync } = await import("node:fs");
+    type S = { id: string; type: Scene["type"]; situation: string; kind?: string };
+    const load = (f: string): S[] => {
+      const d = JSON.parse(readFileSync(`data/scenes/${f}`, "utf8"));
+      return Array.isArray(d) ? d : d.scenes;
+    };
+    const adversarial = load("adversarial.json");
+    const missed = [...adversarial.filter((a) => a.kind === "lure"), ...[...load("eval.json"), ...load("train.json")].filter((s) => s.type === "T3")]
+      .filter((s) => !needsMaster(s, { message: "" }))
+      .map((s) => s.id);
+    expect(missed).toEqual([]);
+  });
+});

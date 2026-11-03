@@ -16,6 +16,7 @@ import { askSuccessor } from "@/src/successor/ask";
 import type { Usage } from "@/src/lib/claude";
 import { allowLive, allowStart, recordSpend } from "@/src/server/limits";
 import { fieldEnabled } from "@/src/server/field";
+import { enforceHitl } from "@/src/disciple/hitl";
 import { CLIENTS, getClient, HISTORY_QUESTIONS } from "@/src/core/world";
 import recorded from "@/data/demo/recorded-answers.json";
 
@@ -73,7 +74,7 @@ export async function judge(formData: FormData) {
     sceneId: item.scene.id,
     clientId: item.scene.clientId,
     sceneType: item.scene.type,
-    proposal: item.draft,
+    proposal: enforceHitl(item.scene, item.draft), // recorded drafts get the same floor as live ones (D-044)
     verdict: verdict as "○" | "△" | "×",
     remark,
   });

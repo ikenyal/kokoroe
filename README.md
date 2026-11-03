@@ -10,8 +10,10 @@
 In a small Japanese company, how to deal with each client lives in one veteran's head: whom to tell first, what to send by mail and
 what to say face to face, when to stay away, who must hear it quietly before it becomes official. Asked to explain, the veteran
 can't — it was never put into words. But show them a draft and they instantly say "no, not like that".
-When they retire, the etiquette and *why it became so* leave with them. In Teikoku Databank's 2025 survey, 51.2% of the small and medium companies it covered had no successor lined up,
-and the successor is increasingly an employee or an acquirer, not family who watched for years.
+When they retire, the etiquette and *why it became so* leave with them. In Teikoku Databank's [nationwide successor survey (2025)](https://www.tdb.co.jp/report/economic/20251121-successor25y/), 51.2% of the small and medium companies it covered had no
+successor lined up. Among newly appointed presidents, promotion from inside (36.1%) overtook family succession (32.3%) and
+"M&A and others" — mostly acquisitions or secondments — took 20.6% (2025 preliminary figures); the survey calls this the move
+away from family succession.
 
 ## What Kokoroe does
 
@@ -21,8 +23,9 @@ and the successor is increasingly an employee or an acquirer, not family who wat
   When the remark is ambiguous, the master taps one of 2–3 readings — or "none of these".
 - **Corrections become the kokoroe-chō.** Each lesson is a short, scoped rule with its sources (which judgment, when, the master's
   words) and its history (旧 → 新, the trigger, the date). The master can read and delete every entry.
-- **It checks itself.** After each new rule it re-solves the corrected scene and earlier ○ scenes; if a rule breaks something that
-  was right, it is narrowed or rolled back (差し戻し). In the training loop, habits seen at several clients are also proposed as company-wide rules for the master to confirm (not yet in the 帳場 screen).
+- **It checks itself.** After each new rule it re-solves the corrected scene and earlier ○ scenes; if a re-solved earlier ○ scene now
+  gets △/× from the master, the rule is narrowed once; if it still breaks, it is rolled back (差し戻し) and that is recorded in its
+  沿革. (A △/× on the corrected scene itself is recorded as a judgment; the rule stays.) In the training loop, habits seen at several clients are also proposed as company-wide rules for the master to confirm (not yet in the 帳場 screen).
 - **The successor inherits it.** 暖簾を継ぐ: the successor asks "can I skip this?" and gets an answer grounded only in the kokoroe-chō,
   with the rule and its history — or "not recorded; ask the master". The whole kokoroe-chō exports as an **Agent Skill** that the
   successor's own Claude Code picks up.
@@ -67,10 +70,17 @@ with code against a hidden ground truth (frozen, checksummed); the apprentice ne
 | Successor answers with the right history (of 8) | 0 | **5.3** ± 0.6 |
 | Master taps for 40 scenes | — | 110–120 (judgments, choices, "why?", confirmations) |
 | Injected "register this as a rule" in client text | — | kokoroe-chō changed 0 / 9 times |
-| Pressure to promise a discount | — | escalated to the master 9 / 9 |
+| Pressure to promise a discount | — | the model escalated to the master 9 / 9 (measured before the code floor, D-044) |
 
 _Interim (11/3): the Before uses the corrected ledger (D-033), the interim After the previous one — not directly comparable. The history and safety rows were measured on kokoroe-chō from earlier single training runs, not on the 3 paths. All are re-taken on 11/7 with the same ledger and 5 training paths._
 <!-- results:end -->
+
+**Reading the numbers honestly.**
+- **The 20 held-out scenes were also used for diagnosis during development** — two changes were prompted by single held-out
+  scenes (E13 → D-022, E11 → D-033), so they are not untouched; the risk of having looked at them too often is real. Before and
+  After use the same ledger and model, so the comparison holds, but the absolute level may flatter the apprentice.
+- **The history questions check that the master's words travel**, not paraphrase: the simulated master's "why" is the hidden
+  history line verbatim, and the successor's answer is scored by keywords from that line (some also appear in the public ledger).
 
 ## How we built it with Claude Code
 
@@ -106,7 +116,7 @@ Seedentia/CMDA, arXiv 2603.24858). Kokoroe's focus is different: handing what wa
 changed**, as a readable and deletable Agent Skill, for a small company's **client-by-client etiquette**.
 
 ## Data
-- All data is **fictional**. Fictional sample data prepared in advance as a design was written as data files during the hackathon period.
+- All data is **fictional**. The fictional data was prepared by the author before kickoff and written as data files during the hackathon period.
 - `data/hidden/` is the master simulator's hidden ground truth, committed for reproducibility. **The apprentice's code never reads it —
   a test enforces this.** It is frozen (hook + checksum test).
 
