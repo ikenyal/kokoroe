@@ -12,6 +12,10 @@
   .ripple { fill: none; stroke: var(--ai); stroke-width: 1.6; opacity: 0; transform-box: fill-box; transform-origin: center;
     animation: ripple 2s var(--d) ease-out both; }
   @keyframes ripple { 0% { opacity: 0; transform: scale(.2); } 8% { opacity: .9; } 100% { opacity: 0; transform: scale(1); } }
+  .glow { opacity: 0; transform-box: fill-box; transform-origin: 50% 100%; animation: glow-in 2.4s 2s ease both, breathe 2.6s 4.4s ease-in-out infinite alternate; }
+  .g2 { animation-delay: 2.6s, 5s; }
+  @keyframes glow-in { to { opacity: 1; } }
+  @keyframes breathe { from { opacity: 1; transform: scaleY(1); } to { opacity: .75; transform: scaleY(.94); } }
   .note { animation: fade 1.2s .3s ease both; opacity: 0; }
 </style></head>
 <body>
@@ -19,8 +23,18 @@
 <svg width="1280" height="720" viewBox="0 0 1280 720">
   <defs><!-- everything except the inside of the well below the rim -->
         <clipPath id="above-rim"><rect x="0" y="0" width="1280" height="431"/><rect x="0" y="431" width="884" height="289"/><rect x="1056" y="431" width="224" height="289"/></clipPath>
+        <clipPath id="sky"><rect x="0" y="0" width="860" height="420"/></clipPath>
+        <!-- glow of a fire behind the roofs: vermilion fading to ochre, kept faint -->
+        <radialGradient id="glow" cx="50%" cy="78%" r="62%">
+          <stop offset="0" stop-color="#b5402f" stop-opacity=".5"/>
+          <stop offset=".5" stop-color="#9a6a3a" stop-opacity=".24"/>
+          <stop offset="1" stop-color="#9a6a3a" stop-opacity="0"/>
+        </radialGradient>
         <clipPath id="in-rim"><ellipse cx="970" cy="430" rx="84" ry="19"/></clipPath></defs>
 
+  <!-- fire glow behind the town (fades in with the sparks, breathes slowly) -->
+  <g clip-path="url(#sky)"><ellipse class="glow" cx="300" cy="420" rx="430" ry="230" fill="url(#glow)"/>
+    <ellipse class="glow g2" cx="560" cy="420" rx="250" ry="150" fill="url(#glow)"/></g>
   <!-- ground and town (draws in first) -->
   <path class="ink thin draw" pathLength="1" style="--d:0s;--t:1.6s" d="M30,420 L840,420"/>
   <path class="ink draw" pathLength="1" style="--d:.2s;--t:2.6s" d="

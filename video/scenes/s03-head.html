@@ -14,8 +14,8 @@
   @keyframes vanish { to { opacity: 0; filter: blur(3px); } }
   .person { animation: leave 2s 7.4s ease-in forwards; }
   @keyframes leave { to { transform: translateX(140px); opacity: 0; } }
-  .stat { position: absolute; left: 120px; top: 200px; opacity: 0; animation: fade 1s 4.8s ease forwards, fade-out .6s 9s ease forwards; }
-  .stat .label { font-size: 28px; }
+  .stat { position: absolute; left: 120px; top: 176px; opacity: 0; animation: fade 1s 4.8s ease forwards, fade-out .6s 9s ease forwards; }
+  .stat .label { font-size: 28px; line-height: 1.5; }
   .stat .num { font-size: 120px; line-height: 1.15; color: var(--ai); font-variant-numeric: tabular-nums; }
   .stat .src { font-size: 16px; color: var(--nibi); margin-top: 8px; }
   .ask { position: absolute; left: 372px; top: 190px; writing-mode: vertical-rl; font-size: 40px; letter-spacing: .14em; opacity: 0;
@@ -39,7 +39,6 @@
     <path class="ink draw" pathLength="1" style="--d:.4s;--t:2.4s" d="
       M780,600 Q800,500 872,476 L872,440 Q852,432 848,414 L842,404 Q846,396 840,390 L846,378 Q834,366 830,352
       L846,338 Q846,316 852,300 Q866,200 960,196 Q1046,200 1054,292 Q1058,372 1016,420 L1012,476 Q1090,494 1120,600"/>
-    <path class="ink thin draw" pathLength="1" style="--d:1.6s;--t:.6s" d="M868,318 Q876,314 884,318"/>
   </g>
   <!-- blank sheet and brush (third beat) -->
   <g class="sheet">
@@ -55,7 +54,7 @@
 </svg>
 <div id="words"></div>
 <div class="stat">
-  <p class="label">後継ぎが決まっていない中小企業</p>
+  <p class="label">調査対象の中小企業のうち、<br>後継ぎが決まっていない企業</p>
   <p class="num">51.2%</p>
   <p class="src gothic">出典：帝国データバンク「全国『後継者不在率』動向調査（2025年）」</p>
 </div>
