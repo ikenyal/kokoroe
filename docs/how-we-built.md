@@ -171,3 +171,9 @@ Short entries, appended every work session. Source material for the README secti
   throwaway data dir, records every scene with Playwright (screen scenes scripted, including the T05 → T13 queue for 帳場), stops the
   server, and assembles with ffmpeg. A rough cut with fixed data and a placeholder voice exists; frames from it led to two fixes
   (a larger viewport scaled down so a whole card fits; opening a rule with a reason in 心得帳) and to padding narration with silence.
+- **Trying the judges' Quickstart as a stranger** — Claude cloned the public repo into an empty directory outside this one and ran
+  only what the README says, with an empty environment (`env -i`, no `.env.local`): `npm ci`, the dev server, a Playwright pass
+  through デモの続き and お試し (a △ on one card, 心得帳, 暖簾を継ぐ with a preset question, 稽古の記録), `npm test` (180 passed) and
+  `eval:quick`. Everything worked on recorded data with no key. The README was changed in three places: `npm ci` instead of
+  `npm install`, `--hostname 127.0.0.1` with the matching URL, and no hand-written test count (it had gone stale at "150+").
+  The check also found a server Claude had left running from an earlier step (127.0.0.1 only); it was stopped, and the clone deleted.
