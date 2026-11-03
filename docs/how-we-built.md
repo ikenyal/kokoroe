@@ -92,3 +92,7 @@ Short entries, appended every work session. Source material for the README secti
 - **Field test made measurable** — the 帳場 got a 実地テスト mode that timestamps each of the master's actions (hidden form fields,
   durations computed and clamped server-side) plus a prose-writing page for t_write, so the impact estimate uses Kento's own
   measured times. The whole flow was driven once with Playwright before handing it over.
+- **Public-demo guards and README skeleton** — live calls from the UI pass per-session / per-IP / daily spend limits (tested), with a
+  fallback notice; docs/deploy.md lists what Kento must create. Checking Amplify's documented Next.js support (12–15) and its
+  per-request compute surfaced a hosting decision (D-032) instead of a late surprise. README (EN + JA) drafted with interim numbers
+  clearly marked for replacement on 11/7.
