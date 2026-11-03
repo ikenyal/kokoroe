@@ -211,7 +211,7 @@ export async function verifyCheck(formData: FormData) {
   const p = meta.pending.find((x) => x.judgmentId === judgmentId);
   if (!p || p.status !== (step === "confirm" ? "needs-confirm" : "needs-regression")) return; // stale or double submit
   const t = ms(formData, "shownAt", "submitAt");
-  if (t !== null) addTimings(meta, [{ kind: "judge", sceneId: p.sceneId, ms: t, verdict }]);
+  if (t !== null) addTimings(meta, [{ kind: "check", sceneId: p.sceneId, ms: t, verdict }]);
   const refused = await allowLive(s.sid);
   if (refused) {
     meta.limit = refused;

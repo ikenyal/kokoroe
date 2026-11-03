@@ -6,6 +6,7 @@ const LABEL: Record<Timing["kind"], string> = {
   remark: "一言を添えて記録する（印から記録まで）",
   choose: "読み方の候補を選ぶ",
   why: "「なぜ？」に答える／飛ばす",
+  check: "確かめ・回帰の確認（解き直した案に印）",
   write: "同じ作法を文章で書く",
 };
 

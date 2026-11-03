@@ -62,7 +62,7 @@ export interface SuccessorTurn {
 
 /** 実地テスト: how long each master action took (ms). Content stays in the store; this is timing only. */
 export interface Timing {
-  kind: "judge" | "remark" | "choose" | "why" | "write";
+  kind: "judge" | "check" | "remark" | "choose" | "why" | "write"; // check = 確かめ稽古 / regression tap
   sceneId: string;
   ms: number;
   chars?: number; // remark / why / write length

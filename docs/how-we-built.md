@@ -162,3 +162,12 @@ Short entries, appended every work session. Source material for the README secti
   same operations (no model tokens) and laid the evidence out under D-002 with one recommendation; the decision itself waits for
   Kento. The official docs (via the claude-api skill) settled the workspace question: memory stores are
   workspace-scoped, so anything shared in public must be created with the public workspace's key.
+- **Rehearsing the human test with a robot** — Claude drove the field-test mode live with Playwright (20 cards, three corrections,
+  "why?" answers, verification taps, 5 prose answers, report; ≈ $0.18). The first attempts found two script bugs (cards are drafted
+  while the page loads; a second `<aside>` on the page) and one real flaw: verification taps were counted as "judging" time, which
+  would have skewed the judge-vs-write comparison — they are now a separate timing kind. The procedure for Kento's 30 minutes is in
+  `docs/field-test.md`, with `npm run field:save` to put the result into the repo.
+- **The video as one command** — `npm run video:shoot` builds the same bundle as the container, serves it on 127.0.0.1 only with a
+  throwaway data dir, records every scene with Playwright (screen scenes scripted, including the T05 → T13 queue for 帳場), stops the
+  server, and assembles with ffmpeg. A rough cut with fixed data and a placeholder voice exists; frames from it led to two fixes
+  (a larger viewport scaled down so a whole card fits; opening a rule with a reason in 心得帳) and to padding narration with silence.
