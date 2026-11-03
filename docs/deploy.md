@@ -29,6 +29,8 @@ The key went in through a 600-permission file outside the repo, read with `file:
 `--query` so the environment is never printed. Verified with Playwright: the start page says data goes to the Claude API; お試し's
 first card drafted live in ~5.8 s; a △ was interpreted and written as a rule in ~12 s while the next card was already shown, followed
 by the optional "why?"; 暖簾を継ぐ answered Q01 (Zoom → Teams) citing K-004. Screenshots: `docs/screens/public-live-*.png`.
+**Deployment 3 (2026-11-03, `:kokoroe.web.3`, approved):** same environment; adds 確かめ稽古 + regression in the 帳場 (D-037).
+Verified on the public URL (`docs/screens/public-live-confirm.png`, `public-live-verified.png`).
 Planned: raise `KOKOROE_DAILY_USD` to 10 before submission (11/8) — shown to Kento first.
 
 ## How the image was actually built and pushed (Podman, Apple Silicon)

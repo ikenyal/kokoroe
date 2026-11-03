@@ -98,7 +98,7 @@ function CheckCard({ p, step, sceneId, proposal, before }: { p: Pending; step: "
       </p>
       <dl className="mt-1 text-[14px]">
         {rows.map(([k, label, f]) => (
-          <div key={k} className="grid grid-cols-[6em_1fr] gap-2">
+          <div key={k} className="grid grid-cols-[7.5em_1fr] gap-2">
             <dt className="text-nibi">{label}</dt>
             <dd className="yomi">
               {before && f(before, client) !== f(proposal, client) && <del className="mr-1 text-nibi">{f(before, client)}</del>}

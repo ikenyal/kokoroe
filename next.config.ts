@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
   images: { unoptimized: true },
   // Runtime reads only data/demo/*.json from disk; keep sessions, docs, evals and secrets out of the server bundle.
   outputFileTracingExcludes: {
-    "/*": [".data/**", ".env*", "docs/**", "eval/**", "tests/**", "spikes/**", "scripts/**", "demo/**", "data/hidden/**", "*.md", "Dockerfile"],
+    "/*": [".data/**", ".env*", "docs/**", "eval/**", "tests/**", "spikes/**", "scripts/**", "demo/**", "video/**", "data/hidden/**", "*.md", "Dockerfile"],
   },
   cacheComponents: true,
   partialPrefetching: true,
