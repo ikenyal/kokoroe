@@ -21,7 +21,15 @@ Account: BrightFlow Sandbox (ID not recorded here). Profile `brightflow-sandbox-
 Public URL: `https://kokoroe.xzan0gz3dgpb8.ap-northeast-1.cs.amazonlightsail.com/` — first deployment **without an API key**
 (recorded data only; `KOKOROE_LIVE` unset). Verified 11/3 with Playwright: AI banner on every page, data-handling text,
 デモの続き (16 rules, card 1/20), お試し (judging records; the side panel says interpretation does not run on recorded data).
-Screenshots: `docs/screens/public-*.png`. Adding the `kokoroe-public` key is a separate deployment, shown to Kento first.
+Screenshots: `docs/screens/public-*.png`.
+
+**Live since 2026-11-03 (deployment 2, image `:kokoroe.web.2`, approved by Kento):** `kokoroe-public` key (workspace monthly cap
+$30), `KOKOROE_LIVE=1`, `KOKOROE_DAILY_USD=5`, session 40 / IP 60 per hour / 1500 per day, `KOKOROE_TRUSTED_PROXY_HOPS=1`.
+The key went in through a 600-permission file outside the repo, read with `file://` and deleted right after; status checks use
+`--query` so the environment is never printed. Verified with Playwright: the start page says data goes to the Claude API; お試し's
+first card drafted live in ~5.8 s; a △ was interpreted and written as a rule in ~12 s while the next card was already shown, followed
+by the optional "why?"; 暖簾を継ぐ answered Q01 (Zoom → Teams) citing K-004. Screenshots: `docs/screens/public-live-*.png`.
+Planned: raise `KOKOROE_DAILY_USD` to 10 before submission (11/8) — shown to Kento first.
 
 ## How the image was actually built and pushed (Podman, Apple Silicon)
 
