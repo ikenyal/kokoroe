@@ -17,6 +17,18 @@ export default function KeikoPage() {
   return (
     <div>
       <h1 className="font-mincho text-[24px] tracking-[0.06em]">稽古の記録</h1>
+      {/* What changed, and by how much, in one sentence — the same numbers as the table below (results.json). */}
+      <p className="yomi mt-3 max-w-[34em] font-mincho text-[19px] leading-relaxed sm:text-[21px]">
+        師匠が{paths ? `約${paths.taps}回` : `${end.taps}回`}のタップで直すと、○ が付く案は
+        <span className="tabular-nums">{pct(results.before.match)}</span>から
+        <span className="tabular-nums text-ai">{paths ? pct(paths.mean) : pct(end.match)}</span>
+        に、後任が経緯ごと答えられた質問は8問中
+        <span className="tabular-nums">{hist[0].mean.toFixed(0)}</span>問から平均
+        <span className="tabular-nums text-ai">{hist.at(-1)!.mean.toFixed(1)}</span>問になりました。
+      </p>
+      <p className="mt-1 text-[13px] text-nibi">
+        {results.official ? "" : "途中経過。"}架空の取引先10社、学習に使わない評価用の20場面で測った値です。
+      </p>
       <p className="yomi mt-2 max-w-[40em] text-[15.5px]">
         弟子の案が、師匠の考えとどれだけ合うようになったかの記録です。架空の取引先10社で、師匠はシミュレータ（隠しの正解に照らして、コードで ○・△・× を付けます）。
       </p>

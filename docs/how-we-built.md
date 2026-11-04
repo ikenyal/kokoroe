@@ -434,3 +434,11 @@ Short entries, appended every work session. Source material for the README secti
   nothing tacit to write). Claude cleaned up through the app's own 「全部消す」, confirmed the folder and ports were gone, and
   checked README, submission draft and video for any claim that correcting is easier than writing; three were reworded to what was
   measured, and the s04 narration was re-synthesized.
+- **Showing the effect without inventing it (11/5, D-063).** Claude reused the learning loop's own check (`ruleTook`, the one
+  確かめ稽古 uses) to decide on screen where a 心得 "took effect", instead of writing a new heuristic, and built the 心得帳なし／あり
+  comparison from an arm already recorded in the same evaluation run. A first version credited the 心得 with every row that
+  changed; ui-critic caught it, and the panel now shows only the 心得's row. A check script found the panel would have shown a
+  心得 learned at T15 on T01 (an earlier scene) in the recorded run; that ordering bug was fixed with a test before any screenshot.
+- **Publishing prepared, not executed.** docs/publishing.md now follows Kento's plan (rename the current repo to an archive, keep
+  it private, create `kokoroe` anew, push the rewritten history). Claude ran the checks read-only over the whole history and
+  wrote the employer domain into no file: the procedure takes it from an environment variable.

@@ -19,6 +19,7 @@ const { values } = parseArgs({
     schemes: { type: "string", default: "light,dark" },
     ask: { type: "boolean", default: false }, // on /noren: press the first example question and shoot noren-answered (recorded, no API)
     judge: { type: "string" }, // e.g. "△": mark the first 帳場 card and also shoot choba-judged (recorded data, no API)
+    advance: { type: "string" }, // e.g. "3": on /choba, mark ○ on that many cards, then shoot choba-advanced (recorded data, no API)
   },
 });
 const out = path.resolve(__dirname, "..", values.out!);
@@ -45,6 +46,15 @@ const sizes = { desktop: { width: 1280, height: 900 }, mobile: { width: 390, hei
         }
         const name = p === "/" ? "home" : p.replace(/^\//, "").replace(/\//g, "-");
         await page.screenshot({ path: path.join(out, `${name}-${scheme}-${size}.png`), fullPage: true });
+        if (p === "/choba" && values.advance) {
+          for (let k = 0; k < Number(values.advance); k++) {
+            await page.locator('label:has(input[value="○"])').click();
+            await page.locator('button:has-text("で記録する")').click();
+            await page.waitForLoadState("networkidle");
+            await page.waitForTimeout(300);
+          }
+          await page.screenshot({ path: path.join(out, `choba-advanced-${scheme}-${size}.png`), fullPage: true });
+        }
         if (p === "/noren" && values.ask) {
           await page.locator('button[name="preset"]').first().click();
           await page.waitForLoadState("networkidle");

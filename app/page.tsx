@@ -4,22 +4,10 @@ import { getSession, liveEnabled } from "@/src/server/session";
 import { fieldEnabled } from "@/src/server/field";
 import { redirect } from "next/navigation";
 import { ownEnabled } from "@/src/core/own-world";
-import { getClient } from "@/src/core/world";
-import type { KokoroeRule } from "@/src/learning/types";
 import demo from "@/data/demo/demo-snapshot.json";
 import { Mark } from "./marks";
-import { sceneRange } from "./dandori";
-
-/** One real 心得 from the demo's 心得帳, shown as it would be handed over: the rule, the master's words, why, and when. */
-function specimen() {
-  const rules = demo.store.rules as unknown as KokoroeRule[];
-  const learned = rules.filter((r) => r.status === "active" && r.sources.some((x) => x.kind !== "ledger"));
-  const r = learned.find((x) => x.history.some((h) => h.trigger && h.masterWords)) ?? learned[0];
-  if (!r) return null;
-  const h = [...r.history].reverse().find((x) => x.trigger) ?? r.history.at(-1)!;
-  const src = r.sources.find((x) => x.kind !== "ledger");
-  return { client: r.scope.clientId ? getClient(r.scope.clientId).name : "全社", text: r.text, words: h.masterWords, why: h.trigger, date: h.date, verdict: src && "verdict" in src ? src.verdict : undefined };
-}
+import { marushinStory, sceneRange } from "./dandori";
+import mcp from "@/demo/successor-mcp/answers.json";
 
 const STEPS = [
   ["一", "弟子（AI の橙丸）が、誰に・何で・いつ・裏で誰に、という段取りを先に作る。"],
@@ -32,7 +20,7 @@ export default async function Home(props: PageProps<"/">) {
   const { limit } = await props.searchParams;
   const s = await getSession();
   const live = liveEnabled();
-  const ex = specimen();
+  const ex = marushinStory(demo, mcp);
   return (
     <div className="grid gap-x-14 gap-y-12 md:grid-cols-[1.15fr_1fr]">
       <section className="flex flex-col">
@@ -90,29 +78,47 @@ export default async function Home(props: PageProps<"/">) {
       <div className="space-y-10">
         {ex && (
           <figure aria-labelledby="ex-h" className="border-t-2 border-sumi/80 pt-4">
-            <p id="ex-h" className="font-mincho text-[14px] text-sumi">心得帳の一行（デモから）</p>
-            <p className="mt-2 text-[14px] text-nibi">{ex.client}</p>
-            <blockquote className="yomi mt-1 font-mincho text-[20px] leading-relaxed">{ex.text}</blockquote>
-            <dl className="mt-4 grid grid-cols-[5em_1fr] gap-y-2 border-t border-keisen pt-3 text-[14px]">
-              {ex.verdict && (
-                <>
-                  <dt className="text-nibi">師匠の印</dt>
-                  <dd className="flex items-center gap-2">
-                    <Mark v={ex.verdict as "○" | "△" | "×"} size={22} className="text-shu" />
-                    {ex.words && <span className="yomi">「{ex.words}」</span>}
-                  </dd>
-                </>
-              )}
-              {ex.why && (
-                <>
-                  <dt className="text-nibi">わけ</dt>
-                  <dd className="yomi">{ex.why}</dd>
-                </>
-              )}
-              <dt className="text-nibi">記帳</dt>
-              <dd className="tabular-nums">{ex.date}</dd>
-            </dl>
-            <figcaption className="mt-3 text-[13px] text-nibi">師匠の印と一言から弟子が書き、わけは師匠の言葉のまま残します。後任はここから聞けます。</figcaption>
+            <p id="ex-h" className="font-mincho text-[14px] text-sumi">一つの例：{ex.client}</p>
+            <ol className="mt-2 text-[14px]">
+              <li className="grid grid-cols-[6.5em_1fr] gap-x-3 border-t border-keisen py-2.5 first:border-t-0">
+                <span className="text-nibi">
+                  弟子の案
+                  <span className="block text-[12px]">{ex.first.type}</span>
+                </span>
+                <span className="yomi">
+                  <span className="block text-[13px] text-sumi/75">{ex.first.to}へ、{ex.first.means}</span>
+                  裏で：{ex.first.quiet ?? "なし"}
+                </span>
+              </li>
+              <li className="grid grid-cols-[6.5em_1fr] items-center gap-x-3 border-t border-keisen py-2.5">
+                <span className="text-nibi">師匠</span>
+                <span className="flex items-center gap-2">
+                  <Mark v={ex.mark.verdict} size={22} className="text-shu" />
+                  <span className="yomi">{ex.mark.remark ? `「${ex.mark.remark}」` : <span className="text-sumi/75">条件つき（一言なし）</span>}</span>
+                </span>
+              </li>
+              <li className="grid grid-cols-[6.5em_1fr] gap-x-3 border-t border-keisen py-2.5">
+                <span className="text-nibi">心得帳に</span>
+                <blockquote className="yomi font-mincho text-[17px] leading-relaxed">{ex.rule}</blockquote>
+              </li>
+              <li className="grid grid-cols-[6.5em_1fr] gap-x-3 border-t border-keisen py-2.5">
+                <span className="text-nibi">
+                  次の案
+                  <span className="block text-[12px]">{ex.next.type}</span>
+                </span>
+                <span className="yomi self-start bg-ai-soft px-1.5 text-sumi">裏で：{ex.next.quiet}</span>
+              </li>
+              <li className="grid grid-cols-[6.5em_1fr] gap-x-3 border-t border-keisen py-2.5">
+                <span className="text-nibi">後任が聞くと</span>
+                <span className="yomi">
+                  <span className="text-nibi">「{ex.question}」</span>
+                  <span className="mt-1 block">{ex.answer}</span>
+                </span>
+              </li>
+            </ol>
+            <figcaption className="mt-2 text-[12.5px] text-nibi">
+              記録した稽古の案と判定、そこから書かれた心得、後任の手元の Claude Code（心得帳を Skill として渡したもの）で記録した答えです。架空の取引先。
+            </figcaption>
           </figure>
         )}
 
