@@ -42,6 +42,11 @@ describe("no internal ids on screen", () => {
     expect(c.why).toContain("2024年");
     expect(c.written).toBe("2026-11-03");
     expect(noDecisionIds("Before は修正後の台帳（D-033）、After は")).toBe("Before は修正後の台帳、After は");
+    // A revised rule: the revision's きっかけ is blank, the original reason follows — show that, never 「（未記入）」.
+    const r = citationParts("旧「A」→ 新「B」・きっかけ: （未記入）・日付: 2026-11-03（J-0035）。当初の規則のきっかけ: 2019年、叱られた・日付: 2026-11-03（J-0020）");
+    expect(r.why).toBe("2019年、叱られた");
+    expect(r.written).toBe("2026-11-03");
+    expect(citationParts("新「C」・きっかけ: （未記入）・日付: 2026-11-03・出典: 台帳").why).toBeNull();
   });
 });
 

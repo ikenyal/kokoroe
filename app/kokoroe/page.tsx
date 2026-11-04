@@ -3,7 +3,8 @@ import { redirect } from "next/navigation";
 import { CLIENTS, TRAIN_SCENES } from "@/src/core/world";
 import { isLedgerFact } from "@/src/learning/export";
 import { SCENE_TYPE_LABELS } from "@/src/core/types";
-import type { KokoroeRule, RuleSource } from "@/src/learning/types";
+import type { JudgmentRecord, KokoroeRule, RuleSource } from "@/src/learning/types";
+import { draftsThatUsed } from "../dandori";
 import { getSession } from "@/src/server/session";
 import { retireRule } from "../actions";
 import { Mark } from "../marks";
@@ -27,7 +28,7 @@ function SourceLine({ s }: { s: RuleSource }) {
 }
 
 /** A rule as a ledger entry: the 心得, then its 沿革 in plain sight (when, the master's mark and words, why, the scene). */
-function Rule({ r, fact = false }: { r: KokoroeRule; fact?: boolean }) {
+function Rule({ r, fact = false, used = [] }: { r: KokoroeRule; fact?: boolean; used?: ReturnType<typeof draftsThatUsed> }) {
   const fromLedger = r.sources.some((s) => s.kind === "ledger");
   const fromMaster = r.sources.some((s) => s.kind !== "ledger");
   const judgmentOf = (id: string) => r.sources.find((s) => s.kind !== "ledger" && "judgmentId" in s && s.judgmentId === id) as Extract<RuleSource, { verdict?: unknown }> | undefined;
@@ -89,6 +90,22 @@ function Rule({ r, fact = false }: { r: KokoroeRule; fact?: boolean }) {
           })}
         </ol>
       )}
+      {!fact && used.length > 0 && (
+        <div className="mt-2.5 border-l-2 border-ai pl-3 text-[13.5px]">
+          <p className="text-nibi">この心得が効いた案</p>
+          <ul className="mt-0.5">
+            {used.slice(0, 4).map(({ judgment: j, cited }) => (
+              <li key={j.id}>
+                {sceneWords(j.sceneId) || "場面"}
+                <span className="text-nibi">　師匠 </span>
+                <span className="font-mincho text-shu">{j.verdict}</span>
+                {cited && <span className="text-nibi">　（弟子が根拠に挙げた）</span>}
+              </li>
+            ))}
+            {used.length > 4 && <li className="text-nibi">ほか {used.length - 4} 件</li>}
+          </ul>
+        </div>
+      )}
       {r.status === "active" && (
         <div className="mt-1.5 flex flex-wrap items-start justify-between gap-x-6 text-[13px]">
           <details>
@@ -118,7 +135,7 @@ function groupsOf(rules: KokoroeRule[], prefix: string): Group[] {
   ].filter((g) => g.rules.length);
 }
 
-function Groups({ groups, fact = false }: { groups: Group[]; fact?: boolean }) {
+function Groups({ groups, fact = false, judgments = [] }: { groups: Group[]; fact?: boolean; judgments?: JudgmentRecord[] }) {
   return (
     <div className="space-y-7">
       {groups.map((g) => (
@@ -127,7 +144,7 @@ function Groups({ groups, fact = false }: { groups: Group[]; fact?: boolean }) {
             <h3 id={`${g.key}-h`} className="font-mincho text-[21px] tracking-[0.04em]">{g.title}</h3>
             <p className="text-[12.5px] text-nibi">{g.note}</p>
           </header>
-          <ul>{g.rules.map((r) => <Rule key={r.id} r={r} fact={fact} />)}</ul>
+          <ul>{g.rules.map((r) => <Rule key={r.id} r={r} fact={fact} used={fact ? [] : draftsThatUsed(r, judgments)} />)}</ul>
         </section>
       ))}
     </div>
@@ -138,6 +155,7 @@ export default async function KokoroePage() {
   const s = await getSession();
   if (!s) redirect("/");
   const rules = await s.store.listRules();
+  const judgments = await s.store.listJudgments();
   const active = rules.filter((r) => r.status === "active");
   // D-052: 心得 = one piece of the master's practice; facts copied from the client ledger are listed apart.
   const kokoroe = groupsOf(active.filter((r) => !isLedgerFact(r)), "k");
@@ -183,7 +201,7 @@ export default async function KokoroePage() {
         <section aria-labelledby="k-h">
           <h2 id="k-h" className="font-mincho text-[22px] tracking-[0.06em]">師匠から覚えた心得</h2>
           <p className="mt-1 mb-6 text-[13px] text-nibi">心得は、師匠の作法の一つ一つ。いつ・どの印と一言から・なぜ、を添えて綴ったものが心得帳です。</p>
-          {kokoroe.length ? <Groups groups={kokoroe} /> : <p className="yomi text-nibi">
+          {kokoroe.length ? <Groups groups={kokoroe} judgments={judgments} /> : <p className="yomi text-nibi">
               まだありません。<Link className="text-ai underline underline-offset-4" href="/choba">帳場</Link>で △ か × を付けると、直したところが、わけと一緒にここに残ります。
             </p>}
         </section>

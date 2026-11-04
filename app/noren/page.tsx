@@ -6,6 +6,8 @@ import { getSession, liveEnabled, type SuccessorTurn } from "@/src/server/sessio
 import { ask } from "../actions";
 import { citationParts, plainText } from "@/src/lib/plain";
 import { ownEnabled } from "@/src/core/own-world";
+import general from "@/data/demo/recorded-answers-general.json";
+import recorded from "@/data/demo/recorded-answers.json";
 
 const ANSWER: Record<SuccessorTurn["answer"], { word: string; tone: string }> = {
   yes: { word: "はい", tone: "text-ai" },
@@ -13,16 +15,64 @@ const ANSWER: Record<SuccessorTurn["answer"], { word: string; tone: string }> = 
   unknown: { word: "心得帳に記録がありません", tone: "text-nibi" },
 };
 
+/**
+ * 心得帳がある・ない: for one of the example questions, the answer the same evaluation recorded WITHOUT a kokoroe-chō (general
+ * knowledge only), beside this one. Recorded data, no API call (data/demo/recorded-answers-general.json).
+ */
+function withoutBook(t: SuccessorTurn) {
+  if (ownEnabled()) return null;
+  const q = HISTORY_QUESTIONS.find((x) => x.question === t.question && x.clientId === t.clientId);
+  return q ? (general.answers as Record<string, { answer: SuccessorTurn["answer"]; explanation: string }>)[q.id] ?? null : null;
+}
+
+/**
+ * Display order only (the questions themselves are the evaluation's): first those where the recorded answers differ most —
+ * no answer without the 心得帳, an answer with its reasons with it — starting with the 浜風運輸 delay; then the rest.
+ */
+function examplesInOrder() {
+  if (ownEnabled()) return HISTORY_QUESTIONS;
+  const g = general.answers as Record<string, { answer: string }>;
+  const telling = (id: string) => g[id]?.answer === "unknown" && (recorded.answers as Record<string, { answer: string }>)[id]?.answer !== "unknown";
+  const first = HISTORY_QUESTIONS.filter((q) => telling(q.id));
+  const lead = first.findIndex((q) => q.clientId === "C01");
+  if (lead > 0) first.unshift(...first.splice(lead, 1));
+  return [...first, ...HISTORY_QUESTIONS.filter((q) => !telling(q.id))];
+}
+
 function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => string | undefined }) {
   const a = ANSWER[t.answer];
+  const g = withoutBook(t);
+  const mine = (
+    <>
+      <p className={`font-mincho text-[22px] ${a.tone}`}>{a.word}</p>
+      <p className="yomi mt-1 text-[16px]">{plainText(t.explanation)}</p>
+    </>
+  );
   return (
     <article className="border-t-2 border-sumi/80 pt-4">
       <p className="text-[13px] text-nibi">
         {COMPANY.successor.name}の質問　{getClient(t.clientId).name}
       </p>
       <p className="yomi mt-1 text-[17px]">{t.question}</p>
-      <p className={`mt-4 font-mincho text-[22px] ${a.tone}`}>{a.word}</p>
-      <p className="yomi mt-1 text-[16px]">{plainText(t.explanation)}</p>
+      {g ? (
+        <div className="mt-4 grid gap-x-8 gap-y-5 sm:grid-cols-2">
+          <section aria-label="心得帳なしの答え" className="border-t border-keisen pt-2 sm:order-none">
+            <h3 className="text-[13px] text-nibi">心得帳なし（一般論だけ）</h3>
+            <p className="mt-1 font-mincho text-[19px] text-sumi/80">{g.answer === "unknown" ? "判断できない" : ANSWER[g.answer].word}</p>
+            <p className="yomi mt-1 text-[15px] text-sumi/80">{plainText(g.explanation)}</p>
+            <p className="mt-3 border-t border-keisen pt-2 text-[13.5px] text-sumi/80">根拠・経緯：なし（心得帳を渡していない）</p>
+          </section>
+          <section aria-label="心得帳ありの答え" className="border-t-2 border-ai pt-2">
+            <h3 className="text-[13px] text-ai">心得帳あり（理由と経緯つき）</h3>
+            <div className="mt-1">{mine}</div>
+            <p className="mt-3 border-t border-keisen pt-2 text-[13.5px] text-sumi">
+              根拠・経緯：{t.citations.length ? `心得 ${t.citations.length} つ（下に、わけと沿革）` : "なし（心得帳に記録がないので、師匠に確認を勧める）"}
+            </p>
+          </section>
+        </div>
+      ) : (
+        <div className="mt-4">{mine}</div>
+      )}
       {t.answer === "unknown" && t.source === "live" && <p className="mt-2 text-[14px]">師匠（{COMPANY.master.name}）に確認してください。</p>}
       {t.citations.length > 0 && (
         <div className="mt-5 grid gap-x-5 border-t border-keisen pt-3 sm:grid-cols-[2.2rem_1fr]">
@@ -50,8 +100,10 @@ function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => str
           </ul>
         </div>
       )}
-      {t.source === "recorded" && (
-        <p className="mt-3 text-[12.5px] text-nibi">記録済みの回答（評価のときの心得帳で答えたもの）を表示しています。</p>
+      {t.source === "recorded" ? (
+        <p className="mt-3 text-[12.5px] text-nibi">記録済みの回答（評価のときの心得帳で答えたもの）を表示しています。{g && "心得帳なしの答えも、同じ評価で記録したものです。"}</p>
+      ) : (
+        g && <p className="mt-3 text-[12.5px] text-nibi">心得帳なしの答えは、評価で記録したものです（同じ質問、心得帳を渡さずに答えたもの）。</p>
       )}
     </article>
   );
@@ -68,7 +120,7 @@ export default async function NorenPage() {
     <section aria-labelledby="ex-h" className="mt-10">
       <h2 id="ex-h" className="font-mincho text-[18px]">{answers.length ? "ほかに聞けること" : "たとえば、後任がよく迷うこと"}</h2>
       <form action={ask} className="mt-3 border-y border-sumi/50">
-        {HISTORY_QUESTIONS.map((q) => (
+        {examplesInOrder().map((q) => (
           <button
             key={q.id}
             name="preset"

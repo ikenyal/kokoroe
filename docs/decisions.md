@@ -1130,3 +1130,34 @@ there is nothing to write down and nothing to correct.
   - Kept, because they describe the procedure, not a measured gain: "No explaining" / 「説明は要りません」 (the master is not asked
     to explain), 「直すだけで」 (the concept), s03 「書いて残して、と頼んでも、言葉にはなりません」 (the problem the product starts
     from, CLAUDE.md's core insight; not presented as a measurement).
+
+## D-063 · 2026-11-05 · Accepted (Kento's direction) · Showing the effect on screen, from recorded data and real behaviour only
+
+**Context.** Kento (11/5): the purpose and the effect must come across to a first-time visitor and in a demo, without claiming
+anything that was not measured (D-062).
+
+**Decision.**
+- **帳場 「変化」.** On the first draft where a learned 心得 takes effect, the row the 心得 is about is shown as 直す前 → この案,
+  with the corrected scene and the master's mark. "Takes effect" is decided by code with the same check as 確かめ稽古
+  (`ruleTook`): this draft follows the 心得's point, the corrected draft did not, and no draft judged after the correction
+  followed it yet. Other rows that changed are listed in one grey line as 「心得とは別の違い」, so nothing is credited to a 心得
+  that it did not cause (ui-critic).
+  - In recorded mode the visitor's △ teaches nothing, so the panel uses the recorded training run (its 心得帳 and judgments to
+    T20, then its first drafts T21–T40, which are the お試し drafts) and says so: 「記録した稽古で、師匠が直したあと…」. A
+    visitor's own correction (live) is worded 「あなたの直しから書いた心得が…」.
+  - Where it shows: お試し T13 (丸新酒造, K-011: 裏で誰に なし → 蔵元にも一言), T20, T23, T26; デモの続き T23 (4th card), T26.
+- **心得帳 「この心得が効いた案」.** Drafts judged after the 心得 that followed it (same check) or named it as a basis.
+- **暖簾を継ぐ 心得帳なし／あり.** For the example questions, the answer recorded WITHOUT a 心得帳 (the "v0-general" arm) beside the
+  answer with the grown 心得帳 — both from the same evaluation run (eval/runs/2026-11-02T21-25-03-586Z-successor-x3.json), copied
+  to `data/demo/recorded-answers-general.json` by `eval/build-general-answers.ts`. No API call. Display order puts first the
+  questions where the two differ most (no answer without, an answer with reasons with); the questions themselves are unchanged.
+  The reason line no longer shows 「（未記入）」 when a revised rule's original reason exists (a display parser fix).
+- **Home.** One example, top to bottom, all recorded: the apprentice's T05 draft (裏で：なし), the master's △ (no remark — shown as
+  it was), K-011, the next 丸新酒造 draft (裏で：蔵元にも一言), and the successor's recorded answer (Claude Code with the 心得帳 Skill,
+  demo/successor-mcp).
+- **デモの続き guide**, closable: 一 案を読む … 五 後任が理由つきで答える, with a note that the demo runs on recorded data.
+- **稽古の記録 headline:** one sentence from results.json (taps, ○ rate before → after, history questions), labelled 途中経過 until
+  the official run.
+- **Unchanged:** learning, judging and evaluation code; the question set; no new API calls.
+- **Not done (for Kento):** the critic suggested folding the home page's 10-scene list into a collapsed section so the example
+  ends the column. That list was Kento's request (11/4 night), so it stays.

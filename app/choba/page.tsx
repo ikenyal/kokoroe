@@ -1,13 +1,14 @@
 import { LimitNote } from "../limit-note";
+import { DemoGuide } from "./demo-guide";
 import { heldForProse } from "@/src/server/own-result";
 import { DIFF_AREAS } from "@/src/learning/area";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { FORMAT_JA, POSTURE_JA, TIMING_JA } from "@/src/core/labels";
-import { AREA_ON_SCREEN, means, noIds, quietWord, toWhom, VISIT_ROWS } from "../dandori";
+import { DANDORI_ROWS, recordedRun, ruleEffect, type RuleEffect, AREA_ON_SCREEN, means, noIds, quietWord, toWhom, VISIT_ROWS } from "../dandori";
 import { SCENE_TYPE_LABELS, type Client, type Proposal, type Scene } from "@/src/core/types";
 import { getClient, TRAIN_SCENES } from "@/src/core/world";
-import type { KokoroeRule } from "@/src/learning/types";
+import type { JudgmentRecord, KokoroeRule } from "@/src/learning/types";
 import demo from "@/data/demo/demo-snapshot.json";
 import { lastUndoable } from "@/src/server/undo";
 import { ScrollToAction } from "./scroll-to-action";
@@ -93,6 +94,55 @@ function ProposalView({ p, client, ruleText }: { p: Proposal; client: Client; ru
         )}
       </Ledger>
     </>
+  );
+}
+
+/**
+ * 「直したら、次が変わる」: shown on the first draft where a learned 心得 takes effect — the corrected draft beside this one,
+ * the changed rows marked. `recorded`: the correction is from the recorded training run, not from this visitor (said so).
+ */
+function EffectView({ effect, client, draft, words, ruleHref, recorded }: { effect: RuleEffect; client: Client; draft: Proposal; words: Words; ruleHref: string | null; recorded: boolean }) {
+  const { rule, before } = effect;
+  const was = getClient(before.clientId);
+  return (
+    <Ledger
+      label="変化"
+      note={recorded ? "記録した稽古で、師匠が直したあと、この心得が初めて効いた案です。" : "あなたの直しから書いた心得が、初めて効いた案です。"}
+    >
+      <p className="yomi text-[15.5px]">
+        心得「{ruleHref ? <Link href={ruleHref} className="text-ai underline-offset-4 hover:underline">{rule.text}</Link> : rule.text}」
+      </p>
+      {(() => {
+        const rows = DANDORI_ROWS.map(([label, show, fields]) => ({
+          label,
+          was: show(before.proposal, was),
+          now: show(draft, client),
+          point: fields.includes(rule.fix!.field as keyof Proposal),
+        }));
+        const point = rows.find((r) => r.point);
+        const others = rows.filter((r) => !r.point && r.was !== r.now).map((r) => r.label);
+        return (
+          <>
+            {point && (
+              <dl className="mt-3 grid grid-cols-[4.5rem_1fr] gap-x-3 gap-y-1.5 border-y border-keisen py-3">
+                <dt className="text-[13px] text-sumi">{point.label}</dt>
+                <dd className="grid gap-1">
+                  <span className="text-[14.5px] text-sumi/80">
+                    直す前：<del className="decoration-sumi/40">{point.was}</del>
+                    <span className="ml-2 text-[12.5px]">
+                      （{words(before.sceneId)}・師匠 <span className="font-mincho text-shu">{before.verdict}</span>
+                      {before.remark ? `「${before.remark}」` : ""}）
+                    </span>
+                  </span>
+                  <span className="self-start bg-ai-soft px-1.5 font-mincho text-[17px] text-sumi">この案：{point.now}</span>
+                </dd>
+              </dl>
+            )}
+            {others.length > 0 && <p className="mt-1.5 text-[13px] text-sumi/75">ほかに変わった行：{others.join("・")}（心得とは別の違い）</p>}
+          </>
+        );
+      })()}
+    </Ledger>
   );
 }
 
@@ -342,7 +392,9 @@ export default async function ChobaPage() {
   const recent = meta.pending.slice(0, 6);
   const judgments = await s.store.listJudgments();
   const rules = await s.store.listRules();
-  const ruleText = (id: string) => rules.find((r) => r.id === id)?.text ?? "（心得帳を見る）";
+  // Recorded drafts cite the recorded run's 心得帳; without live learning, show that 心得's words rather than a bare link.
+  const runRules = recordedRun(demo).rules;
+  const ruleText = (id: string) => rules.find((r) => r.id === id)?.text ?? (!live && s.mode !== "own" ? runRules.find((r) => r.id === id)?.text : undefined) ?? "（心得帳を見る）";
   const undoable = await lastUndoable(s);
   // Something the master is asked to answer in the side panel (a reading, a "why?", a check): on a phone, show it first.
   const asking = recent.filter((p) => ["needs-choice", "needs-why", "needs-confirm", "needs-regression"].includes(p.status));
@@ -353,6 +405,14 @@ export default async function ChobaPage() {
     ? standing(judgments.filter((j) => j.clientId === item.scene.clientId).map((j) => ({ clientId: j.clientId, sceneType: j.sceneType, verdict: j.verdict, kind: j.kind, undone: j.undone, at: j.at })))
     : null;
   const label = s.mode === "demo" ? "デモの続き" : s.mode === "field" ? "師匠役テスト" : s.mode === "own" ? "自分の会社" : "お試し";
+  // 「直したら、次が変わる」: from this session's 心得帳 first; without live learning (recorded data), from the recorded training run.
+  const shown = item ? enforceHitl(item.scene, item.draft) : null;
+  const run = recordedRun(demo);
+  const isRecorded = (j: JudgmentRecord) => run.judgments.some((r) => r.id === j.id && r.at === j.at && r.sceneId === j.sceneId);
+  const mine = item && shown ? ruleEffect(rules, judgments, item.scene, shown) : null;
+  const fromRun = !mine && item && shown && !live && s.mode !== "own" ? ruleEffect(run.rules, run.judgments, item.scene, shown) : null;
+  const effect = mine ?? fromRun;
+  const effectRecorded = !!fromRun || (!!mine && isRecorded(mine.before));
 
   return (
     <div className="grid gap-10 lg:grid-cols-[1fr_19rem]">
@@ -374,6 +434,7 @@ export default async function ChobaPage() {
             </form>
           )}
         </div>
+        {s.mode === "demo" && <DemoGuide live={live} />}
         {undoable && (
           <form action={undo} role="status" aria-live="polite" className="mt-3 border-l-2 border-ai pl-3 text-[13.5px] text-nibi">
             <input type="hidden" name="judgmentId" value={undoable.judgment.id} />
@@ -431,7 +492,17 @@ export default async function ChobaPage() {
               <Ledger label="場面">
                 <p className="yomi text-[16.5px]">{item.scene.situation}</p>
               </Ledger>
-              <ProposalView p={enforceHitl(item.scene, item.draft)} client={getClient(item.scene.clientId)} ruleText={ruleText} />
+              {effect && shown && (
+                <EffectView
+                  effect={effect}
+                  client={getClient(item.scene.clientId)}
+                  draft={shown}
+                  words={words}
+                  recorded={effectRecorded}
+                  ruleHref={rules.some((r) => r.id === effect.rule.id && r.text === effect.rule.text) ? `/kokoroe#${effect.rule.id}` : null}
+                />
+              )}
+              <ProposalView p={shown!} client={getClient(item.scene.clientId)} ruleText={ruleText} />
               <Ledger label="判定">
                 <JudgeForm key={item.scene.id} sceneId={item.scene.id} />
               </Ledger>
@@ -471,7 +542,7 @@ export default async function ChobaPage() {
         {recent.length ? (
           <ul className="mt-3">{recent.map((p) => <PendingItem key={p.judgmentId} p={p} ruleText={ruleText} words={words} sceneOf={(id) => meta.queue.find((q) => q.scene.id === id)?.scene ?? TRAIN_SCENES.find((t) => t.id === id)} beforeOf={(id) => judgments.find((j) => j.id === id)?.proposal} />)}</ul>
         ) : (
-          <p className="mt-4 text-[14px] text-nibi">まだ直しはありません。△ か × を付けると、ここに弟子の読み取りが出ます。</p>
+          <p className="mt-4 text-[14px] text-nibi">このセッションで付けた △・× は、まだありません。付けると、ここに弟子の読み取りが出ます。{effect && effectRecorded && "左の「変化」は、記録した稽古での直しから出たものです。"}</p>
         )}
       </aside>
     </div>
