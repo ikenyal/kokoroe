@@ -28,3 +28,16 @@ critic (`.claude/agents/ui-critic.md`) reviews them after each change.
 5. **Small:**
    - The disabled submit button now has a border and readable text (it was about 2:1).
    - The Next.js dev badge is off in development.
+
+## 最初の画面
+
+1. **What it is, in three ruled lines** (一・二・三, a real sequence): the apprentice drafts, the master only stamps, and the
+   corrections stay with their why and pass to the successor. The paragraph above them is shorter.
+   *Why:* the old paragraph had to be read to the end to learn what happens.
+2. **Two ways to start, as a ruled list.** Each button gets one line on who it is for: 「まず全体を見るなら」 against
+   「心得帳は空から、あなたの印だけで」.
+   *Why:* the two side-by-side boxes were a stock landing-page pattern, and the difference between them was unclear.
+3. **One real 心得 as a specimen.** It comes from the demo's 心得帳: 浜風運輸, the master's × and words, the why from 2019, the
+   date. *Why:* the product's output was invisible until after a click.
+4. **Data handling folded below** (content unchanged). The fictional-data line at the bottom was dropped, since the banner
+   already says it. On phones the headline is a little smaller, so 「作法を、」 stays on one line.
