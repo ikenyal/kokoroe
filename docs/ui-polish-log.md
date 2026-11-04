@@ -135,3 +135,15 @@ critic (`.claude/agents/ui-critic.md`) reviews them after each change.
 6. **Found on the way:** after a theme-token change, Turbopack's persistent dev cache (`.next/dev`) kept serving the old CSS
    across a restart. The missing active tab in a screenshot exposed it. Clearing `.next/dev` fixed it; the earlier screenshots
    were checked and were not affected.
+
+## 講評の残り（11/4 夜、`12-leftovers/`）
+
+1. **The chart's earlier setups are context, not a tangle.** They are hairlines without dots, labelled once under their lowest
+   point (「細い線：改良の途中の版（4本）」). The current setup's dot and range bar are unchanged; every version still appears in
+   the hover and in 「表で見る」. The data and the 0–100% axis are unchanged.
+   *Why:* four grey lines with dots crossed each other near 「はじめ」 and drew the eye away from the result.
+2. **One reading width.** 暖簾を継ぐ, the comparison test's write page and the report page now use the same width as 稽古の記録
+   (`max-w-4xl`); 帳場, 心得帳 and the home page keep their two-column grids.
+3. **The example questions look pressable.** Each row shows 「尋ねる」 in indigo at the right (on phones under the question),
+   is at least 44px tall, and tints indigo on hover.
+   *Why:* the cue appeared only on hover, so on a phone nothing said that the rows were buttons.

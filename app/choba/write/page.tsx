@@ -24,7 +24,7 @@ export default async function WritePage() {
     const from = Math.max(s.meta.pos, s.meta.compare?.fromIndex ?? Infinity);
     const open = s.meta.queue.filter((q, i) => i >= from && !q.live && !done.has(q.scene.id));
     return (
-      <div className="max-w-3xl">
+      <div className="max-w-4xl">
         <h1 className="font-mincho text-[24px] tracking-[0.06em]">作法を文章で書く（比較テスト）</h1>
         <p className="yomi mt-2 text-[15.5px]">
           自分で書いた場面について、後任に引き継ぐつもりで作法を文章にしてください。書き始めてから「記録する」までの時間を測ります。
@@ -66,7 +66,7 @@ export default async function WritePage() {
 
   const next = FIELD_WRITES.find((w) => !done.has(w.sceneId));
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-4xl">
       <h1 className="font-mincho text-[24px] tracking-[0.06em]">同じ作法を文章で書く</h1>
       <p className="yomi mt-2 text-[15.5px]">
         さきほど判定した場面のうち5つについて、後任に引き継ぐつもりで作法を文章にしてください。書き始めてから「記録する」までの時間を測ります（{done.size} / {FIELD_WRITES.length}）。

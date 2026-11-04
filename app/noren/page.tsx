@@ -73,18 +73,18 @@ export default async function NorenPage() {
             key={q.id}
             name="preset"
             value={q.id}
-            className="group grid w-full grid-cols-1 gap-x-4 border-t border-keisen px-1 py-2.5 text-left first:border-t-0 hover:bg-kami-2 sm:grid-cols-[9rem_1fr_auto]"
+            className="group grid min-h-11 w-full cursor-pointer grid-cols-1 gap-x-4 border-t border-keisen px-1 py-2.5 text-left first:border-t-0 hover:bg-ai-soft sm:grid-cols-[9rem_1fr_auto]"
           >
             <span className="text-[13px] text-nibi sm:pt-0.5">{getClient(q.clientId).name}</span>
             <span className="yomi text-[15.5px]">{q.question}</span>
-            <span aria-hidden className="hidden text-[13px] text-ai group-hover:inline sm:pt-0.5">尋ねる</span>
+            <span aria-hidden className="text-[13px] text-ai underline-offset-4 group-hover:underline max-sm:justify-self-end sm:pt-0.5">尋ねる</span>
           </button>
         ))}
       </form>
     </section>
   );
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-4xl">
       <div className="-mb-6 empty:hidden"><LimitNote reason={s.meta.limit} /></div>
       <section aria-labelledby="noren-h">
         <h1 id="noren-h" className="font-mincho text-[24px] tracking-[0.06em]">暖簾を継ぐ</h1>
