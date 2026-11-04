@@ -1,0 +1,735 @@
+{
+  "at": "2026-11-04T00:36:53.836Z",
+  "note": "fictional data; successor personas on the textbook master's grown 心得帳 (seed 101); the 中途 persona was rerun after an empty-text bug (3 questions)",
+  "usd": 0.433,
+  "successors": [
+    {
+      "persona": "plain",
+      "name": "そのまま（基準）",
+      "history": 5,
+      "answerOk": 6,
+      "madeUp": 2,
+      "notCovered": 10,
+      "detail": {
+        "history": [
+          {
+            "id": "Q01",
+            "asked": "港北精機さんとの打ち合わせ、Zoom のリンクを送っておけばいいですよね？",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          },
+          {
+            "id": "Q02",
+            "asked": "大河原建材さん、先代のときみたいに社長に電話して決めてしまっていいですか？",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          },
+          {
+            "id": "Q03",
+            "asked": "浜風運輸さんへの遅延の連絡、確定してからまとめて伝えればいいですよね？",
+            "answer": "no",
+            "ok": false,
+            "answerOk": true
+          },
+          {
+            "id": "Q04",
+            "asked": "まちなか生協さんの見積り、うちのいつもの書式で出してもいいですか？",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          },
+          {
+            "id": "Q05",
+            "asked": "まちなか生協さんの見積り、理事会の前の週に出せば間に合いますか？",
+            "answer": "unknown",
+            "ok": false,
+            "answerOk": false
+          },
+          {
+            "id": "Q06",
+            "asked": "港北精機さんって、昔から Teams しか使えなかったんですか？",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          },
+          {
+            "id": "Q07",
+            "asked": "大河原建材の社長、電話の方が早いって言いそうですけど、それでも打ち合わせを入れた方がいいんですか？",
+            "answer": "unknown",
+            "ok": false,
+            "answerOk": false
+          },
+          {
+            "id": "Q08",
+            "asked": "浜風運輸さん、まだ決まってない話を先に伝えると混乱させませんか？",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          }
+        ],
+        "notCovered": [
+          {
+            "id": "U01",
+            "asked": "白樺製菓さんへの年賀状は、手書きにした方がいいですか？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U02",
+            "asked": "ひだまり介護さんへの請求書は、紙で郵送した方がいいですか？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U03",
+            "asked": "青葉ドラッグさんの請求の締め日は、月末で合わせてもいいですか？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U04",
+            "asked": "県産業振興財団さんへの訪問、手土産は持っていった方がいいですか？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U05",
+            "asked": "港北精機さんの工場長をゴルフに誘ってもいいですか？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U06",
+            "asked": "丸新酒造さんの蔵見学に、うちの新人も連れて行っていいですか？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "N01",
+            "asked": "浜風運輸さんに、納期が早まるという良い知らせも、配車課長に先に伝えた方がいいですか？",
+            "answer": "yes",
+            "madeUp": true,
+            "citations": [
+              "K-025",
+              "K-001"
+            ]
+          },
+          {
+            "id": "N02",
+            "asked": "丸新酒造さんの蔵元に、新酒のお祝いを贈ってもいいですか？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "N03",
+            "asked": "青葉ドラッグさんの担当者が替わったとき、あいさつに伺った方がいいですか？",
+            "answer": "yes",
+            "madeUp": true,
+            "citations": [
+              "K-020",
+              "K-009",
+              "K-025"
+            ]
+          },
+          {
+            "id": "N04",
+            "asked": "白樺製菓さんに、4月の新年度のあいさつを送ってもいいですか？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          }
+        ]
+      }
+    },
+    {
+      "persona": "shy",
+      "name": "遠慮がちな新人",
+      "history": 4,
+      "answerOk": 5,
+      "madeUp": 2,
+      "notCovered": 10,
+      "detail": {
+        "history": [
+          {
+            "id": "Q01",
+            "asked": "お忙しいところ恐縮なのですが、港北精機様との打ち合わせのZoomのURLは、事前にお送りしておけばよろしいでしょうか。",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          },
+          {
+            "id": "Q02",
+            "asked": "大河原建材さんのことで、恐れ入りますが、確認させていただいてもよろしいでしょうか。先代の頃のように、社長様へ直接お電話して決めさせていただいても差し支えないでしょうか。",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          },
+          {
+            "id": "Q03",
+            "asked": "お忙しいところ恐れ入ります。浜風運輸さまへの遅延のご連絡についてなのですが、もし差し支えなければ、内容が確定してからまとめてお伝えする形でよろしいでしょうか。",
+            "answer": "no",
+            "ok": false,
+            "answerOk": true
+          },
+          {
+            "id": "Q04",
+            "asked": "お忙しいところ恐れ入ります。差し出がましいようで大変恐縮なのですが、まちなか生活協同組合様へのお見積りにつきまして、いつもの書式でお出しさせていただいてもよろしいでしょうか。",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          },
+          {
+            "id": "Q05",
+            "asked": "お忙しいところ恐れ",
+            "answer": "unknown",
+            "ok": false,
+            "answerOk": false
+          },
+          {
+            "id": "Q06",
+            "asked": "恐れ入ります、お忙しいところ申し訳ございません。もしお差し支えなければ",
+            "answer": "unknown",
+            "ok": false,
+            "answerOk": false
+          },
+          {
+            "id": "Q07",
+            "asked": "大変恐縮なのですが、大河原建材の社長様は、お電話の方がお早いとおっしゃるかもしれません。それでも、お打ち合わせのお時間をいただいた方がよろしいでしょうか。",
+            "answer": "unknown",
+            "ok": false,
+            "answerOk": false
+          },
+          {
+            "id": "Q08",
+            "asked": "恐れ入りますが、浜風運輸様に、まだ決まっておりませんお話を先にお伝えいたしますと、ご混乱をおかけしてしまうことはございませんでしょうか。",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          }
+        ],
+        "notCovered": [
+          {
+            "id": "U01",
+            "asked": "お忙しいところ恐れ入ります。白樺製菓様への年賀状でございますが、もし差し支えなければ、手書きにしたほうがよろしいでしょうか。",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U02",
+            "asked": "あの、お忙しいところ恐れ入ります。ひだまり介護サービスさまへのご請求書につきまして、もしご迷惑でなければ、紙でご郵送させていただいた方がよろしいでしょうか。",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U03",
+            "asked": "お忙しいところ恐れ入ります。あの、青葉ドラッグさんの請求の締め日についてなのですが、月末に合わせていただくことは可能でございましょうか。もし差し支えなければ、で結構でして……",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U04",
+            "asked": "お忙しいところ恐れ入ります。県産業振興財団さまへのご訪問の件で、大変恐縮なのですが、手土産はお持ちした方がよろしいものでしょうか。",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U05",
+            "asked": "お忙しいところ恐れ入ります。あの、大変差し出がましいお願いで恐縮なのですが、港北精機様の工場長様を、ゴルフにお誘いさせていただいてもよろしいものでしょうか。",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U06",
+            "asked": "恐れ入りますが、お忙しいところ大変申し訳ございません。丸新酒造さんの蔵見学に、もしご迷惑でなければ、うちの新人も同行させていただいてもよろしいでしょうか。",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "N01",
+            "asked": "お忙しいところ恐れ入ります。浜風運輸様の件で、納期が早まるというお話を、もしよろしければ先に配車課長へお伝えしておいた方がよろしいでしょうか。差し出がましいことを申し上げて恐縮なのですが……。",
+            "answer": "yes",
+            "madeUp": true,
+            "citations": [
+              "K-017",
+              "K-001",
+              "K-025"
+            ]
+          },
+          {
+            "id": "N02",
+            "asked": "お忙しいところ恐れ入ります。差し支えなければ、丸新酒造さまの蔵元へ、新酒のお祝いをお送りさせていただいてもよろしいでしょうか。",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "N03",
+            "asked": "あの、お忙しいところ恐れ入ります。青葉ドラッグ様のご担当が替わられたと伺いまして、もしお差し支えなければ、ご挨拶にお伺いした方がよろしいでしょうか。",
+            "answer": "yes",
+            "madeUp": true,
+            "citations": [
+              "K-020",
+              "K-025",
+              "K-009"
+            ]
+          },
+          {
+            "id": "N04",
+            "asked": "白樺製菓様に、四月の新年度のごあいさつを送らせていただいてもよろしいでしょうか。",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          }
+        ]
+      }
+    },
+    {
+      "persona": "former",
+      "name": "前職の常識で聞く中途",
+      "history": 5,
+      "answerOk": 7,
+      "madeUp": 1,
+      "notCovered": 10,
+      "detail": {
+        "history": [
+          {
+            "id": "Q01",
+            "asked": "前の会社では普通、取引先との打ち合わせはZoomのリンクを送っておけばいいですよね？港北精機さんとの打ち合わせも、それで大丈夫ですよね？",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          },
+          {
+            "id": "Q02",
+            "asked": "大河原建材さん、前の会社では普通、社長に直接お電話して決めてしまうものでしたよね？ 先代のときみたいに、今回も社長に電話して決めてしまっていいですか？",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          },
+          {
+            "id": "Q03",
+            "asked": "前の会社では遅延の連絡は確定してからまとめて伝えるのが普通でしたよね？浜風運輸さんへの連絡もそれでいいですよね？",
+            "answer": "no",
+            "ok": false,
+            "answerOk": true
+          },
+          {
+            "id": "Q04",
+            "asked": "前の会社では普通は見積りを自社のいつもの書式で出してましたよね？ まちなか生協さんの見積りも、同じ書式で出して大丈夫ですかね？",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          },
+          {
+            "id": "Q05",
+            "asked": "前の会社だと、理事会の前の週に見積りを出せば普通に間に合ってたんですけど、まちなか生協さんの場合もそれで間に合",
+            "answer": "no",
+            "ok": false,
+            "answerOk": true
+          },
+          {
+            "id": "Q06",
+            "asked": "前の会社では取引先とのやり取りにいくつかツールを使い分けるのが普通でしたよね？港北精機さんは昔からTeamsしか使えなかったんですか？",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          },
+          {
+            "id": "Q07",
+            "asked": "前の会社では普通、取引先とは打ち合わせを入れるものでしたよね？大河原建材の社長は電話の方が早いって言いそうな",
+            "answer": "unknown",
+            "ok": false,
+            "answerOk": false
+          },
+          {
+            "id": "Q08",
+            "asked": "浜風運輸さん、前の会社の感覚だと、まだ決まってない話を先に伝えると普通は混乱させますよね？",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          }
+        ],
+        "notCovered": [
+          {
+            "id": "U01",
+            "asked": "前の会社では年賀状は手書きが普通でしたよね？白樺製菓さんへも、手書きにした方がいいですか？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U02",
+            "asked": "ひだまり介",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U03",
+            "asked": "前の会社では請求の締め日は普通月末でしたよね？青葉ドラッグさんの請求の締め日も、月末で合わせてもいいですか？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U04",
+            "asked": "前の会社では、取引先への訪問には手土産を持っていくのが普通でしたよね？県産業振興財団さんへの訪問でも、やはり手土産は持っていった方がいいんでしょうか？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U05",
+            "asked": "前の会社では、取引先の工場長をゴルフに誘うのは普通でしたよね？ それなら港北精機さんの工場長をゴルフに誘ってもいいですよね？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U06",
+            "asked": "前の会社では取引先の蔵見学には新人も連れて行くのが普通でしたよね？丸新酒造さんの蔵見学に、うちの新人も連れて行っていいですか？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "N01",
+            "asked": "浜風運輸さんには、納期が早まるという良い知らせでも、まず配車課長に先にお伝えするのが普通ですよね？",
+            "answer": "yes",
+            "madeUp": true,
+            "citations": [
+              "K-025",
+              "K-001"
+            ]
+          },
+          {
+            "id": "N02",
+            "asked": "前の会社では、取引先の蔵元さんに新酒のお祝いを贈るのが普通でしたよね？丸新酒造さんにも、同じように贈ってかまわないでしょうか？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "N03",
+            "asked": "前の会社だと取引先の担当が替わったら、あいさつに伺うのが普通でしたよね？ 青葉ドラッグさんの担当者も替わったので、今回も伺った方",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "N04",
+            "asked": "前の会社では普通に新年度のあいさつを送っていたんですが、白樺製菓さんにも4月に送るのが普通ですよね？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          }
+        ]
+      },
+      "note": "rerun 11/4 after 3 of its questions came out empty in the first run"
+    },
+    {
+      "persona": "terse",
+      "name": "一行で雑に聞く人",
+      "history": 4,
+      "answerOk": 6,
+      "madeUp": 1,
+      "notCovered": 10,
+      "detail": {
+        "history": [
+          {
+            "id": "Q01",
+            "asked": "港北精機 打ち合わせ Zoom リンク 送る だけ いい？",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          },
+          {
+            "id": "Q02",
+            "asked": "大河原建材 先代 時 同様 社長 電話 決定 可？",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          },
+          {
+            "id": "Q03",
+            "asked": "浜風運輸 遅延 連絡 確定後 まとめて伝える いい？",
+            "answer": "no",
+            "ok": false,
+            "answerOk": true
+          },
+          {
+            "id": "Q04",
+            "asked": "まちなか生活協同組合 見積り いつもの書式 出して大丈夫？",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          },
+          {
+            "id": "Q05",
+            "asked": "まちなか生活協同組合 見積り 理事会 前週 提出 間に合う？",
+            "answer": "no",
+            "ok": false,
+            "answerOk": true
+          },
+          {
+            "id": "Q06",
+            "asked": "港北精機 昔から Teams のみ 使用？",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          },
+          {
+            "id": "Q07",
+            "asked": "大河原建材 社長 電話 早い 言う 打ち合わせ 入れる 必要 どうする",
+            "answer": "unknown",
+            "ok": false,
+            "answerOk": false
+          },
+          {
+            "id": "Q08",
+            "asked": "浜風運輸 未決定 話 先伝え 混乱 懸念",
+            "answer": "yes",
+            "ok": false,
+            "answerOk": false
+          }
+        ],
+        "notCovered": [
+          {
+            "id": "U01",
+            "asked": "白樺製菓 年賀状 手書き 方 いい？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U02",
+            "asked": "ひだまり介護サービス 請求書 紙 郵送 どうする",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U03",
+            "asked": "青葉ドラッグ 請求 締め日 月末 合わせ 可能か",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U04",
+            "asked": "県産業振興財団 訪問 手土産 持参 必要か",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U05",
+            "asked": "港北精機 工場長 ゴルフ 誘う 問題 ない か",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U06",
+            "asked": "丸新酒造 蔵見学 新人 同行 可否",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "N01",
+            "asked": "浜風運輸 納期 前倒し 朗報 配車課長 先 伝える べき？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "N02",
+            "asked": "丸新酒造 蔵元 新酒 祝い 贈る 可否 確認",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "N03",
+            "asked": "青葉ドラッグ 担当者 交代 あいさつ 伺う 必要 あり？",
+            "answer": "yes",
+            "madeUp": true,
+            "citations": [
+              "K-020",
+              "K-025"
+            ]
+          },
+          {
+            "id": "N04",
+            "asked": "白樺製菓 4月 新年度 あいさつ 送る いい？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          }
+        ]
+      }
+    },
+    {
+      "persona": "outsider",
+      "name": "別部署から来た人",
+      "history": 6,
+      "answerOk": 7,
+      "madeUp": 2,
+      "notCovered": 10,
+      "detail": {
+        "history": [
+          {
+            "id": "Q01",
+            "asked": "港北精機さんとの打ち合わせは、パソコンやスマホから参加するオンライン会議ですよね。それなら、会議に入るためのURLを先方に送っておけば大丈夫でしょうか？",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          },
+          {
+            "id": "Q02",
+            "asked": "大河原建材さん、前の社長さんの頃みたいに、今の社長さんに直接電話して、その場で話を決めちゃっていいんですか？",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          },
+          {
+            "id": "Q03",
+            "asked": "浜風運輸さんの荷物が遅れそうなんですけど、遅れるのがはっきり決まってから、まとめて先方に知らせればいいんですよね？",
+            "answer": "no",
+            "ok": false,
+            "answerOk": true
+          },
+          {
+            "id": "Q04",
+            "asked": "まちなか生協さんに出す見積書、いつも使っている形式で作ってしまって大丈夫ですか？",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          },
+          {
+            "id": "Q05",
+            "asked": "まちなか生協さんの見積もり、理事会がある前の週に出せば、間に合いますか？",
+            "answer": "unknown",
+            "ok": false,
+            "answerOk": false
+          },
+          {
+            "id": "Q06",
+            "asked": "港北精機さんとのやり取りって、昔からTeamsだけで済ませてきた",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          },
+          {
+            "id": "Q07",
+            "asked": "大河原建材の社長さんは、どうせ電話で済ませたほうが早いって言いそうなんですけど、それでも改めて話す時間を取ったほうがいいんでしょうか？",
+            "answer": "yes",
+            "ok": true,
+            "answerOk": true
+          },
+          {
+            "id": "Q08",
+            "asked": "浜風運輸さんに、まだ決まっていない話を先にお伝えしたら、かえって混乱させてしまいませんか？",
+            "answer": "no",
+            "ok": true,
+            "answerOk": true
+          }
+        ],
+        "notCovered": [
+          {
+            "id": "U01",
+            "asked": "あの、白樺製菓さんに出す年賀状って、一言でも手書きした方がいいのかな？印刷だけだと失礼になっちゃう？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U02",
+            "asked": "あの、ひだまり介護サービスさんに出すお金の書類って、紙で郵便で送った方がいいんですか？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U03",
+            "asked": "青葉ドラッグさんに請求書を出すときの区切りを、月末に合わせてもいいでしょうか？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U04",
+            "asked": "県産業振興財団さんに訪問するんですけど、手土産って持っていった方がいいんですかね？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U05",
+            "asked": "港北精機さんの工場長さんを、ゴルフにお誘いしてもよろしいでしょうか？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "U06",
+            "asked": "丸新酒造さんの酒蔵を見学させ",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "N01",
+            "asked": "浜風運輸さんに、納期が早まるという良い知らせを伝えるときも、まずは車の手配を担当している課長さんに話した方がいいでしょうか？",
+            "answer": "yes",
+            "madeUp": true,
+            "citations": [
+              "K-025",
+              "K-001"
+            ]
+          },
+          {
+            "id": "N02",
+            "asked": "えっと、ちょっと確認させてください。丸新酒造さんって、お酒を作っている会社さんですよね。その会社の本社か工場に、新しくできたお酒のお祝いの品を送っても大丈夫でしょうか？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          },
+          {
+            "id": "N03",
+            "asked": "青葉ドラッグさんの担当の方が変わったみたいなんですけど、新しい方にはこちらから直接会いに行って挨拶した方がいいものなんでしょうか？",
+            "answer": "yes",
+            "madeUp": true,
+            "citations": [
+              "K-020",
+              "K-009"
+            ]
+          },
+          {
+            "id": "N04",
+            "asked": "白樺製菓さんに、4月から始まる新しい年度のごあいさつを、お送りしても大丈夫でしょうか？",
+            "answer": "unknown",
+            "madeUp": false,
+            "citations": []
+          }
+        ]
+      }
+    }
+  ]
+}

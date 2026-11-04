@@ -71,6 +71,14 @@ away from family succession.
 - **Master-role test (author only, local):** the author plays the master on fictional scenes in the 帳場 and the app times each
   action ([docs/master-role-test.md](docs/master-role-test.md)). It is not a test with real clients or in a real workplace.
   Internally it is still named `field` (`KOKOROE_FIELD=1`, `npm run field:save`).
+- **Persona simulation (not a real-world test):** master and successor personas played by Claude (a silent master, one who only
+  says 「違う」, a busy-month master, a fat-fingered one, an abbreviating one; an indirect newcomer, a curt asker, and others).
+  This checked **tolerance to variation between people**; whether a draft is right is still decided by the machine judge, and the
+  personas only change how things are said and tapped.
+  - **Result:** no collapse. Silent and vague masters lose more lessons to 「どれでもない」. No successor persona made up an answer
+    to a question the 心得帳 does not cover.
+  - **Details:** [docs/personas-2026-11-05.md](docs/personas-2026-11-05.md).
+  - It is a different thing from the master-role test above.
 - **Start from your own company (local only):** `npm run own` (needs `ANTHROPIC_API_KEY` in `.env.local`) opens
   http://127.0.0.1:3000 on your own client ledger instead of the fictional company.
   - **Setup:** enter the company and the ledger (form or CSV) under 台帳. In the 帳場 you write a situation, the apprentice

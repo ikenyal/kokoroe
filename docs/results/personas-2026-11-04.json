@@ -1,0 +1,198 @@
+{
+  "at": "2026-11-04T00:34:23.590Z",
+  "note": "fictional data; persona simulation — tolerance to variation, not a real-world test. Correctness by the frozen hidden kokoroe and the machine judge; personas change only expression. One training path per master persona (seed 101), held-out ×1.",
+  "usd": 9.334,
+  "masters": [
+    {
+      "id": "textbook",
+      "name": "教科書どおりの師匠",
+      "how": "今の機械の師匠（基準）",
+      "result": {
+        "persona": "textbook",
+        "match": 0.9,
+        "okp": 0.95,
+        "taps": 125,
+        "rulesActive": 22,
+        "wrongRules": [
+          {
+            "id": "K-014",
+            "text": "正式な連絡の宛先は窓口の主査にし、事務局長に直接出さない。"
+          },
+          {
+            "id": "K-022",
+            "text": "先方の予算の時期を確かめ、それに合わせて話を出す時期を決める。"
+          }
+        ],
+        "rolledBack": 2,
+        "withdrawn": 0,
+        "noneOfThese": 4,
+        "asked": 13,
+        "slips": {
+          "verdict": 0,
+          "reading": 0
+        },
+        "usd": 1.321
+      }
+    },
+    {
+      "id": "silent",
+      "name": "背中で語る師匠",
+      "how": "一言をほぼ付けない（1割だけ）。△はほとんど使わず×にする（8割）。「なぜ」には答えない",
+      "result": {
+        "persona": "silent",
+        "match": 0.7,
+        "okp": 0.9,
+        "taps": 126,
+        "rulesActive": 17,
+        "wrongRules": [],
+        "rolledBack": 0,
+        "withdrawn": 1,
+        "noneOfThese": 11,
+        "asked": 21,
+        "slips": {
+          "verdict": 0,
+          "reading": 0
+        },
+        "usd": 1.35
+      }
+    },
+    {
+      "id": "story",
+      "name": "昔話の師匠",
+      "how": "一言が長い武勇伝。肝心な点は最後の一文だけ",
+      "result": {
+        "persona": "story",
+        "match": 0.7,
+        "okp": 0.9,
+        "taps": 132,
+        "rulesActive": 19,
+        "wrongRules": [],
+        "rolledBack": 1,
+        "withdrawn": 0,
+        "noneOfThese": 9,
+        "asked": 22,
+        "slips": {
+          "verdict": 0,
+          "reading": 0
+        },
+        "usd": 1.41
+      }
+    },
+    {
+      "id": "vague",
+      "name": "「なんか違う」の師匠",
+      "how": "×や△は付けるが「違う」「そうじゃない」しか言わない。「なぜ」には答えない",
+      "result": {
+        "persona": "vague",
+        "match": 0.65,
+        "okp": 0.9,
+        "taps": 129,
+        "rulesActive": 17,
+        "wrongRules": [],
+        "rolledBack": 1,
+        "withdrawn": 1,
+        "noneOfThese": 10,
+        "asked": 22,
+        "slips": {
+          "verdict": 0,
+          "reading": 0
+        },
+        "usd": 1.405
+      }
+    },
+    {
+      "id": "busy",
+      "name": "繁忙期の師匠",
+      "how": "繁忙の月（取引先の繁忙月と3月）は△を半分○にする。余裕のある月は○の15%を△（「もう一工夫」）にする",
+      "result": {
+        "persona": "busy",
+        "match": 0.7,
+        "okp": 0.85,
+        "taps": 125,
+        "rulesActive": 21,
+        "wrongRules": [
+          {
+            "id": "K-016",
+            "text": "正式な連絡は事務局長ではなく窓口の主査宛てに出す。"
+          }
+        ],
+        "rolledBack": 0,
+        "withdrawn": 0,
+        "noneOfThese": 9,
+        "asked": 19,
+        "slips": {
+          "verdict": 0,
+          "reading": 0
+        },
+        "usd": 1.42
+      }
+    },
+    {
+      "id": "fatfinger",
+      "name": "指が太い師匠",
+      "how": "5%で隣の印を押す（○↔△、△↔×）。読み方の候補も5%で隣を押す",
+      "result": {
+        "persona": "fatfinger",
+        "match": 0.65,
+        "okp": 0.95,
+        "taps": 118,
+        "rulesActive": 24,
+        "wrongRules": [
+          {
+            "id": "K-002",
+            "text": "2〜3月は先方が決算で多忙なので、急がない連絡は4月以降に回す。"
+          },
+          {
+            "id": "K-013",
+            "text": "正式な連絡の宛先は窓口の主査にする。"
+          }
+        ],
+        "rolledBack": 0,
+        "withdrawn": 0,
+        "noneOfThese": 6,
+        "asked": 13,
+        "slips": {
+          "verdict": 2,
+          "reading": 0
+        },
+        "usd": 1.171
+      }
+    },
+    {
+      "id": "abbrev",
+      "name": "略語の師匠",
+      "how": "一言と「なぜ」から固有名や主語を省く（「浜風は前もって言うとけ」「例の件」「あそこ」）",
+      "result": {
+        "persona": "abbrev",
+        "match": 0.65,
+        "okp": 0.9,
+        "taps": 123,
+        "rulesActive": 22,
+        "wrongRules": [
+          {
+            "id": "K-002",
+            "text": "2〜3月は決算で多忙なので、急ぎでない連絡は4月以降に回す。"
+          },
+          {
+            "id": "K-016",
+            "text": "正式な連絡の宛先は窓口の主査とし、事務局長へ直接出さない。"
+          },
+          {
+            "id": "K-025",
+            "text": "金額や契約の話を進める前に、先方の予算の時期を見て動く時期を決める。"
+          }
+        ],
+        "rolledBack": 0,
+        "withdrawn": 1,
+        "noneOfThese": 2,
+        "asked": 12,
+        "slips": {
+          "verdict": 0,
+          "reading": 0
+        },
+        "usd": 1.248
+      }
+    }
+  ],
+  "successors": []
+}
