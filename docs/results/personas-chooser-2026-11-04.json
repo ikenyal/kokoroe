@@ -1,13 +1,45 @@
 {
-  "at": "2026-11-04T03:12:14.920Z",
+  "at": "2026-11-04T04:03:35.644Z",
   "note": "fictional data; persona simulation — tolerance to variation, not a real-world test. Correctness by the frozen hidden kokoroe and the machine judge; personas change only expression. One training path per master persona (seed 101), held-out ×1.",
-  "usd": 2.796,
+  "usd": 4.033,
+  "reruns": [
+    {
+      "at": "2026-11-04T04:03:35.644Z",
+      "personas": [
+        "textbook"
+      ],
+      "usd": 1.237
+    }
+  ],
   "masters": [
     {
       "id": "textbook",
       "name": "教科書どおりの師匠",
       "how": "今の機械の師匠（基準）",
-      "result": null
+      "result": {
+        "persona": "textbook",
+        "match": 0.7,
+        "okp": 0.8,
+        "taps": 125,
+        "rulesActive": 23,
+        "wrongRules": [
+          {
+            "id": "K-015",
+            "text": "正式な連絡の宛先は窓口の主査とし、事務局長へ直接出さない。"
+          }
+        ],
+        "rolledBack": 2,
+        "withdrawn": 0,
+        "noneOfThese": 3,
+        "asked": 12,
+        "secondRounds": 6,
+        "whereAnswered": 5,
+        "slips": {
+          "verdict": 0,
+          "reading": 0
+        },
+        "usd": 1.237
+      }
     },
     {
       "id": "silent",

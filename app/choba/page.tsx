@@ -194,11 +194,11 @@ function PendingItem({ p, beforeOf, ruleText, words }: { p: Pending; beforeOf: (
               <legend className="text-[13px] text-nibi">どれでもないとき、どこが違いますか（押さなくても進めます）</legend>
               <div className="mt-1 flex flex-wrap gap-2">
                 {DIFF_AREAS.map((a) => (
-                  <button key={a} name="pick" value={`none:${a}`} className="h-10 min-w-12 rounded-[3px] border border-keisen px-3 text-[14px] hover:border-ai hover:bg-ai-soft">
+                  <button key={a} name="pick" value={`none:${a}`} className="h-11 min-w-14 rounded-[3px] border border-keisen px-3 text-[15px] hover:border-ai hover:bg-ai-soft">
                     {DIFF_AREA_JA[a]}
                   </button>
                 ))}
-                <button name="pick" value="none" className="h-10 px-2 text-[14px] text-nibi underline-offset-4 hover:underline">
+                <button name="pick" value="none" className="h-11 px-2 text-[14px] text-nibi underline-offset-4 hover:underline">
                   どれでもない（場所は選ばない）
                 </button>
               </div>

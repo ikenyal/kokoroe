@@ -333,3 +333,9 @@ Short entries, appended every work session. Source material for the README secti
     machine, so its timeout was raised; the diff was not the cause.
   - **Measuring it:** the persona rerun was cut to the two target masters to stay under the $4 limit. Splitting the second
     readings into "with an area" and "without" gave a clearer signal than the headline rate.
+  - **Then (Kento 11/4):**
+    - **Baseline rerun:** the textbook master was rerun ($1.24). Diffing the two training logs showed that the paths split at the
+      first correction, before the chooser came up. So the report says one path cannot answer "is the baseline worse?", rather
+      than reading the 20-point drop as an effect.
+    - **Live check:** a short Playwright script (the library, not MCP) checked the new buttons on 127.0.0.1 at desktop and phone
+      width, then the server was stopped.
