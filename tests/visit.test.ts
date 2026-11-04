@@ -41,6 +41,11 @@ const BEFORE = {
   withBook: "63739f961898651aec5d4db6b8299d7bee2e8c8604aa9f89b55b0aefd89e3be1",
 };
 
+const INTERPRET_BEFORE = {
+  first: "ae221d1840877cd60de3163e1609a8202bb465b3734c483c303e3f21f81bc468",
+  second: "8f9da3ff596fe345be4d15d7a38c49811e71a85049e804081ad15f21b503bb0c",
+};
+
 describe("訪問の段取り is off in the evaluation (D-061)", () => {
   const saved = process.env.KOKOROE_EVAL_VISIT;
   beforeEach(() => {
@@ -60,5 +65,21 @@ describe("訪問の段取り is off in the evaluation (D-061)", () => {
     const got = { noBook: sha(calls[0]), withBook: sha(calls[1]) };
     expect(JSON.stringify((calls[0] as { output_config: unknown }).output_config)).toContain("escalateToMaster"); // the schema is in the fingerprint
     expect(got).toEqual(BEFORE);
+  });
+});
+
+describe("the interpreter is unchanged for drafts without a visit plan (D-061)", () => {
+  it("request fingerprint for an ordinary correction (as in the evaluation)", async () => {
+    const { interpret } = await import("@/src/learning/interpret");
+    calls.length = 0;
+    answer = { diagnosis: "d", ambiguous: false, candidates: [], confidence: "low" };
+    const client = getClient(visitScene.clientId);
+    const judgment = {
+      id: "J-0001", at: "2026-11-04T00:00:00.000Z", sceneId: visitScene.id, clientId: client.id, sceneType: visitScene.type,
+      proposal: { ...base }, verdict: "△", remark: "先に手紙", kind: "draft",
+    };
+    await interpret({ scene: visitScene, client, judgment: judgment as never, existing: [] });
+    await interpret({ scene: visitScene, client, judgment: judgment as never, existing: [], rejected: [{ text: "t", when: null, fix: { field: "channel", value: "letter" } }], area: "channel" });
+    expect({ first: sha(calls[0]), second: sha(calls[1]) }).toEqual(INTERPRET_BEFORE);
   });
 });
