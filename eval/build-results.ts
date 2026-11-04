@@ -41,6 +41,15 @@ function curves() {
   }));
 }
 
+/**
+ * The note under the 稽古の記録 screen (data/demo/results.json `note`), worded for the Japanese screen: 「はじめ」 and
+ * 「40場面のあと」 as in its table, no decision ids, no promised dates. Wording only — the numbers are computed below.
+ */
+export const INTERIM_NOTE =
+  "すべて架空のデータです（取引先10社・評価用20場面・沿革の質問8件）。師匠はシミュレータです。いまの値は 11/3 の途中経過で、はじめの値は直したあとの台帳、40場面のあとの値は直す前の台帳で測ったため、そのままは比べられません。正式な値は、同じ台帳で学習を5本回して測り直したものに差し替えます。";
+export const officialNote = (date: string, paths: number) =>
+  `すべて架空のデータです（取引先10社・学習40場面・評価用20場面・沿革の質問8件）。師匠はシミュレータです。${date} の正式な計測で、はじめと40場面のあとは、同じ台帳・同じ評価用場面で測りました。40場面のあとの値は、学習${paths}本の平均と幅です。`;
+
 type MeanSd = { mean: number; sd: number };
 export interface FinalSummary {
   at: string;
@@ -68,7 +77,7 @@ export function fromFinal(f: FinalSummary, file: string): Omit<Results, "curves"
   return {
     official: true,
     source: file,
-    note: `すべて架空データ（取引先10社・学習40場面・評価用20場面・沿革の質問8件）、師匠はシミュレータ。正式な計測（${f.at.slice(0, 10)}）: Before と After は同じ台帳・同じ評価用場面、After は学習${paths.length}本の平均と幅。`,
+    note: officialNote(f.at.slice(0, 10), paths.length),
     caveat: null,
     before: { label: "Before（台帳＋制約だけの弟子 v0）", match: f.before.match.mean, sd: f.before.match.sd, okp: f.before.okp.mean, runs: f.before.runs.length },
     paths: pathsBlock(paths),
@@ -96,7 +105,7 @@ function fromInterim(files: string[]): Omit<Results, "curves"> {
   return {
     official: false,
     source: null,
-    note: "すべて架空データ（取引先10社・評価用20場面・沿革の質問8件）、師匠はシミュレータ。11/3 の途中経過。Before は修正後の台帳（D-033）、途中経過の After は修正前の台帳で測ったもの。正式な Before／After は 11/7 に同じ台帳・学習5本で取り直す。",
+    note: INTERIM_NOTE,
     caveat: {
       en: "Interim (11/3): the Before uses the corrected ledger (D-033), the interim After the previous one — not directly comparable. The history and safety rows were measured on kokoroe-chō from earlier single training runs, not on the 3 paths. All are re-taken on 11/7 with the same ledger and 5 training paths.",
       ja: "途中経過（11/3）: Before は修正後の台帳（D-033）、After は修正前の台帳で測ったもので、そのままは比べられません。沿革と安全の行は、学習3本ではなく、それより前の1本の学習で育てた心得帳で測ったものです。11/7 に同じ台帳・学習5本ですべて取り直します。",
@@ -115,10 +124,15 @@ function fromInterim(files: string[]): Omit<Results, "curves"> {
   };
 }
 
-export function buildResults() {
+/** The results from the recorded runs, without writing anything (exported for tests). */
+export function computeResults(): Results {
   const files = readdirSync(RUNS).filter((f) => f.endsWith(".json")).sort();
   const final = files.filter((f) => f.endsWith("-final.json")).at(-1);
-  const out: Results = { ...(final ? fromFinal(read(final), final) : fromInterim(files)), curves: curves() };
+  return { ...(final ? fromFinal(read(final), final) : fromInterim(files)), curves: curves() };
+}
+
+export function buildResults() {
+  const out = computeResults();
   writeFileSync(path.join(ROOT, "data/demo/results.json"), JSON.stringify(out, null, 2) + "\n");
   for (const [file, lang] of [["README.md", "en"], ["README.ja.md", "ja"]] as const) {
     const p = path.join(ROOT, file);

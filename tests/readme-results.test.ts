@@ -46,3 +46,28 @@ describe("official results path (from the eval:final smoke summary)", () => {
     }
   });
 });
+
+/**
+ * The 稽古の記録 note is generated (eval/build-results.ts) and worded for the Japanese screen. Recomputing from the recorded runs
+ * reproduces data/demo/results.json exactly — so the numbers come only from the runs, and a wording change cannot move them.
+ * This stays true after the official run: `npm run eval:final` regenerates the file from its summary.
+ */
+describe("稽古の記録: the note's wording, and numbers that only come from the runs", () => {
+  it("recomputing from eval/runs gives the committed results.json, numbers included", async () => {
+    const { computeResults } = await import("@/eval/build-results");
+    expect(JSON.parse(JSON.stringify(computeResults()))).toEqual(results);
+  });
+  it("the note reads as the screen does: はじめ／40場面のあと, no English labels, no decision ids, no promised date", async () => {
+    const { INTERIM_NOTE, officialNote, fromFinal } = await import("@/eval/build-results");
+    const smoke = (await import("./fixtures/final-smoke.json")).default;
+    const official = fromFinal(smoke as never, "x-final.json");
+    expect(official.note).toBe(officialNote(smoke.at.slice(0, 10), smoke.after.paths.length));
+    expect((results as { note: string }).note).toBe(results.official ? officialNote((results.note.match(/\d{4}-\d{2}-\d{2}/) ?? [""])[0], results.paths.n) : INTERIM_NOTE);
+    for (const n of [INTERIM_NOTE, official.note]) {
+      expect(n).toContain("はじめ");
+      expect(n).toContain("40場面のあと");
+      expect(n).toContain("架空");
+      expect(n).not.toMatch(/Before|After|D-\d{3}|11\/7/);
+    }
+  });
+});

@@ -107,7 +107,7 @@ export default async function Home(props: PageProps<"/">) {
           <figure aria-labelledby="ex-h" className="border-t-2 border-sumi/80 pt-4">
             <p id="ex-h" className="font-mincho text-[14px] text-sumi">一つの例：{ex.client}</p>
             <ol className="mt-2 text-[14px]">
-              <li className="grid grid-cols-[6.5em_1fr] gap-x-3 border-t border-keisen py-2.5 first:border-t-0">
+              <li className="grid grid-cols-[7.5em_1fr] gap-x-3 border-t border-keisen py-2.5 first:border-t-0">
                 <span className="text-nibi">
                   弟子の案
                   <span className="block text-[12.5px]">{ex.first.type}</span>
@@ -117,25 +117,25 @@ export default async function Home(props: PageProps<"/">) {
                   裏で：{ex.first.quiet ?? "なし"}
                 </span>
               </li>
-              <li className="grid grid-cols-[6.5em_1fr] items-center gap-x-3 border-t border-keisen py-2.5">
+              <li className="grid grid-cols-[7.5em_1fr] items-center gap-x-3 border-t border-keisen py-2.5">
                 <span className="text-nibi">師匠</span>
                 <span className="flex items-center gap-2">
                   <Mark v={ex.mark.verdict} size={22} className="text-shu" />
                   <span className="yomi">{ex.mark.remark ? `「${ex.mark.remark}」` : <span className="text-sumi/75">条件つき（一言なし）</span>}</span>
                 </span>
               </li>
-              <li className="grid grid-cols-[6.5em_1fr] gap-x-3 border-t border-keisen py-2.5">
+              <li className="grid grid-cols-[7.5em_1fr] gap-x-3 border-t border-keisen py-2.5">
                 <span className="text-nibi">心得帳に</span>
                 <blockquote className="yomi font-mincho text-[17px] leading-relaxed">{ex.rule}</blockquote>
               </li>
-              <li className="grid grid-cols-[6.5em_1fr] gap-x-3 border-t border-keisen py-2.5">
+              <li className="grid grid-cols-[7.5em_1fr] gap-x-3 border-t border-keisen py-2.5">
                 <span className="text-nibi">
                   次の案
                   <span className="block text-[12.5px]">{ex.next.type}</span>
                 </span>
                 <span className="yomi self-start bg-ai-soft px-1.5 text-sumi">裏で：{ex.next.quiet}</span>
               </li>
-              <li className="grid grid-cols-[6.5em_1fr] gap-x-3 border-t border-keisen py-2.5">
+              <li className="grid grid-cols-[7.5em_1fr] gap-x-3 border-t border-keisen py-2.5">
                 <span className="text-nibi">後任が聞くと</span>
                 <span className="yomi">
                   <span className="text-nibi">「{ex.question}」</span>

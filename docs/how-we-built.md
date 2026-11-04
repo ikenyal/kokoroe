@@ -442,3 +442,7 @@ Short entries, appended every work session. Source material for the README secti
 - **Publishing prepared, not executed.** docs/publishing.md now follows Kento's plan (rename the current repo to an archive, keep
   it private, create `kokoroe` anew, push the rewritten history). Claude ran the checks read-only over the whole history and
   wrote the employer domain into no file: the procedure takes it from an environment variable.
+- **A wording change pinned by a test (11/5).** Kento asked to fix the 稽古の記録 note in the generator, not by hand, and to prove the
+  numbers did not move. Claude split computing from writing (`computeResults`) and added a test that recomputing from the recorded
+  runs reproduces `data/demo/results.json` exactly; the regenerated file differed only in the note line. The official run on 11/7
+  goes through the same function, so the new wording appears there too.
