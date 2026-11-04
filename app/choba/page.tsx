@@ -1,10 +1,11 @@
 import { LimitNote } from "../limit-note";
 import { heldForProse } from "@/src/server/own-result";
-import { DIFF_AREA_JA, DIFF_AREAS } from "@/src/learning/area";
+import { DIFF_AREAS } from "@/src/learning/area";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { CHANNEL_JA, FORMAT_JA, MEETING_JA, POSTURE_JA, TIMING_JA, who } from "@/src/core/labels";
-import { SCENE_TYPE_LABELS, type Client, type Proposal } from "@/src/core/types";
+import { FORMAT_JA, POSTURE_JA, TIMING_JA, who } from "@/src/core/labels";
+import { AREA_ON_SCREEN, means, noIds, quietWord, toWhom, VISIT_ROWS } from "../dandori";
+import { SCENE_TYPE_LABELS, type Client, type Proposal, type Scene } from "@/src/core/types";
 import { getClient, TRAIN_SCENES } from "@/src/core/world";
 import type { KokoroeRule } from "@/src/learning/types";
 import demo from "@/data/demo/demo-snapshot.json";
@@ -50,11 +51,11 @@ export function Ledger({ label, note, children, quiet = false }: { label: string
 }
 
 function ProposalView({ p, client, ruleText }: { p: Proposal; client: Client; ruleText: (id: string) => string }) {
-  const front = `${who(client, p.formalTo)}へ ${CHANNEL_JA[p.channel]}${p.meeting !== "none" ? `、${MEETING_JA[p.meeting]}` : ""}`;
+  const quiet = quietWord(p, client);
   return (
     <>
-      {/* 段取り — who, through which channel, and when: the part the master judges. The rest is secondary. */}
-      <Ledger label="段取り" note="弟子（橙丸）の案。判定は、この3行を見て。">
+      {/* 段取り — to whom, by what, when, and the quiet word on the side: the part the master judges. The draft text is secondary. */}
+      <Ledger label="段取り" note="弟子（橙丸）の段取りの案。判定は、ここを見て。">
         {p.escalateToMaster && (
           <p className="mb-3 border-y border-sumi/40 py-2 text-[15px] text-sumi">
             金額・条件が絡むため、橙丸は決めていません。先方に出す前に師匠の判断が要ります。
@@ -62,14 +63,16 @@ function ProposalView({ p, client, ruleText }: { p: Proposal; client: Client; ru
           </p>
         )}
         <dl>
-          <Row main label="表の連絡" gloss="窓口へ正式に">{p.channel === "none" ? "連絡しない" : front}</Row>
-          <Row main label="裏の一言" gloss="決裁者などへ根回し">{p.backchannelTo ? `${who(client, p.backchannelTo)}にも、そっと一言` : <span className="text-nibi">なし</span>}</Row>
-          <Row main label="時期">{TIMING_JA[p.timing]}</Row>
+          <Row main label="誰に" gloss="表の連絡、正式に">{toWhom(p, client)}</Row>
+          <Row main label="何で">{means(p)}</Row>
+          <Row main label="いつ">{TIMING_JA[p.timing]}</Row>
+          <Row main label="裏で誰に" gloss="決裁者などへ根回し">{quiet ?? <span className="text-nibi">なし</span>}</Row>
+          <Row main label="後日">{p.followUp ? "あらためて、あいさつを入れる" : <span className="text-nibi">なし</span>}</Row>
         </dl>
       </Ledger>
+      {p.visit && <VisitView v={p.visit} />}
       <Ledger label="そのほか" quiet>
         <dl>
-          <Row label="後日のあいさつ">{p.followUp ? "入れる" : <span className="text-nibi">入れない</span>}</Row>
           {FORMAT_JA[p.format] && <Row label="書式">{FORMAT_JA[p.format]}</Row>}
           {p.posture.length > 0 && <Row label="伝え方">{p.posture.map((t) => POSTURE_JA[t]).join("、")}</Row>}
           {p.basedOnRules.length > 0 && (
@@ -82,12 +85,27 @@ function ProposalView({ p, client, ruleText }: { p: Proposal; client: Client; ru
             </Row>
           )}
         </dl>
-        <details className="mt-2">
-          <summary className="cursor-pointer text-[14px] text-ai select-none">文面の下書きを見る</summary>
-          <p className="yomi mt-3 border-l-2 border-keisen pl-4 text-[15px] whitespace-pre-line">{p.message}</p>
-        </details>
+        {p.channel !== "none" && (
+          <details className="mt-2">
+            <summary className="cursor-pointer text-[14px] text-ai select-none">文面の下書きを見る（{p.channel === "phone" ? "電話で話すこと" : "送る文"}）</summary>
+            <p className="yomi mt-3 border-l-2 border-keisen pl-4 text-[15px] whitespace-pre-line">{p.message}</p>
+          </details>
+        )}
       </Ledger>
     </>
+  );
+}
+
+/** 訪問の段取り (D-061): only when the 段取り visits the client. Corrected by the same ○△× and one line as the rest. */
+function VisitView({ v }: { v: NonNullable<Proposal["visit"]> }) {
+  return (
+    <Ledger label="訪問" note="訪問するときの段取り。違えば、判定の一言で直してください。">
+      <dl>
+        {VISIT_ROWS.map(([k, label]) => (
+          <Row key={k} label={label}>{noIds(v[k]) || <span className="text-nibi">—</span>}</Row>
+        ))}
+      </dl>
+    </Ledger>
   );
 }
 
@@ -109,19 +127,21 @@ const STATUS: Record<Pending["status"], string> = {
 };
 
 const DECISION_ROWS: [keyof Proposal, string, (p: Proposal, c: Client) => string][] = [
-  ["channel", "表の連絡", (p, c) => (p.channel === "none" ? "連絡しない" : `${who(c, p.formalTo)}へ ${CHANNEL_JA[p.channel]}${p.meeting !== "none" ? `、${MEETING_JA[p.meeting]}` : ""}`)],
-  ["backchannelTo", "裏の一言", (p, c) => (p.backchannelTo ? `${who(c, p.backchannelTo)}にも一言` : "なし")],
-  ["timing", "時期", (p) => TIMING_JA[p.timing]],
-  ["followUp", "後日のあいさつ", (p) => (p.followUp ? "入れる" : "入れない")],
+  ["formalTo", "誰に", (p, c) => toWhom(p, c)],
+  ["channel", "何で", (p) => means(p)],
+  ["timing", "いつ", (p) => TIMING_JA[p.timing]],
+  ["backchannelTo", "裏で誰に", (p, c) => quietWord(p, c) ?? "なし"],
+  ["followUp", "後日", (p) => (p.followUp ? "あいさつを入れる" : "なし")],
   ["format", "書式", (p) => FORMAT_JA[p.format] || "—"],
   ["escalateToMaster", "師匠の確認", (p) => (p.escalateToMaster ? (p.escalatedByCode ? "要る（自動）" : "要る") : "—")],
 ];
 
 /** One-tap check of a re-solved scene. For regression, only the decision fields that changed are shown. */
-function CheckCard({ p, step, sceneId, proposal, before }: { p: Pending; step: "confirm" | "regression"; sceneId: string; proposal: Proposal; before?: Proposal }) {
-  const scene = TRAIN_SCENES.find((t) => t.id === sceneId);
-  const client = getClient(scene?.clientId ?? "C01");
-  const rows = DECISION_ROWS.filter(([k, , f]) => !before || f(before, client) !== f(proposal, client) || k === "channel");
+function CheckCard({ p, step, sceneId, proposal, before, sceneOf }: { p: Pending; step: "confirm" | "regression"; sceneId: string; proposal: Proposal; before?: Proposal; sceneOf: SceneOf }) {
+  // Own mode: the scene lives in the session's queue, not in the fictional training scenes (it used to fall back to C01 and crash).
+  const scene = sceneOf(sceneId);
+  const client = getClient(scene?.clientId ?? CLIENTS[0].id);
+  const rows = DECISION_ROWS.filter(([k, , f]) => !before || f(before, client) !== f(proposal, client) || k === "channel" || k === "formalTo");
   return (
     <form action={verifyCheck} className="mt-2 rounded-[3px] border border-keisen p-3">
       <input type="hidden" name="judgmentId" value={p.judgmentId} />
@@ -140,6 +160,13 @@ function CheckCard({ p, step, sceneId, proposal, before }: { p: Pending; step: "
             </dd>
           </div>
         ))}
+        {proposal.visit &&
+          VISIT_ROWS.map(([k, label]) => (
+            <div key={k} className="grid grid-cols-[7.5em_1fr] gap-2">
+              <dt className="text-nibi">{label}</dt>
+              <dd className="yomi">{noIds(proposal.visit![k]) || "—"}</dd>
+            </div>
+          ))}
       </dl>
       <input name="remark" maxLength={120} autoComplete="off" aria-label="一言（任意）" placeholder="一言（任意）" className="mt-2 block h-9 w-full rounded-[3px] border border-waku bg-kami px-2 font-mincho text-[14px]" />
       <div className="mt-2 flex gap-2">
@@ -186,12 +213,14 @@ function OfflineExample({ sceneId }: { sceneId: string }) {
   );
 }
 
-function PendingItem({ p, beforeOf, ruleText, words }: { p: Pending; beforeOf: (judgmentId: string) => Proposal | undefined; ruleText: (id: string) => string; words: Words }) {
+type SceneOf = (sceneId: string) => Scene | undefined;
+
+function PendingItem({ p, beforeOf, ruleText, words, sceneOf }: { p: Pending; beforeOf: (judgmentId: string) => Proposal | undefined; ruleText: (id: string) => string; words: Words; sceneOf: SceneOf }) {
   return (
     <li className="border-t border-keisen py-3 first:border-t-0">
       <p className="text-[13px] text-nibi">
         {words(p.sceneId)}　{STATUS[p.status]}
-        {p.round === 2 && p.status === "needs-choice" ? `（別の読み方${p.area ? `：「${DIFF_AREA_JA[p.area]}」を手がかりに` : ""}）` : ""}
+        {p.round === 2 && p.status === "needs-choice" ? `（別の読み方${p.area ? `：「${AREA_ON_SCREEN[p.area]}」を手がかりに` : ""}）` : ""}
       </p>
       {p.status === "offline" && <OfflineExample sceneId={p.sceneId} />}
       {p.ruleId && (
@@ -219,7 +248,7 @@ function PendingItem({ p, beforeOf, ruleText, words }: { p: Pending; beforeOf: (
               <div className="mt-1 flex flex-wrap gap-2">
                 {DIFF_AREAS.map((a) => (
                   <button key={a} name="pick" value={`none:${a}`} className="h-11 min-w-14 rounded-[3px] border border-keisen px-3 text-[15px] hover:border-ai hover:bg-ai-soft">
-                    {DIFF_AREA_JA[a]}
+                    {AREA_ON_SCREEN[a]}
                   </button>
                 ))}
                 <button name="pick" value="none" className="h-11 px-2 text-[14px] text-nibi underline-offset-4 hover:underline">
@@ -235,9 +264,9 @@ function PendingItem({ p, beforeOf, ruleText, words }: { p: Pending; beforeOf: (
         </form>
       )}
       {p.status === "needs-confirm" && p.verify?.retried && p.note && <p className="text-[13px] text-nibi">{p.note}</p>}
-      {p.status === "needs-confirm" && p.verify?.confirm && <CheckCard p={p} step="confirm" sceneId={p.sceneId} proposal={p.verify.confirm.proposal} />}
+      {p.status === "needs-confirm" && p.verify?.confirm && <CheckCard p={p} step="confirm" sceneId={p.sceneId} proposal={p.verify.confirm.proposal} sceneOf={sceneOf} />}
       {p.status === "needs-regression" && p.verify?.current && (
-        <CheckCard p={p} step="regression" sceneId={p.verify.current.sceneId} proposal={p.verify.current.proposal} before={beforeOf(p.verify.current.pastJudgmentId)} />
+        <CheckCard p={p} step="regression" sceneId={p.verify.current.sceneId} proposal={p.verify.current.proposal} before={beforeOf(p.verify.current.pastJudgmentId)} sceneOf={sceneOf} />
       )}
       {(p.status === "applied" || p.status === "rolled-back") && p.note?.startsWith("確かめ済み") && <p className="text-[13px] text-nibi">{p.note}</p>}
       {(p.status === "rolled-back" || p.status === "withdrawn") && p.note && <p className="text-[13px] text-shu">{p.note}</p>}
@@ -440,7 +469,7 @@ export default async function ChobaPage() {
         <h2 id="bg-h" className="font-mincho text-[18px] tracking-[0.04em]">弟子の読み取り</h2>
         <p className="mt-1 text-[13px] text-nibi">△・× の意味を弟子が読み取り、心得帳に書きます。待たずに次の案へ進めます。</p>
         {recent.length ? (
-          <ul className="mt-3">{recent.map((p) => <PendingItem key={p.judgmentId} p={p} ruleText={ruleText} words={words} beforeOf={(id) => judgments.find((j) => j.id === id)?.proposal} />)}</ul>
+          <ul className="mt-3">{recent.map((p) => <PendingItem key={p.judgmentId} p={p} ruleText={ruleText} words={words} sceneOf={(id) => meta.queue.find((q) => q.scene.id === id)?.scene ?? TRAIN_SCENES.find((t) => t.id === id)} beforeOf={(id) => judgments.find((j) => j.id === id)?.proposal} />)}</ul>
         ) : (
           <p className="mt-4 text-[14px] text-nibi">まだ直しはありません。△ か × を付けると、ここに弟子の読み取りが出ます。</p>
         )}

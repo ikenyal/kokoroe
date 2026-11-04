@@ -8,6 +8,7 @@ import { getClient } from "@/src/core/world";
 import type { KokoroeRule } from "@/src/learning/types";
 import demo from "@/data/demo/demo-snapshot.json";
 import { Mark } from "./marks";
+import { sceneRange } from "./dandori";
 
 /** One real 心得 from the demo's 心得帳, shown as it would be handed over: the rule, the master's words, why, and when. */
 function specimen() {
@@ -21,7 +22,7 @@ function specimen() {
 }
 
 const STEPS = [
-  ["一", "弟子（AI の橙丸）が、対応の段取りを先に作る。"],
+  ["一", "弟子（AI の橙丸）が、誰に・何で・いつ・裏で誰に、という段取りを先に作る。"],
   ["二", "師匠は ○・△・× の印と、あれば一言を付けるだけ。"],
   ["三", "直された分が、わけつきで心得帳に残り、後任に渡る。"],
 ] as const;
@@ -114,6 +115,19 @@ export default async function Home(props: PageProps<"/">) {
             <figcaption className="mt-3 text-[13px] text-nibi">師匠の印と一言から弟子が書き、わけは師匠の言葉のまま残します。後任はここから聞けます。</figcaption>
           </figure>
         )}
+
+        <section aria-labelledby="range-h" className="border-t-2 border-sumi/80 pt-4">
+          <h2 id="range-h" className="font-mincho text-[14px] text-sumi">扱う場面は10種類。メールだけではありません</h2>
+          <ul className="mt-2">
+            {sceneRange().map((r) => (
+              <li key={r.type} className="grid grid-cols-[9.5em_1fr] gap-x-3 border-t border-keisen py-1.5 text-[13.5px] first:border-t-0">
+                <span className="text-sumi">{r.label}</span>
+                <span className="yomi text-nibi">{r.example ?? "—"}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-2 text-[12.5px] text-nibi">右は、弟子が直される前に出した段取りの例です（架空の取引先）。</p>
+        </section>
 
         <details className="text-[14px]">
           <summary className="cursor-pointer text-ai select-none">データの扱い</summary>

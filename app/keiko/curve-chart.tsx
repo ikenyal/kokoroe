@@ -98,10 +98,9 @@ export function CurveChart({
           const last = c.points.at(-1)!;
           return (
             <g key={c.key}>
-              <path d={d} fill="none" strokeWidth={em ? 2.5 : 1.5} strokeLinejoin="round" strokeLinecap="round" className={em ? "stroke-ai" : "stroke-nibi/55"} />
-              {c.points.map((p, i) => (
-                <circle key={i} cx={x(p.taps)} cy={y(p.match)} r={em ? 4.5 : 3} strokeWidth={2} className={em ? "fill-ai stroke-kami" : "fill-nibi/60 stroke-kami"} />
-              ))}
+              {/* Earlier setups are context only: hairlines without dots, so four of them do not read as a tangle. */}
+              <path d={d} fill="none" strokeWidth={em ? 2.5 : 1} strokeLinejoin="round" strokeLinecap="round" className={em ? "stroke-ai" : "stroke-nibi/35"} />
+              {em && c.points.map((p, i) => <circle key={i} cx={x(p.taps)} cy={y(p.match)} r={4.5} strokeWidth={2} className="fill-ai stroke-kami" />)}
               {/* End labels only when there is no multi-path result to show: otherwise they pile up at the right end
                   (the table below names every curve). */}
               {!paths && (
@@ -113,6 +112,15 @@ export function CurveChart({
           );
         })}
 
+        {paths && (() => {
+          // One label for all the earlier setups, under their lowest point, away from the current setup's label (the table names each).
+          const earlier = curves.filter((c) => c.key !== emphasis);
+          const all = earlier.flatMap((c) => c.points);
+          const low = all.reduce((a, b) => (b.match < a.match ? b : a), all[0]);
+          return low ? (
+            <text x={x(low.taps)} y={y(low.match) + 18} className="fill-nibi text-[10.5px]">細い線：改良の途中の版（{earlier.length}本）</text>
+          ) : null;
+        })()}
         {paths && (
           <g>
             {/* current setup: several training paths — mean dot and min–max bar */}

@@ -101,6 +101,20 @@ export interface Proposal {
   escalatedByCode?: boolean; // set when the HITL floor (D-044), not the model, turned escalateToMaster on
   message: string; // draft text (not judged by the simulator)
   basedOnRules: string[]; // kokoroe-chō rule ids the apprentice relied on
+  /**
+   * 訪問の段取り (D-061): only when the draft visits the client (meeting "in_person"), and only in the app. Absent in the
+   * evaluation: the hidden ground truth has no visit etiquette, so the simulator never sees or judges it.
+   */
+  visit?: VisitPlan;
+}
+
+/** What to get right when visiting in person. Free text in Japanese, short; "" when there is nothing to say. */
+export interface VisitPlan {
+  attire: string; // 服装
+  gift: string; // 手土産
+  checkFirst: string; // 事前に確かめておく話題
+  attendees: string; // 同席者（こちら側）
+  address: string; // 呼び方
 }
 
 export type Verdict = "○" | "△" | "×";

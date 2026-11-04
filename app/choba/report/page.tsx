@@ -36,7 +36,7 @@ export default async function ReportPage() {
   const counts = s.meta.counts;
   const sceneOf = (id: string) => s.meta.queue.find((q) => q.scene.id === id)?.scene;
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-4xl">
       <h1 className="font-mincho text-[24px] tracking-[0.06em]">{own ? "比較テストのまとめ" : "師匠役テストのまとめ"}</h1>
       <p className="mt-2 text-[13px] text-nibi">
         {own ? "自分の取引先（仮名）で測った実測です。この画面の文章はこのPCの外に出ません。" : "作者が師匠役を務めた範囲の実測です（架空データ）。"}中央値で示します。

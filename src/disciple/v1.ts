@@ -11,8 +11,11 @@ import { makeClaudeDisciple } from "./v0";
 
 export const isPureLedger = (r: KokoroeRule) => r.sources.length > 0 && r.sources.every((s) => s.kind === "ledger");
 
-export function makeDiscipleV1(store: KokoroeStore, name = "v1-kokoroe") {
-  return makeClaudeDisciple(name, async (scene, client) =>
-    describeRules((await store.rulesFor(client.id, scene.type)).filter((r) => !isPureLedger(r))),
+/** `opts.visit`: 訪問の段取り (D-061) — the app passes visitInApp(); the evaluation passes nothing (off by default). */
+export function makeDiscipleV1(store: KokoroeStore, name = "v1-kokoroe", opts: { visit?: boolean } = {}) {
+  return makeClaudeDisciple(
+    name,
+    async (scene, client) => describeRules((await store.rulesFor(client.id, scene.type)).filter((r) => !isPureLedger(r))),
+    opts,
   );
 }

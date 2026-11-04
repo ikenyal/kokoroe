@@ -87,7 +87,7 @@ export async function rollbackChange(args: {
  */
 export function ruleTook(rule: KokoroeRule, p: Proposal): boolean | null {
   const f = rule.fix;
-  if (!f) return null;
+  if (!f || f.field === "visit") return null; // a visit correction is free text: code cannot tell whether it took (D-061)
   if (f.field === "posture") return p.posture.includes(f.value as Proposal["posture"][number]);
   return applyFix(p, f)[f.field] === p[f.field];
 }

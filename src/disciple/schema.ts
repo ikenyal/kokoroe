@@ -30,3 +30,19 @@ export const ProposalSchema = z.object({
 });
 
 export type ProposalOutput = z.infer<typeof ProposalSchema>;
+
+/**
+ * 訪問の段取り (D-061). Used only when visits are on (the app); the evaluation keeps ProposalSchema exactly as above, so the
+ * request it sends is unchanged (tests/visit.test.ts).
+ */
+export const VisitSchema = z.object({
+  attire: z.string().describe("服装: what to wear for this client (e.g. whether a suit suits them). Short Japanese."),
+  gift: z.string().describe("手土産: what to bring, or that nothing should be brought. Short Japanese."),
+  checkFirst: z.string().describe("事前に確かめておく話題: what to check or prepare before going. Short Japanese."),
+  attendees: z.string().describe("同席者: who goes from our side. Short Japanese."),
+  address: z.string().describe("呼び方: how to address the people met (title, name, 先代/当代 etc.). Short Japanese."),
+});
+
+export const ProposalWithVisitSchema = ProposalSchema.extend({
+  visit: VisitSchema.nullable().describe("Only when meeting is in_person (a visit): the visit plan. null otherwise."),
+});

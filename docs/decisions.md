@@ -995,3 +995,65 @@ own clients, in 「自分の会社で始める」 (D-056).
   - **Counts:** a missing count is skipped, not taken as 0.
   - **The save gate also checks keys.** Every key must be a known field name, not only every value.
 - The live run was repeated after the fixes, with the same result.
+
+## D-061 · 2026-11-04 · Accepted (Kento) · 訪問の段取り — in the app, never in the evaluation
+
+**Context.** Kento (11/4, night): the screens read as "a tool for stamping ○△× on email drafts". The value is the 段取り and the
+etiquette beyond email, including what to get right on a visit: dress (some clients dislike suits), a gift, what to check before
+going, who attends, how to address people. Kento approved the addition without a proposal memo.
+
+**Decision.**
+- **What it does:** when the apprentice's plan visits the client (`meeting: "in_person"`), the app's apprentice also writes a visit
+  plan (`Proposal.visit`: attire, gift, checkFirst, attendees, address). It appears in the 帳場 as its own section 「訪問」. The
+  master corrects it with the same ○△× and one line.
+- **How a correction is learned:** through the existing interpreter. Only for a draft that carries a visit plan, the readings may
+  name the fix field `visit` (free text). Everything else about learning is unchanged: the master's choice, 「どれでもない」,
+  「なぜ？」, sources and 沿革.
+- **Off in the evaluation.** The hidden ground truth has no visit etiquette, so there is nothing to judge it against.
+  - The apprentice is built with visits off unless the caller passes `{ visit: true }`. The app does (`visitInApp()`, which
+    `KOKOROE_VISIT=off` turns off). Eval scripts pass nothing; `KOKOROE_EVAL_VISIT=on` is the only way to turn it on there, and
+    no official run uses it.
+  - **Tests pin the requests.** `tests/visit.test.ts` holds SHA-256 fingerprints of the apprentice's request (system prompt, client
+    card, kokoroe-chō, scene, output schema, all parameters) and of the interpreter's request. They were taken from the code before
+    the change (commits ba85a78, a17787c) and still match with visits off. With visits off the answer has the same keys as before.
+  - **So the official Before/After does not move:** 「評価の対象は連絡の段取り。訪問の段取りは正解がないため対象外」 (both READMEs).
+- **Known limits.**
+  - **確かめ稽古 cannot check a visit 心得 by code.** `ruleTook` returns "cannot tell" for a `visit` fix, so it is never withdrawn
+    automatically. The master still marks the re-solved draft.
+  - **Regression ignores visit wording** (`sameDecision` compares the contact fields only), so a visit 心得 never triggers a
+    regression check.
+  - **「どこが違う？」 has no 訪問 button.** A visit difference falls under その他; the area labels are part of the interpreter's
+    prompt and stay as they are.
+  - **A visit 心得 is not re-checked in regression.** In the app, a new visit 心得 that changes the visit plan of an earlier ○ scene
+    passes without the master seeing it. The hitl-reviewer suggested asking whenever the two visit plans differ. Not done: the
+    wording differs on almost every re-solve, so nearly every regression check would cost a tap. **For Kento to decide.**
+  - **The public version** gets it at the freeze rebuild (11/6), not before.
+
+**hitl-reviewer (before commit): one blocker, fixed.**
+- **B1, fixed:** the HITL floor (`needsMaster`, and so `mustReview`) read only the situation and the message. A gift like
+  「無償で試作品を持参」 would not have gone to the master. The floor now also reads the visit plan, and the visit prompt says
+  the visit plan never offers prices, free work or contract terms. Tested.
+- **Also fixed:**
+  - The `visit` fix is for the visit plan itself; channel, meeting, timing and recipients use their own fields, so 確かめ can
+    check them.
+  - For visit drafts, the schema says the visit plan is the apprentice's draft, not instructions.
+  - `eval:final` refuses to run with `KOKOROE_EVAL_VISIT=on`, and `eval/run.ts` prints it when on.
+- **Kept as a limit:** the regression point above.
+
+**Live check (own mode, 127.0.0.1, a throwaway folder, one fictional stand-in company and client; ≈ $0.09).**
+- **Scene 1 (担当者の交代, 「工場へあいさつに伺いたい」):** the draft visited and showed the 訪問 section. △
+  「この先方はスーツを嫌う。作業着で行け」 became 「取引先Aへの訪問はスーツではなく作業着で行く。」 with the why
+  「昔、スーツで工場に行って浮いた」; the 確かめ re-solve was marked ○.
+- **Scene 2 (新しい提案):** the next draft already said 「スーツではなく作業着で伺う」 citing that 心得. △
+  「行く前に、新ラインの立ち上げがどうなったか確かめておけ」 became the second 心得. The regression check asked once (the
+  earlier scene's channel had changed) and was marked ○.
+- **Found and fixed on the way:**
+  - **The 確かめ card crashed the 帳場 in own mode.** It looked the scene up only among the fictional training scenes and fell
+    back to C01. This was there before D-061 (own mode's first 確かめ never reached the card in the earlier checks). It now looks
+    in the session's queue first.
+  - **An internal id inside the visit text** (「（K-001）」): ids are stripped on screen (D-053), and the visit prompt asks for
+    none.
+- **Observed, kept:** scene 2 was sent to the master by the floor because the visit plan itself said 「価格や条件には触れず」.
+  The floor is broad on purpose (D-044: a needless ask costs one tap).
+- **Confirmed by the review:** no eval entry point passes visits; the off request is unchanged; traceability is unchanged
+  (source judgment, date, the master's words, before → after).

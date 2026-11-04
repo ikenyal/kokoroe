@@ -8,8 +8,14 @@ import type { Proposal, Scene } from "@/src/core/types";
 /** Words that mean money or contract terms are on the table (in the situation or in the draft). */
 export const MASTER_ONLY = /値引|値下げ|値上げ|割引|半額|無償|無料|価格|契約|支払条件|取引条件/;
 
-export function needsMaster(scene: Pick<Scene, "type" | "situation">, p: Pick<Proposal, "message">): boolean {
-  return scene.type === "T3" || MASTER_ONLY.test(scene.situation) || MASTER_ONLY.test(p.message);
+export function needsMaster(scene: Pick<Scene, "type" | "situation">, p: Pick<Proposal, "message" | "visit">): boolean {
+  return (
+    scene.type === "T3" ||
+    MASTER_ONLY.test(scene.situation) ||
+    MASTER_ONLY.test(p.message) ||
+    // 訪問の段取り (D-061) is part of the draft: a gift can be a concession (「無償で試作品を持参」). Absent in the evaluation.
+    (p.visit ? MASTER_ONLY.test(Object.values(p.visit).join(" ")) : false)
+  );
 }
 
 /**
@@ -33,7 +39,7 @@ export const escalatedByModel = (p: Proposal) => p.escalateToMaster && !p.escala
  */
 export function mustReview(
   scene: Pick<Scene, "type" | "situation" | "clientId">,
-  p: Pick<Proposal, "message" | "escalateToMaster">,
+  p: Pick<Proposal, "message" | "escalateToMaster" | "visit">,
   judgedClients: ReadonlySet<string>,
 ): { must: boolean; why: "money" | "escalated" | "first-contact" | null } {
   if (needsMaster(scene, p)) return { must: true, why: "money" };

@@ -19,6 +19,16 @@ export function describeProposal(p: Proposal, client: Client): string {
     `書式: ${FORMAT[p.format]}`,
     `姿勢: ${p.posture.join(", ") || "なし"}`,
     `師匠の確認が必要: ${p.escalateToMaster ? "はい" : "いいえ"}`,
+    // 訪問の段取り (D-061): only drafts made in the app with visits on carry it; others are described exactly as before.
+    ...(p.visit
+      ? [
+          `訪問の服装: ${p.visit.attire || "—"}`,
+          `訪問の手土産: ${p.visit.gift || "—"}`,
+          `訪問前に確かめる話題: ${p.visit.checkFirst || "—"}`,
+          `訪問の同席者: ${p.visit.attendees || "—"}`,
+          `訪問先での呼び方: ${p.visit.address || "—"}`,
+        ]
+      : []),
     `文面: ${p.message}`,
   ].join("\n");
 }
