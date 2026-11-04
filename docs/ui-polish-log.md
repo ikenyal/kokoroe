@@ -114,3 +114,8 @@ critic (`.claude/agents/ui-critic.md`) reviews them after each change.
 2. **The reading choices are a ruled list** instead of rounded boxes. The same goes for the recorded example.
    - Checked live once on 127.0.0.1, about $0.09. The local start limit was raised for that server through its setting
      (`KOKOROE_IP_STARTS_PER_HOUR`), not by editing its counter.
+
+## 「師匠になって試す」（空の心得帳）
+
+- The empty 心得帳 links to the 帳場 and says what will appear (「△ か × を付けると、直したところが、わけと一緒にここに
+  残ります」). The sidebar's 「心得」 label is hidden when there is nothing under it.

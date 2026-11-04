@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { CLIENTS, TRAIN_SCENES } from "@/src/core/world";
 import { isLedgerFact } from "@/src/learning/export";
@@ -160,7 +161,7 @@ export default async function KokoroePage() {
           心得帳を後任に渡す
         </a>
         <p className="mt-1.5 hidden text-[12px] text-nibi md:block">Agent Skills の形（SKILL.md と取引先ごとのファイル）で書き出します。後任の Claude Code の .claude/skills/ に置くと使えます。</p>
-        <p className="mt-5 hidden text-[12px] text-nibi md:block">心得</p>
+        {kokoroe.length > 0 && <p className="mt-5 hidden text-[12px] text-nibi md:block">心得</p>}
         <ol className="mt-1 hidden space-y-1 text-[14px] md:block">
           {kokoroe.map((g) => (
             <li key={g.key}>
@@ -182,7 +183,9 @@ export default async function KokoroePage() {
         <section aria-labelledby="k-h">
           <h2 id="k-h" className="font-mincho text-[22px] tracking-[0.06em]">師匠から覚えた心得</h2>
           <p className="mt-1 mb-6 text-[13px] text-nibi">心得は、師匠の作法の一つ一つ。いつ・どの印と一言から・なぜ、を添えて綴ったものが心得帳です。</p>
-          {kokoroe.length ? <Groups groups={kokoroe} /> : <p className="yomi text-nibi">まだありません。帳場で ○・△・× を付けると、直したところがここに残ります。</p>}
+          {kokoroe.length ? <Groups groups={kokoroe} /> : <p className="yomi text-nibi">
+              まだありません。<Link className="text-ai underline underline-offset-4" href="/choba">帳場</Link>で △ か × を付けると、直したところが、わけと一緒にここに残ります。
+            </p>}
         </section>
         {facts.length > 0 && (
           <details id="facts" className="scroll-mt-6 border-t-2 border-sumi/80 pt-4">
