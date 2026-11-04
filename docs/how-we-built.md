@@ -367,3 +367,26 @@ Short entries, appended every work session. Source material for the README secti
     check refuses any other string, and a test feeds marked text through it.
   - **Run once in a browser:** a throwaway folder and a fictional stand-in client, before Kento's real run. The first attempt
     "failed" only because the script didn't wait for a same-URL redirect; the screenshot showed it, and the script was fixed.
+
+- **11/4 — UI polish, first pass (branch `ui-polish`; `docs/ui-polish-log.md`).**
+  - **Brief:** Kento's two aims, a newcomer knows what to read and what to press, and the screens should not look generic or
+    AI-made.
+  - **Before starting:** Claude Code read the frontend-design skill. The skill names "cream paper, serif display and a clay
+    accent" as a generic AI look, which is close to where this brief points. So the distinctiveness was put into the ledger's
+    structure instead: ruled sections, margin labels (vertical on wide screens), and the master's marks as a pressed seal.
+  - **A screen-only critic:** `.claude/agents/ui-critic.md` sees only screenshots and answers as a first-time judge would (the
+    30-second test, generic tells, fit with the ledger direction, accessibility). It ran on the "before" screens and again
+    after each screen.
+  - **What the critic caught that Claude Code had missed:**
+    - the blank mobile home (a capture taken too early);
+    - the dev badge in every shot;
+    - a disabled button at about 2:1 contrast;
+    - vermilion spent on system messages;
+    - the 沿革 hidden behind a click on every entry;
+    - the marks below the fold.
+  - **Where Claude Code disagreed with the critic, and why:**
+    - It kept the indigo navigation tab: it is the 暖簾 motif, and its contrast is fine.
+    - It did not touch the chart's scale, because that is the measured data's presentation.
+  - **A change tried and reverted:** a two-column 「そのほか」 squeezed one row into a strip.
+  - **Screenshots:** a small extension of `scripts/screens.ts` (`--out`, `--judge`, `--ask`, wait for load) took before/after
+    shots with recorded data only, with no API calls.
