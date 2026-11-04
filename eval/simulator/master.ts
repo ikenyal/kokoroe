@@ -24,7 +24,8 @@ export interface SimulatedMaster extends Master {
 
 /**
  * Evaluation switch for 「どこが違う？」: KOKOROE_EVAL_DIFF_AREA=off makes the simulated master never answer it, which is the loop
- * as it was before D-057. The 帳場 keeps the buttons either way; this only decides what the evaluation measures.
+ * as it was before D-057. On (the default) it is asked only when the remark is empty, as in the 帳場 (the loop checks that).
+ * The 帳場 keeps the buttons either way; this only decides what the evaluation measures.
  */
 export function diffAreaInEval(): boolean {
   const v = process.env.KOKOROE_EVAL_DIFF_AREA ?? "on";

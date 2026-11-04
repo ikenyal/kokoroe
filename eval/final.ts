@@ -261,7 +261,7 @@ async function main() {
     kind: "final",
     at: new Date().toISOString(),
     note: "fictional data: 10 clients / 40 training + 20 held-out scenes / 8 history questions / 6 adversarial scenes; master = simulator (code against a frozen hidden ground truth)",
-    diffArea: diffAreaInEval() ? `on (the simulated master leaves it out ${WHERE_SKIP_DEFAULT * 100}% of the time, an assumption; D-057)` : "off (KOKOROE_EVAL_DIFF_AREA=off)",
+    diffArea: diffAreaInEval() ? `on, asked only when the remark is empty (the simulated master leaves it out ${WHERE_SKIP_DEFAULT * 100}% of the time, an assumption; D-057)` : "off (KOKOROE_EVAL_DIFF_AREA=off)",
     config: FINAL,
     facts,
     runDir: path.relative(ROOT, dir),

@@ -860,3 +860,38 @@ textbook master; 45–52% for these two). With no words to go on, the interprete
     - ○+△: on 85%, off 95% (mean of two paths). Match: on 65%, off 68%.
     - Seed 202 parted at the first area tapped; seed 303 parted before it.
     - On is 10 points below off on ○+△, past Kento's 5-point line. **Kento decides whether the official run uses on or off.**
+
+**Narrowed (Kento 11/4): 「どこが違う？」 only when the remark is empty.**
+- **The three on/off pairs** (textbook master, one training path each, fictional data):
+
+  | Seed | ○+△ on | ○+△ off | Match on | Match off | Where the pair parted |
+  |---|---|---|---|---|---|
+  | 101 | 80% | 95% | 70% | 90% | before any area was tapped |
+  | 202 | 85% | 90% | 70% | 60% | at the first area tapped (その他) |
+  | 303 | 85% | 100% | 60% | 75% | before any area was tapped |
+
+  On was lower on ○+△ in all three, 10 points on average for seeds 202 and 303, past Kento's 5-point line.
+- **Why it went down (an informed guess, not a measurement):** a master who gives a remark has already said what was wrong. The
+  area tapped by the simulated master (the field that clears its most serious failed check) can point elsewhere than the remark,
+  and the second readings then follow the area against the words. Without a remark the area is the only clue, and there it helped
+  (the silent master: 「どれでもない」 52% → 30%).
+- **Decision:**
+  - The 帳場 offers the area buttons only when the △/× had no remark (`askWhere` in `src/learning/area.ts`, used by the loop, the
+    帳場 and the action). With a remark, 「どれでもない」 leads to the second readings as before D-057.
+  - The evaluation switch `KOKOROE_EVAL_DIFF_AREA` stays. Its default `on` now means this narrowed condition.
+- **Correction to an expectation:** the textbook master is not always talking. It gives no remark on 20% of its △/× by design
+  (`SILENCE_RATE` in `eval/simulator/remark.ts`), so for the official run the narrowed version is not quite the same as off. It
+  comes up in those silent cases (here 2 of the 5 second rounds).
+- **Check** (seed 202, $1.20; `eval:smoke` passed): one textbook path with the narrowed version.
+
+  | Seed 202 | Match | ○+△ | Active rules | 「どれでもない」 at the end |
+  |---|---|---|---|---|
+  | Narrowed | 85% | **95%** | 22 | 4 / 8 |
+  | Off | 60% | 90% | 18 | 5 / 12 |
+  | On, every time | 70% | 85% | 21 | 3 / 11 |
+
+  - ○+△ is back in the off range (90–100%).
+  - It parted from the off path at T04, where the first correction had no remark and the master tapped その他.
+  - The second readings hit 1 of 2 with an area and 0 of 3 without.
+  - One path; the 5-path official run on 11/7 measures it properly.
+- **The official measurement (`eval:final`, 11/7) uses this narrowed version** (default `on`, skip rate 20%, an assumption).

@@ -345,3 +345,9 @@ Short entries, appended every work session. Source material for the README secti
   - **On / off:** an evaluation switch (`KOKOROE_EVAL_DIFF_AREA`) and four paths, run two at a time so as not to slow Kento's
     live master-role test on the same key. `eval/chooser-ab.ts` matches the on and off training logs line by line to show
     whether each pair parted at the chooser or before it.
+  - **Narrowed to empty remarks (Kento's call):**
+    - **The rule in one place:** `askWhere` is shared by the loop, the 帳場 and the action, so the screen, the stored tap and the
+      evaluation can't disagree.
+    - **An assumption checked:** Kento expected the textbook master to always speak. Before running, Claude Code read the
+      simulator and found it is silent on 20% of its △/× by design, so the chooser still comes up there. That is recorded with
+      the check.

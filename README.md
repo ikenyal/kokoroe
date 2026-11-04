@@ -77,9 +77,12 @@ away from family succession.
   personas only change how things are said and tapped.
   - **Result:** no collapse. Silent and vague masters lose more lessons to 「どれでもない」. No successor persona made up an answer
     to a question the 心得帳 does not cover.
-  - **「どこが違う？」:** as a result, the master can now say where the draft was off (宛先, 手段, 時期, 裏の一言, 書式, その他)
-    in the same tap as 「どれでもない」; it is optional. With an area, the second readings found what was meant in 7 of 13 cases;
-    without one, in 1 of 13. How often a simulated master leaves the area out (50% / 30% / 20%) is an assumption.
+  - **「どこが違う？」:** as a result, a master who gave **no remark** can say where the draft was off (宛先, 手段, 時期, 裏の一言,
+    書式, その他) in the same tap as 「どれでもない」; it is optional.
+    - With an area, the second readings found what was meant in 7 of 13 cases; without one, in 1 of 13.
+    - Offered after every 「どれでもない」, it lowered ○+△ for masters who do speak (on/off × 3 pairs: on 80–85%, off 90–100%).
+      So it is now offered only when the remark is empty (D-057).
+    - How often a simulated master leaves the area out (50% / 30% / 20%) is an assumption.
   - **Marks in busy months:** they tend to be lenient (a known limit). A lenient ○ writes nothing. Every 心得 keeps the date it was
     written and the scene and mark it came from, so what was written in a busy month can be reviewed later and deleted in the
     心得帳 (the deletion stays in its 沿革).
@@ -121,8 +124,9 @@ _Interim (11/3): the Before uses the corrected ledger (D-033), the interim After
   After use the same ledger and model, so the comparison holds, but the absolute level may flatter the apprentice.
 - **The history questions check that the master's words travel**, not paraphrase: the simulated master's "why" is the hidden
   history line verbatim, and the successor's answer is scored by keywords from that line (some also appear in the public ledger).
-- **「どこが違う？」 in the simulator rests on an assumption** (D-057). When the simulated master taps 「どれでもない」, it also taps
-  where the draft was off, as a real master knows their own objection. How often it leaves this out is assumed, not measured:
+- **「どこが違う？」 in the simulator rests on an assumption** (D-057). When the simulated master gave no remark and taps
+  「どれでもない」, it also taps where the draft was off, as a real master knows their own objection. (The textbook master is
+  silent on 20% of its △/×.) How often it leaves this out is assumed, not measured:
   20% for the master in these numbers (the official 11/7 measurement uses 20% too); 50% and 30% for the silent and vague
   personas. A real master may answer less often.
 

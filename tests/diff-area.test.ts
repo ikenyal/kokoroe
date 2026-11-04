@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { getClient, TRAIN_SCENES } from "@/src/core/world";
 import type { Proposal, Scene } from "@/src/core/types";
 import type { Disciple } from "@/src/disciple/v0";
-import { areaOfField, DIFF_AREA_FIELDS, DIFF_AREAS, isDiffArea, parsePick } from "@/src/learning/area";
+import { areaOfField, askWhere, DIFF_AREA_FIELDS, DIFF_AREAS, isDiffArea, parsePick } from "@/src/learning/area";
 import type { Interpretation, interpret } from "@/src/learning/interpret";
 import { learnStep } from "@/src/learning/loop";
 import { LocalJsonStore } from "@/src/learning/store";
@@ -60,6 +60,16 @@ describe("「どこが違う？」 in the learning loop", () => {
     expect(r).toMatchObject({ secondRound: true, chosen: null, masterTaps: 3, area: null });
   });
 
+  it("is not asked when the master gave a remark (D-057, narrowed): the second readings get no area", async () => {
+    let asked = 0;
+    const { calls, result } = run({ judge: async () => ({ verdict: "△", remark: "違う" }), where: async () => (asked++, "to") });
+    const r = await result;
+    expect(asked).toBe(0);
+    expect(calls).toHaveLength(2); // the second round still happens, as before D-057
+    expect(calls[1].area).toBeNull();
+    expect(r.area).toBeNull();
+  });
+
   it("is not asked when the master picks a first reading", async () => {
     let asked = 0;
     const { calls, result } = run({ where: async () => (asked++, "to"), choose: async () => 1 });
@@ -77,6 +87,9 @@ describe("areas", () => {
     expect(areaOfField("meeting")).toBe("channel");
     expect(isDiffArea("to")).toBe(true);
     expect(isDiffArea("anything")).toBe(false);
+    expect(askWhere("")).toBe(true);
+    expect(askWhere("  ")).toBe(true);
+    expect(askWhere("違う")).toBe(false);
   });
 });
 

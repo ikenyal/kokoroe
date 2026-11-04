@@ -188,8 +188,8 @@ function PendingItem({ p, beforeOf, ruleText, words }: { p: Pending; beforeOf: (
               {c.when && <span className="text-nibi">（{c.when}）</span>}
             </button>
           ))}
-          {(p.round ?? 1) === 1 ? (
-            // 「どこが違う？」 (D-057): in the same tap as 「どれでもない」, optional. Only a hint for the next readings.
+          {(p.round ?? 1) === 1 && p.noRemark ? (
+            // 「どこが違う？」 (D-057): only when there was no remark; in the same tap as 「どれでもない」, optional. A hint for the next readings.
             <fieldset className="border-t border-keisen pt-2">
               <legend className="text-[13px] text-nibi">どれでもないとき、どこが違いますか（押さなくても進めます）</legend>
               <div className="mt-1 flex flex-wrap gap-2">

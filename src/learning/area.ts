@@ -1,5 +1,5 @@
 /**
- * 「どこが違う？」 (Kento 11/4, D-057): when the master taps 「どれでもない」 for the first readings, they may also tap WHERE the
+ * 「どこが違う？」 (Kento 11/4, D-057): when the master gave no remark and taps 「どれでもない」 for the first readings, they may also tap WHERE the
  * draft was off — 宛先 / 手段 / 時期 / 裏の一言 / 書式 / その他 — in the same tap. Optional: skipping it works as before.
  * The area is only a hint to the interpreter's second round. It does not write anything, does not filter readings, and does not
  * touch the floor (money / contract terms / first contact always go to the master), 確かめ稽古 or regression checks.
@@ -28,6 +28,14 @@ export const DIFF_AREA_FIELDS: Record<DiffArea, ProposalFix["field"][]> = {
   format: ["format"],
   other: ["followUp", "posture", "escalateToMaster"],
 };
+
+/**
+ * D-057 (narrowed, Kento 11/4): ask 「どこが違う？」 only when the master gave no remark. With a remark, the area hint competed with
+ * the reading of the remark and lowered ○+△ (on/off × 3 pairs); with no remark it is the only clue there is.
+ */
+export function askWhere(remark: string): boolean {
+  return remark.trim() === "";
+}
 
 export function isDiffArea(v: unknown): v is DiffArea {
   return typeof v === "string" && (DIFF_AREAS as readonly string[]).includes(v);

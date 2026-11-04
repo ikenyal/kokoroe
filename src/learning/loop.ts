@@ -14,7 +14,7 @@ import type { Candidate, JudgmentRecord, Master } from "./types";
 import { verifyChange, type Verification } from "./verify";
 import { maybeGeneralize, type GeneralizeResult } from "./generalize";
 import { guardScope } from "./scope";
-import type { DiffArea } from "./area";
+import { askWhere, type DiffArea } from "./area";
 
 export type InterpretFn = typeof interpret;
 
@@ -81,7 +81,8 @@ export async function learnStep(args: {
   let area: DiffArea | null = null;
   if (asked && chosen === null) {
     // 「どこが違う？」 (D-057): in the same tap as 「どれでもない」 the master may point at where the draft was off (optional).
-    area = master.where ? await master.where({ scene, client, proposal, candidates: cands }) : null;
+    // Only when there was no remark (D-057, narrowed): with words, the hint competed with reading them.
+    area = master.where && askWhere(judgment.remark) ? await master.where({ scene, client, proposal, candidates: cands }) : null;
     // Second round (D-025): "none of these" → new readings that differ from the rejected ones; one more tap.
     interpretation = await interpretFn({ scene, client, judgment, existing, usage: args.usage, rejected: cands, area });
     shown = interpretation.candidates;

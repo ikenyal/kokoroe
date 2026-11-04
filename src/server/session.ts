@@ -51,6 +51,7 @@ export interface Pending {
   pick?: number | null; // the master's tap while status is "choosing" (null = none of these)
   candidates?: Candidate[];
   round?: 1 | 2;
+  noRemark?: boolean; // the master gave no remark: only then is 「どこが違う？」 offered (D-057, narrowed)
   area?: DiffArea; // 「どこが違う？」: tapped with the first 「どれでもない」 (D-057); only a hint for round 2
   ruleId?: string;
   note?: string;
