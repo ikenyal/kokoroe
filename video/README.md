@@ -90,6 +90,9 @@ Sources on screen (s01-why):
 - [ ] 11/7: re-record the demo snapshot so 心得帳 shows a rule with a multi-entry 沿革 (today every rule in it has one entry).
 - [ ] s08b: the official Before/After (same ledger, 5 training paths) → re-run `narration.ts --yes --only s08b-keiko`; the
       interim Before and After were measured with different ledger wording (D-033).
+- [ ] s04 no longer says 「一瞬で、」 (11/5, D-062: the master-role test measured a median of 53.5 s per card, and writing vs.
+      correcting was not measured). Re-synthesized: 9.38 s (was 9.91 s); the scene stays 10.2 s. 「ココロエは」 now starts at about
+      5.0 s while the title still fades in at 5.4 s. Check the stills on 11/7 and pull the title earlier if it looks late.
 - [x] s08b now says 「架空の10社で、」 (Kento 11/5). Re-synthesized on 11/5: 10.10 s of narration, scene 10.4 s (≈ $0.001).
 - [x] Subtitles timed to the audio (speech marks).
 - [x] Polly narration for every scene (read-only API call with `--profile brightflow-sandbox-ikeda`).

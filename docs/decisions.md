@@ -1096,3 +1096,37 @@ going, who attends, how to address people. Kento approved the addition without a
   The floor is broad on purpose (D-044: a needless ask costs one tap). **Kento (11/5): keep it broad (the safe side).**
 - **Confirmed by the review:** no eval entry point passes visits; the off request is unchanged; traceability is unchanged
   (source judgment, date, the master's words, before → after).
+
+## D-062 · 2026-11-05 · Accepted (Kento) · The own-company comparison was stopped; no AI-made substitute; the feature stays
+
+**Context.** The comparison test (D-060) was to time the same etiquette written as prose against marked ○△×, on clients the author
+knows. On 11/5 Claude prepared it: a stand-in ledger (「（仮）自社」, 取引先A〜E, roles only, no constraints), five general
+scenes chosen by Kento from a list (one per client), entered into the running test. Kento stopped before writing any prose.
+
+**Why it was stopped (Kento).** The ledger was a stand-in. Kento did not know what was particular to 取引先A〜E, so the only prose
+he could write was general manners that fit any company — the same average the AI already knows. Comparing writing with
+correcting on that cannot show the difference that matters, the tacit part.
+
+**Observation.** This is the same thing the master-role test showed (D-059): on a fictional company the judging time could be
+measured, but the prose task did not work, and 18 of 20 general-looking drafts were marked ○ by someone without the history.
+Both point to one thing: **tacit etiquette exists only inside a relationship with a concrete client.** Without that relationship
+there is nothing to write down and nothing to correct.
+
+**Decision.**
+- **Nothing saved.** `own:save` was not run (no prose was written). `~/.kokoroe` was deleted with the app's 「全部消す」, the server
+  was stopped, and no port is open. No drafts were made, so no API cost.
+- **No AI-made substitute.** Claude will not write the "prose" or the "experience" in Kento's place. An AI writing the etiquette
+  and an AI guessing it would only measure the AI against itself — no more than the persona simulation already shows.
+- **The feature stays.** A company that adopts Kokoroe can use it with a veteran on clients they really know, and then compare the
+  time to write with the time to correct. The README's 「自分の会社で始める」 says so.
+- **Claims follow what was measured.** "Correcting is easier/faster than writing" has not been measured on a person here.
+  Checked README (both), the submission draft and the video:
+  - README.md: "mark a draft ○△× faster than they can explain it" → "look at a draft and mark it ○△×" (the Japanese line already
+    said only that).
+  - Submission draft: 「インタビューにも、書き起こしにも時間を取りません」 → 「インタビューや書き起こしの手順はありません」; the stopped
+    comparison is listed under 測れていないこと.
+  - Video s04: 「ベテランは一瞬で、「違う」と言えます」 → 「ベテランは「違う」と言えます」 (the measured median was 53.5 s per card,
+    including reading). Re-synthesized (9.38 s).
+  - Kept, because they describe the procedure, not a measured gain: "No explaining" / 「説明は要りません」 (the master is not asked
+    to explain), 「直すだけで」 (the concept), s03 「書いて残して、と頼んでも、言葉にはなりません」 (the problem the product starts
+    from, CLAUDE.md's core insight; not presented as a measurement).

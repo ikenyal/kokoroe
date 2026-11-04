@@ -427,3 +427,10 @@ Short entries, appended every work session. Source material for the README secti
 - **A hook caught a sentence, not a command.** The AWS guard hook blocked a shell edit because the text being written contained
   the profile name in backticks; the same edit went through the Edit tool instead. Polly's SSO token had expired, so the s08b
   audio is left for Kento.
+- **Preparing a human test, and stopping it (11/5, D-062).** For the comparison test Claude did everything except the human parts:
+  checked `~/.kokoroe` was empty without listing it, loaded a stand-in ledger with Playwright, proposed ten general scenes, entered
+  the five Kento chose into his running test after checking in the code that own mode has one fixed session (so the scenes joined
+  his test, not a new one), and found one submit had not reached the server. Kento then stopped the test (the stand-in clients had
+  nothing tacit to write). Claude cleaned up through the app's own 「全部消す」, confirmed the folder and ports were gone, and
+  checked README, submission draft and video for any claim that correcting is easier than writing; three were reworded to what was
+  measured, and the s04 narration was re-synthesized.
