@@ -32,8 +32,8 @@ export const ProposalSchema = z.object({
 export type ProposalOutput = z.infer<typeof ProposalSchema>;
 
 /**
- * 訪問の段取り (D-061). Used only when visits are on (the app); the evaluation keeps ProposalSchema exactly as above, so the
- * request it sends is unchanged (tests/visit.test.ts).
+ * 訪問の段取り (D-061). A separate, second call made only when visits are on (the app) and the decided 段取り visits. The first
+ * call — the 段取り — always uses ProposalSchema exactly as above, so it is the evaluation's request (tests/visit.test.ts).
  */
 export const VisitSchema = z.object({
   attire: z.string().describe("服装: what to wear for this client (e.g. whether a suit suits them). Short Japanese."),
@@ -43,6 +43,6 @@ export const VisitSchema = z.object({
   address: z.string().describe("呼び方: how to address the people met (title, name, 先代/当代 etc.). Short Japanese."),
 });
 
-export const ProposalWithVisitSchema = ProposalSchema.extend({
-  visit: VisitSchema.nullable().describe("Only when meeting is in_person (a visit): the visit plan. null otherwise."),
+export const VisitPlanOutputSchema = VisitSchema.extend({
+  basedOnRules: z.array(z.string()).describe("IDs of the kokoroe-chō rules this visit plan follows. Empty if none."),
 });

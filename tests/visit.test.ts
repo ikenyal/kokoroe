@@ -9,6 +9,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const calls: unknown[] = [];
 let answer: Record<string, unknown> = {};
+let visitAnswer: Record<string, unknown> = {};
 vi.mock("@/src/lib/claude", async (orig) => {
   const real = await orig<typeof import("@/src/lib/claude")>();
   return {
@@ -17,7 +18,8 @@ vi.mock("@/src/lib/claude", async (orig) => {
       messages: {
         parse: async (params: unknown) => {
           calls.push(params);
-          return { model: "m", stop_reason: "end_turn", usage: { input_tokens: 1, output_tokens: 1 }, parsed_output: answer };
+          const isVisitCall = JSON.stringify((params as { output_config: unknown }).output_config).includes("attire");
+          return { model: "m", stop_reason: "end_turn", usage: { input_tokens: 1, output_tokens: 1 }, parsed_output: isVisitCall ? visitAnswer : answer };
         },
       },
     }),
@@ -91,29 +93,72 @@ describe("訪問の段取り in the app (D-061)", () => {
     delete process.env.KOKOROE_EVAL_VISIT;
   });
 
-  it("on: the prompt and schema ask for a visit plan, kept only when the draft really visits", async () => {
+  it("on: the 段取り request is the evaluation's, byte for byte; the visit plan is a second call that keeps the 段取り", async () => {
     const client = getClient(visitScene.clientId);
-    answer = { ...base, visit: plan };
+    answer = { ...base, basedOnRules: ["K-011"] };
+    visitAnswer = { ...plan, basedOnRules: ["K-020"] };
     const p = await makeClaudeDisciple("app", undefined, { visit: true }).propose(visitScene, client);
-    const req = JSON.stringify(calls[0]);
-    expect(req).toContain("attire");
-    expect(req).toContain('also fill \\"visit\\"');
+    expect(calls).toHaveLength(2);
+    // Same first request as with visits off — the fingerprint taken before visits existed.
+    expect(sha(calls[0])).toBe(BEFORE.noBook);
+    // The second call gets the decided 段取り as input and asks only for the visit plan.
+    const second = JSON.stringify(calls[1]);
+    expect(second).toContain("attire");
+    expect(second).toContain("<plan note=");
+    expect(JSON.stringify((calls[1] as { output_config: unknown }).output_config)).not.toContain("escalateToMaster"); // no 段取り fields to fill
     expect(p.visit).toEqual(plan);
-    answer = { ...base, meeting: "zoom", visit: plan };
+    for (const k of Object.keys(base).filter((k) => k !== "basedOnRules")) expect(p[k as keyof typeof p]).toEqual(base[k as keyof typeof base]); // every 段取り field as decided
+    const basedOnRules = p.basedOnRules;
+    expect(basedOnRules).toEqual(["K-011"]); // K-020 was never given to the visit call (no book): dropped
+  });
+
+  it("on, with a book: the first request is still the evaluation's", async () => {
+    const client = getClient(visitScene.clientId);
+    answer = { ...base };
+    visitAnswer = { ...plan, basedOnRules: ["K-011", "K-999"] };
+    const d = makeClaudeDisciple("app", async () => BOOK, { visit: true });
+    const p = await d.propose(visitScene, client);
+    expect(sha(calls[0])).toBe(BEFORE.withBook);
+    expect(JSON.stringify(calls[1])).toContain("K-011 先代のときは"); // the visit plan reads the same kokoroe-chō
+    expect(p.basedOnRules).toEqual(["K-011"]); // an id it was given is kept; an invented one is not
+    expect(d.usage).toHaveLength(2);
+  });
+
+  it("on, no visit in the 段取り: one call, and the same shape as without visits", async () => {
+    const client = getClient(visitScene.clientId);
+    answer = { ...base, meeting: "zoom" };
     const q = await makeClaudeDisciple("app", undefined, { visit: true }).propose(visitScene, client);
-    expect("visit" in q).toBe(false); // not a visit: the same shape as without visits
+    expect(calls).toHaveLength(1);
+    expect("visit" in q).toBe(false);
+  });
+
+  it("on: if the visit call fails, the 段取り still comes back (without a visit plan)", async () => {
+    const client = getClient(visitScene.clientId);
+    answer = { ...base };
+    visitAnswer = null as never;
+    const err = vi.spyOn(console, "error").mockImplementation(() => {});
+    const d = makeClaudeDisciple("app", undefined, { visit: true });
+    const p = await d.propose(visitScene, client);
+    err.mockRestore();
+    expect(calls).toHaveLength(2);
+    expect(d.usage).toHaveLength(2); // the failed visit call is still counted
+    expect("visit" in p).toBe(false);
+    expect(p.formalTo).toBe("contact");
   });
 
   it("off: the schema has no visit, the answer keeps its shape; KOKOROE_EVAL_VISIT=on is the only way to turn it on in eval", async () => {
     const client = getClient(visitScene.clientId);
     answer = { ...base };
+    visitAnswer = { ...plan, basedOnRules: [] };
     const p = await makeClaudeDisciple("eval").propose(visitScene, client);
+    expect(calls).toHaveLength(1);
     expect(Object.keys(p).sort()).toEqual(Object.keys(base).sort());
-    // The structured-output schema sent off has no visit property, so the model cannot return one.
     expect(JSON.stringify((calls[0] as { output_config: unknown }).output_config)).not.toContain("attire");
     process.env.KOKOROE_EVAL_VISIT = "on";
     await makeClaudeDisciple("eval-on").propose(visitScene, client);
-    expect(JSON.stringify(calls[1])).toContain("attire");
+    expect(sha(calls[1])).toBe(BEFORE.noBook); // even on, the 段取り request is unchanged
+    expect(JSON.stringify(calls[2])).toContain("attire");
+    delete process.env.KOKOROE_EVAL_VISIT;
   });
 
   it("a correction to the visit plan can be read and written, and code never claims to check it", async () => {

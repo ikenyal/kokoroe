@@ -16,7 +16,7 @@ Max 3:00, Japanese. Plan: [scenes.json](scenes.json) — **structure v5** (11/4)
     practice; the 心得帳 is those, written down with why each came to be. s04b says so in the narration and on screen.
   - The total is kept near 2:55, leaving room under 3:00.
 
-16 scenes, **2:54.8**. Everything is generated here during the hackathon — no outside footage, images or music:
+16 scenes, **about 2:55.8** (2:54.8, plus about 1 s for 「架空の10社で、」 in s08b on 11/5; re-measure after synthesis). Everything is generated here during the hackathon — no outside footage, images or music:
 - **screen** scenes are recordings of the real app (the features shown were built during the hackathon),
 - **anim** scenes are HTML/CSS pages in [scenes/](scenes/) recorded the same way (explanations only).
 Remotion was not used (separate license terms for company use); Playwright + ffmpeg only.
@@ -90,6 +90,8 @@ Sources on screen (s01-why):
 - [ ] 11/7: re-record the demo snapshot so 心得帳 shows a rule with a multi-entry 沿革 (today every rule in it has one entry).
 - [ ] s08b: the official Before/After (same ledger, 5 training paths) → re-run `narration.ts --yes --only s08b-keiko`; the
       interim Before and After were measured with different ledger wording (D-033).
+- [ ] s08b now says 「架空の10社で、」 (Kento 11/5). Re-synthesize it with narration.ts (`--yes --only s08b-keiko`; the AWS SSO
+      login for the sandbox profile had expired on 11/5) and set its seconds from the new marks (10.0 s is an estimate).
 - [x] Subtitles timed to the audio (speech marks).
 - [x] Polly narration for every scene (read-only API call with `--profile brightflow-sandbox-ikeda`).
 

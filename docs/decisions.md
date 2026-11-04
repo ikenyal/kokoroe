@@ -1018,6 +1018,36 @@ going, who attends, how to address people. Kento approved the addition without a
     card, kokoroe-chō, scene, output schema, all parameters) and of the interpreter's request. They were taken from the code before
     the change (commits ba85a78, a17787c) and still match with visits off. With visits off the answer has the same keys as before.
   - **So the official Before/After does not move:** 「評価の対象は連絡の段取り。訪問の段取りは正解がないため対象外」 (both READMEs).
+
+**Revised 11/5 (Kento): the visit plan is a separate, second call.**
+- **What the night showed.** In the first version the visit instructions were part of the apprentice's one request (a paragraph
+  added to the system prompt and a combined schema). When the demo was re-recorded with visits on (above, and
+  docs/ui-polish-log.md), the 丸新酒造 drafts put the 蔵元 in front and 奥様 behind: the instructions moved the contact 段取り
+  itself. So the apprentice in the app (visits on) and the apprentice being evaluated (visits off) were different apprentices,
+  and the evaluation no longer described the product.
+- **Decision.** The 段取り is always made by the evaluation's request, byte for byte, with visits on or off. Only when visits are on
+  and the decided 段取り visits (`meeting: "in_person"`), a second call (`planVisit`, its own prompt and schema) gets the decided
+  段取り as quoted data (`<plan>`), with the client card, the kokoroe-chō and the situation, and writes only the visit plan. It
+  cannot change the 段取り: its schema has no 段取り fields, and the 段取り fields are kept as decided.
+- **Unchanged:** the interpreter, the kokoroe-chō, 確かめ稽古 and the regression check treat `proposal.visit` as before. The
+  money/contract floor still reads the visit plan (B1 of the first review); every proposal, with or without a visit plan, goes
+  through it.
+- **Tests** (`tests/visit.test.ts`): with visits on, the first request matches the fingerprints taken before D-061 (without and
+  with a kokoroe-chō), every 段取り field comes back as decided, a draft that does not visit makes one call, and a failed visit
+  call still returns the 段取り. Rule ids from the visit call are kept only if they were in the kokoroe-chō it was given.
+- **hitl-reviewer:** no blockers. Applied:
+  - the visit prompt says not to mention prices or terms at all, because the model had written disclaimers
+    (「価格や条件は話さない」) that tripped the floor;
+  - `<plan>` is declared quoted data, like `<situation>`, since the draft's text is shaped by the situation;
+  - invented rule ids are dropped;
+  - the visit call's usage is counted even when it fails.
+- **The demo record (11/5).** The recorded 段取り are unchanged. `eval/add-visits.ts` added a visit plan only to the queued drafts
+  that visit: 4 in デモの続き and 9 in お試し (≈ $0.07). It reads each snapshot's own kokoroe-chō, and it stops if any 段取り field
+  would change. The demo queue now opens with its first visit (T27, order only). The 師匠役テスト set is not touched.
+  - **T05 → T13 is as before:** T05 goes to 奥様 with no quiet word; T13 adds the quiet word to the 蔵元 (K-011).
+  - **One お試し card now goes to the master:** T10's recorded message mentions a 随意契約 procedure (「契約」). It was recorded
+    before the floor read the message (D-044); applying the floor now raises it, as the live app would.
+- **Cost:** a visit draft costs one more Sonnet call (≈ $0.006).
 - **Known limits.**
   - **確かめ稽古 cannot check a visit 心得 by code.** `ruleTook` returns "cannot tell" for a `visit` fix, so it is never withdrawn
     automatically. The master still marks the re-solved draft.

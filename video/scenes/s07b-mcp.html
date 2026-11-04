@@ -28,13 +28,16 @@
     <div class="col" style="--d:.6s"><h2>Skill だけ<span>ある時点の心得帳の写し</span></h2><p class="lead" id="a1"></p><p class="why" id="w1"></p></div>
     <div class="col mcp" style="--d:4.2s"><h2>Skill ＋ MCP<span>育ち続ける心得帳に問い合わせる</span></h2><p class="lead" id="a2"></p><p class="why" id="w2"></p></div>
   </div>
-  <p class="note">右は、写しの後に師匠が加えた心得（<span id="newrule"></span>）を、問い合わせ口から見つけています。</p>
+  <p class="note">右は、写しの後に師匠が加えた心得<span id="newrule"></span>を、問い合わせ口から見つけています。</p>
 </div></div>
 <script>
   const M = window.MCP;
   const plain = (s) => s.replace(/\*\*/g, "").replace(/^#+\s*/gm, "");
   const lead = (s) => plain(s.split("\n").find((l) => l.trim()) ?? "");
-  const rule = (s) => (plain(s).match(/K-\d{3}[^\n（]*/) ?? [""])[0].replace(/[：:]\s*$/, "").slice(0, 48);
+  // No rule ids on screen (D-053, applied to the video by Kento 11/5): the id only finds the rule's words, then is dropped.
+  const ruleText = (s, id) => (plain(s).match(new RegExp((id ?? "K-\\d{3}") + "[^\\n（]*")) ?? [""])[0]
+    .replace(/^K-\d{3}\s*[」』）)]?\s*[：:「『（(]?\s*/, "").replace(/[」』]/g, "").replace(/[：:]\s*$/, "").trim().slice(0, 48);
+  const rule = (s) => ruleText(s);
   if (M) {
     document.getElementById("q").textContent = M.question;
     const a = M.answers["skill-only"].result, b = M.answers["with-mcp"].result;
@@ -53,7 +56,8 @@
       if (fresh >= 0.5) el.className = "diff";
       a2.append(el);
     }
-    document.getElementById("newrule").textContent = (plain(b).match(/K-\d{3}/g) ?? []).find((k) => !plain(a).includes(k)) ?? "";
+    const added = (plain(b).match(/K-\d{3}/g) ?? []).find((k) => !plain(a).includes(k));
+    document.getElementById("newrule").textContent = added ? "「" + ruleText(b, added) + "」" : "";
     document.getElementById("w2").textContent = "根拠: " + rule(b);
   }
 </script></body></html>

@@ -419,3 +419,11 @@ Short entries, appended every work session. Source material for the README secti
   recorded source (55% in the rank replay) and was recounted from the same 8 runs: 175 of 320. Record: docs/audits/2026-11-05.md.
 - **A fresh clone without a key** (install, tests, `eval:quick`, build) replaced the 11/3 "checked from a fresh clone". No
   server was started, because Kento was testing on 127.0.0.1:3100.
+- **A finding turned into a design change (11/5, later).** Kento read the failed re-record as a deeper problem: the app's
+  apprentice and the evaluated one had become different. Claude split the visit plan into a second call that takes the decided
+  段取り as input, and proved the split with the fingerprint test taken before the visit feature existed — now with visits *on*.
+  The hitl-reviewer subagent (no blockers) pointed out that the new prompt made the model write 「価格は話さない」, which the
+  money floor then caught; the prompt was changed and the 13 recorded visit plans were made again (≈ $0.07).
+- **A hook caught a sentence, not a command.** The AWS guard hook blocked a shell edit because the text being written contained
+  the profile name in backticks; the same edit went through the Edit tool instead. Polly's SSO token had expired, so the s08b
+  audio is left for Kento.
