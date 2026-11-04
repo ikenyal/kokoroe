@@ -65,7 +65,7 @@ never send it together with `managed-agents-2026-04-01` (400).
 ## Layout
 
 ```
-app/                  Next.js UI (帳場 / 心得帳 / 番付 / 暖簾を継ぐ / 稽古の記録)
+app/                  Next.js UI (帳場 / 心得帳 / 暖簾を継ぐ / 稽古の記録 / 自分の会社で始める)
 src/lib/              Anthropic client, model constants
 src/core/             domain types (Client, Scene, Proposal, Judgment, Rule, HistoryEntry)
 data/world/           fictional company + 10 clients (what the apprentice may know)

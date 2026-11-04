@@ -3,7 +3,7 @@ import { heldForProse } from "@/src/server/own-result";
 import { DIFF_AREAS } from "@/src/learning/area";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { FORMAT_JA, POSTURE_JA, TIMING_JA, who } from "@/src/core/labels";
+import { FORMAT_JA, POSTURE_JA, TIMING_JA } from "@/src/core/labels";
 import { AREA_ON_SCREEN, means, noIds, quietWord, toWhom, VISIT_ROWS } from "../dandori";
 import { SCENE_TYPE_LABELS, type Client, type Proposal, type Scene } from "@/src/core/types";
 import { getClient, TRAIN_SCENES } from "@/src/core/world";

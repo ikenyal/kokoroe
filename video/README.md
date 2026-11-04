@@ -1,6 +1,6 @@
 # Demo video — built as code
 
-Max 3:00, Japanese. Plan: [scenes.json](scenes.json) — **structure v4** (11/4):
+Max 3:00, Japanese. Plan: [scenes.json](scenes.json) — **structure v5** (11/4):
 - **v2** (after Kento's first review): the problem, why it never gets written down, and the solution are said in the first minute;
   the Edo story closes the video.
 - **v3** (second review): adds why it matters now (three forces) and two questions between parts that give the viewer a reason to
@@ -16,7 +16,7 @@ Max 3:00, Japanese. Plan: [scenes.json](scenes.json) — **structure v4** (11/4)
     practice; the 心得帳 is those, written down with why each came to be. s04b says so in the narration and on screen.
   - The total is kept near 2:55, leaving room under 3:00.
 
-16 scenes, **2:54.8**. Everything is generated here during the hackathon — no outside footage, images or music:
+16 scenes, **about 2:55.8** (2:54.8, plus about 1 s for 「架空の10社で、」 in s08b on 11/5; re-measure after synthesis). Everything is generated here during the hackathon — no outside footage, images or music:
 - **screen** scenes are recordings of the real app (the features shown were built during the hackathon),
 - **anim** scenes are HTML/CSS pages in [scenes/](scenes/) recorded the same way (explanations only).
 Remotion was not used (separate license terms for company use); Playwright + ffmpeg only.
@@ -61,7 +61,7 @@ Sources on screen (s01-why):
   accents fixed with `x-amazon-pron-kana` (`ACCENTS` in [narration.ts](narration.ts)), 0.5 s between sentences. In v3 most
   multi-sentence scenes use 0.3 s (`pauseMs`), to stay under 3:00. Readings that
   must not change on screen use `<sub alias>` (`READINGS`). Add a word to `ACCENTS` when it still sounds wrong.
-- Scene seconds come from the narration's real length: each scene = 0.3 s lead + narration + room for the picture.
+- Scene seconds come from the narration's real length: each scene = 0.15 s lead + narration + room for the picture.
 - Subtitles switch on Polly's sentence speech marks (`<id>.marks.json`), so they follow the voice.
 - Numbers in the narration (`{before}` etc. in scenes.json) are filled from `data/demo/results.json`; while it is not official
   the line starts with 「途中経過では、」 and s08b shows a banner saying the numbers are interim. Re-run the narration for s08b
@@ -90,6 +90,8 @@ Sources on screen (s01-why):
 - [ ] 11/7: re-record the demo snapshot so 心得帳 shows a rule with a multi-entry 沿革 (today every rule in it has one entry).
 - [ ] s08b: the official Before/After (same ledger, 5 training paths) → re-run `narration.ts --yes --only s08b-keiko`; the
       interim Before and After were measured with different ledger wording (D-033).
+- [ ] s08b now says 「架空の10社で、」 (Kento 11/5). Re-synthesize it with narration.ts (`--yes --only s08b-keiko`; the AWS SSO
+      login for the sandbox profile had expired on 11/5) and set its seconds from the new marks (10.0 s is an estimate).
 - [x] Subtitles timed to the audio (speech marks).
 - [x] Polly narration for every scene (read-only API call with `--profile brightflow-sandbox-ikeda`).
 
@@ -139,3 +141,21 @@ The video's job is still the product. The development story could take one short
 - **Not claimed:** that the pattern was measured on development work, or that a general-purpose 帳場 exists. The README's table
   (「二つ目の帳場」) is the source; the video only points to it.
 - **Cost:** it has to fit the 3-minute limit, so it replaces seconds elsewhere. Kento decides on 11/7 whether it goes in.
+
+## Idea for 11/7, not built: a visit corrected in own mode (Kento's decision on 11/5)
+
+The demo snapshot now opens with a draft that carries a 訪問の段取り (D-061). But a correction to the visit plan cannot come from
+the recorded demo: the simulated master judges only the contact 段取り, and there is no hidden answer for dress or gifts. So the
+visit correction is shot separately, as its own short beat:
+- **Where it is shot:** 自分の会社で始める (own mode) on 127.0.0.1, with a throwaway folder and one fictional stand-in company and
+  client (as in `scripts/check-own-visit.ts`: 「試しの製作所（架空）」 and 「取引先A（架空）」). Delete the folder afterwards. Live
+  calls, a few cents.
+- **What is shown:**
+  1. the 訪問 section of a draft (服装・手土産・先に確かめる話題・同席者・呼び方);
+  2. the master's △ and 「この先方はスーツを嫌う。作業着で行け」;
+  3. the 心得 in the 心得帳, with its why;
+  4. the next visit draft already saying 「作業着で伺う」.
+- **Where in the video:** inside or right after s05 (帳場), about 6–8 s, if the 3-minute limit allows. Otherwise one still in s06.
+- **Not claimed:** that visit plans are evaluated. The evaluation covers the contact 段取り only; a visit plan has no right
+  answer, so it is out of scope (README).
+- Kento decides on 11/7 whether it goes in, and which scene gives up the seconds.
