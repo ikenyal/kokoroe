@@ -17,6 +17,7 @@ const { values } = parseArgs({
     out: { type: "string", default: "docs/screens" }, // e.g. docs/screens/ui-polish/before
     sizes: { type: "string", default: "desktop,mobile" },
     schemes: { type: "string", default: "light,dark" },
+    ask: { type: "boolean", default: false }, // on /noren: press the first example question and shoot noren-answered (recorded, no API)
     judge: { type: "string" }, // e.g. "△": mark the first 帳場 card and also shoot choba-judged (recorded data, no API)
   },
 });
@@ -44,6 +45,12 @@ const sizes = { desktop: { width: 1280, height: 900 }, mobile: { width: 390, hei
         }
         const name = p === "/" ? "home" : p.replace(/^\//, "").replace(/\//g, "-");
         await page.screenshot({ path: path.join(out, `${name}-${scheme}-${size}.png`), fullPage: true });
+        if (p === "/noren" && values.ask) {
+          await page.locator('button[name="preset"]').first().click();
+          await page.waitForLoadState("networkidle");
+          await page.waitForTimeout(800);
+          await page.screenshot({ path: path.join(out, `noren-answered-${scheme}-${size}.png`), fullPage: true });
+        }
         if (p === "/choba" && values.judge) {
           await page.locator(`label:has(input[value="${values.judge}"])`).click();
           await page.waitForTimeout(400); // let the stamp settle

@@ -64,3 +64,15 @@ critic (`.claude/agents/ui-critic.md`) reviews them after each change.
    short note instead. The 台帳 facts are folded at the bottom, with their count.
 3. **Quieter structure.** Client headings use a thin rule instead of a heavy one. The full source list and 「消す」 share one small
    fold per entry, and 「消す」 is in ink, not vermilion.
+
+## 暖簾を継ぐ
+
+1. **One column, with the example questions as a ruled list under the form** (client on the left, question on the right,
+   「尋ねる」 on hover). They were eight boxed cards in a side column. After a question, the answer comes first and the list
+   follows as 「ほかに聞けること」.
+   *Why:* the boxed cards were the most template-like element in the app, the left half was empty, and 「右の質問例」 made no
+   sense on a phone.
+2. **The basis stands out.** 「根拠の心得」 is a margin label, like the 帳場's sections; the rule is in Mincho, followed by わけ and
+   出どころ.
+3. **「いいえ」 is in ink, not vermilion.** Vermilion stays for the master's marks.
+4. **Plainer note on the demo:** 「このデモでは、下の質問に記録済みの答えで返します」.
