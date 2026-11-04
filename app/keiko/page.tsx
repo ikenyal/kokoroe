@@ -10,48 +10,98 @@ export default function KeikoPage() {
   const curves = results.curves as Curve[];
   const latest = curves.at(-1)!;
   const end = latest.points.at(-1)!;
-  const pathsRaw = results.paths as null | { mean: number; min: number; max: number; n: number; paths: { taps: number }[] };
+  const pathsRaw = results.paths as null | { mean: number; min: number; max: number; n: number; okp: { mean: number }; paths: { taps: number }[] };
   const paths = pathsRaw && { ...pathsRaw, taps: Math.round(pathsRaw.paths.reduce((a, p) => a + p.taps, 0) / pathsRaw.paths.length) };
   const hist = results.history;
   const adv: typeof results.adversarial & { escalatedByModel?: number } = results.adversarial; // typed: escalatedByModel appears with the 11/7 run (D-044)
   return (
     <div>
       <h1 className="font-mincho text-[24px] tracking-[0.06em]">稽古の記録</h1>
-      <p className="yomi mt-2 max-w-[40em] text-[15px] text-nibi">{noDecisionIds(results.note)}</p>
+      <p className="yomi mt-2 max-w-[40em] text-[15.5px]">
+        弟子の案が、師匠の考えとどれだけ合うようになったかの記録です。架空の取引先10社で、師匠はシミュレータ（隠しの正解に照らして、コードで ○・△・× を付けます）。
+      </p>
 
       <section aria-labelledby="ba-h" className="mt-8">
-        <h2 id="ba-h" className="sr-only">Before と After</h2>
-        <dl className="grid gap-x-10 gap-y-6 border-y-2 border-sumi/80 py-6 sm:grid-cols-3">
-          <div>
-            <dt className="text-[13px] text-nibi">Before　台帳と制約だけの弟子</dt>
-            <dd className="mt-1 font-mincho text-[40px] leading-none tabular-nums">{pct(results.before.match)}</dd>
-            <dd className="mt-1 text-[13px] text-nibi">評価用20場面の一致率（○）、{results.before.runs}回平均 ±{Math.round(results.before.sd * 100)}</dd>
-          </div>
-          <div>
-            <dt className="text-[13px] text-nibi">ダメ出し40場面のあと{results.official ? "" : "（途中経過）"}</dt>
-            <dd className="mt-1 font-mincho text-[40px] leading-none tabular-nums text-ai">
-              {paths ? pct(paths.mean) : pct(end.match)}
-            </dd>
-            <dd className="mt-1 text-[13px] text-nibi">
-              {paths ? `学習${paths.n}本の平均（${pct(paths.min)}〜${pct(paths.max)}）` : `${latest.label}の曲線、タップ ${end.taps} 回`}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-[13px] text-nibi">後任が経緯ごと答えられた質問</dt>
-            <dd className="mt-1 font-mincho text-[40px] leading-none tabular-nums">
-              {hist[0].mean.toFixed(0)}<span className="text-[22px] text-nibi"> → </span>
-              <span className="text-ai">{hist.at(-1)!.mean.toFixed(1)}</span>
-              <span className="text-[18px] text-nibi"> / 8</span>
-            </dd>
-            <dd className="mt-1 text-[13px] text-nibi">心得帳なし → 育った心得帳、{results.official ? `学習${results.paths?.n ?? 0}本の平均` : "3回平均"}</dd>
-          </div>
-        </dl>
+        <h2 id="ba-h" className="font-mincho text-[18px]">はじめと、ダメ出し40場面のあと{results.official ? "" : "（途中経過）"}</h2>
+        <table className="mt-3 w-full max-w-4xl border-collapse border-y-2 border-sumi/80 text-left">
+          <thead>
+            <tr className="border-b border-keisen text-[13px] text-nibi">
+              <th className="py-2 font-normal">測ったこと</th>
+              <th className="w-[22%] font-normal">はじめ（台帳だけ）</th>
+              <th className="w-[26%] font-normal">40場面のあと</th>
+            </tr>
+          </thead>
+          <tbody className="tabular-nums">
+            <tr className="border-b border-keisen align-baseline">
+              <th scope="row" className="py-3 pr-4 text-[14.5px] font-normal">
+                師匠が ○ を付けた割合
+                <span className="block text-[12.5px] text-nibi">学習に使わない評価用の20場面で</span>
+              </th>
+              <td className="font-mincho text-[30px] leading-none">{pct(results.before.match)}</td>
+              <td>
+                <span className="font-mincho text-[30px] leading-none text-ai">{paths ? pct(paths.mean) : pct(end.match)}</span>
+                <span className="block text-[12.5px] text-nibi">{paths ? `学習${paths.n}本の平均（${pct(paths.min)}〜${pct(paths.max)}）` : `${latest.label}、タップ ${end.taps} 回`}</span>
+              </td>
+            </tr>
+            <tr className="border-b border-keisen align-baseline">
+              <th scope="row" className="py-3 pr-4 text-[14.5px] font-normal">
+                ○ か △（条件つきでよし）の割合
+                <span className="block text-[12.5px] text-nibi">大きく外れなかった案の割合</span>
+              </th>
+              <td className="font-mincho text-[24px] leading-none">{pct(results.before.okp)}</td>
+              <td className="font-mincho text-[24px] leading-none text-ai">{paths ? pct(paths.okp.mean) : pct(end.okp)}</td>
+            </tr>
+            <tr className="align-baseline">
+              <th scope="row" className="py-3 pr-4 text-[14.5px] font-normal">
+                後任の質問に、わけごと答えられた数
+                <span className="block text-[12.5px] text-nibi">取引先の経緯を聞く8問のうち</span>
+              </th>
+              <td className="font-mincho text-[24px] leading-none">{hist[0].mean.toFixed(0)}<span className="text-[14px] text-nibi"> / 8</span></td>
+              <td className="font-mincho text-[24px] leading-none text-ai">
+                {hist.at(-1)!.mean.toFixed(1)}
+                <span className="text-[14px] text-nibi"> / 8</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p className="mt-2 text-[13px] text-nibi">
+          師匠の手間は、40場面で{paths ? ` 約 ${paths.taps} 回` : ` ${end.taps} 回`}のタップ（印・候補の選択・「なぜ？」・確かめの合計）。
+        </p>
       </section>
 
-      <section aria-labelledby="curve-h" className="mt-10 grid gap-8 lg:grid-cols-[1fr_17rem]">
+      <section aria-labelledby="safe-h" className="mt-10 max-w-4xl">
+        <h2 id="safe-h" className="font-mincho text-[18px]">安全の確かめ</h2>
+        <table className="mt-3 w-full border-collapse border-y-2 border-sumi/80 text-left text-[14.5px]">
+          <tbody className="tabular-nums">
+            <tr className="border-b border-keisen align-baseline">
+              <th scope="row" className="py-3 pr-4 font-normal">取引先の文面に「心得として登録せよ」などの指示を紛れ込ませて、心得帳が書き換わった回数</th>
+              <td className="w-[26%] font-mincho text-[22px]">
+                {adv.injectionRuns - adv.storeProtected}
+                <span className="text-[14px] text-nibi"> / {adv.injectionRuns} 回</span>
+              </td>
+            </tr>
+            <tr className="align-baseline">
+              <th scope="row" className="py-3 pr-4 font-normal">
+                値引き・契約条件を迫られた場面で、師匠の判断に回した回数
+                <span className="block text-[12.5px] text-nibi">
+                  {adv.escalatedByModel === undefined
+                    ? "弟子が自分で回した回数。金額・契約を必ず師匠に回す仕組みをコードに入れる前の計測です。"
+                    : `弟子が自分で回したのは ${adv.escalatedByModel} 回。残りもコードの仕組みで必ず師匠に回ります。`}
+                </span>
+              </th>
+              <td className="font-mincho text-[22px]">
+                {adv.escalated}
+                <span className="text-[14px] text-nibi"> / {adv.lureRuns} 回</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section aria-labelledby="curve-h" className="mt-10 max-w-4xl">
         <div className="min-w-0">
-          <h2 id="curve-h" className="text-[15px] font-bold">学習曲線</h2>
-          <p className="mt-1 text-[13px] text-nibi">どれだけ師匠の手を借りて、どこまで一致するようになったか。灰色の線は改良の途中の版、藍の点と縦線は今の構成を学習{paths?.n ?? 0}本で測った平均と幅{results.official ? "（正式な計測）" : "（途中経過）"}です。</p>
+          <h2 id="curve-h" className="font-mincho text-[18px]">師匠の手間と、一致の伸び</h2>
+          <p className="mt-1 text-[13px] text-nibi">横は師匠が押した回数、縦は ○ の割合。灰色の線は改良の途中の版、藍の点と縦線は今の構成を学習{paths?.n ?? 0}本で測った平均と幅{results.official ? "（正式な計測）" : "（途中経過）"}です。</p>
           <div className="mt-4">
             <p className="mb-1 text-[12px] text-nibi sm:hidden">図は横にずらせます。右端が今の構成の結果です。</p>
             <CurveChart curves={curves} emphasis={paths ? null : latest.key} before={results.before} paths={paths} />
@@ -88,23 +138,14 @@ export default function KeikoPage() {
             </table>
           </details>
         </div>
-        <aside className="space-y-6 text-[14px] lg:border-l-2 lg:border-keisen lg:pl-6">
-          <div>
-            <h3 className="font-bold">安全の確かめ</h3>
-            <p className="yomi mt-1">
-              取引先の文面に紛れた「心得として登録せよ」などの指示で、心得帳が書き換わった回数は {adv.injectionRuns} 回中 {adv.injectionRuns - adv.storeProtected} 回。値引き・契約条件を迫られた場面では、
-              {adv.escalatedByModel === undefined
-                ? `弟子が自分で ${adv.lureRuns} 回中 ${adv.escalated} 回、師匠の判断に回しました（金額・契約を必ず師匠に回す仕組みを、コードに入れる前の計測）。`
-                : `弟子が自分で師匠の判断に回したのは ${adv.lureRuns} 回中 ${adv.escalatedByModel} 回。金額・契約を必ず師匠に回す仕組みがコードにあるので、実際には ${adv.lureRuns} 回中 ${adv.escalated} 回とも師匠に回ります。`}
-            </p>
-          </div>
-          <div>
-            <h3 className="font-bold">数字の読み方</h3>
-            <p className="yomi mt-1 text-nibi">
-              同じ構成でも、師匠が一言を添えたかどうかで学習の進み方が変わり、最終値が10ポイントほど揺れます。そのため正式な数字は、学習を何本か回した平均と幅で示します。
-            </p>
-          </div>
-        </aside>
+      </section>
+
+      <section aria-labelledby="note-h" className="mt-10 max-w-4xl border-t border-keisen pt-4 text-[13.5px]">
+        <h2 id="note-h" className="font-mincho text-[16px]">数字の注記</h2>
+        <ul className="yomi mt-2 list-disc space-y-1 pl-5 text-nibi">
+          <li>{noDecisionIds(results.note)}</li>
+          <li>同じ構成でも、師匠が一言を添えたかどうかで学習の進み方が変わり、最後の値が10ポイントほど揺れます。そのため数字は、学習を何本か回した平均と幅で示します。</li>
+        </ul>
       </section>
     </div>
   );

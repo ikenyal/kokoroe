@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
 import type { Verdict } from "@/src/core/types";
 import { judge } from "../actions";
@@ -12,18 +12,35 @@ function Send({ verdict }: { verdict: Verdict | null }) {
   return (
     <button
       disabled={!verdict || pending}
-      className="h-12 rounded-[3px] bg-sumi px-6 text-[15px] text-kami disabled:cursor-not-allowed disabled:opacity-35"
+      className="h-12 rounded-[3px] border border-ai bg-ai px-6 text-[15px] text-kami disabled:cursor-not-allowed disabled:border-waku disabled:bg-transparent disabled:text-nibi"
     >
       {pending ? "記録しています" : verdict ? `${verdict} で記録する` : "印を選んでください"}
     </button>
   );
 }
 
+const KEYS: Record<string, Verdict> = { "1": "○", "2": "△", "3": "×" };
+
 export function JudgeForm({ sceneId }: { sceneId: string }) {
   const [verdict, setVerdict] = useState<Verdict | null>(null);
   const [markedAt, setMarkedAt] = useState<number | null>(null); // first tap on a mark (師匠役テスト: time to judge)
+  const pick = (v: Verdict) => {
+    setVerdict(v);
+    setMarkedAt((t) => t ?? Date.now());
+  };
+  // Keys 1・2・3 press ○・△・×, except while typing in a field (a remark must never change the mark).
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const el = e.target as HTMLElement | null;
+      if (e.metaKey || e.ctrlKey || e.altKey || e.isComposing || el?.closest("input:not([type=radio]), textarea, select, [contenteditable]")) return;
+      const v = KEYS[e.key];
+      if (v) pick(v);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
   return (
-    <form action={judge} className="mt-8" onSubmit={() =>
+    <form action={judge} onSubmit={() =>
         setTimeout(() => {
           setVerdict(null);
           setMarkedAt(null);
@@ -33,27 +50,26 @@ export function JudgeForm({ sceneId }: { sceneId: string }) {
       <TimedFields />
       <input type="hidden" name="markedAt" value={markedAt ?? ""} />
       <fieldset>
-        <legend className="text-[13px] text-nibi">師匠の判定</legend>
-        <div className="mt-2 grid grid-cols-3 gap-3 sm:max-w-md">
-          {(["○", "△", "×"] as const).map((v) => {
+        <legend className="sr-only">師匠の判定</legend>
+        <div className="flex gap-3">
+          {(["○", "△", "×"] as const).map((v, i) => {
             const on = verdict === v;
             return (
               <label
                 key={v}
-                className={`flex cursor-pointer flex-col items-center gap-1 rounded-[3px] border py-3 transition-colors has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-3 has-[input:focus-visible]:outline-ai ${
-                  on ? "border-shu bg-shu-soft text-shu" : "border-keisen text-shu/80 hover:border-shu/60"
+                className={`relative flex w-24 cursor-pointer flex-col items-center gap-0.5 border py-2.5 has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-3 has-[input:focus-visible]:outline-ai sm:w-28 ${
+                  on ? "border-shu text-shu shadow-[inset_0_0_0_3px_var(--kami),inset_0_0_0_4.5px_var(--shu)]" : "border-keisen text-sumi/70 hover:border-sumi/50 hover:text-sumi"
                 }`}
               >
-                <input type="radio" name="verdict" value={v} aria-label={`${v} ${VERDICT_WORD[v]}`} className="sr-only" checked={on} onChange={() => {
-                    setVerdict(v);
-                    setMarkedAt((t) => t ?? Date.now());
-                  }} />
-                <Mark v={v} size={46} />
-                <span aria-hidden className="text-[13px] text-sumi">{VERDICT_WORD[v]}</span>
+                <input type="radio" name="verdict" value={v} aria-label={`${v} ${VERDICT_WORD[v]}`} className="sr-only" checked={on} onChange={() => pick(v)} />
+                <span aria-hidden className="absolute top-1 left-1.5 hidden text-[12px] tabular-nums text-nibi sm:block">{i + 1}</span>
+                <Mark v={v} size={48} className={on ? "inkan" : ""} />
+                <span aria-hidden className={`text-[13px] ${on ? "text-shu" : "text-sumi"}`}>{VERDICT_WORD[v]}</span>
               </label>
             );
           })}
         </div>
+        <p className="mt-2 hidden text-[12.5px] text-nibi sm:block">キーボードの 1・2・3 でも押せます。</p>
       </fieldset>
       <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-end">
         <label className="flex-1">
