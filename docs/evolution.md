@@ -90,3 +90,14 @@ Short summary only. No code was written before kickoff. The fictional data was p
   refuse a meeting the client would have welcomed. Rewriting the public ledger to 「文書の連絡はメール。打ち合わせは可」 fixed it even
   for the Before (52.5% → 55%). The explicit half of the knowledge needs as much care as the tacit half.
 
+
+### 2026-11-05
+- **Where the tacit part lives (D-062).** Two tests by the author ended the same way. On the fictional company (master-role test,
+  D-059) the judging could be timed, but there was nothing to write, and polite general drafts looked right. On a stand-in ledger
+  of the author's own (the comparison test) the only prose possible was general manners — the average the AI already knows — so
+  the test was stopped before it began. Tacit etiquette is not a stock of rules a person carries around; it exists inside the
+  relationship with a concrete client. That is why the product asks the person who holds the relationship, at the moment a draft
+  touches it. "Correcting is easier than writing" stays a hypothesis here; the comparison feature is kept for a company that can
+  test it on real relationships. No AI-written substitute: an AI guessing an AI's etiquette measures nothing new.
+- **The visit plan became a second step (D-061, revised).** Asking for visits in the same prompt moved who was 表 and who was 裏.
+  The 段取り is now made exactly as evaluated, and the visit plan is added after it.
