@@ -147,3 +147,22 @@ critic (`.claude/agents/ui-critic.md`) reviews them after each change.
 3. **The example questions look pressable.** Each row shows 「尋ねる」 in indigo at the right (on phones under the question),
    is at least 44px tall, and tints indigo on hover.
    *Why:* the cue appeared only on hover, so on a phone nothing said that the rows were buttons.
+
+## 段取りを主役に（11/4 夜、Kento の気づきから、`13-dandori/`）
+
+Kento's observation: the screens read as "a tool for stamping ○△× on email drafts". The value is the 段取り (who, by what,
+when, the quiet word to whom) and the etiquette beyond email.
+
+1. **The 段取り in his words: 誰に・何で・いつ・裏で誰に・後日.** 「何で」 is written as actions: 「手紙を出す。そのうえで訪問して
+   話す」, 「電話する」, 「あえて連絡しない」. The note says 「弟子（橙丸）の段取りの案」. 後日のあいさつ moved up from そのほか, since
+   it is part of the 段取り. The re-check card in the side panel uses the same rows.
+2. **The draft text stays folded,** now labelled for what it is (「送る文」 or 「電話で話すこと」), and is not offered when the
+   段取り is not to contact.
+3. **The breadth on the home page:** 「扱う場面は10種類。メールだけではありません」, a ruled list of the 10 kinds of scene, each with
+   one recorded 段取り. The examples are the apprentice's first drafts on the fictional training scenes, before any correction,
+   and the list says so. Where several exist, it shows one that is not just an email.
+4. **「どこが違う？」 buttons use the same words** (誰に・何で・いつ・裏で誰に・書式・その他). This is UI only: the labels in
+   `src/learning/area.ts` are also part of the interpreter's prompt, so they stay as they are (宛先 = 誰に, 手段 = 何で …).
+
+All of this is display only (`app/dandori.ts`). The proposal fields, `src/core/labels.ts` and anything the simulator or the
+evaluation reads are unchanged.
