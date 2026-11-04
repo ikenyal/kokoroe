@@ -18,11 +18,16 @@ const { values } = parseArgs({ options: { base: { type: "string", default: "http
 const OUT = path.resolve(__dirname, "..", "docs/readme");
 mkdirSync(OUT, { recursive: true });
 
-async function shot(page: Page, l: Locator, name: string, bottom = 20) {
+/** `until`: end the picture at the bottom of this part instead of the whole one. */
+async function shot(page: Page, l: Locator, name: string, bottom = 20, until?: Locator) {
   await l.first().scrollIntoViewIfNeeded();
   await page.waitForTimeout(300);
   // A margin of paper around the part, so it does not look cut out.
   const b = (await l.first().boundingBox())!;
+  if (until) {
+    const u = (await until.first().boundingBox())!;
+    b.height = u.y + u.height - b.y;
+  }
   const m = 20;
   await page.screenshot({ path: path.join(OUT, `${name}.png`), fullPage: true,
     clip: { x: Math.max(0, b.x - m), y: Math.max(0, b.y + (await page.evaluate(() => window.scrollY)) - m), width: b.width + 2 * m, height: b.height + m + bottom } });
@@ -65,6 +70,8 @@ async function shot(page: Page, l: Locator, name: string, bottom = 20) {
   // The answer appears once a question is asked: the first example (the page lists the clearest differences first).
   await page.locator('button[name="preset"]').first().click();
   await page.waitForLoadState("networkidle");
-  await shot(page, page.locator('article:has(section[aria-label="心得帳なしの答え"])'), "3-noren-with-without");
+  // The question and the two answers (ui-critic 11/5: the whole turn was too tall to read at README width).
+  const turn = page.locator('article:has(section[aria-label="心得帳なしの答え"])');
+  await shot(page, turn, "3-noren-with-without", 20, turn.locator('section[aria-label="心得帳ありの答え"]').locator(".."));
   await browser.close();
 })();
