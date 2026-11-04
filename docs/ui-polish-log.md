@@ -41,3 +41,16 @@ critic (`.claude/agents/ui-critic.md`) reviews them after each change.
    date. *Why:* the product's output was invisible until after a click.
 4. **Data handling folded below** (content unchanged). The fictional-data line at the bottom was dropped, since the banner
    already says it. On phones the headline is a little smaller, so 「作法を、」 stays on one line.
+
+## 帳場（2回目、ui-critic の講評から）
+
+1. **The three 段取り lines are tighter**, and 表の連絡／裏の一言 carry a small gloss under the label (窓口へ正式に／決裁者などへ
+   根回し) instead of a paragraph. *Why:* the marks were far below the fold, and the explanation was a manual to read.
+2. **Ink before the seal.** Unpressed marks are drawn in ink; vermilion appears only on the one the master presses. The record
+   button is indigo, so it no longer outweighs the seal. The key numbers show on wide screens only.
+3. **Plain wording after judging:** 「…に △を記録しました。このデモでは、弟子の読み取りは行いません（公開版のライブでは
+   行います）」, with no 記録済み／ライブ版 jargon.
+4. **Tap targets:** 「ここで区切る」 and 「取り消す」 are 40 px tall. On phones the status line is shorter.
+5. **Kept: the indigo tab in the navigation.** It is a 暖簾 hanging from the top rule, tied to 「暖簾を継ぐ」, and its dark-mode
+   contrast is about 8:1.
+6. **Tried and reverted:** そのほか in two columns squeezed 伝え方 into a narrow strip.

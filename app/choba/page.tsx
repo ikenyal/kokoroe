@@ -21,10 +21,13 @@ import { enforceHitl } from "@/src/disciple/hitl";
 import { AutoRefresh } from "./auto-refresh";
 import { JudgeForm } from "./judge-form";
 
-function Row({ label, children, main = false }: { label: string; children: React.ReactNode; main?: boolean }) {
+function Row({ label, gloss, children, main = false }: { label: string; gloss?: string; children: React.ReactNode; main?: boolean }) {
   return (
-    <div className={`grid grid-cols-[6.6em_1fr] gap-3 border-t border-keisen first:border-t-0 sm:grid-cols-[7em_1fr] ${main ? "py-3.5" : "py-2"}`}>
-      <dt className={main ? "pt-0.5 text-[14px] text-sumi" : "text-[13px] text-nibi"}>{label}</dt>
+    <div className={`grid grid-cols-[6.6em_1fr] gap-3 border-t border-keisen first:border-t-0 sm:grid-cols-[7em_1fr] ${main ? "py-2.5" : "py-1.5"}`}>
+      <dt className={main ? "pt-0.5 text-[14px] leading-snug text-sumi" : "text-[13px] text-nibi"}>
+        {label}
+        {gloss && <span className="block text-[11.5px] text-nibi">{gloss}</span>}
+      </dt>
       <dd className={`yomi ${main ? "text-[18px]" : "text-[15px] text-sumi/90"}`}>{children}</dd>
     </div>
   );
@@ -51,7 +54,7 @@ function ProposalView({ p, client, ruleText }: { p: Proposal; client: Client; ru
   return (
     <>
       {/* 段取り — who, through which channel, and when: the part the master judges. The rest is secondary. */}
-      <Ledger label="段取り" note="弟子（橙丸）の案。判定はここを見ます。表の連絡は窓口への正式な連絡、裏の一言は決裁者などへの根回しです。">
+      <Ledger label="段取り" note="弟子（橙丸）の案。判定は、この3行を見て。">
         {p.escalateToMaster && (
           <p className="mb-3 border-l-4 border-sumi bg-kami-2 px-4 py-2 text-[15px] text-sumi">
             金額・条件が絡むため、橙丸は決めていません。先方に出す前に師匠の判断が要ります。
@@ -59,8 +62,8 @@ function ProposalView({ p, client, ruleText }: { p: Proposal; client: Client; ru
           </p>
         )}
         <dl>
-          <Row main label="表の連絡">{p.channel === "none" ? "連絡しない" : front}</Row>
-          <Row main label="裏の一言">{p.backchannelTo ? `${who(client, p.backchannelTo)}にも、そっと一言` : <span className="text-nibi">なし</span>}</Row>
+          <Row main label="表の連絡" gloss="窓口へ正式に">{p.channel === "none" ? "連絡しない" : front}</Row>
+          <Row main label="裏の一言" gloss="決裁者などへ根回し">{p.backchannelTo ? `${who(client, p.backchannelTo)}にも、そっと一言` : <span className="text-nibi">なし</span>}</Row>
           <Row main label="時期">{TIMING_JA[p.timing]}</Row>
         </dl>
       </Ledger>
@@ -101,7 +104,7 @@ const STATUS: Record<Pending["status"], string> = {
   "needs-why": "心得帳に書きました。よければ、わけを一言",
   applied: "心得帳に書きました",
   "nothing-learned": "今回は何も覚えていません",
-  offline: "記録済みの案で動いています（読み取りはライブ版で動きます）",
+  offline: "このデモでは、弟子の読み取りは行いません（公開版のライブでは行います）",
   error: "解釈できませんでした",
 };
 
@@ -331,25 +334,25 @@ export default async function ChobaPage() {
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <p className="text-[13px] text-nibi">
             {label}　<span className="tabular-nums">{done} / {meta.queue.length}</span> 件 済み
-            {!live && "　記録済みの案を表示しています"}
+            {!live && <span className="hidden sm:inline">　記録済みの案を表示しています</span>}
           </p>
           <div aria-hidden className="h-1.5 min-w-24 flex-1 rounded-full bg-keisen/60">
             <div className="h-full rounded-full bg-ai" style={{ width: `${(100 * done) / Math.max(1, meta.queue.length)}%` }} />
           </div>
           {item && (
             <form action={pause}>
-              <button className="text-[13px] text-ai underline-offset-4 hover:underline">ここで区切る</button>
+              <button className="inline-flex min-h-10 items-center text-[13px] text-ai underline-offset-4 hover:underline">ここで区切る</button>
             </form>
           )}
         </div>
         {undoable && (
           <form action={undo} role="status" aria-live="polite" className="mt-3 border-l-2 border-ai pl-3 text-[13.5px] text-nibi">
             <input type="hidden" name="judgmentId" value={undoable.judgment.id} />
-            直前の判定：{words(undoable.judgment.sceneId)}に <span className="font-mincho text-[15px] text-shu">{undoable.judgment.verdict}</span>
+            {words(undoable.judgment.sceneId)}に <span className="font-mincho text-[15px] text-shu">{undoable.judgment.verdict}</span>
             {(() => {
               // What happened to it, without looking at the side panel.
               const p = meta.pending.find((x) => x.judgmentId === undoable.judgment.id);
-              const said = !p ? "。心得帳は変えません" : `。${STATUS[p.status]}`;
+              const said = !p ? "を記録しました。○ は心得帳を変えません" : `を記録しました。${STATUS[p.status]}`;
               return <span className="text-sumi">{said}</span>;
             })()}
             {undoable.block === "busy" ? (
@@ -359,7 +362,7 @@ export default async function ChobaPage() {
             ) : undoable.block === "follow-up" ? (
               <span>（この判定の後に別の直しが入ったため、取り消せません）</span>
             ) : (
-              <button className="ml-2 text-ai underline-offset-4 hover:underline">
+              <button className="ml-2 inline-flex min-h-10 items-center text-ai underline-offset-4 hover:underline">
                 取り消す{undoable.writes ? "（心得帳に書いた分も戻し、沿革に残します）" : ""}
               </button>
             )}
