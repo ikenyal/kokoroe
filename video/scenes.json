@@ -134,7 +134,7 @@
     {
       "id": "s08b-keiko",
       "kind": "screen",
-      "seconds": 10.0,
+      "seconds": 10.4,
       "page": "/keiko",
       "part": "8 なぜ効くか（数字）",
       "action": "稽古の記録: Before/After (reads data/demo/results.json; interim until 11/7)",
