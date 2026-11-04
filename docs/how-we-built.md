@@ -360,3 +360,10 @@ Short entries, appended every work session. Source material for the README secti
   - **Kept as it happened:** 18 of 20 were ○ because the author had no history with these clients, and the prose task was not
     done. The submission draft's "faster than writing" sentence was replaced, not filled in, since no writing time exists.
   - **Kept apart:** this test is reported apart from the persona simulation.
+
+- **11/4 — own-company comparison test (D-060).**
+  - **Reuse:** built from the master-role test's parts (timings, writing page, summary) rather than copies.
+  - **The data guarantee:** what may leave the own folder is fixed in code. A pure function builds the result from numbers, a last
+    check refuses any other string, and a test feeds marked text through it.
+  - **Run once in a browser:** a throwaway folder and a fictional stand-in client, before Kento's real run. The first attempt
+    "failed" only because the script didn't wait for a same-URL redirect; the screenshot showed it, and the script was fixed.

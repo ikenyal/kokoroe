@@ -1,4 +1,5 @@
 import { LimitNote } from "../limit-note";
+import { heldForProse } from "@/src/server/own-result";
 import { DIFF_AREA_JA, DIFF_AREAS } from "@/src/learning/area";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -248,6 +249,7 @@ function NewScene() {
   const field = "mt-1 block h-11 w-full rounded-[3px] border border-waku bg-kami px-2 text-[15px]";
   return (
     <form action={ownAddScene} className="mt-6 space-y-4">
+      <TimedFields />
       <h1 className="font-mincho text-[22px]">次の場面を書く</h1>
       <p className="text-[13.5px] text-nibi">取引先に何かを伝える・相談する場面を、ありのままに書いてください。弟子が案を作ります。送るのはあなたです（弟子は何も送りません）。</p>
       <div className="grid gap-3 sm:grid-cols-[1fr_1fr_6rem]">
@@ -265,6 +267,10 @@ function NewScene() {
         <textarea name="situation" required maxLength={600} rows={4} placeholder="例：来月の納品が1週間遅れそう。まだ確定ではない。" className="mt-1 block w-full rounded-[3px] border border-waku bg-kami p-3 font-mincho text-[16px]" />
       </label>
       <button className="h-12 rounded-[3px] bg-sumi px-6 text-[15px] text-kami">弟子に案を作らせる</button>
+      <p className="text-[13px] text-nibi">
+        文章で書く時間と判定の時間を比べるときは、<Link className="text-ai underline" href="/choba/write">比較テスト</Link>（先に文章、そのあと判定）を使います。まとめは
+        <Link className="text-ai underline" href="/choba/report">こちら</Link>。
+      </p>
     </form>
   );
 }
@@ -273,7 +279,10 @@ export default async function ChobaPage() {
   const s = await getSession();
   if (!s) redirect("/");
   const live = liveEnabled();
-  if (live && !s.meta.paused && s.meta.queue[s.meta.pos] && !s.meta.queue[s.meta.pos].live) await draftLive(s, s.meta.pos);
+  // Own-mode comparison test (D-060): a card whose situation has no prose yet is held back and NOT drafted, so the master writes
+  // before seeing anything from the AI.
+  const heldBack = heldForProse;
+  if (live && !s.meta.paused && s.meta.queue[s.meta.pos] && !s.meta.queue[s.meta.pos].live && !heldBack(s.meta, s.meta.pos)) await draftLive(s, s.meta.pos);
   const meta = (await getSession())!.meta;
   const words = sceneWordsFrom(meta.queue);
   const item = meta.paused ? undefined : meta.queue[meta.pos];
@@ -334,6 +343,15 @@ export default async function ChobaPage() {
           <p role="alert" className="mt-6 border-l-4 border-shu bg-shu-soft px-4 py-2 text-[14px]">
             案を作るには Claude API のキーが要ります。.env.local に ANTHROPIC_API_KEY を置き、KOKOROE_LIVE=1 をつけて起動してください。
           </p>
+        ) : item && heldBack(meta, meta.pos) ? (
+          <>
+            <p role="status" className="mt-6 border-l-4 border-ai bg-ai-soft px-4 py-2 text-[14.5px]">
+              比較テスト中です。次の場面（{words(item.scene.id)}）は、先に
+              <Link className="text-ai underline" href="/choba/write">文章で書いて</Link>
+              から判定します。弟子の案は、書き終わるまで作りません。
+            </p>
+            <NewScene />
+          </>
         ) : item && s.mode === "own" && !item.live ? (
           <p role="alert" className="mt-6 border-l-4 border-shu bg-shu-soft px-4 py-2 text-[14px]">
             この場面の案を作れませんでした（その日の上限か、通信の失敗）。しばらくしてから、このページを開き直してください。

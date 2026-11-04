@@ -23,6 +23,7 @@ import { CLIENTS, getClient, HISTORY_QUESTIONS } from "@/src/core/world";
 import recorded from "@/data/demo/recorded-answers.json";
 import { deleteOwnData, parseClientsCsv, saveOwnClients, saveOwnCompany, toClients, type ClientRow } from "@/src/core/own-world";
 import { reloadOwnWorld } from "@/src/core/world";
+import { heldForProse } from "@/src/server/own-result";
 import { requireOwn } from "@/src/server/own";
 import { OWN_SID, openSession, startOwnSession } from "@/src/server/session";
 import { SCENE_TYPE_LABELS, type SceneType } from "@/src/core/types";
@@ -62,7 +63,7 @@ function ms(formData: FormData, from: string, to: string): number | null {
 }
 
 function addTimings(meta: SessionMeta, t: Timing[]) {
-  if (meta.mode !== "field") return;
+  if (meta.mode !== "field" && meta.mode !== "own") return; // own mode too (D-060): times only, kept in its own folder
   meta.timings = [...(meta.timings ?? []), ...t];
 }
 
@@ -77,6 +78,7 @@ export async function judge(formData: FormData) {
   const item = s.meta.paused ? undefined : s.meta.queue[s.meta.pos]; // 「ここで区切る」: nothing is judged until 「続きから」
   if (!item || item.scene.id !== sceneId) return; // stale form (double submit) — ignore
   if (s.mode === "own" && !item.live) return; // own mode: no draft was made (limit or error) — nothing to judge, nothing to learn
+  if (heldForProse(s.meta, s.meta.pos)) return; // own-mode comparison: prose first (D-060)
   const j = await s.store.addJudgment({
     at: new Date().toISOString(),
     sceneId: item.scene.id,
@@ -278,13 +280,21 @@ export async function verifyCheck(formData: FormData) {
   revalidatePath("/choba");
 }
 
-/** 師匠役テスト: the same etiquette written as prose, timed (for t_write). Field mode only. */
+/** 師匠役テスト / own-mode comparison: the same etiquette written as prose, timed (for t_write). */
 export async function submitWrite(formData: FormData) {
   const s = await getSession();
-  if (!s || s.mode !== "field") redirect("/");
+  if (!s || (s.mode !== "field" && s.mode !== "own")) redirect("/");
   const sceneId = String(formData.get("sceneId") ?? "");
   const text = String(formData.get("text") ?? "").trim().slice(0, 2000);
-  if (!/^T\d{2}$/.test(sceneId) || !text) throw new Error("invalid write");
+  // Field: the fixed fictional scenes. Own: one of the situations the master wrote (S-nnnn in this session's queue).
+  // Own: only a situation not judged yet — prose comes before the judgment (D-060).
+  // Own: once per situation, before its draft exists, and only for situations added after the comparison started.
+  const i = s.meta.queue.findIndex((q) => q.scene.id === sceneId);
+  const known =
+    s.mode === "field"
+      ? /^T\d{2}$/.test(sceneId)
+      : /^S-\d{4}$/.test(sceneId) && !!s.meta.compare && i >= Math.max(s.meta.pos, s.meta.compare.fromIndex) && !s.meta.queue[i].live && !(s.meta.writes ?? []).some((w) => w.sceneId === sceneId);
+  if (!known || !text) throw new Error("invalid write");
   const t = ms(formData, "shownAt", "submitAt");
   const meta = readMeta(s.mode, s.sid);
   meta.writes = [...(meta.writes ?? []).filter((w) => w.sceneId !== sceneId), { sceneId, text, ms: t ?? 0 }];
@@ -351,12 +361,47 @@ export async function ownAddScene(formData: FormData) {
   if (!CLIENTS.some((c) => c.id === clientId) || !(type in SCENE_TYPE_LABELS) || !(month >= 1 && month <= 12) || !situation) throw new Error("invalid scene");
   const meta = readMeta("own", OWN_SID);
   const id = `S-${String(meta.queue.length + 1).padStart(4, "0")}`;
+  // Writing the situation is timed on its own row (D-060), apart from judging.
+  const tScene = ms(formData, "shownAt", "submitAt");
+  if (tScene !== null) addTimings(meta, [{ kind: "scene", sceneId: id, ms: tScene, chars: situation.length }]);
   const draft = { channel: "none", meeting: "none", formalTo: "contact", backchannelTo: null, timing: "now", followUp: false, format: "not_applicable", posture: [], escalateToMaster: false, message: "", basedOnRules: [] } as const;
   meta.queue.push({ scene: { id, set: "train", clientId, type, month, situation }, draft: { ...draft, posture: [] } as never });
   meta.pos = Math.min(meta.pos, meta.queue.length - 1);
   meta.paused = false;
   s.saveMeta(meta);
   redirect("/choba"); // the 帳場 drafts it live (draftLive) before showing the card
+}
+
+/** Own mode: start the comparison test — prose first, then judging (D-060). */
+export async function ownStartCompare() {
+  await requireOwn();
+  const s = openSession("own", OWN_SID);
+  if (!s) redirect("/own");
+  const meta = readMeta("own", OWN_SID);
+  // Only situations added from now on take part: a card already drafted may have been read, so its prose would not be "first".
+  meta.compare = meta.compare ?? { startedAt: new Date().toISOString(), fromIndex: meta.queue.length };
+  s.saveMeta(meta);
+  redirect("/choba/write");
+}
+
+/** Own mode: the master's counts on the summary page — a number per prose text, yes/no per learned 心得 (D-060). */
+export async function ownSaveCounts(formData: FormData) {
+  await requireOwn();
+  const s = openSession("own", OWN_SID);
+  if (!s) redirect("/own");
+  const meta = readMeta("own", OWN_SID);
+  const prose: Record<string, number> = {};
+  for (const w of meta.writes ?? []) {
+    const raw = formData.get(`prose:${w.sceneId}`);
+    if (raw === null || raw === "") continue; // left out: not counted, rather than counted as 0
+    const n = Number(raw);
+    if (Number.isInteger(n) && n >= 0 && n <= 50) prose[w.sceneId] = n;
+  }
+  const rules: Record<string, boolean> = {};
+  for (const r of await s.store.listRules()) if (r.status === "active" && r.sources.some((x) => x.kind !== "ledger")) rules[r.id] = formData.get(`rule:${r.id}`) === "1";
+  meta.counts = { prose, rules };
+  s.saveMeta(meta);
+  revalidatePath("/choba/report");
 }
 
 /** 全部消す: the own folder (company, ledger, 心得帳, judgments). Needs the word 消す typed. */

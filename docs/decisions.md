@@ -943,3 +943,55 @@ textbook master; 45–52% for these two). With no words to go on, the interprete
 
 **Separate from the persona simulation** (`docs/personas-2026-11-04.md`), which checks tolerance to variation between people with
 the machine judge. This test is one real person's time on the real screen. The two are reported side by side, never mixed.
+
+## D-060 · 2026-11-04 · Accepted (Kento) · Own-company comparison: prose first, then judging; only times and counts leave
+
+**Context.** In the master-role test (D-059) the author had no history with the fictional clients, so writing the etiquette as
+prose could not be done, and judging time could not be compared with writing time. Kento will run the comparison on 11/5 on his
+own clients, in 「自分の会社で始める」 (D-056).
+
+**What was built**
+- **Timings in own mode:** the same items as the master-role test. Writing a situation is its own row (「状況を書く」), counted in
+  neither the judging time nor the writing time.
+- **Write first, so the AI does not anchor the prose:** 「比較テストを始める」 on the writing page. While it is on, the 帳場 holds
+  back, and does not even draft, any card whose situation has no prose yet. Prose can be written only for a situation not yet
+  judged.
+- **Writing page in own mode:** pick one of your own situations and write the etiquette.
+- **Summary page in own mode:**
+  - The timing table.
+  - A counting list with the prose and the 心得 learned from judging side by side, under one rule: 「後任がそのまま実行できる
+    具体的な作法か」. A number per prose text, a tick per 心得; the counts are saved in the own folder.
+  - A preview of exactly what will be saved.
+- **`npm run own:save`:**
+  - Writes `docs/results/own-company-test-<date>.json` with times and counts only.
+  - `buildOwnResult` builds it from numbers. `assertNoText` refuses to write if any string other than the fixed note and the
+    date is present.
+  - A test feeds marked situations, prose, remarks, 心得 and answers, and checks that none comes out.
+- **Procedure:** `docs/own-company-test.md`. It covers:
+  - stand-in names, and what never to enter;
+  - checking the employer's policy on sending data to an external API;
+  - the order (prose first);
+  - the counting rule;
+  - deleting everything with 全部消す afterwards.
+
+**Checked**
+- Tests pass, `eval:smoke` passes.
+- **One live run on 127.0.0.1**, with a throwaway own folder and one fictional stand-in client (`scripts/check-own-compare.ts`):
+  - the card was held and not drafted until the prose existed;
+  - the draft then appeared, and a △ was read;
+  - the counting list showed 1 prose text and 1 心得;
+  - the preview and the saved file held no text.
+- The throwaway folders were deleted, and the server was stopped.
+- Own mode stays absent from the public version (the existing tests).
+- **hitl-reviewer:** no code blocker. One doc blocker and five smaller points, all fixed before committing:
+  - **Doc (blocker):** the procedure understated what goes to the Claude API. It now lists the remarks, the 「なぜ？」 answers, the
+    chosen readings, the 心得 text (sent with every later draft) and successor questions, and says the prose is not sent. The same
+    care applies to remarks, where a real name or amount most easily slips in.
+  - **The check script refuses a non-empty own folder.** It takes screenshots into the repo, so a server on the real ~/.kokoroe
+    must never be checked with it. The refusal was tested: nothing was written.
+  - **Only situations added after 「比較テストを始める」 take part** (`compare.fromIndex`). A card already drafted may have been
+    read, so its prose would not be "first".
+  - **Prose:** written once per situation, only before its draft exists. A judgment of a held card is refused.
+  - **Counts:** a missing count is skipped, not taken as 0.
+  - **The save gate also checks keys.** Every key must be a known field name, not only every value.
+- The live run was repeated after the fixes, with the same result.

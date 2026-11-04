@@ -68,9 +68,9 @@ export interface SuccessorTurn {
   source: "live" | "recorded";
 }
 
-/** 師匠役テスト: how long each master action took (ms). Content stays in the store; this is timing only. */
+/** 師匠役テスト and own mode: how long each master action took (ms). Content stays in the store; this is timing only. */
 export interface Timing {
-  kind: "judge" | "check" | "remark" | "choose" | "why" | "write"; // check = 確かめ稽古 / regression tap
+  kind: "judge" | "check" | "remark" | "choose" | "why" | "write" | "scene"; // check = 確かめ稽古 / regression tap; scene = writing a situation (own mode)
   sceneId: string;
   ms: number;
   chars?: number; // remark / why / write length
@@ -104,6 +104,13 @@ export interface SessionMeta {
   limit?: "session" | "ip" | "daily"; // set when a live call was refused; the UI says so and falls back to recorded data
   timings?: Timing[];
   writes?: FieldWrite[];
+  /**
+   * Own mode, the comparison test (D-060): prose first, then judging. While it is on, the 帳場 holds back (and does not draft)
+   * any card whose situation has no prose yet, so the master never sees the AI's draft before writing.
+   */
+  compare?: { startedAt: string; fromIndex: number }; // only situations added after the start (queue index ≥ fromIndex) take part
+  /** Own mode: the master's own count, by one rule (「後任がそのまま実行できる具体的な作法か」): per prose text, and per learned 心得. */
+  counts?: { prose: Record<string, number>; rules: Record<string, boolean> };
   answers?: SuccessorTurn[]; // 暖簾を継ぐ — newest first
   createdAt: string;
   queue: QueueItem[];

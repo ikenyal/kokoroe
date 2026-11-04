@@ -26,7 +26,8 @@
     "video:shoot": "tsx video/shoot.ts",
     "field:save": "tsx scripts/field-save.ts",
     "export:skill": "tsx eval/export-skill.ts",
-    "own": "KOKOROE_OWN=1 KOKOROE_LIVE=1 next dev --hostname 127.0.0.1"
+    "own": "KOKOROE_OWN=1 KOKOROE_LIVE=1 next dev --hostname 127.0.0.1",
+    "own:save": "KOKOROE_OWN=1 tsx scripts/own-save.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "1.4.0",
