@@ -904,6 +904,13 @@ textbook master; 45–52% for these two). With no words to go on, the interprete
   - **Applied:**
     - The action's rule for storing an area moved into a pure helper (`areaToStore`), with a test for each case above.
     - Note: the 帳場 reads the stored `noRemark` flag, which `askWhere` sets, rather than calling `askWhere` itself.
+- **Live browser check of the narrowed screen** (127.0.0.1, after the master-role test; `scripts/check-diff-area.ts`;
+  `docs/screens/diff-area-{noremark,remark}-desktop.png`, `diff-area-phone*.png`):
+  - △ with no remark: the six area buttons appear.
+  - △ with 「違う」: only 「どれでもない」 appears.
+  - Skipping the area leads to the second readings, which have no area buttons.
+  - At 390 px the area buttons are 44 px tall.
+  - The server was stopped afterwards.
   - **Noted, unchanged (from before D-057):** in the 帳場 a 確かめ稽古 follow-up correction can get a second round of readings,
     while the evaluation loop's follow-up has one. This matters only when comparing tap counts between the two.
 
