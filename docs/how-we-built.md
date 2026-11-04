@@ -390,3 +390,20 @@ Short entries, appended every work session. Source material for the README secti
   - **A change tried and reverted:** a two-column 「そのほか」 squeezed one row into a strip.
   - **Screenshots:** a small extension of `scripts/screens.ts` (`--out`, `--judge`, `--ask`, wait for load) took before/after
     shots with recorded data only, with no API calls.
+
+- **11/4, night — an unattended run on `ui-polish` (Kento asleep; `docs/ui-polish-log.md` starts with the summary).**
+  - **Brief:** Kento left five tasks in order, with the earlier limits still in force, and one rule for doubt: write down the
+    question, stop that piece on the safe side, and move on. The task that went furthest beyond UI, the 訪問の段取り, was
+    approved in advance, with its condition: off in the evaluation, proven by a test.
+  - **"Unchanged" measured, not argued.** Before touching the apprentice or the interpreter, Claude Code committed a test that
+    fingerprints both requests (SHA-256 of prompt, schema and parameters) as they were. The addition was then built so that the
+    same test still passes with visits off. That made "the official Before/After cannot move" something a test checks.
+  - **The hitl-reviewer found the blocker that mattered.** The money/contract floor read the situation and the message but not
+    the new visit plan, so 「無償で試作品を持参」 would not have reached the master. It was fixed and tested before the commit.
+    One suggestion was not taken and was left for Kento: asking the master whenever visit wording differs in a regression check.
+  - **The live run found an older bug.** The visit scenario was the first to reach own mode's 確かめ card, and the card crashed:
+    it looked the scene up only among the fictional ones. Fixed in the same night, with screenshots of the whole flow.
+  - **The second 帳場.** At Kento's request, the READMEs now show this repository's own development in the product's shape:
+    Claude Code's draft, Kento's one-line judgment, and where the difference was kept (`CLAUDE.md`, a hook, a decision record).
+    Five examples were taken from the git history and the records. The first was a rule given before any code, not a
+    correction, and the table says so.
