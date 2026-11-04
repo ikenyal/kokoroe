@@ -76,3 +76,18 @@ critic (`.claude/agents/ui-critic.md`) reviews them after each change.
    出どころ.
 3. **「いいえ」 is in ink, not vermilion.** Vermilion stays for the master's marks.
 4. **Plainer note on the demo:** 「このデモでは、下の質問に記録済みの答えで返します」.
+
+## 最初の画面・心得帳（2回目、ui-critic の講評から）
+
+1. **最初の画面:**
+   - On phones the start buttons come right after the intro, so a button is in the first screen; 一・二・三 follow. Desktop is
+     unchanged.
+   - Lines 一・三 are shorter, with no lone 「ます。」.
+   - The specimen's date is labelled 記帳 (when it was written down), and its caption is set in ink Mincho.
+   - The stacked double rule under the specimen is gone.
+2. **心得帳:**
+   - **Each 沿革 entry is a ledger row.** The master's mark sits in the left margin, drawn with the same brush mark as the 帳場 at
+     one size (× and △ no longer differ). The date and scene are in readable ink.
+   - **Two separate actions:** 「出典の一覧」 (indigo) and 「この心得を消す」 at opposite ends, each 40 px tall.
+   - **Tighter spacing** between clients.
+   - **On phones,** the side index collapses to the hand-over button and the counts, so the first 心得 is in the first screen.

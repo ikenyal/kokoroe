@@ -21,9 +21,9 @@ function specimen() {
 }
 
 const STEPS = [
-  ["一", "弟子（AI の橙丸）が、取引先への対応の段取りを先に作ります。"],
-  ["二", "師匠は、○・△・× の印と、あれば短い一言を付けるだけです。"],
-  ["三", "直された分が、わけと日付つきで心得帳に残り、後任に渡ります。"],
+  ["一", "弟子（AI の橙丸）が、対応の段取りを先に作る。"],
+  ["二", "師匠は ○・△・× の印と、あれば一言を付けるだけ。"],
+  ["三", "直された分が、わけつきで心得帳に残り、後任に渡る。"],
 ] as const;
 
 export default async function Home(props: PageProps<"/">) {
@@ -34,7 +34,7 @@ export default async function Home(props: PageProps<"/">) {
   const ex = specimen();
   return (
     <div className="grid gap-x-14 gap-y-12 md:grid-cols-[1.15fr_1fr]">
-      <section>
+      <section className="flex flex-col">
         <h1 className="font-mincho text-[25px] leading-snug tracking-[0.04em] sm:text-[30px]">
           聞いても出てこない作法を、
           <br />
@@ -43,7 +43,7 @@ export default async function Home(props: PageProps<"/">) {
         <p className="yomi mt-4 max-w-[32em] text-[16px]">
           取引先ごとの付き合い方は、ベテランの頭の中にしかありません。説明はできなくても、案を見れば「違う」とはすぐ言えます。ココロエは、その「違う」を集めます。
         </p>
-        <ol className="mt-6 max-w-[32em] border-t border-keisen">
+        <ol className="mt-6 max-w-[32em] border-t border-keisen max-md:order-last">
           {STEPS.map(([n, t]) => (
             <li key={n} className="grid grid-cols-[2rem_1fr] border-b border-keisen py-2.5">
               <span aria-hidden className="font-mincho text-[17px] text-nibi">{n}</span>
@@ -88,8 +88,8 @@ export default async function Home(props: PageProps<"/">) {
 
       <div className="space-y-10">
         {ex && (
-          <figure aria-labelledby="ex-h" className="border-y-2 border-sumi/80 py-5">
-            <p id="ex-h" className="text-[13px] text-nibi">心得帳の一行（デモから）</p>
+          <figure aria-labelledby="ex-h" className="border-t-2 border-sumi/80 pt-4">
+            <p id="ex-h" className="font-mincho text-[14px] text-sumi">心得帳の一行（デモから）</p>
             <p className="mt-2 text-[14px] text-nibi">{ex.client}</p>
             <blockquote className="yomi mt-1 font-mincho text-[20px] leading-relaxed">{ex.text}</blockquote>
             <dl className="mt-4 grid grid-cols-[5em_1fr] gap-y-2 border-t border-keisen pt-3 text-[14px]">
@@ -108,14 +108,14 @@ export default async function Home(props: PageProps<"/">) {
                   <dd className="yomi">{ex.why}</dd>
                 </>
               )}
-              <dt className="text-nibi">日付</dt>
+              <dt className="text-nibi">記帳</dt>
               <dd className="tabular-nums">{ex.date}</dd>
             </dl>
             <figcaption className="mt-3 text-[13px] text-nibi">師匠の印と一言から弟子が書き、わけは師匠の言葉のまま残します。後任はここから聞けます。</figcaption>
           </figure>
         )}
 
-        <details className="border-t border-keisen pt-3 text-[14px]">
+        <details className="text-[14px]">
           <summary className="cursor-pointer text-ai select-none">データの扱い</summary>
           <dl className="mt-3 space-y-4">
             <div>

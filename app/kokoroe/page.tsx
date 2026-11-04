@@ -5,6 +5,7 @@ import { SCENE_TYPE_LABELS } from "@/src/core/types";
 import type { KokoroeRule, RuleSource } from "@/src/learning/types";
 import { getSession } from "@/src/server/session";
 import { retireRule } from "../actions";
+import { Mark } from "../marks";
 
 const VERDICT_LABEL = { "○": "○", "△": "△", "×": "×" } as const;
 
@@ -31,7 +32,7 @@ function Rule({ r, fact = false }: { r: KokoroeRule; fact?: boolean }) {
   const judgmentOf = (id: string) => r.sources.find((s) => s.kind !== "ledger" && "judgmentId" in s && s.judgmentId === id) as Extract<RuleSource, { verdict?: unknown }> | undefined;
   const trigger = r.history.map((h) => h.trigger).filter(Boolean).at(-1);
   return (
-    <li id={r.id} className="scroll-mt-6 border-t border-keisen py-5 first:border-t-0">
+    <li id={r.id} className="scroll-mt-6 border-t border-keisen py-4 first:border-t-0">
       {(r.scope.sceneTypes || (fromLedger && fromMaster)) && (
         <p className="text-[12.5px] text-nibi">
           {r.scope.sceneTypes && `${r.scope.sceneTypes.map((t) => SCENE_TYPE_LABELS[t]).join("・")}のとき`}
@@ -49,18 +50,26 @@ function Rule({ r, fact = false }: { r: KokoroeRule; fact?: boolean }) {
           </p>
         )
       ) : (
-        <ol aria-label="沿革" className="mt-3 space-y-2.5 border-l-2 border-keisen pl-4 text-[14px]">
+        <ol aria-label="沿革" className="mt-2.5 space-y-2 text-[14px]">
           {r.history.map((h, i) => {
             const j = h.judgmentId ? judgmentOf(h.judgmentId) : undefined;
             const words = h.masterWords || (j && "remark" in j ? j.remark : "");
             return (
-              <li key={i}>
+              <li key={i} className="grid grid-cols-[1.75rem_1fr] gap-x-2">
+                <span className="pt-0.5 text-shu">
+                  {j && "verdict" in j && j.verdict && (
+                    <>
+                      <Mark v={j.verdict} size={20} />
+                      <span className="sr-only">師匠の判定 {j.verdict}</span>
+                    </>
+                  )}
+                </span>
+                <div>
                 <p className="flex flex-wrap items-baseline gap-x-2">
-                  <span className="tabular-nums text-nibi">{h.date}</span>
-                  {j && "verdict" in j && j.verdict && <span className="font-mincho text-[16px] leading-none text-shu" aria-label={`師匠の判定 ${j.verdict}`}>{j.verdict}</span>}
-                  {words ? <span className="yomi">「{words}」</span> : j ? <span className="text-nibi">（一言なし）</span> : null}
-                  {j && "sceneId" in j && <span className="text-nibi">{sceneWords(j.sceneId)}</span>}
-                  {!j && h.judgmentId === "MASTER" && <span className="text-nibi">師匠が心得帳で直接</span>}
+                  <span className="tabular-nums text-sumi/75">{h.date}</span>
+                  {words ? <span className="yomi">「{words}」</span> : j ? <span className="text-sumi/75">（一言なし）</span> : null}
+                  {j && "sceneId" in j && <span className="text-sumi/75">{sceneWords(j.sceneId)}</span>}
+                  {!j && h.judgmentId === "MASTER" && <span className="text-sumi/75">師匠が心得帳で直接</span>}
                 </p>
                 {h.before && (
                   <p className="yomi text-[14px] text-nibi">
@@ -73,21 +82,27 @@ function Rule({ r, fact = false }: { r: KokoroeRule; fact?: boolean }) {
                     {h.trigger}
                   </p>
                 )}
+                </div>
               </li>
             );
           })}
         </ol>
       )}
       {r.status === "active" && (
-        <details className="mt-2 text-[13px]">
-          <summary className="inline-flex min-h-9 cursor-pointer items-center text-nibi select-none">出典の一覧・この{fact ? "事実" : "心得"}を消す</summary>
-          <ul className="mt-1 space-y-1">{r.sources.map((s, i) => <SourceLine key={i} s={s} />)}</ul>
-          <form action={retireRule} className="mt-2 flex items-center gap-3">
-            <input type="hidden" name="ruleId" value={r.id} />
-            <span className="text-nibi">消した記録は沿革に残ります。</span>
-            <button className="rounded-[3px] border border-sumi/60 px-3 py-1 text-sumi hover:bg-kami-2">消す</button>
-          </form>
-        </details>
+        <div className="mt-1.5 flex flex-wrap items-start justify-between gap-x-6 text-[13px]">
+          <details>
+            <summary className="inline-flex min-h-10 cursor-pointer items-center text-ai select-none">出典の一覧</summary>
+            <ul className="mb-2 space-y-1">{r.sources.map((s, i) => <SourceLine key={i} s={s} />)}</ul>
+          </details>
+          <details className="text-right">
+            <summary className="inline-flex min-h-10 cursor-pointer items-center text-nibi select-none">この{fact ? "事実" : "心得"}を消す</summary>
+            <form action={retireRule} className="mb-2 flex items-center justify-end gap-3">
+              <input type="hidden" name="ruleId" value={r.id} />
+              <span className="text-nibi">消した記録は沿革に残ります。</span>
+              <button className="rounded-[3px] border border-sumi/60 px-3 py-1 text-sumi hover:bg-kami-2">消す</button>
+            </form>
+          </details>
+        </div>
       )}
     </li>
   );
@@ -104,7 +119,7 @@ function groupsOf(rules: KokoroeRule[], prefix: string): Group[] {
 
 function Groups({ groups, fact = false }: { groups: Group[]; fact?: boolean }) {
   return (
-    <div className="space-y-10">
+    <div className="space-y-7">
       {groups.map((g) => (
         <section key={g.key} id={g.key} aria-labelledby={`${g.key}-h`} className="scroll-mt-6">
           <header className="border-b border-sumi/50 pb-1.5">
@@ -144,9 +159,9 @@ export default async function KokoroePage() {
         >
           心得帳を後任に渡す
         </a>
-        <p className="mt-1.5 text-[12px] text-nibi">Agent Skills の形（SKILL.md と取引先ごとのファイル）で書き出します。後任の Claude Code の .claude/skills/ に置くと使えます。</p>
-        <p className="mt-5 text-[12px] text-nibi">心得</p>
-        <ol className="mt-1 space-y-1 text-[14px]">
+        <p className="mt-1.5 hidden text-[12px] text-nibi md:block">Agent Skills の形（SKILL.md と取引先ごとのファイル）で書き出します。後任の Claude Code の .claude/skills/ に置くと使えます。</p>
+        <p className="mt-5 hidden text-[12px] text-nibi md:block">心得</p>
+        <ol className="mt-1 hidden space-y-1 text-[14px] md:block">
           {kokoroe.map((g) => (
             <li key={g.key}>
               <a href={`#${g.key}`} className="flex justify-between gap-2 hover:text-ai">
