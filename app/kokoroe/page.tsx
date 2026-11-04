@@ -92,15 +92,15 @@ function Rule({ r, fact = false }: { r: KokoroeRule; fact?: boolean }) {
       {r.status === "active" && (
         <div className="mt-1.5 flex flex-wrap items-start justify-between gap-x-6 text-[13px]">
           <details>
-            <summary className="inline-flex min-h-10 cursor-pointer items-center text-ai select-none">出典の一覧</summary>
+            <summary className="inline-flex min-h-11 cursor-pointer items-center text-ai select-none">出典の一覧</summary>
             <ul className="mb-2 space-y-1">{r.sources.map((s, i) => <SourceLine key={i} s={s} />)}</ul>
           </details>
           <details className="text-right">
-            <summary className="inline-flex min-h-10 cursor-pointer items-center text-nibi select-none">この{fact ? "事実" : "心得"}を消す</summary>
+            <summary className="inline-flex min-h-11 cursor-pointer items-center text-sumi/80 select-none">この{fact ? "事実" : "心得"}を消す</summary>
             <form action={retireRule} className="mb-2 flex items-center justify-end gap-3">
               <input type="hidden" name="ruleId" value={r.id} />
               <span className="text-nibi">消した記録は沿革に残ります。</span>
-              <button className="rounded-[3px] border border-sumi/60 px-3 py-1 text-sumi hover:bg-kami-2">消す</button>
+              <button className="rounded-[3px] border border-sumi/60 min-h-11 px-4 text-sumi hover:bg-kami-2">消す</button>
             </form>
           </details>
         </div>

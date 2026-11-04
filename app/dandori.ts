@@ -28,10 +28,11 @@ export function sceneRange() {
   const score = (p: Proposal) => (p.channel !== "mail" ? 2 : 0) + (p.meeting !== "none" ? 2 : 0) + (p.backchannelTo ? 1 : 0);
   return (Object.keys(SCENE_TYPE_LABELS) as SceneType[]).map((t) => {
     const best = q.filter((x) => x.scene.type === t).sort((a, b) => score(b.draft) - score(a.draft))[0];
-    if (!best) return { type: t, label: SCENE_TYPE_LABELS[t], example: null };
+    if (!best) return { type: t, label: SCENE_TYPE_LABELS[t], example: null, quiet: null };
     const c = getClient(best.scene.clientId);
     const quiet = quietWord(best.draft, c);
-    return { type: t, label: SCENE_TYPE_LABELS[t], client: c.name, example: `${means(best.draft)}${quiet ? `。${quiet}` : ""}` };
+    const to = toWhom(best.draft, c);
+    return { type: t, label: SCENE_TYPE_LABELS[t], client: c.name, example: `${to === "—" ? "" : `${to}へ、`}${means(best.draft)}`, quiet };
   });
 }
 

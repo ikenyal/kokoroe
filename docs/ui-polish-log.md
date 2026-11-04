@@ -1,5 +1,45 @@
 # UI polish log (branch `ui-polish`, from 11/4 until the feature freeze on 11/6)
 
+## 今夜のまとめ（11/4 夜、Kento が寝ている間。ここだけ読めば足ります）
+
+**やったこと**（すべて `ui-polish` に push 済みで、main にもマージ済み。テスト 271 件、型、lint、`eval:smoke` 2回、ライト／ダーク × デスクトップ／スマホの画面を確認）
+1. **講評の残り:**
+   - グラフの途中の版は、点のない細い線にして、ラベルを一つにまとめました。
+   - 読む画面の幅を揃えました（`max-w-4xl`）。
+   - 暖簾を継ぐの例の質問に、いつも「尋ねる」を出し、高さを 44px にしました。
+2. **段取りを主役に:**
+   - 案の行を 誰に・何で・いつ・裏で誰に・後日 にし、「何で」は動作で書きます（「手紙を出す。そのうえで訪問して話す」「あえて連絡しない」）。呼び名は「弟子（橙丸）の段取りの案」です。
+   - 文面は「文面の下書き（参考）」として畳んでいます。
+   - 最初の画面に「扱う場面は10種類。メールだけではありません」を置き、10種類の場面を、記録済みの段取りの例と並べました（例は誰に宛てるかから始め、裏の一言は別の行です）。
+3. **訪問の段取り（D-061）:**
+   - 段取りに訪問が入るときだけ、服装・手土産・先に確かめる話題・同席者・呼び方 を弟子が案に含め、同じ ○△× と一言で直せます。直しは心得になります。
+   - **評価では切っています。** 弟子と解釈役への依頼の指紋（SHA-256）を、変更の前にテストとして固定してから作りました。切ったときの依頼は1文字も変わりません。`eval:final` は `KOKOROE_EVAL_VISIT=on` だと止まります。README と決定記録に「評価の対象は連絡の段取り。訪問の段取りは正解がないため対象外」と書きました。
+   - **hitl-reviewer の指摘（止める1件）を直しました。** 金額・契約の下限が訪問の案を読んでおらず、「無償で試作品を持参」が師匠に回らない状態でした。
+   - **自分の会社モードで実際に試しました**（一時フォルダ、架空の会社と取引先を1つ。終わったあと消しました。≈ $0.09）。「この先方はスーツを嫌う。作業着で行け」と「行く前に、新ラインの立ち上げがどうなったか確かめておけ」が心得になり、次の案はもう作業着で来ました（`14-visit/`）。
+   - **途中で前からあった不具合を見つけて直しました:** 自分の会社モードで、確かめの欄が帳場ごと落ちていました。
+4. **二つ目の帳場:**
+   - README（英・日）に、この開発そのものの例を5件、表にしました（MCP の遮断、正解の凍結、127.0.0.1、作者メールの書き換え、段位を見送った判断）。最初の1件はダメ出しではなく最初からの決まりだ、と正直に書いています。
+   - 「案を見れば ○△× を付けられる仕事なら同じ仕組みが使える」は一言だけにし、汎用の帳場は今後の展望として書きました。
+   - 動画への入れ方の案は `video/README.md` に置きました（作っていません）。
+5. **ui-critic の講評（3回目）から:**
+   - 金額の注意は段取りの下に移し、意味が通る言い方にしました。
+   - 一言の例を段取りの直しの形にしました。
+   - 心得帳の小さなリンクを 44px にしました。
+
+**前後の代表的なスクリーンショット**
+- 帳場: `before/choba-light-desktop.png` → `15-critic/choba-light-desktop.png`（スマホは `15-critic/choba-light-mobile.png`）
+- 最初の画面: `merge-2/home-light-desktop.png` → `15-critic/home-light-desktop.png`
+- 訪問の段取り: `14-visit/1-card.png`、`14-visit/2-card.png`（前の直しが効いた案）、`14-visit/3-kokoroe.png`
+- 稽古の記録のグラフ: `merge-2/keiko-light-desktop.png` → `12-leftovers/keiko-light-desktop.png`
+
+**費用:** 今夜のライブ ≈ $0.09、`eval:smoke` 2回 ≈ $0.09。合計 ≈ $0.2 です（上限は $5）。サーバーはすべて止めてあり、公開版の作り直し・AWS・force push はしていません。
+
+**判断してほしいこと**
+1. **デモに訪問を見せるか**（ui-critic の一番の指摘）。デモの記録済みの案には訪問の段取りがなく、最初のカードはメールです。見せるには `data/demo/demo-snapshot.json` を録り直すか、並べ替える必要があり、動画もこれで撮っています。今夜は触っていません。
+2. **回帰の確かめで、訪問の案の違いも師匠に見せるか**（hitl-reviewer の提案）。訪問の言い回しは解き直すたびに変わるため、ほぼ毎回1タップ増えます。今は見せていません（D-061 に記録）。
+3. **金額の下限が訪問の文面にも効くため、「価格には触れず」と書いただけの訪問も師匠に回ります**（実際に1回起きました）。わざと広くしている（D-044）ので、そのままにしています。
+4. **公開版への反映は、11/6 の凍結時の作り直しで行います**（訪問の段取りも含めて）。
+
 Two aims (Kento): a first-time visitor knows what to read and what to press, and the screens stop looking like a generic
 AI-made page. The direction is a merchant's ledger:
 - sections divided by ruled lines and space;
@@ -166,3 +206,24 @@ when, the quiet word to whom) and the etiquette beyond email.
 
 All of this is display only (`app/dandori.ts`). The proposal fields, `src/core/labels.ts` and anything the simulator or the
 evaluation reads are unchanged.
+
+## 訪問の段取り（D-061）と、ui-critic の講評（3回目、`14-visit/`・`merge-3/`・`15-critic/`）
+
+1. **The 訪問 section** on the card, only when the 段取り visits: 服装・手土産・先に確かめる話題・同席者・呼び方. It is corrected by
+   the same ○△× and one line. Shots from a live run in own mode with a fictional stand-in (`14-visit/`). The blank capture of the
+   regression check was dropped; the script's log shows that the card was there.
+2. **From the critic** (question: does it still look like stamping email drafts?):
+   - **The money/contract note moved below the 段取り rows,** worded as what it is: 「金額・条件が絡む場面です。金額や条件は橙丸が
+     決めず、先方に出す前に師匠が判断します。」 *Why:* at the top, 「橙丸は決めていません」 contradicted the full plan below it.
+   - **Home table: whom first** (「PM（窓口）へ、チャットで送る…」), and the quiet word on its own line in ink (「裏で、部長（決裁）に
+     も、そっと一言」). *Why:* seven of ten rows began with メールを送る, and the 根回し was lost after the channel.
+   - **The draft link reads 「文面の下書き（参考）」.** The remark example reads like a 段取り correction: 「例：先に工場長へ電話。社長
+     にも一言」.
+   - **心得帳:** 出典の一覧 / この心得を消す / 消す are 44px tall, and 消す is in ink rather than faint grey.
+3. **Not taken:**
+   - The △ in the status line is the master's own mark, so vermilion is right.
+   - The filled tab stays (the 暖簾, decided earlier).
+   - 「先に印を選ぶ」 is the disabled state of the button that then reads 「△で記録する」.
+4. **For Kento:** "show 訪問 in the demo" (the critic's first point). The demo's recorded drafts have no visit plan, and its
+   first card is an email. Either change means re-recording `data/demo/demo-snapshot.json` (live drafts) or reordering it, and
+   the video is shot from that snapshot. Left as it is; see the summary at the top.

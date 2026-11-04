@@ -122,7 +122,10 @@ export default async function Home(props: PageProps<"/">) {
             {sceneRange().map((r) => (
               <li key={r.type} className="grid grid-cols-[9.5em_1fr] gap-x-3 border-t border-keisen py-1.5 text-[13.5px] first:border-t-0">
                 <span className="text-sumi">{r.label}</span>
-                <span className="yomi text-nibi">{r.example ?? "—"}</span>
+                <span className="yomi text-nibi">
+                  {r.example ?? "—"}
+                  {r.quiet && <span className="block text-sumi">裏で、{r.quiet}</span>}
+                </span>
               </li>
             ))}
           </ul>
