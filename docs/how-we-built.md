@@ -351,5 +351,12 @@ Short entries, appended every work session. Source material for the README secti
     - **An assumption checked:** Kento expected the textbook master to always speak. Before running, Claude Code read the
       simulator and found it is silent on 20% of its △/× by design, so the chooser still comes up there. That is recorded with
       the check.
-    - **Review after the commit:** Kento noticed that the hitl-reviewer had not been run on the narrowing before it was pushed. It
-      was run then: no blockers. Its smaller point (test the action's store rule) was applied, and the result is in D-057.
+    - **Review after the commit:** Claude Code reported, unprompted, that it had not yet run the hitl-reviewer on the narrowing
+      before pushing it. Kento then asked for it to be run: no blockers. Its smaller point (test the action's store rule) was applied, and the result is in D-057.
+
+- **11/4 — master-role test (D-059).**
+  - **The test:** Kento played the master on 20 fictional scenes, timed by the app, and saved the result with `npm run field:save`.
+  - **Records:** Claude Code wrote the result into the result file's notes, the READMEs, D-059 and the submission draft.
+  - **Kept as it happened:** 18 of 20 were ○ because the author had no history with these clients, and the prose task was not
+    done. The submission draft's "faster than writing" sentence was replaced, not filled in, since no writing time exists.
+  - **Kept apart:** this test is reported apart from the persona simulation.

@@ -1,0 +1,40 @@
+{
+  "note": "師匠役テスト / master-role test (D-031, D-041, D-046): one person (the author) as the master, fictional data. Timings in ms; medians per action.",
+  "date": "2026-11-04",
+  "cards": 20,
+  "judged": 20,
+  "corrections": 2,
+  "timings": {
+    "judge": {
+      "n": 20,
+      "medianMs": 53549
+    },
+    "remark": {
+      "n": 20,
+      "medianMs": 1324.5
+    }
+  },
+  "rulesLearned": [
+    {
+      "id": "K-011",
+      "text": "大きな提案は、入れ替えの理由と必要性を最初に丁寧に説明する。",
+      "when": "先方に負担の大きい変更を持ちかけるとき"
+    },
+    {
+      "id": "K-012",
+      "text": "あいさつ状には、時期を選んだ理由やあいさつの意図を書き添えない。",
+      "when": null
+    }
+  ],
+  "prose": [],
+  "proseEtiquetteCount": null,
+  "verdicts": "18 of 20 marked ○; 2 corrections (2 心得 learned)",
+  "readingNote": "judge = from the card shown to the mark, including reading the draft and its message (median 53.5 s; 20 cards ≈ 18 min). remark = from the mark to recording it (median 1.3 s; almost no remarks were written).",
+  "authorNote": "The author has never dealt with this fictional company or its clients. Seeing them for the first time, the polite, plausible drafts looked acceptable, so 18 of 20 were marked ○. This is the situation the product addresses: a successor who does not know the history would send the AI draft as it is; only someone who knows the history can correct it.",
+  "proseSkipped": "Writing the same etiquette as prose was not done: the author had no experience of these clients to write it from, so the task did not apply. The judging-vs-writing comparison was therefore not measured; no writing time exists and none is to be assumed (D-059).",
+  "measured": "time per judgment by one person, on fictional data",
+  "notMeasured": [
+    "how much etiquette comes out (the author could not supply any)",
+    "judging time compared with writing time"
+  ]
+}

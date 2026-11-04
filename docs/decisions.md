@@ -906,3 +906,33 @@ textbook master; 45–52% for these two). With no words to go on, the interprete
     - Note: the 帳場 reads the stored `noRemark` flag, which `askWhere` sets, rather than calling `askWhere` itself.
   - **Noted, unchanged (from before D-057):** in the 帳場 a 確かめ稽古 follow-up correction can get a second round of readings,
     while the evaluation loop's follow-up has one. This matters only when comparing tap counts between the two.
+
+## D-059 · 2026-11-04 · Accepted (Kento) · Master-role test: what one first-time person measured, and what it could not
+
+**What was done.** Kento played the master in the 帳場 on 20 fictional scenes, on 127.0.0.1, with live drafts. Result:
+`docs/results/master-role-test-2026-11-04.json`.
+
+**Measured** (one person, fictional data):
+- **Time to mark ○/△/×:** median **53.5 s** per card, including reading the draft and its message. 20 cards took about 18 minutes.
+- **Time to add a remark and record it:** median 1.3 s. Almost no remarks were written.
+- **Marks:** 18 of 20 were ○. The 2 corrections each became a 心得.
+
+**What it shows, stated plainly.**
+- The author has never dealt with this fictional company or its clients. Seeing them for the first time, polite and plausible
+  drafts looked acceptable, so 18 of 20 got ○.
+- This is the situation the product addresses: a successor who does not know the history would send the AI draft as it is.
+  Only someone who knows the history can correct the tacit part.
+- So this is a result checked by a person, not a weakness to hide. The value of the 帳場 depends on the master being the person
+  who holds the history.
+
+**Not done, and not measured.**
+- **Writing the same etiquette as prose was not done.** A first-time author has no experience to write it from, so the task did
+  not apply.
+- **Not measured:**
+  - how much etiquette comes out;
+  - judging time compared with writing time.
+- **No writing time is invented.** Any impact estimate that would need one either says plainly that it is an assumption, or does
+  not use it. The submission draft's "faster than writing" sentence was replaced accordingly.
+
+**Separate from the persona simulation** (`docs/personas-2026-11-04.md`), which checks tolerance to variation between people with
+the machine judge. This test is one real person's time on the real screen. The two are reported side by side, never mixed.

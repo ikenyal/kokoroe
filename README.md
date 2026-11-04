@@ -70,6 +70,14 @@ away from family succession.
   `ANTHROPIC_API_KEY=...` and `KOKOROE_LIVE=1` in `.env.local` (template: `.env.example`).
 - **Master-role test (author only, local):** the author plays the master on fictional scenes in the 帳場 and the app times each
   action ([docs/master-role-test.md](docs/master-role-test.md)). It is not a test with real clients or in a real workplace.
+  - **Result (11/4, one person, 20 fictional scenes; D-059):** marking a card took a median of **53.5 s**, including reading the
+    draft and its message (about 18 minutes for 20). Adding a remark and recording it took a median of 1.3 s; almost none were
+    written.
+  - **18 of 20 were marked ○.** The author has never dealt with this fictional company, and to a first-time reader the polite,
+    plausible drafts looked fine. This is exactly the successor who would send the AI's draft as it is. Only someone who knows
+    the history can correct the tacit part.
+  - **Not measured:** writing the same etiquette as prose was not done (the author had no experience to write from). So there is
+    no comparison of judging time with writing time, and no count of how much etiquette comes out.
   Internally it is still named `field` (`KOKOROE_FIELD=1`, `npm run field:save`).
 - **Persona simulation (not a real-world test):** master and successor personas played by Claude (a silent master, one who only
   says 「違う」, a busy-month master, a fat-fingered one, an abbreviating one; an indirect newcomer, a curt asker, and others).
