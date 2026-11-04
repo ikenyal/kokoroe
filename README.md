@@ -10,6 +10,23 @@
 each entry keeps its *沿革* (history: old → new, the trigger, the master's words, the date). The *帳場* is the master's desk
 (the review screen), and *暖簾を継ぐ* ("taking over the shop curtain") is the successor's screen.
 
+## See it on screen (recorded demo, fictional data)
+
+**1. Correct it, and the next draft changes (帳場).** After the master marked a draft for 丸新酒造 △ (no remark), the
+apprentice's next draft for a similar situation added, on its own, a quiet word to the 蔵元 (the owner, who decides).
+
+<img src="docs/readme/1-choba-change.webp" alt="The 帳場's 「変化」 panel: the 心得 'when writing formally to the owner's wife, give the owner a word first'; behind the scenes: the earlier draft said none, this draft says a quiet word to the owner" width="720">
+
+**2. The 心得帳 keeps it with its history:** when, from which mark and words of the master, and why. The master can read and
+delete every entry.
+
+<img src="docs/readme/2-kokoroe-history.webp" alt="心得帳 entry for 浜風運輸: tell bad news to the dispatch manager early, before it is certain; × with the words 'to the dispatch manager, early'; why: in 2019 they were told too late and could not rearrange the trucks" width="720">
+
+**3. The successor gets an answer with its reason (暖簾を継ぐ).** The same question: without the 心得帳, "can't judge"; with it,
+an answer that cites the 心得 and its history.
+
+<img src="docs/readme/3-noren-with-without.webp" alt="暖簾を継ぐ: a question about a delay notice to 浜風運輸. Without the 心得帳: can't judge. With it: no, with the 2019 reason" width="720">
+
 ## The problem
 
 In a small Japanese company, how to deal with each client lives in one veteran's head: whom to tell first, what to send by mail and
@@ -155,6 +172,32 @@ always off in evaluation runs (D-061).
   silent on 20% of its △/×.) How often it leaves this out is assumed, not measured:
   20% for the master in these numbers (the official 11/7 measurement uses 20% too); 50% and 30% for the silent and vague
   personas. A real master may answer less often.
+
+## What was made with Claude, and what was not
+
+What this entry asks to be judged on is what was made with Claude. The line is drawn here.
+
+**Made with Claude**
+- **This repository's code and documents**, written with Claude Code during the hackathon (from 2026-11-02): the app, the master
+  simulator and evaluation, scripts, tests and hooks, the fictional data files, the README and the records, and the video's scene
+  pages and narration script. Which calls were the author's and what Claude Code did is in
+  [docs/how-we-built.md](docs/how-we-built.md) (and in "A second 帳場" below).
+- **What Claude writes inside the app** (Anthropic API, called directly): the apprentice's 段取り drafts, message drafts and visit
+  plans; the readings of the master's remark and the 心得 written from them; company-wide rule proposals; the successor's answers.
+  In the evaluation, the personas' wording (Haiku; cached in `eval/personas-texts.json`). Whether a draft is right is decided by
+  code (the machine-checkable simulator), not by Claude.
+- **Kokoroe's Skill and MCP server.** The 心得帳 exported as an Agent Skill (`SKILL.md`) and the read-only MCP server
+  (`src/mcp/server.ts`) are part of this work. **Claude Code itself is Anthropic's product, used as it is** — in the video, the
+  successor's Claude Code answers from Kokoroe's Skill and asks Kokoroe's MCP server; the video marks which part of the answer
+  came from which.
+
+**Not made with Claude**
+- Narration voice: Amazon Polly (text-to-speech; the script is Claude-made as above). Hosting: Amazon Lightsail.
+- Main open-source software: Next.js, React, Tailwind CSS, Zod, the MCP TypeScript SDK, Playwright (screen recording), ffmpeg (video
+  assembly), Vitest. Fonts: Shippori Mincho and Zen Kaku Gothic New (Google Fonts, SIL Open Font License).
+- Statistics quoted in the README and the video: Teikoku Databank (successor survey, 2025) and the Statistics Bureau of Japan
+  (Labour Force Survey, 2025).
+- No external images or music are used. The pictures in the video are HTML/CSS pages and screens of the app itself.
 
 ## How we built it with Claude Code
 
