@@ -15,6 +15,8 @@
   --shu-soft: #f3dcd6;
   --keisen: #cfccc4; /* ruled lines */
   --waku: #88847b; /* edges of fields you type into: 3:1 against paper (WCAG 1.4.11) */
+  --sukime: rgb(90 80 60 / 0.016); /* laid lines of the paper: felt, not seen; never to compete with the ledger's rules */
+  --mura: rgb(120 105 80 / 0.045); /* unevenness of the paper */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -29,6 +31,8 @@
     --shu-soft: #3a2420;
     --keisen: #2e333a;
     --waku: #6a7078;
+    --sukime: rgb(255 255 255 / 0.01);
+    --mura: rgb(255 255 255 / 0.02);
   }
 }
 
@@ -48,7 +52,12 @@
 }
 
 html {
-  background: var(--kami);
+  background-color: var(--kami);
+  /* Washi, faintly: the horizontal laid lines (簀の目) a paper screen leaves, with a soft unevenness. CSS only, no image. */
+  background-image:
+    repeating-linear-gradient(0deg, var(--sukime) 0 1px, transparent 1px 4px),
+    radial-gradient(ellipse at 20% 10%, var(--mura), transparent 60%),
+    radial-gradient(ellipse at 85% 70%, var(--mura), transparent 55%);
   color: var(--sumi);
 }
 

@@ -104,3 +104,13 @@ critic (`.claude/agents/ui-critic.md`) reviews them after each change.
 4. **The chart:** headed 「師匠の手間と、一致の伸び」, with one line on the axes; the baseline label reads 「はじめ」. The caveats
    moved to 「数字の注記」 at the end.
 5. **Unchanged:** every number and how it is computed (still read from `data/demo/results.json`).
+
+## 紙と、帳場の右の欄
+
+1. **A faint paper texture in CSS only:** the horizontal laid lines (簀の目) a washi screen leaves, plus a soft unevenness.
+   - At the first strength the lines competed with the ledger's ruled lines, which carry meaning. They are now at about 1.6%:
+     felt, not seen.
+   - A fixed background drew them only in one band of a full-page capture, so it scrolls with the page.
+2. **The reading choices are a ruled list** instead of rounded boxes. The same goes for the recorded example.
+   - Checked live once on 127.0.0.1, about $0.09. The local start limit was raised for that server through its setting
+     (`KOKOROE_IP_STARTS_PER_HOUR`), not by editing its counter.

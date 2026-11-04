@@ -178,7 +178,7 @@ function OfflineExample({ sceneId }: { sceneId: string }) {
   if (!r) return null;
   const from = r.sources.find((x) => x.kind !== "ledger");
   return (
-    <div className="mt-2 rounded-[3px] border border-keisen bg-kami-2/50 px-3 py-2 text-[13.5px]">
+    <div className="mt-2 border-t border-keisen pt-2 text-[13.5px]">
       <p className="text-nibi">ライブ版なら、ここで弟子が {from?.verdict ?? "△"} の意味を読み取り、心得帳にこう書きます（記録済みの例{from && from.sceneId !== sceneId ? `：${sceneWords(from.sceneId)}の場面から` : ""}）。</p>
       <p className="yomi mt-1 text-[15px]">「{r.text}」</p>
       {r.when && <p className="yomi text-nibi">条件：{r.when}</p>}
@@ -203,11 +203,11 @@ function PendingItem({ p, beforeOf, ruleText, words }: { p: Pending; beforeOf: (
         </p>
       )}
       {p.status === "needs-choice" && p.candidates && (
-        <form action={choose} className="mt-2 space-y-2">
+        <form action={choose} className="mt-2">
           <input type="hidden" name="judgmentId" value={p.judgmentId} />
           <TimedFields />
           {p.candidates.map((c, i) => (
-            <button key={i} name="pick" value={String(i)} className="yomi block w-full rounded-[3px] border border-keisen px-3 py-2 text-left text-[15px] hover:border-ai hover:bg-ai-soft">
+            <button key={i} name="pick" value={String(i)} className="yomi block w-full border-t border-keisen px-1 py-2.5 text-left text-[15px] last-of-type:border-b hover:bg-ai-soft">
               {c.text}
               {c.when && <span className="text-nibi">（{c.when}）</span>}
             </button>
@@ -228,7 +228,7 @@ function PendingItem({ p, beforeOf, ruleText, words }: { p: Pending; beforeOf: (
               </div>
             </fieldset>
           ) : (
-            <button name="pick" value="none" className="text-[14px] text-nibi underline-offset-4 hover:underline">
+            <button name="pick" value="none" className="block min-h-11 w-full border-t border-keisen px-1 text-left text-[14px] text-nibi underline-offset-4 hover:underline">
               どれでもない
             </button>
           )}
