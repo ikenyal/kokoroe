@@ -32,7 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="ja" className={`${shippori.variable} ${zenkaku.variable}`}>
       <body className="min-h-dvh">
         {/* Always visible: who drafts and who decides. */}
-        <p role="note" className="border-b border-keisen bg-ai-soft px-4 py-1.5 text-center text-[13px] text-sumi">
+        <p role="note" className="mx-auto max-w-5xl border-b border-keisen px-5 py-1.5 text-[12.5px] text-sumi/85">
           {own
             ? "自分の会社モード：データはこのPCだけに保存し、案を作るときだけ Claude API に送ります。案は AI の弟子が作り、判断はあなたが行います。"
             : "案は AI の弟子（橙丸）が作り、判断は師匠が行います。登場する会社・人物はすべて架空です。"}

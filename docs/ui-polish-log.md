@@ -104,3 +104,34 @@ critic (`.claude/agents/ui-critic.md`) reviews them after each change.
 4. **The chart:** headed 「師匠の手間と、一致の伸び」, with one line on the axes; the baseline label reads 「はじめ」. The caveats
    moved to 「数字の注記」 at the end.
 5. **Unchanged:** every number and how it is computed (still read from `data/demo/results.json`).
+
+## 紙と、帳場の右の欄
+
+1. **A faint paper texture in CSS only:** the horizontal laid lines (簀の目) a washi screen leaves, plus a soft unevenness.
+   - At the first strength the lines competed with the ledger's ruled lines, which carry meaning. They are now at about 1.6%:
+     felt, not seen.
+   - A fixed background drew them only in one band of a full-page capture, so it scrolls with the page.
+2. **The reading choices are a ruled list** instead of rounded boxes. The same goes for the recorded example.
+   - Checked live once on 127.0.0.1, about $0.09. The local start limit was raised for that server through its setting
+     (`KOKOROE_IP_STARTS_PER_HOUR`), not by editing its counter.
+
+## 「師匠になって試す」（空の心得帳）
+
+- The empty 心得帳 links to the 帳場 and says what will appear (「△ か × を付けると、直したところが、わけと一緒にここに
+  残ります」). The sidebar's 「心得」 label is hidden when there is nothing under it.
+
+## 全体（ui-critic の全画面の講評から）
+
+1. **Filled indigo stays indigo in the dark.** New tokens `ai-fill` / `on-fill` are used by the active tab and the main buttons.
+   *Why:* in dark mode these turned pale sky blue, the one off-palette colour. Links and outlines keep the lighter `ai`, which
+   reads better as text.
+2. **The top banner is a ledger note:** paper ground, a hairline rule, and the page's width instead of a full-width tinted strip.
+   *Why:* it read like a cookie notice.
+3. **Open marks.** The ○△× have no frame until pressed (a faint frame on hover), so the chosen one's seal rim is the only frame.
+   The submit button's idle text is 「先に印を選ぶ」.
+4. **The 段取り notice is a ruled entry,** not a grey box with a thick bar. 「弟子の読み取り」 is set in Mincho like the other
+   headings.
+5. **Kept: the filled navigation tab** (the 暖簾, as before); the critic raised it again, and its dark-mode colour is now fixed.
+6. **Found on the way:** after a theme-token change, Turbopack's persistent dev cache (`.next/dev`) kept serving the old CSS
+   across a restart. The missing active tab in a screenshot exposed it. Clearing `.next/dev` fixed it; the earlier screenshots
+   were checked and were not affected.
