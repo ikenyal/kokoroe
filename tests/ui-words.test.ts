@@ -76,3 +76,15 @@ describe("taking back a judgment (帳場)", () => {
     expect(revised.history.at(-1)!.after).toBe("（取り消し）前の心得");
   });
 });
+
+describe("example texts on screen never point at a fictional client (D-053)", () => {
+  it("the 帳場's remark and 「なぜ」 examples name no client, contact or decider", async () => {
+    const { readFileSync } = await import("node:fs");
+    const clients = JSON.parse(readFileSync(new URL("../data/world/clients.json", import.meta.url), "utf8")) as { name: string; contact: string; decider: string }[];
+    const words = clients.flatMap((c) => [c.name, c.contact, c.decider]).filter((w) => w.length >= 2);
+    const files = ["../app/choba/judge-form.tsx", "../app/choba/page.tsx"];
+    const examples = files.flatMap((f) => [...readFileSync(new URL(f, import.meta.url), "utf8").matchAll(/placeholder="(例：[^"]*)"/g)].map((m) => m[1]));
+    expect(examples.length).toBeGreaterThan(0);
+    for (const e of examples) for (const w of words) expect(e, `${e} mentions ${w}`).not.toContain(w);
+  });
+});

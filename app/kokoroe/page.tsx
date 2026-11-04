@@ -178,8 +178,8 @@ export default async function KokoroePage() {
         >
           心得帳を後任に渡す
         </a>
-        <p className="mt-1.5 hidden text-[12px] text-nibi md:block">Agent Skills の形（SKILL.md と取引先ごとのファイル）で書き出します。後任の Claude Code の .claude/skills/ に置くと使えます。</p>
-        {kokoroe.length > 0 && <p className="mt-5 hidden text-[12px] text-nibi md:block">心得</p>}
+        <p className="mt-1.5 hidden text-[12.5px] text-nibi md:block">Agent Skills の形（SKILL.md と取引先ごとのファイル）で書き出します。後任の Claude Code の .claude/skills/ に置くと使えます。</p>
+        {kokoroe.length > 0 && <p className="mt-5 hidden text-[12.5px] text-nibi md:block">心得</p>}
         <ol className="mt-1 hidden space-y-1 text-[14px] md:block">
           {kokoroe.map((g) => (
             <li key={g.key}>
@@ -193,7 +193,7 @@ export default async function KokoroePage() {
         {facts.length > 0 && (
           <p className="mt-3 text-[14px]">
             <a href="#facts" className="hover:text-ai">台帳から写した事実 <span className="tabular-nums text-nibi">{nF}</span></a>
-            <span className="block text-[12px] text-nibi">いちばん下に畳んであります</span>
+            <span className="block text-[12.5px] text-nibi">いちばん下に畳んであります</span>
           </p>
         )}
       </nav>

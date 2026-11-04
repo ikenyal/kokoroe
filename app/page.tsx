@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { ownEnabled } from "@/src/core/own-world";
 import demo from "@/data/demo/demo-snapshot.json";
 import { Mark } from "./marks";
-import { marushinStory, sceneRange } from "./dandori";
+import { marushinStory, sceneRangeSplit } from "./dandori";
 import mcp from "@/demo/successor-mcp/answers.json";
 
 const STEPS = [
@@ -73,6 +73,33 @@ export default async function Home(props: PageProps<"/">) {
             。上のボタンを押すと、最初からやり直します。
           </p>
         )}
+        <section aria-labelledby="range-h" className="mt-10 max-w-[32em] border-t-2 border-sumi/80 pt-4">
+          <h2 id="range-h" className="font-mincho text-[14px] text-sumi">扱う場面は10種類。メールだけではありません</h2>
+          {(() => {
+            const { shown, rest } = sceneRangeSplit();
+            const row = (r: (typeof shown)[number]) => (
+              <li key={r.type} className="grid grid-cols-[9.5em_1fr] gap-x-3 border-t border-keisen py-1.5 text-[14px] first:border-t-0">
+                <span className="text-sumi">{r.label}</span>
+                <span className="yomi text-sumi/80">
+                  {r.example ?? "—"}
+                  {r.quiet && <span className="block text-sumi">裏で、{r.quiet}</span>}
+                </span>
+              </li>
+            );
+            return (
+              <>
+                <ul className="mt-2">{shown.map(row)}</ul>
+                {rest.length > 0 && (
+                  <details className="mt-1 border-t border-keisen">
+                    <summary className="inline-flex min-h-11 cursor-pointer items-center text-[14px] text-ai select-none">残り{rest.length}種類を見る</summary>
+                    <ul>{rest.map(row)}</ul>
+                  </details>
+                )}
+              </>
+            );
+          })()}
+          <p className="mt-2 text-[12.5px] text-sumi/75">弟子が直される前に出した段取りの例です（架空の取引先）。</p>
+        </section>
       </section>
 
       <div className="space-y-10">
@@ -83,7 +110,7 @@ export default async function Home(props: PageProps<"/">) {
               <li className="grid grid-cols-[6.5em_1fr] gap-x-3 border-t border-keisen py-2.5 first:border-t-0">
                 <span className="text-nibi">
                   弟子の案
-                  <span className="block text-[12px]">{ex.first.type}</span>
+                  <span className="block text-[12.5px]">{ex.first.type}</span>
                 </span>
                 <span className="yomi">
                   <span className="block text-[13px] text-sumi/75">{ex.first.to}へ、{ex.first.means}</span>
@@ -104,7 +131,7 @@ export default async function Home(props: PageProps<"/">) {
               <li className="grid grid-cols-[6.5em_1fr] gap-x-3 border-t border-keisen py-2.5">
                 <span className="text-nibi">
                   次の案
-                  <span className="block text-[12px]">{ex.next.type}</span>
+                  <span className="block text-[12.5px]">{ex.next.type}</span>
                 </span>
                 <span className="yomi self-start bg-ai-soft px-1.5 text-sumi">裏で：{ex.next.quiet}</span>
               </li>
@@ -121,22 +148,6 @@ export default async function Home(props: PageProps<"/">) {
             </figcaption>
           </figure>
         )}
-
-        <section aria-labelledby="range-h" className="border-t-2 border-sumi/80 pt-4">
-          <h2 id="range-h" className="font-mincho text-[14px] text-sumi">扱う場面は10種類。メールだけではありません</h2>
-          <ul className="mt-2">
-            {sceneRange().map((r) => (
-              <li key={r.type} className="grid grid-cols-[9.5em_1fr] gap-x-3 border-t border-keisen py-1.5 text-[13.5px] first:border-t-0">
-                <span className="text-sumi">{r.label}</span>
-                <span className="yomi text-nibi">
-                  {r.example ?? "—"}
-                  {r.quiet && <span className="block text-sumi">裏で、{r.quiet}</span>}
-                </span>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-2 text-[12.5px] text-nibi">右は、弟子が直される前に出した段取りの例です（架空の取引先）。</p>
-        </section>
 
         <details className="text-[14px]">
           <summary className="cursor-pointer text-ai select-none">データの扱い</summary>

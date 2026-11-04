@@ -8,7 +8,7 @@
   --kami: #f3f2ee;
   --kami-2: #e9e7e1; /* a page under a page */
   --sumi: #1f2328;
-  --nibi: #5f646b;
+  --nibi: #565b62; /* 6.1:1 on --kami, 5.5:1 on --kami-2 (small labels and captions read comfortably) */
   --ai: #2b4a6f;
   --ai-soft: #dfe5ec;
   --ai-fill: #2b4a6f; /* indigo as a filled surface (active tab, main buttons) */

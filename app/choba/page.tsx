@@ -28,7 +28,7 @@ function Row({ label, gloss, children, main = false }: { label: string; gloss?: 
     <div className={`grid grid-cols-[6.6em_1fr] gap-3 border-t border-keisen first:border-t-0 sm:grid-cols-[7em_1fr] ${main ? "py-2.5" : "py-1.5"}`}>
       <dt className={main ? "pt-0.5 text-[14px] leading-snug text-sumi" : "text-[13px] text-nibi"}>
         {label}
-        {gloss && <span className="block text-[11.5px] text-nibi">{gloss}</span>}
+        {gloss && <span className="block text-[12px] text-nibi">{gloss}</span>}
       </dt>
       <dd className={`yomi ${main ? "text-[18px]" : "text-[15px] text-sumi/90"}`}>{children}</dd>
     </div>
@@ -72,12 +72,12 @@ function ProposalView({ p, client, ruleText }: { p: Proposal; client: Client; ru
         )}
       </Ledger>
       {p.visit && <VisitView v={p.visit} />}
-      <Ledger label="そのほか" quiet>
+      <Ledger label="補足" quiet>
         <dl>
           {FORMAT_JA[p.format] && <Row label="書式">{FORMAT_JA[p.format]}</Row>}
           {p.posture.length > 0 && <Row label="伝え方">{p.posture.map((t) => POSTURE_JA[t]).join("、")}</Row>}
           {p.basedOnRules.length > 0 && (
-            <Row label="根拠の心得">
+            <Row label="弟子が挙げた心得">
               {p.basedOnRules.map((id) => (
                 <Link key={id} href={`/kokoroe#${id}`} className="block text-ai underline-offset-4 hover:underline">
                   {ruleText(id)}
@@ -127,12 +127,12 @@ function EffectView({ effect, client, draft, words, ruleHref, recorded }: { effe
               <dl className="mt-3 grid grid-cols-[4.5rem_1fr] gap-x-3 gap-y-1.5 border-y border-keisen py-3">
                 <dt className="text-[13px] text-sumi">{point.label}</dt>
                 <dd className="grid gap-1">
+                  <span className="text-[12.5px] text-sumi/75">
+                    直したのは、{words(before.sceneId)}の案（師匠 <span className="font-mincho text-shu">{before.verdict}</span>
+                    {before.remark ? `「${before.remark}」` : "、一言なし"}）
+                  </span>
                   <span className="text-[14.5px] text-sumi/80">
                     直す前：<del className="decoration-sumi/40">{point.was}</del>
-                    <span className="ml-2 text-[12.5px]">
-                      （{words(before.sceneId)}・師匠 <span className="font-mincho text-shu">{before.verdict}</span>
-                      {before.remark ? `「${before.remark}」` : ""}）
-                    </span>
                   </span>
                   <span className="self-start bg-ai-soft px-1.5 font-mincho text-[17px] text-sumi">この案：{point.now}</span>
                 </dd>
@@ -430,7 +430,7 @@ export default async function ChobaPage() {
           </div>
           {item && (
             <form action={pause}>
-              <button className="inline-flex min-h-10 items-center text-[13px] text-ai underline-offset-4 hover:underline">ここで区切る</button>
+              <button className="inline-flex min-h-11 items-center px-1 text-[13.5px] text-ai underline-offset-4 hover:underline">ここで区切る</button>
             </form>
           )}
         </div>
@@ -452,7 +452,7 @@ export default async function ChobaPage() {
             ) : undoable.block === "follow-up" ? (
               <span>（この判定の後に別の直しが入ったため、取り消せません）</span>
             ) : (
-              <button className="ml-2 inline-flex min-h-10 items-center text-ai underline-offset-4 hover:underline">
+              <button className="ml-2 inline-flex min-h-11 items-center px-1 text-ai underline-offset-4 hover:underline">
                 取り消す{undoable.writes ? "（心得帳に書いた分も戻し、沿革に残します）" : ""}
               </button>
             )}
@@ -484,7 +484,7 @@ export default async function ChobaPage() {
               </h1>
               {record && (
                 <p className="mt-1 text-[13px] text-nibi">
-                  {record.last === null ? "この取引先の判定は、まだありません。" : record.streak > 0 ? `この取引先では ○ が${record.streak}回続いています。` : "この取引先の直近の判定は ○ ではありません。"}
+                  {record.last === null ? "この取引先の判定は、まだありません。" : record.streak > 0 ? `この取引先では ○ が${record.streak}回続いています。` : "前回、この取引先の案は師匠が直しています。"}
                 </p>
               )}
             </header>

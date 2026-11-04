@@ -40,7 +40,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <header className="mx-auto flex max-w-5xl flex-wrap items-end justify-between gap-x-8 gap-y-3 px-5 pt-6 pb-3">
           <Link href="/" className="group">
             <span className="block font-mincho text-[26px] leading-none tracking-[0.08em]">ココロエ</span>
-            <span className="mt-1 block text-[12px] text-nibi">{own ? "自分の会社モード" : COMPANY.name}　橙丸の帳面</span>
+            <span className="mt-1 block text-[12.5px] text-nibi">{own ? "自分の会社モード" : COMPANY.name}　橙丸の帳面</span>
           </Link>
           <Nav own={own} />
         </header>

@@ -664,6 +664,9 @@ master-role test (11/6).
   - The 帳場 side panel is 「弟子の読み取り」, so 裏 is used only for 裏の一言.
   - Without a key, a recorded example shows what the live version writes.
   - The remark and 「なぜ」 placeholders are generic: the old ones were the answers to a scene and a rule.
+    **11/5:** a later remark example (「例：先に工場長へ電話。社長にも一言」, from the 段取り wording on 11/4) had drifted back toward
+    an answer — 工場長 is 港北精機's decider, and 「社長にも一言」 is the shape of the hidden company-wide 表と裏 rule. Replaced by
+    「例：結論を先に。資料は一枚にまとめて」, whose words appear in no hidden rule, simulator remark or scene (checked by count only).
 - **Phone:** when the apprentice asks the master something (a reading, a 「なぜ」, a check), that panel comes first and is
   scrolled into view once.
 
