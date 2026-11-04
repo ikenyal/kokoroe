@@ -26,7 +26,7 @@ export function Nav({ own = false }: { own?: boolean }) {
             aria-current={active ? "page" : undefined}
             // A noren hangs from the top: the active tab is a cloth of indigo, the others are just text.
             className={`shrink-0 rounded-b-[3px] px-3 pt-2 pb-2.5 text-[15px] tracking-[0.04em] whitespace-nowrap transition-colors sm:px-3.5 ${
-              active ? "bg-ai text-kami" : "text-sumi hover:bg-kami-2"
+              active ? "bg-ai-fill text-on-fill" : "text-sumi hover:bg-kami-2"
             }`}
           >
             {it.label}

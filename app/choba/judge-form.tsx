@@ -12,9 +12,9 @@ function Send({ verdict }: { verdict: Verdict | null }) {
   return (
     <button
       disabled={!verdict || pending}
-      className="h-12 rounded-[3px] border border-ai bg-ai px-6 text-[15px] text-kami disabled:cursor-not-allowed disabled:border-waku disabled:bg-transparent disabled:text-nibi"
+      className="h-12 rounded-[3px] border border-ai-fill bg-ai-fill px-6 text-[15px] text-on-fill disabled:cursor-not-allowed disabled:border-waku disabled:bg-transparent disabled:text-nibi"
     >
-      {pending ? "記録しています" : verdict ? `${verdict} で記録する` : "印を選んでください"}
+      {pending ? "記録しています" : verdict ? `${verdict} で記録する` : "先に印を選ぶ"}
     </button>
   );
 }
@@ -58,7 +58,7 @@ export function JudgeForm({ sceneId }: { sceneId: string }) {
               <label
                 key={v}
                 className={`relative flex w-24 cursor-pointer flex-col items-center gap-0.5 border py-2.5 has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-3 has-[input:focus-visible]:outline-ai sm:w-28 ${
-                  on ? "border-shu text-shu shadow-[inset_0_0_0_3px_var(--kami),inset_0_0_0_4.5px_var(--shu)]" : "border-keisen text-sumi/70 hover:border-sumi/50 hover:text-sumi"
+                  on ? "border-shu text-shu shadow-[inset_0_0_0_3px_var(--kami),inset_0_0_0_4.5px_var(--shu)]" : "border-transparent text-sumi/70 hover:border-keisen hover:text-sumi"
                 }`}
               >
                 <input type="radio" name="verdict" value={v} aria-label={`${v} ${VERDICT_WORD[v]}`} className="sr-only" checked={on} onChange={() => pick(v)} />

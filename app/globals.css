@@ -11,6 +11,8 @@
   --nibi: #5f646b;
   --ai: #2b4a6f;
   --ai-soft: #dfe5ec;
+  --ai-fill: #2b4a6f; /* indigo as a filled surface (active tab, main buttons) */
+  --on-fill: #f3f2ee;
   --shu: #b5402f;
   --shu-soft: #f3dcd6;
   --keisen: #cfccc4; /* ruled lines */
@@ -27,6 +29,8 @@
     --nibi: #a3a6ab;
     --ai: #8fb0d6;
     --ai-soft: #24303d;
+    --ai-fill: #35567d; /* stays a deep indigo in the dark: no pale sky-blue fills */
+    --on-fill: #ecebe7;
     --shu: #e07a64;
     --shu-soft: #3a2420;
     --keisen: #2e333a;
@@ -43,6 +47,8 @@
   --color-nibi: var(--nibi);
   --color-ai: var(--ai);
   --color-ai-soft: var(--ai-soft);
+  --color-ai-fill: var(--ai-fill);
+  --color-on-fill: var(--on-fill);
   --color-shu: var(--shu);
   --color-shu-soft: var(--shu-soft);
   --color-keisen: var(--keisen);

@@ -16,7 +16,7 @@ export default function ErrorPage({ error, retry }: { error: unknown; retry: () 
         {"もう一度試すか、うまくいかなければ帳場に戻ってください。"}
       </p>
       <div className="mt-6 flex flex-wrap items-center gap-4">
-        <button onClick={() => retry()} className="rounded-[3px] bg-ai px-5 py-2.5 text-[15px] text-kami hover:opacity-95">
+        <button onClick={() => retry()} className="rounded-[3px] bg-ai-fill px-5 py-2.5 text-[15px] text-on-fill hover:opacity-95">
           もう一度試す
         </button>
         <Link className="text-[15px] text-ai underline underline-offset-4" href="/choba">帳場に戻る</Link>

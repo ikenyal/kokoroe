@@ -72,7 +72,7 @@ export default async function OwnPage() {
         </form>
 
         <form action={ownStart}>
-          <button disabled={!CLIENTS.length} className="rounded-[3px] bg-ai px-6 py-3 text-[15px] text-kami disabled:opacity-40">
+          <button disabled={!CLIENTS.length} className="rounded-[3px] bg-ai-fill px-6 py-3 text-[15px] text-on-fill disabled:opacity-40">
             帳場へ（{CLIENTS.length} 社）
           </button>
           {CLIENTS.length > 0 && <Link href="/kokoroe" className="ml-4 text-[14px] text-ai underline-offset-4 hover:underline">心得帳を見る</Link>}

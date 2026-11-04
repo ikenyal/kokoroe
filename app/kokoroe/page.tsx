@@ -156,7 +156,7 @@ export default async function KokoroePage() {
         <a
           href="/kokoroe/export"
           download
-          className="mt-4 block rounded-[3px] bg-ai px-3 py-2.5 text-center text-[14px] text-kami hover:opacity-95"
+          className="mt-4 block rounded-[3px] bg-ai-fill px-3 py-2.5 text-center text-[14px] text-on-fill hover:opacity-95"
         >
           心得帳を後任に渡す
         </a>

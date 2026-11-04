@@ -63,7 +63,7 @@ export default async function Home(props: PageProps<"/">) {
         <div className="mt-3 max-w-[32em] border-y-2 border-sumi/80">
           <form action={start} className="grid items-center gap-x-5 gap-y-2 py-4 sm:grid-cols-[13rem_1fr]">
             <input type="hidden" name="mode" value="demo" />
-            <button className="h-12 rounded-[3px] bg-ai px-5 text-[16px] text-kami hover:opacity-95">デモの続きから見る</button>
+            <button className="h-12 rounded-[3px] bg-ai-fill px-5 text-[16px] text-on-fill hover:opacity-95">デモの続きから見る</button>
             <p className="text-[14px] text-sumi">途中まで育った心得帳があります。まず全体を見るならこちら。</p>
           </form>
           <form action={start} className="grid items-center gap-x-5 gap-y-2 border-t border-keisen py-4 sm:grid-cols-[13rem_1fr]">

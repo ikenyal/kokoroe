@@ -56,7 +56,7 @@ function ProposalView({ p, client, ruleText }: { p: Proposal; client: Client; ru
       {/* 段取り — who, through which channel, and when: the part the master judges. The rest is secondary. */}
       <Ledger label="段取り" note="弟子（橙丸）の案。判定は、この3行を見て。">
         {p.escalateToMaster && (
-          <p className="mb-3 border-l-4 border-sumi bg-kami-2 px-4 py-2 text-[15px] text-sumi">
+          <p className="mb-3 border-y border-sumi/40 py-2 text-[15px] text-sumi">
             金額・条件が絡むため、橙丸は決めていません。先方に出す前に師匠の判断が要ります。
             {p.escalatedByCode && <span className="block text-[13px] text-nibi">（値引き・契約・金額に触れる場面のため、仕組みとして自動で師匠に回しています）</span>}
           </p>
@@ -337,7 +337,7 @@ export default async function ChobaPage() {
             {!live && <span className="hidden sm:inline">　記録済みの案を表示しています</span>}
           </p>
           <div aria-hidden className="h-1.5 min-w-24 flex-1 rounded-full bg-keisen/60">
-            <div className="h-full rounded-full bg-ai" style={{ width: `${(100 * done) / Math.max(1, meta.queue.length)}%` }} />
+            <div className="h-full rounded-full bg-ai-fill" style={{ width: `${(100 * done) / Math.max(1, meta.queue.length)}%` }} />
           </div>
           {item && (
             <form action={pause}>
@@ -437,7 +437,7 @@ export default async function ChobaPage() {
       </section>
 
       <aside aria-labelledby="bg-h" className={`scroll-mt-4 lg:order-none lg:border-l-2 lg:border-keisen lg:pl-6 ${asking.length ? "order-first" : ""}`}>
-        <h2 id="bg-h" className="text-[15px] font-bold">弟子の読み取り</h2>
+        <h2 id="bg-h" className="font-mincho text-[18px] tracking-[0.04em]">弟子の読み取り</h2>
         <p className="mt-1 text-[13px] text-nibi">△・× の意味を弟子が読み取り、心得帳に書きます。待たずに次の案へ進めます。</p>
         {recent.length ? (
           <ul className="mt-3">{recent.map((p) => <PendingItem key={p.judgmentId} p={p} ruleText={ruleText} words={words} beforeOf={(id) => judgments.find((j) => j.id === id)?.proposal} />)}</ul>
