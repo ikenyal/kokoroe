@@ -91,3 +91,16 @@ critic (`.claude/agents/ui-critic.md`) reviews them after each change.
    - **Two separate actions:** 「出典の一覧」 (indigo) and 「この心得を消す」 at opposite ends, each 40 px tall.
    - **Tighter spacing** between clients.
    - **On phones,** the side index collapses to the hand-over button and the counts, so the first 心得 is in the first screen.
+
+## 稽古の記録
+
+1. **A one-line opening** saying what is measured (how well the apprentice's drafts came to match the master's, on fictional
+   data with a simulated master). It used to open with a caveat about ledger versions.
+2. **The comparison as a ruled ledger table:** each row asks a plain question (「師匠が ○ を付けた割合」「○ か △ の割合」
+   「後任の質問に、わけごと答えられた数」), with columns 「はじめ（台帳だけ）」 and 「40場面のあと」, and the master's taps
+   under it.
+   *Why:* three equal "Before / After" figures had to be decoded, and the English labels sat oddly in Japanese.
+3. **Safety as its own table:** 0 / 9 and 9 / 9, with one plain line each. It used to be prose in the sidebar.
+4. **The chart:** headed 「師匠の手間と、一致の伸び」, with one line on the axes; the baseline label reads 「はじめ」. The caveats
+   moved to 「数字の注記」 at the end.
+5. **Unchanged:** every number and how it is computed (still read from `data/demo/results.json`).

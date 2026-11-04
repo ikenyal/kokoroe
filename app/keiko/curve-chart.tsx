@@ -90,7 +90,7 @@ export function CurveChart({
         {/* Before band */}
         <rect x={M.left} width={W - M.left - M.right} y={y(before.match + before.sd)} height={y(before.match - before.sd) - y(before.match + before.sd)} className="fill-kami-2" />
         <line x1={M.left} x2={W - M.right} y1={y(before.match)} y2={y(before.match)} className="stroke-nibi" strokeDasharray="4 4" strokeWidth={1} />
-        <text x={W - M.right + 6} y={y(before.match) + 4} className="fill-nibi text-[11px]">Before {pct(before.match)}</text>
+        <text x={W - M.right + 6} y={y(before.match) + 4} className="fill-nibi text-[11px]">はじめ {pct(before.match)}</text>
 
         {ordered.map((c) => {
           const em = c.key === emphasis;
