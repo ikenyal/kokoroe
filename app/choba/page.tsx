@@ -56,12 +56,6 @@ function ProposalView({ p, client, ruleText }: { p: Proposal; client: Client; ru
     <>
       {/* 段取り — to whom, by what, when, and the quiet word on the side: the part the master judges. The draft text is secondary. */}
       <Ledger label="段取り" note="弟子（橙丸）の段取りの案。判定は、ここを見て。">
-        {p.escalateToMaster && (
-          <p className="mb-3 border-y border-sumi/40 py-2 text-[15px] text-sumi">
-            金額・条件が絡むため、橙丸は決めていません。先方に出す前に師匠の判断が要ります。
-            {p.escalatedByCode && <span className="block text-[13px] text-nibi">（値引き・契約・金額に触れる場面のため、仕組みとして自動で師匠に回しています）</span>}
-          </p>
-        )}
         <dl>
           <Row main label="誰に" gloss="表の連絡、正式に">{toWhom(p, client)}</Row>
           <Row main label="何で">{means(p)}</Row>
@@ -69,6 +63,12 @@ function ProposalView({ p, client, ruleText }: { p: Proposal; client: Client; ru
           <Row main label="裏で誰に" gloss="決裁者などへ根回し">{quiet ?? <span className="text-nibi">なし</span>}</Row>
           <Row main label="後日">{p.followUp ? "あらためて、あいさつを入れる" : <span className="text-nibi">なし</span>}</Row>
         </dl>
+        {p.escalateToMaster && (
+          <p className="mt-3 border-y border-sumi/40 py-2 text-[15px] text-sumi">
+            金額・条件が絡む場面です。金額や条件は橙丸が決めず、先方に出す前に師匠が判断します。
+            {p.escalatedByCode && <span className="block text-[13px] text-nibi">（値引き・契約・金額に触れる場面のため、仕組みとして自動で師匠に回しています）</span>}
+          </p>
+        )}
       </Ledger>
       {p.visit && <VisitView v={p.visit} />}
       <Ledger label="そのほか" quiet>
@@ -87,7 +87,7 @@ function ProposalView({ p, client, ruleText }: { p: Proposal; client: Client; ru
         </dl>
         {p.channel !== "none" && (
           <details className="mt-2">
-            <summary className="cursor-pointer text-[14px] text-ai select-none">文面の下書きを見る（{p.channel === "phone" ? "電話で話すこと" : "送る文"}）</summary>
+            <summary className="cursor-pointer text-[14px] text-ai select-none">{p.channel === "phone" ? "電話で話すことの下書き（参考）" : "文面の下書き（参考）"}</summary>
             <p className="yomi mt-3 border-l-2 border-keisen pl-4 text-[15px] whitespace-pre-line">{p.message}</p>
           </details>
         )}

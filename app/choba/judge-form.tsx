@@ -78,7 +78,7 @@ export function JudgeForm({ sceneId }: { sceneId: string }) {
             name="remark"
             maxLength={120}
             autoComplete="off"
-            placeholder="例：この先方には、これでは足りない"
+            placeholder="例：先に工場長へ電話。社長にも一言"
             className="mt-1 block h-12 w-full rounded-[3px] border border-waku bg-kami px-3 font-mincho text-[16px] placeholder:text-nibi focus:border-ai"
           />
         </label>
