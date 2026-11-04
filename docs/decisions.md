@@ -784,7 +784,7 @@ the fictional company. Conditions: `KOKOROE_OWN=1`, 127.0.0.1 only, data outside
 
 ## D-058 · 2026-11-04 · Accepted (Kento) · Busy months: no "you marked ○ last time" hint; a known limit
 
-**Context.** In the persona run (`docs/personas-2026-11-05.md`) the busy-month master had the lowest ○+△ among the personas whose
+**Context.** In the persona run (`docs/personas-2026-11-04.md`) the busy-month master had the lowest ○+△ among the personas whose
 words were intact (85%). Its lenient ○ in busy months taught nothing there; its strict △ (「もう一工夫」) in calm months sent the
 interpreter looking for a difference that was not there. A display-only fix was proposed: show 「前回この取引先の似た場面には
 ○ を付けています」 next to the marks.
@@ -847,7 +847,7 @@ textbook master; 45–52% for these two). With no words to go on, the interprete
   - After a △ with no remark, the readings came with the six area buttons.
   - 「どれでもない（場所は選ばない）」 led to the second readings, which had no area buttons.
   - At phone width (390 px) the area buttons are 44 px tall, raised from 40 px for touch.
-- **Persona rerun** (fictional data, one path each, seed 101, $2.80; `docs/personas-2026-11-05.md`):
+- **Persona rerun** (fictional data, one path each, seed 101, $2.80; `docs/personas-2026-11-04.md`):
   - **With an area tapped:** the second readings found what was meant in 7 of 13 cases; without one, 1 of 13.
   - **Silent master:** 「どれでもない」 at the end 52% → 30%; rules 17 → 20; match 70% → 75%.
   - **Vague master:** 45% → 50%. It skipped the area 7 times, and all of those missed. Match 65% → 70%.
@@ -856,3 +856,7 @@ textbook master; 45–52% for these two). With no words to go on, the interprete
     - Match 90% → 70% and ○+△ 95% → 80%. The two training paths already differ at the first correction, before any area was
       tapped, so one path cannot tell whether the chooser changes the baseline.
     - The official 5-path measurement on 11/7 is where that shows. 80% ○+△ is below the earlier paths' 90–95%; watch it there.
+  - **On / off check** (Kento 11/4; `KOKOROE_EVAL_DIFF_AREA`, seeds 202 and 303, $4.72):
+    - ○+△: on 85%, off 95% (mean of two paths). Match: on 65%, off 68%.
+    - Seed 202 parted at the first area tapped; seed 303 parted before it.
+    - On is 10 points below off on ○+△, past Kento's 5-point line. **Kento decides whether the official run uses on or off.**

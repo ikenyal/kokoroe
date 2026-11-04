@@ -22,6 +22,16 @@ export interface SimulatedMaster extends Master {
   failingLog(): string[][];
 }
 
+/**
+ * Evaluation switch for 「どこが違う？」: KOKOROE_EVAL_DIFF_AREA=off makes the simulated master never answer it, which is the loop
+ * as it was before D-057. The 帳場 keeps the buttons either way; this only decides what the evaluation measures.
+ */
+export function diffAreaInEval(): boolean {
+  const v = process.env.KOKOROE_EVAL_DIFF_AREA ?? "on";
+  if (v !== "on" && v !== "off") throw new Error(`KOKOROE_EVAL_DIFF_AREA must be on or off, not ${v}`);
+  return v === "on";
+}
+
 /** How often the textbook master leaves 「どこが違う？」 unanswered (an assumption, D-057: not every master answers). */
 export const WHERE_SKIP_DEFAULT = 0.2;
 
@@ -76,7 +86,8 @@ export function areaToFix(scene: Scene, client: Client, proposal: Proposal): Dif
   return null;
 }
 
-export function createSimulatedMaster(seed = 7, opts: { whereSkip?: number } = {}): SimulatedMaster {
+export function createSimulatedMaster(seed = 7, opts: { whereSkip?: number; diffArea?: boolean } = {}): SimulatedMaster {
+  const diffArea = opts.diffArea ?? diffAreaInEval();
   const rand = rng(seed);
   // Its own random stream, so answering 「どこが違う？」 does not shift the remarks drawn from `rand`.
   const randWhere = rng(seed * 17 + 3);
@@ -118,10 +129,15 @@ export function createSimulatedMaster(seed = 7, opts: { whereSkip?: number } = {
       return best; // null = none of these
     },
 
-    async where() {
-      if (!last || randWhere() < whereSkip) return null;
-      return areaToFix(last.scene, last.client, last.proposal);
-    },
+    // Off: no `where` at all, so the loop runs exactly as before D-057.
+    ...(diffArea
+      ? {
+          async where() {
+            if (!last || randWhere() < whereSkip) return null;
+            return areaToFix(last.scene, last.client, last.proposal);
+          },
+        }
+      : {}),
 
     async confirmGeneralization({ members }) {
       // Yes only if every member's correction was about the same hidden rule, and that rule holds for all clients.

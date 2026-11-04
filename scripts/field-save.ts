@@ -6,6 +6,7 @@
  * --no-text — the 5 prose answers, so the "how many distinct pieces of etiquette" comparison (D-041) can be tallied by hand
  * (`proseEtiquetteCount` is left for Kento to fill in). Fictional data only.
  */
+import { jstDate } from "@/src/learning/fix";
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
@@ -24,7 +25,8 @@ const timings: T[] = meta.timings ?? [];
 const median = (xs: number[]) => { const s = [...xs].sort((a, b) => a - b); const m = s.length >> 1; return s.length ? (s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2) : null; };
 const kinds = [...new Set(timings.map((t) => t.kind))];
 const learned = store.rules.filter((r: { origin?: string }) => r.origin !== "ledger");
-const date = meta.createdAt.slice(0, 10);
+// The JST day the test was run. createdAt is UTC: slicing it would give the previous day for a test started before 09:00 JST.
+const date = jstDate(meta.createdAt);
 const out = {
   note: "師匠役テスト / master-role test (D-031, D-041, D-046): one person (the author) as the master, fictional data. Timings in ms; medians per action.",
   date,

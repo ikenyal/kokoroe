@@ -311,7 +311,7 @@ Short entries, appended every work session. Source material for the README secti
     - A production build's static shell is fixed at build time, so own mode runs on `next dev` (`npm run own`).
   - **Review:** the hitl-reviewer subagent reviewed the guards, the data handling and the deletion.
 
-- **11/4–5 — persona simulation (docs/personas-2026-11-05.md).**
+- **11/4 — persona simulation (docs/personas-2026-11-04.md).**
   - **Scope, stated plainly:** it checks tolerance to variation between people. It is not a substitute for a real-world test, and
     it is apart from the master-role test (Kento's own measured session).
   - **Personas:** Claude Code wrote persona wrappers around the machine master in `eval/` only. The correct answer stays the frozen
@@ -339,3 +339,9 @@ Short entries, appended every work session. Source material for the README secti
       than reading the 20-point drop as an effect.
     - **Live check:** a short Playwright script (the library, not MCP) checked the new buttons on 127.0.0.1 at desktop and phone
       width, then the server was stopped.
+  - **Dates:** some records said 11/5 on 11/4. The JST date code was right; Claude Code had taken the plan's date for the
+    file name and a deployment entry. Those were fixed. The master-role test's file name now comes from the JST day the test
+    was run (it had used the UTC date of `createdAt`).
+  - **On / off:** an evaluation switch (`KOKOROE_EVAL_DIFF_AREA`) and four paths, run two at a time so as not to slow Kento's
+    live master-role test on the same key. `eval/chooser-ab.ts` matches the on and off training logs line by line to show
+    whether each pair parted at the chooser or before it.

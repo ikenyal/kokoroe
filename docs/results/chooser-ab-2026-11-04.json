@@ -1,0 +1,199 @@
+{
+  "at": "2026-11-04T05:26:31.775Z",
+  "note": "fictional data; textbook master; 「どこが違う？」 on/off (KOKOROE_EVAL_DIFF_AREA) × seeds 202, 303; one training path each, held-out ×1; skip rate when on: 20% (assumption, D-057)",
+  "usd": 4.716,
+  "summary": {
+    "on": {
+      "match": 0.6499999999999999,
+      "okp": 0.85,
+      "rules": 19.5,
+      "none": 0.40559440559440557
+    },
+    "off": {
+      "match": 0.675,
+      "okp": 0.95,
+      "rules": 18.5,
+      "none": 0.4356060606060606
+    }
+  },
+  "runs": [
+    {
+      "seed": 202,
+      "on": {
+        "persona": "textbook",
+        "match": 0.7,
+        "okp": 0.85,
+        "taps": 118,
+        "rulesActive": 21,
+        "wrongRules": [
+          {
+            "id": "K-015",
+            "text": "正式な連絡は窓口の主査宛てに出し、事務局長へ直接出さない。"
+          },
+          {
+            "id": "K-020",
+            "text": "白樺製菓への季節のあいさつは、メールではなく手紙で送る。"
+          },
+          {
+            "id": "K-022",
+            "text": "担当が替わったら、前任から何をどこまで引き継いでいるかをまず確かめる。"
+          }
+        ],
+        "rolledBack": 0,
+        "withdrawn": 0,
+        "noneOfThese": 3,
+        "asked": 11,
+        "secondRounds": {
+          "withArea": [
+            1,
+            3
+          ],
+          "without": [
+            0,
+            1
+          ]
+        },
+        "whereAnswered": 3,
+        "slips": {
+          "verdict": 0,
+          "reading": 0
+        },
+        "usd": 1.162
+      },
+      "off": {
+        "persona": "textbook",
+        "match": 0.6,
+        "okp": 0.9,
+        "taps": 126,
+        "rulesActive": 18,
+        "wrongRules": [
+          {
+            "id": "K-002",
+            "text": "2〜3月は決算で多忙なので、急がない用件の連絡は4月まで待つ。"
+          },
+          {
+            "id": "K-008",
+            "text": "年度予算で動くため、予算要求が固まる前に本題まで伝えておく。"
+          },
+          {
+            "id": "K-024",
+            "text": "正式な連絡は窓口の奥様宛てにし、蔵元へ直接出して窓口を飛ばさない。"
+          }
+        ],
+        "rolledBack": 2,
+        "withdrawn": 0,
+        "noneOfThese": 5,
+        "asked": 12,
+        "secondRounds": {
+          "withArea": [
+            0,
+            0
+          ],
+          "without": [
+            2,
+            7
+          ]
+        },
+        "whereAnswered": 0,
+        "slips": {
+          "verdict": 0,
+          "reading": 0
+        },
+        "usd": 1.268
+      },
+      "partedAt": {
+        "line": 5,
+        "scene": "T04",
+        "on": "（1巡目は「どれでもない」、どこが違う？→ その他 → 2巡目の候補）",
+        "off": "（1巡目は「どれでもない」 → 2巡目の候補）"
+      },
+      "firstChooser": {
+        "line": 5,
+        "scene": "T04",
+        "tapped": "T04"
+      },
+      "parted": "at or after the first area tapped (where on and off can first differ)"
+    },
+    {
+      "seed": 303,
+      "on": {
+        "persona": "textbook",
+        "match": 0.6,
+        "okp": 0.85,
+        "taps": 120,
+        "rulesActive": 18,
+        "wrongRules": [
+          {
+            "id": "K-013",
+            "text": "正式な連絡は事務局長に直接ではなく、窓口の主査宛てに出す。"
+          }
+        ],
+        "rolledBack": 4,
+        "withdrawn": 0,
+        "noneOfThese": 7,
+        "asked": 13,
+        "secondRounds": {
+          "withArea": [
+            2,
+            4
+          ],
+          "without": [
+            0,
+            5
+          ]
+        },
+        "whereAnswered": 4,
+        "slips": {
+          "verdict": 0,
+          "reading": 0
+        },
+        "usd": 1.211
+      },
+      "off": {
+        "persona": "textbook",
+        "match": 0.75,
+        "okp": 1,
+        "taps": 102,
+        "rulesActive": 19,
+        "wrongRules": [
+          {
+            "id": "K-014",
+            "text": "事務局長への連絡も直接せず、必ず窓口の主査を通して行う。"
+          }
+        ],
+        "rolledBack": 0,
+        "withdrawn": 1,
+        "noneOfThese": 5,
+        "asked": 11,
+        "secondRounds": {
+          "withArea": [
+            0,
+            0
+          ],
+          "without": [
+            2,
+            7
+          ]
+        },
+        "whereAnswered": 0,
+        "slips": {
+          "verdict": 0,
+          "reading": 0
+        },
+        "usd": 1.075
+      },
+      "partedAt": {
+        "line": 6,
+        "scene": "T04",
+        "on": "候補1: 担当交代時は、動く前に師匠と引き継ぎ内容を確かめる。  [escalateToMaster=true]",
+        "off": "候補1: 後任には、これまでの取り決めや経緯を示し、伝わっているかを確かめる。（窓口の担当者が替わったとき）  [posture=cite_precedent]"
+      },
+      "firstChooser": {
+        "line": 5,
+        "scene": "T04",
+        "tapped": "T07"
+      },
+      "parted": "before any 「どこが違う？」 (the interpreter's own variation)"
+    }
+  ]
+}

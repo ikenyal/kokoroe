@@ -1,5 +1,5 @@
 /**
- * Persona simulation (Kento 11/5): how well does the mechanism hold up when the people vary? NOT a substitute for a real-world
+ * Persona simulation (Kento, 11/4): how well does the mechanism hold up when the people vary? NOT a substitute for a real-world
  * test — a check of tolerance to variation. The master-role test (Kento's own measured session) is a separate thing.
  *
  * What stays fixed (no AI grading AI):
@@ -29,11 +29,11 @@ import { askSuccessor } from "@/src/successor/ask";
 import { runOnce } from "./evaluate";
 import { pct } from "./metrics";
 import { HISTORY_ANSWERS } from "./simulator/hidden";
-import { createSimulatedMaster, hiddenRuleFixedBy, type SimulatedMaster } from "./simulator/master";
+import { createSimulatedMaster, diffAreaInEval, hiddenRuleFixedBy, type SimulatedMaster } from "./simulator/master";
 import { rng } from "./simulator/remark";
 import { trainScenes } from "./training";
 
-const SEED = 101; // the same training path for every persona: differences come from the persona, not the path
+let SEED = 101; // the same training path for every persona: differences come from the persona, not the path (--seed sets it)
 const EVAL_SEED = 7;
 let BUDGET_USD = 9.5; // --budget sets it; a path is not started when the spend so far + one path (≈ $1.45) would pass it
 const ROOT = path.join(__dirname, "..");
@@ -264,7 +264,7 @@ async function runSuccessors(storeFile: string) {
 }
 
 async function main() {
-  const { values } = parseArgs({ options: { yes: { type: "boolean", default: false }, only: { type: "string" }, parallel: { type: "string", default: "3" }, "successors-only": { type: "string" }, out: { type: "string" }, raw: { type: "string" }, budget: { type: "string" } } });
+  const { values } = parseArgs({ options: { yes: { type: "boolean", default: false }, only: { type: "string" }, parallel: { type: "string", default: "3" }, "successors-only": { type: "string" }, out: { type: "string" }, raw: { type: "string" }, budget: { type: "string" }, seed: { type: "string" } } });
   // Second part on its own: the successor personas on the textbook master's grown 心得帳, with a hard cap on what is left of the budget.
   if (values["successors-only"] !== undefined) {
     const cap = Number(values["successors-only"]);
@@ -279,9 +279,10 @@ async function main() {
     return console.log(`≈ $${estimateUsd(usage).toFixed(3)} → ${path.relative(ROOT, out)}`);
   }
   if (values.budget) BUDGET_USD = Number(values.budget);
+  if (values.seed) SEED = Number(values.seed);
   if (values.raw) RAW = path.join(__dirname, "runs", "raw", values.raw.replace(/[^a-z0-9-]/gi, ""));
   const masters = MASTER_PERSONAS.filter((p) => !values.only || values.only.split(",").includes(p.id));
-  console.log(`master personas: ${masters.map((m) => m.name).join(" / ")} — one training path each (seed ${SEED}), held-out ×1`);
+  console.log(`master personas: ${masters.map((m) => m.name).join(" / ")} — one training path each (seed ${SEED}), held-out ×1; 「どこが違う？」 ${diffAreaInEval() ? "on" : "off"}`);
   console.log(`successor personas: ${SUCCESSOR_PERSONAS.map((p) => p.name).join(" / ")} — on the textbook master's grown 心得帳`);
   console.log(`estimate: about $1.1 per training path × ${masters.length} + successors ≈ $0.5 → ≈ $${(1.1 * masters.length + 0.5).toFixed(1)}; stops at $${BUDGET_USD}`);
   if (!values.yes) return console.log("Not called. Add --yes.");
@@ -312,7 +313,9 @@ async function main() {
   const prevRow = (id: string) => prev?.masters?.find((m: { id: string }) => m.id === id)?.result ?? null;
   writeFileSync(out, JSON.stringify({
     at: new Date().toISOString(),
-    note: "fictional data; persona simulation — tolerance to variation, not a real-world test. Correctness by the frozen hidden kokoroe and the machine judge; personas change only expression. One training path per master persona (seed 101), held-out ×1.",
+    note: "fictional data; persona simulation — tolerance to variation, not a real-world test. Correctness by the frozen hidden kokoroe and the machine judge; personas change only expression. One training path per master persona, held-out ×1.",
+    seed: SEED,
+    diffArea: diffAreaInEval() ? "on" : "off",
     usd: Number(((prev?.usd ?? 0) + total).toFixed(3)),
     ...(prev ? { reruns: [...(prev.reruns ?? []), { at: new Date().toISOString(), personas: masters.map((m) => m.id), usd: Number(total.toFixed(3)) }] } : {}),
     masters: MASTER_PERSONAS.map((p) => ({ ...p, result: results.find((r) => r.persona === p.id) ?? prevRow(p.id) })),

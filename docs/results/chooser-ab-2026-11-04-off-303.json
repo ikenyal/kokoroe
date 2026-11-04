@@ -1,0 +1,75 @@
+{
+  "at": "2026-11-04T05:25:12.551Z",
+  "note": "fictional data; persona simulation — tolerance to variation, not a real-world test. Correctness by the frozen hidden kokoroe and the machine judge; personas change only expression. One training path per master persona, held-out ×1.",
+  "seed": 303,
+  "diffArea": "off",
+  "usd": 1.075,
+  "masters": [
+    {
+      "id": "textbook",
+      "name": "教科書どおりの師匠",
+      "how": "今の機械の師匠（基準）",
+      "result": {
+        "persona": "textbook",
+        "match": 0.75,
+        "okp": 1,
+        "taps": 102,
+        "rulesActive": 19,
+        "wrongRules": [
+          {
+            "id": "K-014",
+            "text": "事務局長への連絡も直接せず、必ず窓口の主査を通して行う。"
+          }
+        ],
+        "rolledBack": 0,
+        "withdrawn": 1,
+        "noneOfThese": 5,
+        "asked": 11,
+        "secondRounds": 7,
+        "whereAnswered": 0,
+        "slips": {
+          "verdict": 0,
+          "reading": 0
+        },
+        "usd": 1.075
+      }
+    },
+    {
+      "id": "silent",
+      "name": "背中で語る師匠",
+      "how": "一言をほぼ付けない（1割だけ）。△はほとんど使わず×にする（8割）。「なぜ」には答えない",
+      "result": null
+    },
+    {
+      "id": "story",
+      "name": "昔話の師匠",
+      "how": "一言が長い武勇伝。肝心な点は最後の一文だけ",
+      "result": null
+    },
+    {
+      "id": "vague",
+      "name": "「なんか違う」の師匠",
+      "how": "×や△は付けるが「違う」「そうじゃない」しか言わない。「なぜ」には答えない",
+      "result": null
+    },
+    {
+      "id": "busy",
+      "name": "繁忙期の師匠",
+      "how": "繁忙の月（取引先の繁忙月と3月）は△を半分○にする。余裕のある月は○の15%を△（「もう一工夫」）にする",
+      "result": null
+    },
+    {
+      "id": "fatfinger",
+      "name": "指が太い師匠",
+      "how": "5%で隣の印を押す（○↔△、△↔×）。読み方の候補も5%で隣を押す",
+      "result": null
+    },
+    {
+      "id": "abbrev",
+      "name": "略語の師匠",
+      "how": "一言と「なぜ」から固有名や主語を省く（「浜風は前もって言うとけ」「例の件」「あそこ」）",
+      "result": null
+    }
+  ],
+  "successors": []
+}

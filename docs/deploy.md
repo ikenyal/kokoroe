@@ -31,7 +31,7 @@ first card drafted live in ~5.8 s; a △ was interpreted and written as a rule i
 by the optional "why?"; 暖簾を継ぐ answered Q01 (Zoom → Teams) citing K-004. Screenshots: `docs/screens/public-live-*.png`.
 **Deployment 3 (2026-11-03, `:kokoroe.web.3`, approved):** same environment; adds 確かめ稽古 + regression in the 帳場 (D-037).
 Verified on the public URL (`docs/screens/public-live-confirm.png`, `public-live-verified.png`).
-**Deployment 4 (2026-11-05, `:kokoroe.web.4`, approved by Kento):**
+**Deployment 4 (2026-11-04, `:kokoroe.web.4`, approved by Kento):**
 - **Environment:** the same; the settings were read into a 600-permission temp file outside the repo, only the image was
   swapped, and the file was deleted right after (never printed). `KOKOROE_OWN` is not set.
 - **Adds:**

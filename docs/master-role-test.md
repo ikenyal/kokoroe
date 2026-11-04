@@ -73,7 +73,7 @@ http://127.0.0.1:3100 を開き、「**師匠役テストを始める（作者�
 1. 「所要時間のまとめ」（/choba/report）を開いて、スクリーンショットを撮ります（操作ごとの中央値。確かめ・回帰の確認のタップは、印を付ける時間とは別の行に出ます）。
 2. 結果をリポジトリに保存します（API は呼びません）。
    ```bash
-   npm run -s field:save            # → docs/results/master-role-test-2026-11-06.json（書いた文章を含む）
+   npm run -s field:save            # → docs/results/master-role-test-<実施日>.json（書いた文章を含む）
    npm run -s field:save -- --no-text   # 文章を残したくない場合（時間と件数だけ）
    ```
 3. サーバーを止めます（Ctrl-C）。

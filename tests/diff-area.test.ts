@@ -10,7 +10,7 @@ import type { Interpretation, interpret } from "@/src/learning/interpret";
 import { learnStep } from "@/src/learning/loop";
 import { LocalJsonStore } from "@/src/learning/store";
 import type { Candidate, Master, ProposalFix } from "@/src/learning/types";
-import { areaToFix, createSimulatedMaster } from "@/eval/simulator/master";
+import { areaToFix, createSimulatedMaster, diffAreaInEval } from "@/eval/simulator/master";
 import { IDEAL_TRAIN } from "./fixtures/ideal-proposals-train";
 
 const scene: Scene = { id: "X1", set: "train", clientId: "C10", type: "T1", month: 6, situation: "（テスト用の場面）" };
@@ -117,5 +117,24 @@ describe("simulated master's 「どこが違う？」", () => {
       await b.where!({ scene: t05, client, proposal: noBack, candidates: [] });
     }
     expect(rb).toEqual(ra);
+  });
+});
+
+describe("evaluation switch (KOKOROE_EVAL_DIFF_AREA)", () => {
+  it("off: the simulated master has no 「どこが違う？」, so the loop runs as before D-057", () => {
+    const prev = process.env.KOKOROE_EVAL_DIFF_AREA;
+    try {
+      delete process.env.KOKOROE_EVAL_DIFF_AREA;
+      expect(diffAreaInEval()).toBe(true);
+      expect(createSimulatedMaster(1).where).toBeTypeOf("function");
+      process.env.KOKOROE_EVAL_DIFF_AREA = "off";
+      expect(createSimulatedMaster(1).where).toBeUndefined();
+      expect(createSimulatedMaster(1, { diffArea: true }).where).toBeTypeOf("function");
+      process.env.KOKOROE_EVAL_DIFF_AREA = "maybe";
+      expect(() => diffAreaInEval()).toThrow();
+    } finally {
+      if (prev === undefined) delete process.env.KOKOROE_EVAL_DIFF_AREA;
+      else process.env.KOKOROE_EVAL_DIFF_AREA = prev;
+    }
   });
 });

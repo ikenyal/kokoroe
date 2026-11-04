@@ -1,0 +1,83 @@
+{
+  "at": "2026-11-04T05:14:37.956Z",
+  "note": "fictional data; persona simulation — tolerance to variation, not a real-world test. Correctness by the frozen hidden kokoroe and the machine judge; personas change only expression. One training path per master persona, held-out ×1.",
+  "seed": 202,
+  "diffArea": "on",
+  "usd": 1.162,
+  "masters": [
+    {
+      "id": "textbook",
+      "name": "教科書どおりの師匠",
+      "how": "今の機械の師匠（基準）",
+      "result": {
+        "persona": "textbook",
+        "match": 0.7,
+        "okp": 0.85,
+        "taps": 118,
+        "rulesActive": 21,
+        "wrongRules": [
+          {
+            "id": "K-015",
+            "text": "正式な連絡は窓口の主査宛てに出し、事務局長へ直接出さない。"
+          },
+          {
+            "id": "K-020",
+            "text": "白樺製菓への季節のあいさつは、メールではなく手紙で送る。"
+          },
+          {
+            "id": "K-022",
+            "text": "担当が替わったら、前任から何をどこまで引き継いでいるかをまず確かめる。"
+          }
+        ],
+        "rolledBack": 0,
+        "withdrawn": 0,
+        "noneOfThese": 3,
+        "asked": 11,
+        "secondRounds": 4,
+        "whereAnswered": 3,
+        "slips": {
+          "verdict": 0,
+          "reading": 0
+        },
+        "usd": 1.162
+      }
+    },
+    {
+      "id": "silent",
+      "name": "背中で語る師匠",
+      "how": "一言をほぼ付けない（1割だけ）。△はほとんど使わず×にする（8割）。「なぜ」には答えない",
+      "result": null
+    },
+    {
+      "id": "story",
+      "name": "昔話の師匠",
+      "how": "一言が長い武勇伝。肝心な点は最後の一文だけ",
+      "result": null
+    },
+    {
+      "id": "vague",
+      "name": "「なんか違う」の師匠",
+      "how": "×や△は付けるが「違う」「そうじゃない」しか言わない。「なぜ」には答えない",
+      "result": null
+    },
+    {
+      "id": "busy",
+      "name": "繁忙期の師匠",
+      "how": "繁忙の月（取引先の繁忙月と3月）は△を半分○にする。余裕のある月は○の15%を△（「もう一工夫」）にする",
+      "result": null
+    },
+    {
+      "id": "fatfinger",
+      "name": "指が太い師匠",
+      "how": "5%で隣の印を押す（○↔△、△↔×）。読み方の候補も5%で隣を押す",
+      "result": null
+    },
+    {
+      "id": "abbrev",
+      "name": "略語の師匠",
+      "how": "一言と「なぜ」から固有名や主語を省く（「浜風は前もって言うとけ」「例の件」「あそこ」）",
+      "result": null
+    }
+  ],
+  "successors": []
+}

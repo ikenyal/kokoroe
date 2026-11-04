@@ -83,7 +83,7 @@ away from family succession.
   - **Marks in busy months:** they tend to be lenient (a known limit). A lenient ○ writes nothing. Every 心得 keeps the date it was
     written and the scene and mark it came from, so what was written in a busy month can be reviewed later and deleted in the
     心得帳 (the deletion stays in its 沿革).
-  - **Details:** [docs/personas-2026-11-05.md](docs/personas-2026-11-05.md).
+  - **Details:** [docs/personas-2026-11-04.md](docs/personas-2026-11-04.md).
   - It is a different thing from the master-role test above.
 - **Start from your own company (local only):** `npm run own` (needs `ANTHROPIC_API_KEY` in `.env.local`) opens
   http://127.0.0.1:3000 on your own client ledger instead of the fictional company.
