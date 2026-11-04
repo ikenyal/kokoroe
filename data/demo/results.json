@@ -1,7 +1,7 @@
 {
   "official": false,
   "source": null,
-  "note": "すべて架空データ（取引先10社・評価用20場面・沿革の質問8件）、師匠はシミュレータ。11/3 の途中経過。Before は修正後の台帳（D-033）、途中経過の After は修正前の台帳で測ったもの。正式な Before／After は 11/7 に同じ台帳・学習5本で取り直す。",
+  "note": "すべて架空のデータです（取引先10社・評価用20場面・沿革の質問8件）。師匠はシミュレータです。いまの値は 11/3 の途中経過で、はじめの値は直したあとの台帳、40場面のあとの値は直す前の台帳で測ったため、そのままは比べられません。正式な値は、同じ台帳で学習を5本回して測り直したものに差し替えます。",
   "caveat": {
     "en": "Interim (11/3): the Before uses the corrected ledger (D-033), the interim After the previous one — not directly comparable. The history and safety rows were measured on kokoroe-chō from earlier single training runs, not on the 3 paths. All are re-taken on 11/7 with the same ledger and 5 training paths.",
     "ja": "途中経過（11/3）: Before は修正後の台帳（D-033）、After は修正前の台帳で測ったもので、そのままは比べられません。沿革と安全の行は、学習3本ではなく、それより前の1本の学習で育てた心得帳で測ったものです。11/7 に同じ台帳・学習5本ですべて取り直します。"

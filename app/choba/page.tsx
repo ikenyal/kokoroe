@@ -125,14 +125,14 @@ function EffectView({ effect, client, draft, words, ruleHref, recorded }: { effe
           <>
             {point && (
               <dl className="mt-3 grid grid-cols-[4.5rem_1fr] gap-x-3 gap-y-1.5 border-y border-keisen py-3">
-                <dt className="text-[13px] text-sumi">{point.label}</dt>
+                <dt className="text-[13px] text-sumi">{({ 何で: "何で（手段）", いつ: "いつ（時期）" } as Record<string, string>)[point.label] ?? point.label}</dt>
                 <dd className="grid gap-1">
                   <span className="text-[12.5px] text-sumi/75">
                     直したのは、{words(before.sceneId)}の案（師匠 <span className="font-mincho text-shu">{before.verdict}</span>
                     {before.remark ? `「${before.remark}」` : "、一言なし"}）
                   </span>
                   <span className="text-[14.5px] text-sumi/80">
-                    直す前：<del className="decoration-sumi/40">{point.was}</del>
+                    その案：<del className="decoration-sumi/40">{point.was}</del>
                   </span>
                   <span className="self-start bg-ai-soft px-1.5 font-mincho text-[17px] text-sumi">この案：{point.now}</span>
                 </dd>
