@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { getClient, TRAIN_SCENES } from "@/src/core/world";
 import type { Proposal, Scene } from "@/src/core/types";
 import type { Disciple } from "@/src/disciple/v0";
-import { areaOfField, askWhere, DIFF_AREA_FIELDS, DIFF_AREAS, isDiffArea, parsePick } from "@/src/learning/area";
+import { areaOfField, areaToStore, askWhere, DIFF_AREA_FIELDS, DIFF_AREAS, isDiffArea, parsePick } from "@/src/learning/area";
 import type { Interpretation, interpret } from "@/src/learning/interpret";
 import { learnStep } from "@/src/learning/loop";
 import { LocalJsonStore } from "@/src/learning/store";
@@ -99,6 +99,17 @@ describe("the 帳場's choice value", () => {
     expect(parsePick("none")).toEqual({ index: null, area: null });
     expect(parsePick("none:channel")).toEqual({ index: null, area: "channel" });
     for (const bad of ["1:to", "none:", "none:foo", "none:to:xyz", "3", "none:constructor", "", "NONE"]) expect(parsePick(bad)).toBeNull();
+  });
+});
+
+describe("the 帳場's 「どれでもない」 stores an area only on a card without a remark, first readings", () => {
+  it("drops it for a card with a remark, an older card, a 確かめ follow-up or the second readings", () => {
+    expect(areaToStore({ noRemark: true }, "to")).toBe("to");
+    expect(areaToStore({ noRemark: true, round: 1 }, "channel")).toBe("channel");
+    expect(areaToStore({ noRemark: true }, null)).toBeNull();
+    expect(areaToStore({}, "to")).toBeNull(); // a remark was given, or a card saved before the narrowing, or a 確かめ follow-up
+    expect(areaToStore({ noRemark: false }, "to")).toBeNull();
+    expect(areaToStore({ noRemark: true, round: 2 }, "to")).toBeNull();
   });
 });
 

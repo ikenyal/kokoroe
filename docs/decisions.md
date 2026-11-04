@@ -895,3 +895,14 @@ textbook master; 45–52% for these two). With no words to go on, the interprete
   - The second readings hit 1 of 2 with an area and 0 of 3 without.
   - One path; the 5-path official run on 11/7 measures it properly.
 - **The official measurement (`eval:final`, 11/7) uses this narrowed version** (default `on`, skip rate 20%, an assumption).
+- **hitl-reviewer on the narrowing** (after the commit, as the project rules require; no server): **no blockers.**
+  - **Checked that no area reaches the interpreter when there is a remark:**
+    - A crafted `none:<area>` post is stored as a plain 「どれでもない」.
+    - `noRemark` is set by the server from the stored remark.
+    - Cards saved before the narrowing, 確かめ稽古 follow-up cards and second readings get no area.
+  - **The floor is untouched,** and so are D-044, 確かめ稽古 and regression.
+  - **Applied:**
+    - The action's rule for storing an area moved into a pure helper (`areaToStore`), with a test for each case above.
+    - Note: the 帳場 reads the stored `noRemark` flag, which `askWhere` sets, rather than calling `askWhere` itself.
+  - **Noted, unchanged (from before D-057):** in the 帳場 a 確かめ稽古 follow-up correction can get a second round of readings,
+    while the evaluation loop's follow-up has one. This matters only when comparing tap counts between the two.

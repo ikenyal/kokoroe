@@ -56,3 +56,11 @@ export function parsePick(raw: string): { index: number | null; area: DiffArea |
   if (m[2] !== undefined && (m[1] !== "none" || !isDiffArea(m[2]))) return null;
   return { index: m[1] === "none" ? null : Number(m[1]), area: (m[2] as DiffArea | undefined) ?? null };
 }
+
+/**
+ * The area a 「どれでもない」 tap may store on a pending card: only on the first readings and only when the △/× had no remark
+ * (`noRemark` is set by the server from the stored remark). Anything else stores none, so a crafted post cannot add a hint.
+ */
+export function areaToStore(card: { noRemark?: boolean; round?: 1 | 2 }, area: DiffArea | null): DiffArea | null {
+  return area && card.noRemark === true && (card.round ?? 1) === 1 ? area : null;
+}

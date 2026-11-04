@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 import { getSession, liveEnabled, readMeta, startSession, type Mode } from "@/src/server/session";
-import { askWhere, parsePick } from "@/src/learning/area";
+import { areaToStore, askWhere, parsePick } from "@/src/learning/area";
 import { applyChoice, interpretInBackground } from "@/src/server/background";
 import { afterConfirm, afterRegression, confirmWithoutLive, startVerification } from "@/src/server/verify-ui";
 import { undoLast } from "@/src/server/undo";
@@ -152,11 +152,11 @@ export async function choose(formData: FormData) {
   const tChoose = ms(formData, "shownAt", "submitAt");
   if (tChoose !== null) addTimings(meta, [{ kind: "choose", sceneId, ms: tChoose }]);
   // The area counts only on the first readings (the second round is the last one, D-025), and only when there was no remark.
-  meta.pending = meta.pending.map((p) =>
-    p.judgmentId === judgmentId && p.status === "needs-choice"
-      ? { ...p, status: "choosing", pick: index, ...(areaIn && p.noRemark && (p.round ?? 1) === 1 ? { area: areaIn } : {}) }
-      : p,
-  );
+  meta.pending = meta.pending.map((p) => {
+    if (p.judgmentId !== judgmentId || p.status !== "needs-choice") return p;
+    const area = areaToStore(p, areaIn);
+    return { ...p, status: "choosing", pick: index, ...(area ? { area } : {}) };
+  });
   s.saveMeta(meta);
   after(() => applyChoice(s.mode, s.sid, judgmentId, index));
   revalidatePath("/choba");

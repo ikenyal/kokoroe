@@ -351,3 +351,5 @@ Short entries, appended every work session. Source material for the README secti
     - **An assumption checked:** Kento expected the textbook master to always speak. Before running, Claude Code read the
       simulator and found it is silent on 20% of its △/× by design, so the chooser still comes up there. That is recorded with
       the check.
+    - **Review after the commit:** Kento noticed that the hitl-reviewer had not been run on the narrowing before it was pushed. It
+      was run then: no blockers. Its smaller point (test the action's store rule) was applied, and the result is in D-057.
