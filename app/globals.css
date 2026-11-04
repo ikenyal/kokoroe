@@ -71,6 +71,26 @@ body {
   text-wrap: pretty;
 }
 
+/* The master's mark, pressed like a seal: a short press, a slight tilt, ink a little heavier. */
+.inkan {
+  transform: rotate(-4deg);
+  filter: drop-shadow(0 0 0.4px currentColor);
+  animation: inkan-press 140ms ease-out;
+}
+@keyframes inkan-press {
+  from {
+    transform: rotate(-4deg) scale(1.18);
+    opacity: 0.4;
+  }
+}
+
+/* Margin labels of a ledger section, written vertically (used with the sm: variant, so phones keep them horizontal). */
+@utility tate {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  letter-spacing: 0.3em;
+}
+
 :focus-visible {
   outline: 2px solid var(--ai);
   outline-offset: 3px;

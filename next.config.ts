@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
     "/*": [".data/**", ".env*", "docs/**", "eval/**", "tests/**", "spikes/**", "scripts/**", "demo/**", "video/**", "data/hidden/**", "*.md", "Dockerfile"],
   },
   cacheComponents: true,
+  devIndicators: false, // no floating dev badge over the screens (development only)
   partialPrefetching: true,
   turbopack: {
     rules: {

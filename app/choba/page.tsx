@@ -21,12 +21,28 @@ import { enforceHitl } from "@/src/disciple/hitl";
 import { AutoRefresh } from "./auto-refresh";
 import { JudgeForm } from "./judge-form";
 
-function Row({ label, children }: { label: string; children: React.ReactNode }) {
+function Row({ label, children, main = false }: { label: string; children: React.ReactNode; main?: boolean }) {
   return (
-    <div className="grid grid-cols-[6.6em_1fr] gap-3 sm:grid-cols-[7em_1fr] border-t border-keisen py-3 first:border-t-0">
-      <dt className="text-[13px] text-nibi">{label}</dt>
-      <dd className="yomi text-[16px]">{children}</dd>
+    <div className={`grid grid-cols-[6.6em_1fr] gap-3 border-t border-keisen first:border-t-0 sm:grid-cols-[7em_1fr] ${main ? "py-3.5" : "py-2"}`}>
+      <dt className={main ? "pt-0.5 text-[14px] text-sumi" : "text-[13px] text-nibi"}>{label}</dt>
+      <dd className={`yomi ${main ? "text-[18px]" : "text-[15px] text-sumi/90"}`}>{children}</dd>
     </div>
+  );
+}
+
+/**
+ * One part of the card, like a section of a ledger page: a short label in the left margin (vertical on wide screens),
+ * the content on the right, divided by ruled lines. The parts are read in order: 場面 → 段取り → そのほか → 判定.
+ */
+export function Ledger({ label, note, children, quiet = false }: { label: string; note?: string; children: React.ReactNode; quiet?: boolean }) {
+  return (
+    <section aria-label={label} className="grid gap-x-5 border-t border-keisen pt-4 pb-5 sm:grid-cols-[2.2rem_1fr]">
+      <h2 className={`font-mincho sm:tate ${quiet ? "text-[13px] text-nibi" : "text-[15px] text-sumi"} tracking-[0.2em]`}>{label}</h2>
+      <div className="mt-1 sm:mt-0">
+        {note && <p className="mb-1 text-[13px] text-nibi">{note}</p>}
+        {children}
+      </div>
+    </section>
   );
 }
 
@@ -34,36 +50,40 @@ function ProposalView({ p, client, ruleText }: { p: Proposal; client: Client; ru
   const front = `${who(client, p.formalTo)}へ ${CHANNEL_JA[p.channel]}${p.meeting !== "none" ? `、${MEETING_JA[p.meeting]}` : ""}`;
   return (
     <>
-      {/* 表と裏 — the two lines that carry the etiquette. */}
-      {p.escalateToMaster && (
-        <p className="mt-6 border-l-4 border-shu bg-shu-soft px-4 py-2 text-[15px] text-sumi">
-          金額・条件が絡むため、橙丸は決めていません。先方に出す前に師匠の判断が要ります。
-          {p.escalatedByCode && <span className="block text-[13px] text-nibi">（値引き・契約・金額に触れる場面のため、仕組みとして自動で師匠に回しています）</span>}
-        </p>
-      )}
-      <dl className="mt-6 border-y-2 border-sumi/80">
-        <Row label="表の連絡">{p.channel === "none" ? "連絡しない" : front}</Row>
-        <Row label="裏の一言">{p.backchannelTo ? `${who(client, p.backchannelTo)}にも、そっと一言` : <span className="text-nibi">なし</span>}</Row>
-      </dl>
-      <dl className="mt-1">
-        <Row label="時期">{TIMING_JA[p.timing]}</Row>
-        <Row label="後日のあいさつ">{p.followUp ? "入れる" : <span className="text-nibi">入れない</span>}</Row>
-        {FORMAT_JA[p.format] && <Row label="書式">{FORMAT_JA[p.format]}</Row>}
-        {p.posture.length > 0 && <Row label="伝え方">{p.posture.map((t) => POSTURE_JA[t]).join("、")}</Row>}
-        {p.basedOnRules.length > 0 && (
-          <Row label="根拠の心得">
-            {p.basedOnRules.map((id) => (
-              <Link key={id} href={`/kokoroe#${id}`} className="block text-ai underline-offset-4 hover:underline">
-                {ruleText(id)}
-              </Link>
-            ))}
-          </Row>
+      {/* 段取り — who, through which channel, and when: the part the master judges. The rest is secondary. */}
+      <Ledger label="段取り" note="弟子（橙丸）の案。判定はここを見ます。表の連絡は窓口への正式な連絡、裏の一言は決裁者などへの根回しです。">
+        {p.escalateToMaster && (
+          <p className="mb-3 border-l-4 border-sumi bg-kami-2 px-4 py-2 text-[15px] text-sumi">
+            金額・条件が絡むため、橙丸は決めていません。先方に出す前に師匠の判断が要ります。
+            {p.escalatedByCode && <span className="block text-[13px] text-nibi">（値引き・契約・金額に触れる場面のため、仕組みとして自動で師匠に回しています）</span>}
+          </p>
         )}
-      </dl>
-      <details className="mt-3">
-        <summary className="cursor-pointer text-[14px] text-ai select-none">文面の下書きを見る</summary>
-        <p className="yomi mt-3 border-l-2 border-keisen pl-4 text-[15px] whitespace-pre-line">{p.message}</p>
-      </details>
+        <dl>
+          <Row main label="表の連絡">{p.channel === "none" ? "連絡しない" : front}</Row>
+          <Row main label="裏の一言">{p.backchannelTo ? `${who(client, p.backchannelTo)}にも、そっと一言` : <span className="text-nibi">なし</span>}</Row>
+          <Row main label="時期">{TIMING_JA[p.timing]}</Row>
+        </dl>
+      </Ledger>
+      <Ledger label="そのほか" quiet>
+        <dl>
+          <Row label="後日のあいさつ">{p.followUp ? "入れる" : <span className="text-nibi">入れない</span>}</Row>
+          {FORMAT_JA[p.format] && <Row label="書式">{FORMAT_JA[p.format]}</Row>}
+          {p.posture.length > 0 && <Row label="伝え方">{p.posture.map((t) => POSTURE_JA[t]).join("、")}</Row>}
+          {p.basedOnRules.length > 0 && (
+            <Row label="根拠の心得">
+              {p.basedOnRules.map((id) => (
+                <Link key={id} href={`/kokoroe#${id}`} className="block text-ai underline-offset-4 hover:underline">
+                  {ruleText(id)}
+                </Link>
+              ))}
+            </Row>
+          )}
+        </dl>
+        <details className="mt-2">
+          <summary className="cursor-pointer text-[14px] text-ai select-none">文面の下書きを見る</summary>
+          <p className="yomi mt-3 border-l-2 border-keisen pl-4 text-[15px] whitespace-pre-line">{p.message}</p>
+        </details>
+      </Ledger>
     </>
   );
 }
@@ -323,9 +343,15 @@ export default async function ChobaPage() {
           )}
         </div>
         {undoable && (
-          <form action={undo} className="mt-2 text-[13px] text-nibi">
+          <form action={undo} role="status" aria-live="polite" className="mt-3 border-l-2 border-ai pl-3 text-[13.5px] text-nibi">
             <input type="hidden" name="judgmentId" value={undoable.judgment.id} />
-            直前の判定：{words(undoable.judgment.sceneId)}に <span className="font-mincho text-shu">{undoable.judgment.verdict}</span>
+            直前の判定：{words(undoable.judgment.sceneId)}に <span className="font-mincho text-[15px] text-shu">{undoable.judgment.verdict}</span>
+            {(() => {
+              // What happened to it, without looking at the side panel.
+              const p = meta.pending.find((x) => x.judgmentId === undoable.judgment.id);
+              const said = !p ? "。心得帳は変えません" : `。${STATUS[p.status]}`;
+              return <span className="text-sumi">{said}</span>;
+            })()}
             {undoable.block === "busy" ? (
               <span>（弟子が読み取り中です。終わると取り消せます）</span>
             ) : undoable.block === "changed-since" ? (
@@ -368,11 +394,16 @@ export default async function ChobaPage() {
                   {record.last === null ? "この取引先の判定は、まだありません。" : record.streak > 0 ? `この取引先では ○ が${record.streak}回続いています。` : "この取引先の直近の判定は ○ ではありません。"}
                 </p>
               )}
-              <blockquote className="yomi mt-3 border-l-2 border-ai pl-4 text-[16px]">{item.scene.situation}</blockquote>
-              <p className="mt-6 text-[13px] text-nibi">弟子（橙丸）の案</p>
             </header>
-            <ProposalView p={enforceHitl(item.scene, item.draft)} client={getClient(item.scene.clientId)} ruleText={ruleText} />
-            <JudgeForm key={item.scene.id} sceneId={item.scene.id} />
+            <div className="mt-4">
+              <Ledger label="場面">
+                <p className="yomi text-[16.5px]">{item.scene.situation}</p>
+              </Ledger>
+              <ProposalView p={enforceHitl(item.scene, item.draft)} client={getClient(item.scene.clientId)} ruleText={ruleText} />
+              <Ledger label="判定">
+                <JudgeForm key={item.scene.id} sceneId={item.scene.id} />
+              </Ledger>
+            </div>
           </article>
         ) : meta.paused ? (
           <div className="mt-6">
@@ -408,10 +439,7 @@ export default async function ChobaPage() {
         {recent.length ? (
           <ul className="mt-3">{recent.map((p) => <PendingItem key={p.judgmentId} p={p} ruleText={ruleText} words={words} beforeOf={(id) => judgments.find((j) => j.id === id)?.proposal} />)}</ul>
         ) : (
-          <p className="mt-4 flex items-center gap-2 text-[14px] text-nibi">
-            <Mark v="○" size={20} className="text-shu" />
-            まだ直しはありません。
-          </p>
+          <p className="mt-4 text-[14px] text-nibi">まだ直しはありません。△ か × を付けると、ここに弟子の読み取りが出ます。</p>
         )}
       </aside>
     </div>
