@@ -97,6 +97,18 @@ const INTERIM = `
     document.body.appendChild(el);
   });`;
 
+/** s07 (運営 11/5: make clear what is Kokoroe's own): a quiet tag in the top-left corner — this is Kokoroe's own screen, and the
+ *  answer's words are written by Claude through the API from the 心得帳. s07b then shows the off-the-shelf Claude Code. */
+const OWN_SCREEN = (text: string) => `
+  window.addEventListener("DOMContentLoaded", () => {
+    const el = document.createElement("div");
+    el.textContent = ${JSON.stringify(text)};
+    el.style.cssText = "position:fixed;right:18px;top:150px;width:max-content;white-space:pre-line;padding:8px 12px;border:2px solid #2b4a6f;background:rgba(243,242,238,.94);" +
+      "color:#2b4a6f;font:600 17px/1.55 'Hiragino Sans','Yu Gothic',sans-serif;z-index:2147483646;pointer-events:none";
+    document.body.appendChild(el);
+  });`;
+const TAGS: Record<string, string> = { "s07-noren": "ココロエの画面（自作）\n答えの文面は、\nClaude の API が\n心得帳から書きます" };
+
 const shown = (l: Locator, timeout: number) => l.first().waitFor({ timeout }).then(() => true, () => false);
 
 /** Scripted steps for real-screen scenes. Finalized with the narration after the feature freeze; timing is logged per scene. */
@@ -121,8 +133,10 @@ const STEPS: Record<string, (p: Page, base: string, live: boolean) => Promise<vo
       }
     }
     await p.waitForTimeout(2000);
-    await card.scrollIntoViewIfNeeded(); // T13's draft: the quiet word to the 蔵元
-    await p.mouse.wheel(0, 260);
+    // T13's draft: the quiet word to the 蔵元. The card is long since visit plans were added (11/5), so scroll to the
+    // 段取り's 「裏で誰に」 row itself rather than by a fixed amount (dry run 11/5: a fixed scroll ended below the 段取り).
+    const back = card.locator('section[aria-label="段取り"] dt', { hasText: "裏で誰に" }).first();
+    await back.evaluate((el) => el.scrollIntoView({ behavior: "smooth", block: "center" }));
   },
   "s06-kokoroe": async (p) => {
     await p.waitForTimeout(1600);
@@ -176,6 +190,7 @@ const STEPS: Record<string, (p: Page, base: string, live: boolean) => Promise<vo
     // Screen scenes are recorded at 1536 px and scaled to 1280, so their subtitles are drawn larger to look the same.
     await ctx.addInitScript(SUBTITLE(cues, at, end, t0, s.kind === "screen" ? 31 : 26));
     if (s.id === "s08b-keiko" && !official) await ctx.addInitScript(INTERIM);
+    if (TAGS[s.id]) await ctx.addInitScript(OWN_SCREEN(TAGS[s.id]));
     if (s.wipe === "noren") await ctx.addInitScript(WIPE(t0));
     const p = await ctx.newPage();
     if (s.kind === "anim") {

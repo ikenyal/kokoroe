@@ -1164,3 +1164,26 @@ anything that was not measured (D-062).
 - **Unchanged:** learning, judging and evaluation code; the question set; no new API calls.
 - **Not done (for Kento):** the critic suggested folding the home page's 10-scene list into a collapsed section so the example
   ends the column. That list was Kento's request (11/4 night), so it stays.
+
+## D-064 · 2026-11-05 · Accepted (Kento, after the organizers' answer) · What was made with Claude, said in the repository and on screen
+
+**Context.** The organizers answered three questions:
+- Only what was made with Claude is judged, and the repository should say which part that is.
+- A demo through Claude Code should let the judges see which part is the entrant's own MCP server.
+- A partly synthesized narration is fine.
+
+**Decision.**
+- **README (en/ja): 「Claude で作ったもの／Claude 以外のもの」.**
+  - *Made with Claude:* this repository's code and documents (Claude Code), what Claude writes inside the app, and Kokoroe's Skill
+    and MCP server.
+  - *Not made with Claude:* the Polly narration voice, Lightsail hosting, the main OSS and fonts, and the two statistics sources.
+  - No outside images or music are used.
+  - The author's calls and Claude Code's work are linked to how-we-built.md.
+- **Video, on screen only (no narration change, no new Polly call).**
+  - s04b: chips for 「文面は Claude の API（既製）」 and 「ココロエが作った仕組み」.
+  - s07: a tag 「ココロエの画面（自作）」.
+  - s07b:
+    - Claude Code is labelled as Anthropic's product, and the columns name Kokoroe's Skill and MCP server.
+    - Each 根拠 carries 「Skill から」 or 「MCP から」.
+    - The 藍 underline is explained as what Kokoroe's MCP server returned after the copy.
+- **Not changed:** the app's behaviour, the evaluation, the narration.

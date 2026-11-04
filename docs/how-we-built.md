@@ -446,3 +446,10 @@ Short entries, appended every work session. Source material for the README secti
   numbers did not move. Claude split computing from writing (`computeResults`) and added a test that recomputing from the recorded
   runs reproduces `data/demo/results.json` exactly; the regenerated file differed only in the note line. The official run on 11/7
   goes through the same function, so the new wording appears there too.
+- **The organizers' answer, made visible (11/5, D-064).** Claude wrote the 「Claude で作ったもの／以外」 section from the package
+  list, the call sites of the API and the video's sources, and labelled the video's pictures. It then ran the whole video shoot
+  once on recorded data (no API, no Polly) and looked at stills of every scene. The dry run found:
+  - s05 no longer reached the climax: the cards had grown with visit plans, so a fixed scroll ended below the 段取り. The camera now
+    scrolls to the 「裏で誰に」 row by its label.
+  - Three new labels wrapped or covered the app's logo.
+  The README's three pictures are taken by a script (`scripts/readme-shots.ts`) from the same recorded data.

@@ -56,6 +56,19 @@ Sources on screen (s01-why):
 - 330万人: 総務省統計局「労働力調査（詳細集計）2025年（令和7年）平均結果」, 転職者数 (checked in the bureau's summary PDF on 11/4).
 - Job transfers within a company have no clear public figure, so they get words only.
 
+## What is Kokoroe's, and what is off the shelf (the organizers' answer, 11/5)
+The organizers judge only what was made with Claude, and asked that a demo through Claude Code make clear which part is the
+entrant's own MCP server. So the video says it on screen (no narration change):
+- **s04b-flow:** a dashed chip under 弟子 「文面は Claude の API（既製）」, and a solid 藍 chip under 心得帳 「ココロエが作った仕組み」.
+- **s07-noren:** a tag in the top-left corner 「ココロエの画面（自作）。答えの文面は Claude の API が心得帳から書きます」 (drawn by
+  `record.ts`, like the subtitles).
+- **s07b-mcp:**
+  - The question line says Claude Code is Anthropic's product (「Claude Code（Anthropic の既製品）」).
+  - The columns are 「ココロエが書き出した Skill（心得帳の写し）」 and 「ココロエの MCP サーバー（読み取り専用）に問い合わせる」.
+  - Each 根拠 carries a tag saying where it came from: 「Skill から」 (ink) or 「MCP から」 (藍, when it is the 心得 added after the copy).
+  - The note says the 藍 underline is what Kokoroe's MCP server returned after the copy, and that Claude Code wrote the sentences.
+- The organizers also said a partly synthesized narration is fine (Polly is listed under "Not made with Claude" in the README).
+
 ## Narration and subtitles
 - Voice (Kento, 11/4, after [the voice trial](../docs/voice-trial-2026-11-04.md)): Amazon Polly **Takumi**, neural, rate 105%,
   accents fixed with `x-amazon-pron-kana` (`ACCENTS` in [narration.ts](narration.ts)), 0.5 s between sentences. In v3 most
@@ -94,6 +107,10 @@ Sources on screen (s01-why):
       correcting was not measured). Re-synthesized: 9.38 s (was 9.91 s); the scene stays 10.2 s. 「ココロエは」 now starts at about
       5.0 s while the title still fades in at 5.4 s. Check the stills on 11/7 and pull the title earlier if it looks late.
 - [x] s08b now says 「架空の10社で、」 (Kento 11/5). Re-synthesized on 11/5: 10.10 s of narration, scene 10.4 s (≈ $0.001).
+- [x] Dry run of the whole shoot on 11/5, after two days of screen changes (recorded data, the Takumi audio on disk, no API or
+      Polly): 2:56.2, nothing over its time. Stills in `docs/screens/video-dryrun/`. Fixed: s05 now scrolls to T13's 「裏で誰に」
+      row by its label (the cards grew with visit plans and a fixed scroll missed it); the new labels in s04b, s07 and s07b no
+      longer wrap or cover the logo. Details: docs/ui-polish-log.md.
 - [x] Subtitles timed to the audio (speech marks).
 - [x] Polly narration for every scene (read-only API call with `--profile brightflow-sandbox-ikeda`).
 
