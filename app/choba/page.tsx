@@ -4,7 +4,7 @@ import { DIFF_AREAS } from "@/src/learning/area";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { FORMAT_JA, POSTURE_JA, TIMING_JA, who } from "@/src/core/labels";
-import { AREA_ON_SCREEN, means, quietWord, toWhom } from "../dandori";
+import { AREA_ON_SCREEN, means, quietWord, toWhom, VISIT_ROWS } from "../dandori";
 import { SCENE_TYPE_LABELS, type Client, type Proposal } from "@/src/core/types";
 import { getClient, TRAIN_SCENES } from "@/src/core/world";
 import type { KokoroeRule } from "@/src/learning/types";
@@ -70,6 +70,7 @@ function ProposalView({ p, client, ruleText }: { p: Proposal; client: Client; ru
           <Row main label="後日">{p.followUp ? "あらためて、あいさつを入れる" : <span className="text-nibi">なし</span>}</Row>
         </dl>
       </Ledger>
+      {p.visit && <VisitView v={p.visit} />}
       <Ledger label="そのほか" quiet>
         <dl>
           {FORMAT_JA[p.format] && <Row label="書式">{FORMAT_JA[p.format]}</Row>}
@@ -92,6 +93,19 @@ function ProposalView({ p, client, ruleText }: { p: Proposal; client: Client; ru
         )}
       </Ledger>
     </>
+  );
+}
+
+/** 訪問の段取り (D-061): only when the 段取り visits the client. Corrected by the same ○△× and one line as the rest. */
+function VisitView({ v }: { v: NonNullable<Proposal["visit"]> }) {
+  return (
+    <Ledger label="訪問" note="訪問するときの段取り。違えば、判定の一言で直してください。">
+      <dl>
+        {VISIT_ROWS.map(([k, label]) => (
+          <Row key={k} label={label}>{v[k] || <span className="text-nibi">—</span>}</Row>
+        ))}
+      </dl>
+    </Ledger>
   );
 }
 
@@ -145,6 +159,13 @@ function CheckCard({ p, step, sceneId, proposal, before }: { p: Pending; step: "
             </dd>
           </div>
         ))}
+        {proposal.visit &&
+          VISIT_ROWS.map(([k, label]) => (
+            <div key={k} className="grid grid-cols-[7.5em_1fr] gap-2">
+              <dt className="text-nibi">{label}</dt>
+              <dd className="yomi">{proposal.visit![k] || "—"}</dd>
+            </div>
+          ))}
       </dl>
       <input name="remark" maxLength={120} autoComplete="off" aria-label="一言（任意）" placeholder="一言（任意）" className="mt-2 block h-9 w-full rounded-[3px] border border-waku bg-kami px-2 font-mincho text-[14px]" />
       <div className="mt-2 flex gap-2">

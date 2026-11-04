@@ -63,8 +63,9 @@ export interface JudgmentRecord {
 
 /** A field change that a candidate reading implies for the proposal ("if the master meant this, the draft should have …"). */
 export interface ProposalFix {
-  field: "channel" | "meeting" | "formalTo" | "backchannelTo" | "timing" | "followUp" | "format" | "posture" | "escalateToMaster";
-  value: string; // enum value; "true"/"false" for booleans; "null" for no backchannel; a posture tag to add
+  // "visit" (D-061): a correction to the visit plan; only offered when the judged draft had one (never in the evaluation).
+  field: "channel" | "meeting" | "formalTo" | "backchannelTo" | "timing" | "followUp" | "format" | "posture" | "escalateToMaster" | "visit";
+  value: string; // enum value; "true"/"false" for booleans; "null" for no backchannel; a posture tag to add; for visit, short Japanese
 }
 
 /** One possible reading of the master's △/× (shown to the master as a one-tap choice when ambiguous). */

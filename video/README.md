@@ -126,3 +126,16 @@ The idea: kinetic typography made entirely in code, with no assets. Showiness is
   - It was 170 s; with s09a and the cuts above it is 173 s.
   - s01 and s07 narration already run long.
   - Any added seconds come from shortening other scenes; s02 and s03 are the first places to look.
+
+## Idea for 11/7, not built: the second 帳場 (Kento's request on the night of 11/4)
+
+The video's job is still the product. The development story could take one short beat near the end, without new claims:
+- **Where:** after the hand-off scene and before the end card, about 8–10 s. Or as one line in the end card if time is short.
+- **What is shown:** the same three-part shape, with real artefacts from this repo, not mock-ups:
+  1. Claude Code's draft (a line of a plan or a diff);
+  2. Kento's one-line judgment, e.g. 「127.0.0.1 だけで」;
+  3. where it was kept: the `CLAUDE.md` line or the hook file name.
+- **Narration (draft, one sentence):** 「この開発も、同じ形で進めました。Claude Code の案に一言で判断し、その違いを作法として残す。」
+- **Not claimed:** that the pattern was measured on development work, or that a general-purpose 帳場 exists. The README's table
+  (「二つ目の帳場」) is the source; the video only points to it.
+- **Cost:** it has to fit the 3-minute limit, so it replaces seconds elsewhere. Kento decides on 11/7 whether it goes in.

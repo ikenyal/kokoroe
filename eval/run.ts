@@ -10,7 +10,7 @@ import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
 import { EVAL_SCENES } from "@/src/core/world";
-import { discipleV0, type Disciple } from "@/src/disciple/v0";
+import { discipleV0, visitInEval, type Disciple } from "@/src/disciple/v0";
 import { naiveDisciple } from "./disciples/naive";
 import { runOnce } from "./evaluate";
 import { breakdown, meanSd, pct } from "./metrics";
@@ -35,7 +35,7 @@ async function main() {
   const seed = Number(values.seed);
 
   const scenes = values.scenes ? EVAL_SCENES.filter((s) => values.scenes!.split(",").includes(s.id)) : EVAL_SCENES;
-  console.log(`disciple=${disciple.name} set=${values.set} repeat=${repeat}  (fictional 10 clients / 20 held-out scenes)`);
+  console.log(`disciple=${disciple.name} set=${values.set} repeat=${repeat}  (fictional 10 clients / 20 held-out scenes)${visitInEval() ? "  訪問の段取り ON (KOKOROE_EVAL_VISIT=on; not the official setting, D-061)" : ""}`);
   const runs: Awaited<ReturnType<typeof runOnce>>[] = [];
   for (let k = 0; k < repeat; k++) {
     const r = await runOnce(disciple, scenes, seed, Number(values.concurrency));

@@ -39,6 +39,11 @@ away from family succession.
 - **The successor inherits it.** 暖簾を継ぐ: the successor asks "can I skip this?" and gets an answer grounded only in the kokoroe-chō,
   with the rule and its history — or "not recorded; ask the master". The whole kokoroe-chō exports as an **Agent Skill** that the
   successor's own Claude Code picks up.
+- **Visits, too (app only).** When the plan visits the client in person, the apprentice also writes the visit plan: what to wear
+  (some clients dislike suits), whether to bring a gift, what to check first, who goes, how to address people. The master corrects
+  it with the same ○△× and one line, and the correction becomes a 心得. **The evaluation covers the contact plan only:** the hidden
+  ground truth has no visit etiquette, so visits are off in every evaluation run (`KOKOROE_EVAL_VISIT`, default off), and a test
+  pins the apprentice's request to be byte-for-byte what it was before visits were added (D-061).
 - **The master stays in charge.** The apprentice never sends anything and never commits to prices or contract terms; instructions
   hidden in client messages can't write the kokoroe-chō.
 
@@ -129,6 +134,9 @@ with code against a hidden ground truth (frozen, checksummed); the apprentice ne
 _Interim (11/3): the Before uses the corrected ledger (D-033), the interim After the previous one — not directly comparable. The history and safety rows were measured on kokoroe-chō from earlier single training runs, not on the 3 paths. All are re-taken on 11/7 with the same ledger and 5 training paths._
 <!-- results:end -->
 
+The evaluation covers the contact plan. The visit plan (dress, gifts…) is not in the hidden ground truth, so it is out of scope and
+always off in evaluation runs (D-061).
+
 **Reading the numbers honestly.**
 - **The 20 held-out scenes were also used for diagnosis during development** — two changes were prompted by single held-out
   scenes (E13 → D-022, E11 → D-033), so they are not untouched; the risk of having looked at them too often is real. Before and
@@ -156,6 +164,25 @@ Built in one week by one person with Claude Code at the center (full log: [docs/
 - **Measured, not assumed.** Every change was measured on the held-out set with repeated runs; prompt caching was A/B-tested
   (−37% cost, verdicts unchanged); the Before was re-measured and replaced when the prompt layout changed.
 - **Decisions on record.** 30+ decision records ([docs/decisions.md](docs/decisions.md)) and an idea log ([docs/evolution.md](docs/evolution.md)).
+
+### A second 帳場: how this repository was built
+
+The development ran in the same shape as the product. Claude Code drafted a plan or a change; Kento judged it, often in one line;
+the difference was kept where the next session reads it first: in `CLAUDE.md`, in a hook, or in a decision record with its reason
+and date. These are examples from the git history and the records. They are not all corrections: the first was a rule Kento
+gave before any code was written.
+
+| The draft or the situation | Kento's judgment | Where it was kept |
+|---|---|---|
+| The developer's Claude Code had work MCP servers attached (day 1, before any code) | Never call MCP tools in this public repo | `CLAUDE.md`, a hook that blocks every `mcp__` call (D-003) |
+| The hidden ground truth had been edited during day 1 (a 「why」 line added, one remark reworded) | Freeze it, so the Before/After cannot look like the answers moved | A hook that blocks edits, a checksum test (D-017) |
+| The dev server ran on the default host and was reachable from the LAN for hours (it can call Claude with the dev key) | Bind to `127.0.0.1` and stop it after each check | `CLAUDE.md`; every script and command since |
+| Claude Code's own milestone audit found a work e-mail address as the commit author | Rewrite to the GitHub noreply address (option A of the audit) | All 44 commits rewritten and checked; `docs/audits/2026-11-03.md`, `docs/publishing.md` |
+| The plan's ranks (見習い・手代・番頭) for lighter review after a run of ○ | Replay recorded runs before building any screen; then not adopted | D-055; the floor `mustReview` in code |
+
+As in the product, a hook is the strongest form of a 心得: it holds even when the instruction is forgotten. The same pattern should
+fit any work where an expert can mark a draft ○△× faster than they can explain it, such as pricing, quality inspection,
+screening or design review. A general-purpose 帳場 is a possible next step, not something built here.
 
 ## Design notes
 

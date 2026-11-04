@@ -83,3 +83,70 @@ describe("the interpreter is unchanged for drafts without a visit plan (D-061)",
     expect({ first: sha(calls[0]), second: sha(calls[1]) }).toEqual(INTERPRET_BEFORE);
   });
 });
+
+describe("訪問の段取り in the app (D-061)", () => {
+  const plan = { attire: "スーツは避け、作業着に近い服で", gift: "持参しない", checkFirst: "先代の近況", attendees: "篠原と二人", address: "当代を社長と呼ぶ" };
+  beforeEach(() => {
+    calls.length = 0;
+    delete process.env.KOKOROE_EVAL_VISIT;
+  });
+
+  it("on: the prompt and schema ask for a visit plan, kept only when the draft really visits", async () => {
+    const client = getClient(visitScene.clientId);
+    answer = { ...base, visit: plan };
+    const p = await makeClaudeDisciple("app", undefined, { visit: true }).propose(visitScene, client);
+    const req = JSON.stringify(calls[0]);
+    expect(req).toContain("attire");
+    expect(req).toContain('also fill \\"visit\\"');
+    expect(p.visit).toEqual(plan);
+    answer = { ...base, meeting: "zoom", visit: plan };
+    const q = await makeClaudeDisciple("app", undefined, { visit: true }).propose(visitScene, client);
+    expect("visit" in q).toBe(false); // not a visit: the same shape as without visits
+  });
+
+  it("off: the schema has no visit, the answer keeps its shape; KOKOROE_EVAL_VISIT=on is the only way to turn it on in eval", async () => {
+    const client = getClient(visitScene.clientId);
+    answer = { ...base };
+    const p = await makeClaudeDisciple("eval").propose(visitScene, client);
+    expect(Object.keys(p).sort()).toEqual(Object.keys(base).sort());
+    // The structured-output schema sent off has no visit property, so the model cannot return one.
+    expect(JSON.stringify((calls[0] as { output_config: unknown }).output_config)).not.toContain("attire");
+    process.env.KOKOROE_EVAL_VISIT = "on";
+    await makeClaudeDisciple("eval-on").propose(visitScene, client);
+    expect(JSON.stringify(calls[1])).toContain("attire");
+  });
+
+  it("a correction to the visit plan can be read and written, and code never claims to check it", async () => {
+    const { interpret } = await import("@/src/learning/interpret");
+    const { describeProposal } = await import("@/src/learning/describe");
+    const { ruleTook } = await import("@/src/learning/verify");
+    const { applyFix } = await import("@/src/learning/fix");
+    const client = getClient(visitScene.clientId);
+    const proposal = { ...base, visit: plan } as never;
+    expect(describeProposal(proposal, client)).toContain("訪問の服装: スーツは避け");
+    expect(describeProposal({ ...base } as never, client)).not.toMatch(/訪問の|訪問前|訪問先/);
+    answer = { diagnosis: "d", ambiguous: false, candidates: [], confidence: "low" };
+    const judgment = { id: "J-0002", at: "x", sceneId: visitScene.id, clientId: client.id, sceneType: visitScene.type, proposal, verdict: "△", remark: "スーツは嫌がる", kind: "draft" };
+    await interpret({ scene: visitScene, client, judgment: judgment as never, existing: [] });
+    expect(JSON.stringify(calls[0])).toContain('\\"visit\\"');
+    const fix = { field: "visit" as const, value: "スーツは避ける" };
+    expect(applyFix(proposal, fix)).toEqual(proposal);
+    expect(ruleTook({ fix } as never, proposal)).toBeNull();
+  });
+});
+
+describe("the HITL floor reads the visit plan (D-061, hitl-reviewer B1)", () => {
+  it("a free gift or contract talk on a visit goes to the master, even with a clean message", async () => {
+    const { enforceHitl, mustReview } = await import("@/src/disciple/hitl");
+    const scene = { type: "T10" as const, situation: "先代から当代への代替わりのあいさつ", clientId: "C01" };
+    const visit = { attire: "", gift: "無償で試作品を持参", checkFirst: "", attendees: "", address: "" };
+    const p = enforceHitl(scene, { ...base, visit } as never) as { escalateToMaster: boolean; escalatedByCode?: boolean };
+    expect(p).toMatchObject({ escalateToMaster: true, escalatedByCode: true });
+    expect(mustReview(scene, { message: "ご挨拶に伺います。", escalateToMaster: false, visit: { ...visit, gift: "", checkFirst: "来期の契約条件を確かめる" } }, new Set(["C01"])).why).toBe("money");
+    expect(enforceHitl(scene, { ...base } as never)).toMatchObject({ escalateToMaster: false }); // no visit: as before
+  });
+  it("the official run refuses KOKOROE_EVAL_VISIT=on", async () => {
+    const src = (await import("node:fs")).readFileSync(new URL("../eval/final.ts", import.meta.url), "utf8");
+    expect(src).toContain("if (visitInEval()) throw");
+  });
+});

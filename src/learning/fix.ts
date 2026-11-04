@@ -15,6 +15,8 @@ export function applyFix(p: Proposal, fix: ProposalFix): Proposal {
     case "backchannelTo":
       q.backchannelTo = v === "contact" || v === "decider" ? v : null;
       break;
+    case "visit":
+      break; // free text about the visit plan: there is no single field value to set (D-061)
     case "posture":
       if ((POSTURE_TAGS as readonly string[]).includes(v) && !q.posture.includes(v as PostureTag)) q.posture.push(v as PostureTag);
       break;

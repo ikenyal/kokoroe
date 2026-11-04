@@ -21,7 +21,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync
 import path from "node:path";
 import { parseArgs } from "node:util";
 import { CLIENTS, EVAL_SCENES, TRAIN_SCENES } from "@/src/core/world";
-import { discipleV0, type Usage } from "@/src/disciple/v0";
+import { discipleV0, visitInEval, type Usage } from "@/src/disciple/v0";
 import { makeDiscipleV1 } from "@/src/disciple/v1";
 import { seedFromLedger } from "@/src/learning/ledger";
 import { LocalJsonStore } from "@/src/learning/store";
@@ -64,6 +64,8 @@ export function preflight(opts: { allowDirty: boolean; needKey: boolean }) {
   for (const f of files) if (sha(path.join(hiddenDir, f)) !== freeze.files[f]) throw new Error(`data/hidden/${f} changed since the freeze (D-017)`);
   const c01 = CLIENTS.find((c) => c.id === "C01");
   if (!c01?.constraints.includes("打ち合わせは可")) throw new Error("public ledger is not the corrected one (D-033: C01 「…打ち合わせは可」)");
+  // D-061: the official run never includes the visit plan (the hidden ground truth has no visit etiquette).
+  if (visitInEval()) throw new Error("KOKOROE_EVAL_VISIT=on: the official run covers the contact plan only (D-061) — unset it");
   const commit = execFileSync("git", ["rev-parse", "HEAD"], { cwd: ROOT }).toString().trim();
   const dirty = execFileSync("git", ["status", "--porcelain"], { cwd: ROOT }).toString().trim();
   if (dirty && !opts.allowDirty) throw new Error(`git tree is not clean — commit first so the result names its code:\n${dirty}`);

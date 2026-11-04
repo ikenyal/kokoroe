@@ -5,6 +5,7 @@
  */
 import { getClient } from "@/src/core/world";
 import { makeDiscipleV1 } from "@/src/disciple/v1";
+import { visitInApp } from "@/src/disciple/v0";
 import { applyCandidate } from "@/src/learning/compile";
 import { interpret } from "@/src/learning/interpret";
 import { guardScope } from "@/src/learning/scope";
@@ -100,7 +101,7 @@ export async function draftLive(s: Session, index: number) {
     return; // keep the recorded draft
   }
   drafting.add(key);
-  const d = makeDiscipleV1(s.store, "v1-live");
+  const d = makeDiscipleV1(s.store, "v1-live", { visit: visitInApp() }); // 訪問の段取り (D-061): on in the app
   try {
     const draft = await d.propose(item.scene, getClient(item.scene.clientId)).finally(() => recordSpend(d.usage));
     // Re-read after the await and patch only this card, so background updates made meanwhile are kept.

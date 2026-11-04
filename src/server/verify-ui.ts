@@ -17,6 +17,7 @@ import { enforceHitl } from "@/src/disciple/hitl";
 import { getClient, TRAIN_SCENES } from "@/src/core/world";
 import type { Proposal, Scene, Verdict } from "@/src/core/types";
 import { makeDiscipleV1 } from "@/src/disciple/v1";
+import { visitInApp } from "@/src/disciple/v0";
 import { applyCandidate } from "@/src/learning/compile";
 import { interpret } from "@/src/learning/interpret";
 import { MAX_REGRESSION, okScenes, rollbackChange, ruleTook, sameDecision } from "@/src/learning/verify";
@@ -38,7 +39,7 @@ function sceneById(s: Session, id: string): Scene | undefined {
 }
 
 async function draft(s: Session, scene: Scene): Promise<Proposal> {
-  const d = makeDiscipleV1(s.store, "v1-verify");
+  const d = makeDiscipleV1(s.store, "v1-verify", { visit: visitInApp() }); // the re-solved draft shows the visit plan too (D-061)
   try {
     return await d.propose(scene, getClient(scene.clientId));
   } finally {

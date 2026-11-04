@@ -40,3 +40,12 @@ export function sceneRange() {
  * interpreter's prompt, so it stays as it is (宛先 = 誰に, 手段 = 何で, 時期 = いつ, 裏の一言 = 裏で誰に).
  */
 export const AREA_ON_SCREEN = { to: "誰に", channel: "何で", timing: "いつ", backchannel: "裏で誰に", format: "書式", other: "その他" } as const;
+
+/** 訪問の段取り (D-061), in the order a visit is prepared. */
+export const VISIT_ROWS = [
+  ["attire", "服装"],
+  ["gift", "手土産"],
+  ["checkFirst", "先に確かめる話題"],
+  ["attendees", "同席者"],
+  ["address", "呼び方"],
+] as const;
