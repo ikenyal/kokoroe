@@ -9,7 +9,7 @@
 <style>
   .wrap { width: 1160px; }
   .q { font-size: 24px; text-align: center; opacity: 0; animation: fade .6s .1s ease both; }
-  .q small { display: block; font-size: 15px; color: var(--nibi); margin-bottom: 6px; }
+  .q small { display: block; font-size: 20px; color: var(--sumi); margin-bottom: 8px; }
   .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 26px; }
   .col { border-top: 3px solid var(--sumi); padding-top: 14px; opacity: 0; animation: fade .7s var(--d) ease both; }
   .col.mcp { border-color: var(--ai); }
@@ -18,7 +18,7 @@
   .lead { font-size: 26px; line-height: 1.55; margin-top: 12px; }
   .mcp .lead { color: var(--ai); }
   /* The sentence only the Skill + MCP answer says — marked like a brush underline, appearing a beat after its column. */
-  .diff { background: linear-gradient(transparent 62%, rgba(43,74,111,.18) 62%); font-weight: 600; padding: 0 2px;
+  .diff { display: block; width: fit-content; background: linear-gradient(transparent 62%, rgba(43,74,111,.18) 62%); font-weight: 600; padding: 0 2px;
           background-size: 0% 100%; background-repeat: no-repeat; animation: mark .8s 5.4s ease forwards; }
   @keyframes mark { to { background-size: 100% 100%; } }
   .note { font-size: 15px; color: var(--nibi); text-align: center; margin-top: 22px; opacity: 0; animation: fade .6s 6.6s ease both; }
@@ -30,12 +30,12 @@
   .note .mark { background: linear-gradient(transparent 62%, rgba(43,74,111,.18) 62%); font-weight: 600; color: var(--sumi); }
 </style></head>
 <body><div class="stage"><div class="wrap">
-  <p class="q"><small>後任の手元の Claude Code（Anthropic の既製品）に、同じ質問</small><span id="q"></span></p>
+  <p class="q"><small>後任の手元の <b>Claude Code（Anthropic の既製品）</b>に、同じ質問</small><span id="q"></span></p>
   <div class="cols">
-    <div class="col" style="--d:.6s"><h2>Skill だけ<span>ココロエが書き出した Skill（心得帳の写し）</span></h2><p class="lead" id="a1"></p><p class="why" id="w1"></p></div>
-    <div class="col mcp" style="--d:4.2s"><h2>Skill ＋ MCP<span>ココロエの MCP サーバー（読み取り専用）に問い合わせる</span></h2><p class="lead" id="a2"></p><p class="why" id="w2"></p></div>
+    <div class="col" style="--d:.6s"><h2>Skill だけ<span>ココロエが書き出した Skill（書き出した時点の写し）</span></h2><p class="lead" id="a1"></p><p class="why" id="w1"></p></div>
+    <div class="col mcp" style="--d:4.2s"><h2>Skill ＋ MCP<span>ココロエの MCP サーバー（読み取り専用）で、いまの心得帳に</span></h2><p class="lead" id="a2"></p><p class="why" id="w2"></p></div>
   </div>
-  <p class="note"><span class="mark">藍の下線</span>＝ココロエの MCP サーバーが返した、写しの後の変更<span id="newrule"></span>。<br><span class="tag">Skill から</span><span class="tag mcp">MCP から</span>＝根拠の出どころ　文章にまとめたのは Claude Code</p>
+  <p class="note"><span class="mark">藍の下線</span>＝写しの後の変更（ココロエの MCP サーバーから）<span class="tag">Skill から</span><span class="tag mcp">MCP から</span>＝根拠の出どころ</p>
 </div></div>
 <script>
   const M = window.MCP;
@@ -65,7 +65,6 @@
       a2.append(el);
     }
     const added = (plain(b).match(/K-\d{3}/g) ?? []).find((k) => !plain(a).includes(k));
-    document.getElementById("newrule").textContent = added ? "「" + ruleText(b, added) + "」" : "";
     // The right answer's first rule is the one only the MCP server knows (added after the copy) when there is one.
     const first = (plain(b).match(/K-\d{3}/) ?? [""])[0];
     why("w2", first && first === added ? "MCP" : "Skill", rule(b));

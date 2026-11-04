@@ -24,9 +24,11 @@
   @keyframes write { to { clip-path: inset(0 0 0 0); } }
   /* 既製 vs 自作 (運営 11/5): the apprentice's words are written by Claude's API (off the shelf); the 心得帳 and how it is kept
      are Kokoroe's own. Dashed = off the shelf, solid 藍 = made here. */
-  .chip { position: absolute; top: 392px; width: 300px; margin-left: -45px; white-space: nowrap; text-align: center; font-size: 16px; opacity: 0; animation: fade .4s var(--d) ease forwards; }
+  .chip { position: absolute; top: 392px; width: 300px; margin-left: -45px; white-space: nowrap; text-align: center; font-size: 18px; opacity: 0; animation: fade .4s var(--d) ease forwards; }
   .chip span { display: inline-block; padding: 3px 10px; border: 1.5px dashed var(--nibi); color: var(--nibi); }
-  .chip.own span { border: 1.5px solid var(--ai); color: var(--ai); }
+  .chip.own { width: 820px; margin-left: 0; }
+  /* The own part spans 師匠 → 後任 (ui-critic 11/5: under the 心得帳 only, it read as if only the book were Kokoroe's). */
+  .chip.own span { display: block; border: 1.5px solid var(--ai); border-top: none; color: var(--ai); padding-top: 6px; }
   .defs { position: absolute; left: 240px; top: 448px; width: 800px; padding: 18px 30px; border-top: 1.5px solid var(--keisen); border-bottom: 1.5px solid var(--keisen);
     display: grid; grid-template-columns: 5em 1fr; row-gap: 10px; font-size: 24px; line-height: 1.5; opacity: 0; animation: fade .4s 4.9s ease forwards; }
   .defs dt { font-weight: 600; opacity: 0; animation: fade .45s var(--d) ease forwards; }
@@ -42,7 +44,7 @@
 <p class="say">「裏で蔵元に一言」</p>
 <div class="arrow" style="left:587px;width:90px;--d:4.6s"></div>
 <div class="node book" style="left:680px;--d:4.8s"><h2>心得帳</h2><p class="gothic">心得を、経緯ごと<br>綴ったもの</p></div>
-<p class="chip own gothic" style="left:680px;--d:5.0s"><span>ココロエが作った仕組み</span></p>
+<p class="chip own gothic" style="left:375px;--d:5.0s"><span>ココロエが作った仕組み：師匠の帳場・心得帳・後任への受け渡し（Skill／MCP サーバー）</span></p>
 <div class="arrow" style="left:892px;width:90px;--d:7.4s"></div>
 <div class="node" style="left:985px;--d:7.6s"><h2>後任</h2><p class="gothic">引き継ぐ人<br>読んで、聞ける</p></div>
 <dl class="defs">

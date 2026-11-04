@@ -131,9 +131,8 @@ function EffectView({ effect, client, draft, words, ruleHref, recorded }: { effe
                     直したのは、{words(before.sceneId)}の案（師匠 <span className="font-mincho text-shu">{before.verdict}</span>
                     {before.remark ? `「${before.remark}」` : "、一言なし"}）
                   </span>
-                  <span className="text-[14.5px] text-sumi/80">
-                    その案：<del className="decoration-sumi/40">{point.was}</del>
-                  </span>
+                  {/* No strikethrough: a line through 「なし」 reads as 「な七」 (ui-critic 11/5). The two labels say which is which. */}
+                  <span className="text-[14.5px] text-sumi/75">その案：{point.was}</span>
                   <span className="self-start bg-ai-soft px-1.5 font-mincho text-[17px] text-sumi">この案：{point.now}</span>
                 </dd>
               </dl>
