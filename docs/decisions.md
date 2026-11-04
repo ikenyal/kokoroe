@@ -714,7 +714,8 @@ for a replay before any screen was built.
 - **Rules replayed:** grouped by client. 手代 = 2 ○ in a row (review not skipped: only a 「確認だけ」 mark). 番頭 = 5 ○ in a row plus
   a passed 確かめ稽古 (review skipped).
 - **手代:** reached 39 times counting the master's marks on drafts, 84 counting every mark. Of the drafts it would have marked
-  「確認だけ」, **76% / 64% had been marked △/×**, worse than the overall 55% of training drafts.
+  「確認だけ」, **76% / 64% had been marked △/×**, worse than the overall 55% of training drafts
+  (175 of the 320 drafts in the same 8 runs were marked △/×; counted again on 11/5 for the audit — not in the replay's JSON).
 - **番頭:** reached 0 / 3 times, and no draft ever passed without review.
 - **Client × situation type:** never reached at all; each pair occurs once in the 40 training scenes.
 
@@ -1026,8 +1027,16 @@ going, who attends, how to address people. Kento approved the addition without a
     prompt and stay as they are.
   - **A visit 心得 is not re-checked in regression.** In the app, a new visit 心得 that changes the visit plan of an earlier ○ scene
     passes without the master seeing it. The hitl-reviewer suggested asking whenever the two visit plans differ. Not done: the
-    wording differs on almost every re-solve, so nearly every regression check would cost a tap. **For Kento to decide.**
+    wording differs on almost every re-solve, so nearly every regression check would cost a tap. **Kento (11/5): keep it this
+    way.** One more tap on nearly every regression check costs more than it protects. A visit plan never sends or promises
+    anything, money and contract words in it still go to the master (the floor reads it), and the master sees the visit plan on
+    every new draft anyway.
   - **The public version** gets it at the freeze rebuild (11/6), not before.
+  - **The demo record keeps no visit plans (11/5).** Kento asked to re-record the demo with visits on, on condition that the
+    丸新酒造 T05 △ → T13 quiet word to the 蔵元 still happened. One run (T01–T20, the demo's v1 settings, seed 7, ≈ $0.52): with
+    the visit instructions added, the first drafts for 丸新酒造 put the 蔵元 in front and 奥様 behind (× on R04, nothing learned at
+    T05). The condition failed, so `data/demo/` is unchanged. It also shows that the visit instructions move the contact
+    段取り itself — one more reason they stay out of the evaluation. Details and an alternative: docs/ui-polish-log.md.
 
 **hitl-reviewer (before commit): one blocker, fixed.**
 - **B1, fixed:** the HITL floor (`needsMaster`, and so `mustReview`) read only the situation and the message. A gift like
@@ -1054,6 +1063,6 @@ going, who attends, how to address people. Kento approved the addition without a
   - **An internal id inside the visit text** (「（K-001）」): ids are stripped on screen (D-053), and the visit prompt asks for
     none.
 - **Observed, kept:** scene 2 was sent to the master by the floor because the visit plan itself said 「価格や条件には触れず」.
-  The floor is broad on purpose (D-044: a needless ask costs one tap).
+  The floor is broad on purpose (D-044: a needless ask costs one tap). **Kento (11/5): keep it broad (the safe side).**
 - **Confirmed by the review:** no eval entry point passes visits; the off request is unchanged; traceability is unchanged
   (source judgment, date, the master's words, before → after).

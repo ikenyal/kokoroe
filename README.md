@@ -23,7 +23,9 @@ away from family succession.
 ## What Kokoroe does
 
 - **The apprentice drafts first.** For each client situation (a delay, a quote, a new proposal, a greeting…), the AI apprentice
-  *Daidaimaru* proposes how to handle it — channel, the formal route (表) and the quiet word to the decider (裏), timing, tone, a draft.
+  *Daidaimaru* proposes a 段取り (plan): whom to contact formally (誰に), by what means (何で — mail, a call, a letter, a visit, or
+  deliberately nothing), when (いつ), whom to give a quiet word behind the scenes (裏で誰に), and whether to follow up later (後日).
+  The message text is a folded draft under the plan.
 - **The master only marks it.** ○ / △ (right, but missing a condition) / ×, with an optional one-liner. No explaining.
   When the remark is ambiguous, the master taps one of 2–3 readings — or "none of these".
 - **Corrections become the kokoroe-chō.** Each lesson is a short, scoped rule with its sources (which judgment, when, the master's
@@ -63,8 +65,9 @@ away from family succession.
 
 ## Try it
 
-- **Public demo:** _URL to be added (11/6)._ Two modes: **デモの続き** (a recorded run stopped half-way) and **お試し** (you are the master).
-- **Run locally** (Node 22+, npm; checked from a fresh clone on 11/3):
+- **Public demo:** _URL to be added (11/6)._ Two modes: **デモの続き** (button 「デモの続きから見る」: a recorded run stopped half-way) and **お試し**
+  (button 「師匠になって試す」: you are the master).
+- **Run locally** (Node 22+, npm; checked from a fresh clone: all four on 11/3; install, tests, eval:quick and a production build again on 11/5):
   ```bash
   npm ci
   npm run dev -- --hostname 127.0.0.1   # http://127.0.0.1:3000 — works on recorded data, no key and no .env needed
@@ -90,10 +93,10 @@ away from family succession.
   personas only change how things are said and tapped.
   - **Result:** no collapse. Silent and vague masters lose more lessons to 「どれでもない」. No successor persona made up an answer
     to a question the 心得帳 does not cover.
-  - **「どこが違う？」:** as a result, a master who gave **no remark** can say where the draft was off (宛先, 手段, 時期, 裏の一言,
+  - **「どこが違う？」:** as a result, a master who gave **no remark** can say where the draft was off (誰に, 何で, いつ, 裏で誰に,
     書式, その他) in the same tap as 「どれでもない」; it is optional.
-    - With an area, the second readings found what was meant in 7 of 13 cases; without one, in 1 of 13.
-    - Offered after every 「どれでもない」, it lowered ○+△ for masters who do speak (on/off × 3 pairs: on 80–85%, off 90–100%).
+    - With an area, the second readings found what was meant in 7 of 13 cases; without one, in 1 of 13 (fictional data, simulated masters, one training path each; D-057).
+    - Offered after every 「どれでもない」, it lowered ○+△ for masters who do speak (on/off × 3 pairs, one training path each, held-out ○+△ on the fictional 20 scenes: on 80–85%, off 90–100%).
       So it is now offered only when the remark is empty (D-057).
     - How often a simulated master leaves the area out (50% / 30% / 20%) is an assumption.
   - **Marks in busy months:** they tend to be lenient (a known limit). A lenient ○ writes nothing. Every 心得 keeps the date it was
@@ -159,11 +162,12 @@ Built in one week by one person with Claude Code at the center (full log: [docs/
   runs the fast tests at once and blocks the commit until a small API eval has run.
 - **Subagents.** Subagents following the `world-keeper` definition (run as general-purpose) wrote the 40 training scenes in
   parallel. `hitl-reviewer` reviewed the UI and found three blocking bugs before they shipped: a master's choice never applied,
-  a rule written without a tap, and lost updates.
+  a rule written without a tap, and lost updates. Later reviews blocked more before commit, e.g. four in own mode (D-056) and,
+  for the visit plan, a money check that did not read it (D-061).
 - **Skills.** `world-consistency` and `decision-log` for this repo; the product itself exports Agent Skills.
 - **Measured, not assumed.** Every change was measured on the held-out set with repeated runs; prompt caching was A/B-tested
   (−37% cost, verdicts unchanged); the Before was re-measured and replaced when the prompt layout changed.
-- **Decisions on record.** 30+ decision records ([docs/decisions.md](docs/decisions.md)) and an idea log ([docs/evolution.md](docs/evolution.md)).
+- **Decisions on record.** 60+ decision records ([docs/decisions.md](docs/decisions.md)) and an idea log ([docs/evolution.md](docs/evolution.md)).
 
 ### A second 帳場: how this repository was built
 

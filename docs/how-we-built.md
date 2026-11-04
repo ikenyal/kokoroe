@@ -407,3 +407,15 @@ Short entries, appended every work session. Source material for the README secti
     Claude Code's draft, Kento's one-line judgment, and where the difference was kept (`CLAUDE.md`, a hook, a decision record).
     Five examples were taken from the git history and the records. The first was a rule given before any code, not a
     correction, and the table says so.
+
+### 2026-11-05 (morning): a re-record that did not hold, and the second audit
+- **A condition set before spending.** Kento allowed the demo to be re-recorded with visits on only if the 丸新酒造 T05 △ → T13
+  quiet word still happened. Claude ran the first 20 training scenes once (≈ $0.52), saw T05 and T13 come out with 表 and 裏
+  reversed, and kept the old record without a second try. Re-running until the story appeared would have been picking the run.
+  The finding went into D-061: the visit instructions move the contact 段取り itself.
+- **Audit with a read-only subagent, then checked by hand.** A general-purpose subagent (no edits, no server, no API) listed
+  mismatches between the READMEs, screens, decisions, submission draft and video plan, and traced every number. Claude checked
+  each item before fixing. One item turned out stale (a comment that already said its times were old). One number had no
+  recorded source (55% in the rank replay) and was recounted from the same 8 runs: 175 of 320. Record: docs/audits/2026-11-05.md.
+- **A fresh clone without a key** (install, tests, `eval:quick`, build) replaced the 11/3 "checked from a fresh clone". No
+  server was started, because Kento was testing on 127.0.0.1:3100.
