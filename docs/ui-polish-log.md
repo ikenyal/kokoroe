@@ -54,3 +54,13 @@ critic (`.claude/agents/ui-critic.md`) reviews them after each change.
 5. **Kept: the indigo tab in the navigation.** It is a 暖簾 hanging from the top rule, tied to 「暖簾を継ぐ」, and its dark-mode
    contrast is about 8:1.
 6. **Tried and reverted:** そのほか in two columns squeezed 伝え方 into a narrow strip.
+
+## 心得帳
+
+1. **The 沿革 is visible without a click.** Under each 心得: the date, the master's mark in vermilion and words, the scene, and
+   「わけ」. An earlier wording appears as 「前は ~~…~~」. *Why:* the history is the point of the 心得帳, and every entry hid it
+   behind 「出典と沿革」.
+2. **The master's 心得 lead.** The 「師匠」 tag pill is gone (the section says so). A 心得 that started as a ledger fact carries a
+   short note instead. The 台帳 facts are folded at the bottom, with their count.
+3. **Quieter structure.** Client headings use a thin rule instead of a heavy one. The full source list and 「消す」 share one small
+   fold per entry, and 「消す」 is in ink, not vermilion.

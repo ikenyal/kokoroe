@@ -8,18 +8,6 @@ import { retireRule } from "../actions";
 
 const VERDICT_LABEL = { "○": "○", "△": "△", "×": "×" } as const;
 
-function Origin({ r }: { r: KokoroeRule }) {
-  const ledger = r.sources.some((s) => s.kind === "ledger");
-  const master = r.sources.some((s) => s.kind !== "ledger");
-  const label = ledger && master ? "台帳＋師匠" : ledger ? "台帳" : r.scope.clientId === null ? "全社・師匠" : "師匠";
-  return (
-    <span className={`rounded-[2px] px-1.5 py-px text-[12px] ${ledger && !master ? "border border-keisen text-nibi" : "bg-ai-soft text-ai"}`}>
-      {label}
-    </span>
-  );
-}
-
-/** Which situation a judgment was about, in words (no internal ids on screen). */
 function sceneWords(sceneId: string) {
   const t = TRAIN_SCENES.find((x) => x.id === sceneId);
   return t ? `${SCENE_TYPE_LABELS[t.type]}・${t.month}月の場面` : "";
@@ -36,66 +24,71 @@ function SourceLine({ s }: { s: RuleSource }) {
   );
 }
 
-function Rule({ r }: { r: KokoroeRule }) {
+/** A rule as a ledger entry: the 心得, then its 沿革 in plain sight (when, the master's mark and words, why, the scene). */
+function Rule({ r, fact = false }: { r: KokoroeRule; fact?: boolean }) {
+  const fromLedger = r.sources.some((s) => s.kind === "ledger");
+  const fromMaster = r.sources.some((s) => s.kind !== "ledger");
+  const judgmentOf = (id: string) => r.sources.find((s) => s.kind !== "ledger" && "judgmentId" in s && s.judgmentId === id) as Extract<RuleSource, { verdict?: unknown }> | undefined;
   const trigger = r.history.map((h) => h.trigger).filter(Boolean).at(-1);
   return (
     <li id={r.id} className="scroll-mt-6 border-t border-keisen py-5 first:border-t-0">
-      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-        <Origin r={r} />
-        {r.scope.sceneTypes && (
-          <span className="text-[12px] text-nibi">{r.scope.sceneTypes.map((t) => SCENE_TYPE_LABELS[t]).join("・")}のとき</span>
-        )}
-      </div>
-      <p className="yomi mt-1.5 text-[17px]">{r.text}</p>
-      {r.when && <p className="yomi text-[15px] text-nibi">条件：{r.when}</p>}
-      {trigger && (
-        <p className="yomi mt-1 text-[15px]">
-          <span className="text-nibi">わけ：</span>
-          {trigger}
+      {(r.scope.sceneTypes || (fromLedger && fromMaster)) && (
+        <p className="text-[12.5px] text-nibi">
+          {r.scope.sceneTypes && `${r.scope.sceneTypes.map((t) => SCENE_TYPE_LABELS[t]).join("・")}のとき`}
+          {r.scope.sceneTypes && fromLedger && fromMaster && "　"}
+          {fromLedger && fromMaster && "台帳の事実を、師匠の判定で直したもの"}
         </p>
       )}
-      <details className="group mt-2 text-[13.5px]">
-        <summary className="cursor-pointer text-ai select-none">出典と沿革（{r.history.length}）</summary>
-        <div className="mt-3 grid gap-4 md:grid-cols-2">
-          <div>
-            <h4 className="text-[12px] text-nibi">出典</h4>
-            <ul className="mt-1 space-y-1">{r.sources.map((s, i) => <SourceLine key={i} s={s} />)}</ul>
-          </div>
-          <div>
-            <h4 className="text-[12px] text-nibi">沿革</h4>
-            <ol className="mt-1 border-l border-keisen">
-              {r.history.map((h, i) => (
-                <li key={i} className="relative pb-3 pl-4">
-                  <span aria-hidden className="absolute top-[0.55em] -left-[4px] h-[7px] w-[7px] rounded-full bg-ai" />
+      <p className={`yomi ${fact ? "text-[16px]" : "text-[18px]"}`}>{r.text}</p>
+      {r.when && <p className="yomi text-[15px] text-nibi">条件：{r.when}</p>}
+      {fact ? (
+        trigger && (
+          <p className="yomi mt-1 text-[14.5px]">
+            <span className="text-nibi">わけ：</span>
+            {trigger}
+          </p>
+        )
+      ) : (
+        <ol aria-label="沿革" className="mt-3 space-y-2.5 border-l-2 border-keisen pl-4 text-[14px]">
+          {r.history.map((h, i) => {
+            const j = h.judgmentId ? judgmentOf(h.judgmentId) : undefined;
+            const words = h.masterWords || (j && "remark" in j ? j.remark : "");
+            return (
+              <li key={i}>
+                <p className="flex flex-wrap items-baseline gap-x-2">
                   <span className="tabular-nums text-nibi">{h.date}</span>
-                  <p className="yomi">
-                    {h.before ? (
-                      <>
-                        <del className="text-nibi decoration-shu/70">{h.before}</del>
-                        <br />→ {h.after}
-                      </>
-                    ) : (
-                      h.after
-                    )}
+                  {j && "verdict" in j && j.verdict && <span className="font-mincho text-[16px] leading-none text-shu" aria-label={`師匠の判定 ${j.verdict}`}>{j.verdict}</span>}
+                  {words ? <span className="yomi">「{words}」</span> : j ? <span className="text-nibi">（一言なし）</span> : null}
+                  {j && "sceneId" in j && <span className="text-nibi">{sceneWords(j.sceneId)}</span>}
+                  {!j && h.judgmentId === "MASTER" && <span className="text-nibi">師匠が心得帳で直接</span>}
+                </p>
+                {h.before && (
+                  <p className="yomi text-[14px] text-nibi">
+                    前は <del className="decoration-sumi/40">{h.before}</del>
                   </p>
-                  {h.trigger && <p className="yomi text-nibi">きっかけ：{h.trigger}</p>}
-                  {h.masterWords && <p className="yomi text-nibi">師匠：「{h.masterWords}」</p>}
-                </li>
-              ))}
-            </ol>
-          </div>
-        </div>
-        {r.status === "active" && (
-          <details className="mt-3">
-            <summary className="cursor-pointer text-nibi select-none">この心得を消す</summary>
-            <form action={retireRule} className="mt-2 flex items-center gap-3">
-              <input type="hidden" name="ruleId" value={r.id} />
-              <span className="text-nibi">消した記録は沿革に残ります。</span>
-              <button className="rounded-[3px] border border-shu px-3 py-1 text-shu hover:bg-shu-soft">消す</button>
-            </form>
-          </details>
-        )}
-      </details>
+                )}
+                {h.trigger && (
+                  <p className="yomi">
+                    <span className="text-nibi">わけ：</span>
+                    {h.trigger}
+                  </p>
+                )}
+              </li>
+            );
+          })}
+        </ol>
+      )}
+      {r.status === "active" && (
+        <details className="mt-2 text-[13px]">
+          <summary className="inline-flex min-h-9 cursor-pointer items-center text-nibi select-none">出典の一覧・この{fact ? "事実" : "心得"}を消す</summary>
+          <ul className="mt-1 space-y-1">{r.sources.map((s, i) => <SourceLine key={i} s={s} />)}</ul>
+          <form action={retireRule} className="mt-2 flex items-center gap-3">
+            <input type="hidden" name="ruleId" value={r.id} />
+            <span className="text-nibi">消した記録は沿革に残ります。</span>
+            <button className="rounded-[3px] border border-sumi/60 px-3 py-1 text-sumi hover:bg-kami-2">消す</button>
+          </form>
+        </details>
+      )}
     </li>
   );
 }
@@ -109,16 +102,16 @@ function groupsOf(rules: KokoroeRule[], prefix: string): Group[] {
   ].filter((g) => g.rules.length);
 }
 
-function Groups({ groups }: { groups: Group[] }) {
+function Groups({ groups, fact = false }: { groups: Group[]; fact?: boolean }) {
   return (
     <div className="space-y-10">
       {groups.map((g) => (
         <section key={g.key} id={g.key} aria-labelledby={`${g.key}-h`} className="scroll-mt-6">
-          <header className="border-b-2 border-sumi/80 pb-1.5">
+          <header className="border-b border-sumi/50 pb-1.5">
             <h3 id={`${g.key}-h`} className="font-mincho text-[21px] tracking-[0.04em]">{g.title}</h3>
             <p className="text-[12.5px] text-nibi">{g.note}</p>
           </header>
-          <ul>{g.rules.map((r) => <Rule key={r.id} r={r} />)}</ul>
+          <ul>{g.rules.map((r) => <Rule key={r.id} r={r} fact={fact} />)}</ul>
         </section>
       ))}
     </div>
@@ -166,21 +159,26 @@ export default async function KokoroePage() {
         {facts.length > 0 && (
           <p className="mt-3 text-[14px]">
             <a href="#facts" className="hover:text-ai">台帳から写した事実 <span className="tabular-nums text-nibi">{nF}</span></a>
+            <span className="block text-[12px] text-nibi">いちばん下に畳んであります</span>
           </p>
         )}
       </nav>
       <div className="space-y-14">
         <section aria-labelledby="k-h">
           <h2 id="k-h" className="font-mincho text-[22px] tracking-[0.06em]">師匠から覚えた心得</h2>
-          <p className="mt-1 mb-6 text-[13px] text-nibi">心得は、師匠の作法の一つ一つ。それを、なぜそうなったか（沿革）と一緒に綴ったものが心得帳です。</p>
+          <p className="mt-1 mb-6 text-[13px] text-nibi">心得は、師匠の作法の一つ一つ。いつ・どの印と一言から・なぜ、を添えて綴ったものが心得帳です。</p>
           {kokoroe.length ? <Groups groups={kokoroe} /> : <p className="yomi text-nibi">まだありません。帳場で ○・△・× を付けると、直したところがここに残ります。</p>}
         </section>
         {facts.length > 0 && (
-          <section id="facts" aria-labelledby="f-h" className="scroll-mt-6">
-            <h2 id="f-h" className="font-mincho text-[22px] tracking-[0.06em]">台帳から写した事実</h2>
-            <p className="mt-1 mb-6 text-[13px] text-nibi">取引先台帳に書かれていたこと。師匠の作法ではなく、作法の前提になる事実です。師匠が直すと、心得に移ります。</p>
-            <Groups groups={facts} />
-          </section>
+          <details id="facts" className="scroll-mt-6 border-t-2 border-sumi/80 pt-4">
+            <summary className="cursor-pointer select-none">
+              <h2 className="inline font-mincho text-[20px] tracking-[0.06em]">台帳から写した事実（{nF}）</h2>
+              <span className="mt-1 block text-[13px] text-nibi">取引先台帳に書かれていたこと。師匠の作法ではなく、作法の前提になる事実です。師匠が直すと、心得に移ります。</span>
+            </summary>
+            <div className="mt-6">
+              <Groups groups={facts} fact />
+            </div>
+          </details>
         )}
         {inactive.length > 0 && (
           <details className="text-[14px]">
