@@ -35,9 +35,9 @@ import { trainScenes } from "./training";
 
 const SEED = 101; // the same training path for every persona: differences come from the persona, not the path
 const EVAL_SEED = 7;
-const BUDGET_USD = 9.5;
+let BUDGET_USD = 9.5; // --budget sets it; a path is not started when the spend so far + one path (≈ $1.45) would pass it
 const ROOT = path.join(__dirname, "..");
-const RAW = path.join(__dirname, "runs", "raw", "personas");
+let RAW = path.join(__dirname, "runs", "raw", "personas"); // --raw <name> keeps another set of grown 心得帳 beside it
 const TEXTS = path.join(__dirname, "personas-texts.json");
 
 // ---------- cheap, cached wording ----------
@@ -81,9 +81,15 @@ export const MASTER_PERSONAS: { id: MasterPersona; name: string; how: string }[]
 
 const VAGUE = ["違う", "そうじゃない", "違うな", "そうじゃないんだよ"];
 
+/**
+ * 「どこが違う？」 (D-057): how often each persona leaves it unanswered. Assumptions, not measurements: the silent master answers
+ * half the time, the vague one most of the time; the rest as the textbook master (WHERE_SKIP_DEFAULT, 20%).
+ */
+export const WHERE_SKIP: Partial<Record<MasterPersona, number>> = { silent: 0.5, vague: 0.3 };
+
 /** The machine master, with the persona laid over what it says and taps. Verdict truth and the failing log stay the machine's. */
 export function personaMaster(id: MasterPersona, seed = SEED): SimulatedMaster & { slips: () => { verdict: number; reading: number } } {
-  const base = createSimulatedMaster(seed);
+  const base = createSimulatedMaster(seed, { whereSkip: WHERE_SKIP[id] });
   const rand = rng(seed * 31 + id.length);
   let slips = { verdict: 0, reading: 0 };
   let n = 0;
@@ -169,6 +175,8 @@ interface MasterResult {
   withdrawn: number;
   noneOfThese: number;
   asked: number;
+  secondRounds: number; // first readings answered 「どれでもない」
+  whereAnswered: number; // of those, 「どこが違う？」 answered
   slips: { verdict: number; reading: number };
   usd: number;
 }
@@ -209,6 +217,8 @@ async function runMaster(id: MasterPersona): Promise<MasterResult> {
     withdrawn: t.steps.filter((s) => s.verification?.withdrawn).length,
     noneOfThese: t.steps.filter((s) => s.asked && s.chosen === null).length,
     asked: t.steps.filter((s) => s.asked).length,
+    secondRounds: t.steps.filter((s) => s.secondRound).length,
+    whereAnswered: t.steps.filter((s) => s.secondRound && s.area).length,
     slips: master.slips(),
     usd: Number(usd.toFixed(3)),
   };
@@ -254,7 +264,7 @@ async function runSuccessors(storeFile: string) {
 }
 
 async function main() {
-  const { values } = parseArgs({ options: { yes: { type: "boolean", default: false }, only: { type: "string" }, parallel: { type: "string", default: "3" }, "successors-only": { type: "string" } } });
+  const { values } = parseArgs({ options: { yes: { type: "boolean", default: false }, only: { type: "string" }, parallel: { type: "string", default: "3" }, "successors-only": { type: "string" }, out: { type: "string" }, raw: { type: "string" }, budget: { type: "string" } } });
   // Second part on its own: the successor personas on the textbook master's grown 心得帳, with a hard cap on what is left of the budget.
   if (values["successors-only"] !== undefined) {
     const cap = Number(values["successors-only"]);
@@ -268,6 +278,8 @@ async function main() {
     writeFileSync(out, JSON.stringify({ at: new Date().toISOString(), note: "fictional data; successor personas on the textbook master's grown 心得帳 (seed 101)", usd: Number(estimateUsd(usage).toFixed(3)), successors }, null, 2) + "\n");
     return console.log(`≈ $${estimateUsd(usage).toFixed(3)} → ${path.relative(ROOT, out)}`);
   }
+  if (values.budget) BUDGET_USD = Number(values.budget);
+  if (values.raw) RAW = path.join(__dirname, "runs", "raw", values.raw.replace(/[^a-z0-9-]/gi, ""));
   const masters = MASTER_PERSONAS.filter((p) => !values.only || values.only.split(",").includes(p.id));
   console.log(`master personas: ${masters.map((m) => m.name).join(" / ")} — one training path each (seed ${SEED}), held-out ×1`);
   console.log(`successor personas: ${SUCCESSOR_PERSONAS.map((p) => p.name).join(" / ")} — on the textbook master's grown 心得帳`);
@@ -280,27 +292,31 @@ async function main() {
   await Promise.all(
     Array.from({ length: Number(values.parallel) }, async () => {
       for (let m = queue.shift(); m; m = queue.shift()) {
-        if (spent + estimateUsd(usage) > BUDGET_USD - 1.2) { console.log(`skip ${m.name}: budget`); continue; }
+        if (spent + estimateUsd(usage) > BUDGET_USD - 1.45) { console.log(`skip ${m.name}: budget`); continue; }
         const r = await runMaster(m.id);
         results.push(r);
         spent += r.usd;
         saveCache();
-        console.log(`${m.name.padEnd(12)} match ${pct(r.match)} ○+△ ${pct(r.okp)} taps ${r.taps} rules ${r.rulesActive} wrong ${r.wrongRules.length} rolled-back ${r.rolledBack} withdrawn ${r.withdrawn} none ${r.noneOfThese}/${r.asked} slips ${JSON.stringify(r.slips)} $${r.usd}  (total ≈ $${(spent + estimateUsd(usage)).toFixed(2)})`);
+        console.log(`${m.name.padEnd(12)} match ${pct(r.match)} ○+△ ${pct(r.okp)} taps ${r.taps} rules ${r.rulesActive} wrong ${r.wrongRules.length} rolled-back ${r.rolledBack} withdrawn ${r.withdrawn} none ${r.noneOfThese}/${r.asked} second-rounds ${r.secondRounds} where ${r.whereAnswered} slips ${JSON.stringify(r.slips)} $${r.usd}  (total ≈ $${(spent + estimateUsd(usage)).toFixed(2)})`);
       }
     }),
   );
+  // --only reruns some master personas: no successors, and the rows are merged into an existing file (--out) instead of replacing it.
   const textbook = path.join(RAW, "textbook.store.json");
-  const successors = existsSync(textbook) && spent + estimateUsd(usage) < BUDGET_USD - 0.6 ? await runSuccessors(textbook) : [];
+  const successors = !values.only && existsSync(textbook) && spent + estimateUsd(usage) < BUDGET_USD - 0.6 ? await runSuccessors(textbook) : [];
   saveCache();
   const total = spent + estimateUsd(usage);
   const date = new Date(Date.now() + 9 * 3600_000).toISOString().slice(0, 10);
-  const out = path.join(ROOT, "docs", "results", `personas-${date}.json`);
+  const out = values.out ? path.resolve(ROOT, values.out) : path.join(ROOT, "docs", "results", `personas-${date}.json`);
+  const prev = values.only && existsSync(out) ? JSON.parse(readFileSync(out, "utf8")) : null;
+  const prevRow = (id: string) => prev?.masters?.find((m: { id: string }) => m.id === id)?.result ?? null;
   writeFileSync(out, JSON.stringify({
     at: new Date().toISOString(),
     note: "fictional data; persona simulation — tolerance to variation, not a real-world test. Correctness by the frozen hidden kokoroe and the machine judge; personas change only expression. One training path per master persona (seed 101), held-out ×1.",
-    usd: Number(total.toFixed(3)),
-    masters: MASTER_PERSONAS.map((p) => ({ ...p, result: results.find((r) => r.persona === p.id) ?? null })),
-    successors,
+    usd: Number(((prev?.usd ?? 0) + total).toFixed(3)),
+    ...(prev ? { reruns: [...(prev.reruns ?? []), { at: new Date().toISOString(), personas: masters.map((m) => m.id), usd: Number(total.toFixed(3)) }] } : {}),
+    masters: MASTER_PERSONAS.map((p) => ({ ...p, result: results.find((r) => r.persona === p.id) ?? prevRow(p.id) })),
+    successors: prev ? prev.successors : successors,
   }, null, 2) + "\n");
   console.log(`total ≈ $${total.toFixed(2)} → ${path.relative(ROOT, out)}`);
 }

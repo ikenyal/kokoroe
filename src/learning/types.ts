@@ -1,3 +1,4 @@
+import type { DiffArea } from "./area";
 import type { Client, Proposal, Scene, SceneType, Verdict } from "@/src/core/types";
 
 /** Where a rule applies. Rules start narrow (one client) and are widened only on evidence. */
@@ -84,6 +85,11 @@ export interface Master {
   judge(scene: Scene, client: Client, p: Proposal): Promise<{ verdict: Verdict; remark: string }>;
   /** Pick the reading the master meant. null = "none of these". */
   choose(args: { scene: Scene; client: Client; proposal: Proposal; candidates: Candidate[] }): Promise<number | null>;
+  /**
+   * Optional, asked in the same tap as the first 「どれでもない」 (D-057): where was the draft off? null = not answered.
+   * Only a hint for the second readings; a master without this method behaves as before.
+   */
+  where?(args: { scene: Scene; client: Client; proposal: Proposal; candidates: Candidate[] }): Promise<DiffArea | null>;
   /**
    * Optional: why is it so? One short line, or "" to skip. Asked once per rule — when a rule is learned from a correction
    * (scene + candidate given), or once per ledger-seeded rule (no scene/candidate).

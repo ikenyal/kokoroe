@@ -1,0 +1,91 @@
+{
+  "at": "2026-11-04T03:12:14.920Z",
+  "note": "fictional data; persona simulation — tolerance to variation, not a real-world test. Correctness by the frozen hidden kokoroe and the machine judge; personas change only expression. One training path per master persona (seed 101), held-out ×1.",
+  "usd": 2.796,
+  "masters": [
+    {
+      "id": "textbook",
+      "name": "教科書どおりの師匠",
+      "how": "今の機械の師匠（基準）",
+      "result": null
+    },
+    {
+      "id": "silent",
+      "name": "背中で語る師匠",
+      "how": "一言をほぼ付けない（1割だけ）。△はほとんど使わず×にする（8割）。「なぜ」には答えない",
+      "result": {
+        "persona": "silent",
+        "match": 0.75,
+        "okp": 0.9,
+        "taps": 136,
+        "rulesActive": 20,
+        "wrongRules": [
+          {
+            "id": "K-017",
+            "text": "白樺製菓には季節・節目のあいさつを手紙で送る。"
+          }
+        ],
+        "rolledBack": 1,
+        "withdrawn": 0,
+        "noneOfThese": 6,
+        "asked": 20,
+        "secondRounds": 10,
+        "whereAnswered": 4,
+        "slips": {
+          "verdict": 0,
+          "reading": 0
+        },
+        "usd": 1.338
+      }
+    },
+    {
+      "id": "story",
+      "name": "昔話の師匠",
+      "how": "一言が長い武勇伝。肝心な点は最後の一文だけ",
+      "result": null
+    },
+    {
+      "id": "vague",
+      "name": "「なんか違う」の師匠",
+      "how": "×や△は付けるが「違う」「そうじゃない」しか言わない。「なぜ」には答えない",
+      "result": {
+        "persona": "vague",
+        "match": 0.7,
+        "okp": 0.95,
+        "taps": 135,
+        "rulesActive": 18,
+        "wrongRules": [],
+        "rolledBack": 1,
+        "withdrawn": 0,
+        "noneOfThese": 12,
+        "asked": 24,
+        "secondRounds": 16,
+        "whereAnswered": 9,
+        "slips": {
+          "verdict": 0,
+          "reading": 0
+        },
+        "usd": 1.458
+      }
+    },
+    {
+      "id": "busy",
+      "name": "繁忙期の師匠",
+      "how": "繁忙の月（取引先の繁忙月と3月）は△を半分○にする。余裕のある月は○の15%を△（「もう一工夫」）にする",
+      "result": null
+    },
+    {
+      "id": "fatfinger",
+      "name": "指が太い師匠",
+      "how": "5%で隣の印を押す（○↔△、△↔×）。読み方の候補も5%で隣を押す",
+      "result": null
+    },
+    {
+      "id": "abbrev",
+      "name": "略語の師匠",
+      "how": "一言と「なぜ」から固有名や主語を省く（「浜風は前もって言うとけ」「例の件」「あそこ」）",
+      "result": null
+    }
+  ],
+  "successors": []
+}

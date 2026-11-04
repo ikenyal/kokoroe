@@ -320,3 +320,16 @@ Short entries, appended every work session. Source material for the README secti
   - **Spend:** $9.76 of the $10 limit. The run stopped itself before the successor part, which was then run with a hard cap.
   - **Bug found by reading the outputs:** 20 of 130 generated texts were empty. That was fixed, and the affected successor
     persona was rerun. The affected master persona is reported as not valid rather than rerun past the budget.
+  - **Then (Kento 11/4):** the storyteller master was rerun ($1.43, within the $1.6 he allowed). Rerunning a single persona now
+    merges into the results file instead of overwriting it.
+
+- **11/4 — 「どこが違う？」 (D-057).**
+  - **The chooser:** built in `src/learning/area.ts` and wired through the loop, the interpreter, the 帳場 and the simulated master.
+  - **Asking instead of guessing:** one condition in the request ("only when there is no remark") would have missed the vague
+    master, who always says 「違う」. Claude Code asked Kento with a question dialog before writing code.
+  - **Review:** the hitl-reviewer subagent ran in the background while `eval:smoke` ran. It found no blockers, and its smaller
+    points were applied.
+  - **A flaky test:** one test failed only with the diff. Timing it showed that a cold `npx tsx` start alone takes 2–17 s on this
+    machine, so its timeout was raised; the diff was not the cause.
+  - **Measuring it:** the persona rerun was cut to the two target masters to stay under the $4 limit. Splitting the second
+    readings into "with an area" and "without" gave a clearer signal than the headline rate.

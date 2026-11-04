@@ -77,6 +77,12 @@ away from family succession.
   personas only change how things are said and tapped.
   - **Result:** no collapse. Silent and vague masters lose more lessons to 「どれでもない」. No successor persona made up an answer
     to a question the 心得帳 does not cover.
+  - **「どこが違う？」:** as a result, the master can now say where the draft was off (宛先, 手段, 時期, 裏の一言, 書式, その他)
+    in the same tap as 「どれでもない」; it is optional. With an area, the second readings found what was meant in 7 of 13 cases;
+    without one, in 1 of 13.
+  - **Marks in busy months:** they tend to be lenient (a known limit). A lenient ○ writes nothing. Every 心得 keeps the date it was
+    written and the scene and mark it came from, so what was written in a busy month can be reviewed later and deleted in the
+    心得帳 (the deletion stays in its 沿革).
   - **Details:** [docs/personas-2026-11-05.md](docs/personas-2026-11-05.md).
   - It is a different thing from the master-role test above.
 - **Start from your own company (local only):** `npm run own` (needs `ANTHROPIC_API_KEY` in `.env.local`) opens

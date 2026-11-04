@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 import { getSession, liveEnabled, readMeta, startSession, type Mode } from "@/src/server/session";
+import { parsePick } from "@/src/learning/area";
 import { applyChoice, interpretInBackground } from "@/src/server/background";
 import { afterConfirm, afterRegression, confirmWithoutLive, startVerification } from "@/src/server/verify-ui";
 import { undoLast } from "@/src/server/undo";
@@ -124,15 +125,16 @@ export async function pause(formData: FormData) {
   revalidatePath("/choba");
 }
 
-/** 読み方の候補を選ぶ（index）/ どれでもない（none）. */
+/** 読み方の候補を選ぶ（index）/ どれでもない（none）, optionally with 「どこが違う？」 (area, first readings only, D-057). */
 export async function choose(formData: FormData) {
   const s = await getSession();
   if (!s) redirect("/");
   const judgmentId = String(formData.get("judgmentId") ?? "");
-  const pick = String(formData.get("pick") ?? "");
-  if (!/^J-\d{4}$/.test(judgmentId) || !/^(none|[0-2])$/.test(pick)) throw new Error("invalid choice");
+  // "none:<area>" = 「どれでもない」 with 「どこが違う？」 in one tap (a submit button carries one value).
+  const parsed = parsePick(String(formData.get("pick") ?? ""));
+  if (!/^J-\d{4}$/.test(judgmentId) || !parsed) throw new Error("invalid choice");
+  const { index, area: areaIn } = parsed;
   if (!liveEnabled()) return;
-  const index = pick === "none" ? null : Number(pick);
   if (index === null) {
     // "none of these" in round 1 starts a second interpretation — a live call.
     const refused = await allowLive(s.sid);
@@ -149,7 +151,12 @@ export async function choose(formData: FormData) {
   const sceneId = meta.pending.find((p) => p.judgmentId === judgmentId)?.sceneId ?? "";
   const tChoose = ms(formData, "shownAt", "submitAt");
   if (tChoose !== null) addTimings(meta, [{ kind: "choose", sceneId, ms: tChoose }]);
-  meta.pending = meta.pending.map((p) => (p.judgmentId === judgmentId && p.status === "needs-choice" ? { ...p, status: "choosing", pick: index } : p));
+  // The area counts only on the first readings: the second round is the last one (D-025).
+  meta.pending = meta.pending.map((p) =>
+    p.judgmentId === judgmentId && p.status === "needs-choice"
+      ? { ...p, status: "choosing", pick: index, ...(areaIn && (p.round ?? 1) === 1 ? { area: areaIn } : {}) }
+      : p,
+  );
   s.saveMeta(meta);
   after(() => applyChoice(s.mode, s.sid, judgmentId, index));
   revalidatePath("/choba");

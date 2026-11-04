@@ -1,7 +1,16 @@
 {
-  "at": "2026-11-04T00:34:23.590Z",
+  "at": "2026-11-04T02:52:16.304Z",
   "note": "fictional data; persona simulation — tolerance to variation, not a real-world test. Correctness by the frozen hidden kokoroe and the machine judge; personas change only expression. One training path per master persona (seed 101), held-out ×1.",
-  "usd": 9.334,
+  "usd": 10.767,
+  "reruns": [
+    {
+      "at": "2026-11-04T02:52:16.304Z",
+      "personas": [
+        "story"
+      ],
+      "usd": 1.433
+    }
+  ],
   "masters": [
     {
       "id": "textbook",
@@ -62,20 +71,29 @@
       "how": "一言が長い武勇伝。肝心な点は最後の一文だけ",
       "result": {
         "persona": "story",
-        "match": 0.7,
-        "okp": 0.9,
-        "taps": 132,
-        "rulesActive": 19,
-        "wrongRules": [],
-        "rolledBack": 1,
+        "match": 0.55,
+        "okp": 0.8,
+        "taps": 128,
+        "rulesActive": 20,
+        "wrongRules": [
+          {
+            "id": "K-014",
+            "text": "白樺製菓にはメールで済ませず手紙を送り、足を運んで直接話す。"
+          },
+          {
+            "id": "K-024",
+            "text": "大河原建材への最初の連絡は電話で済まさず、書面で申し入れる。"
+          }
+        ],
+        "rolledBack": 0,
         "withdrawn": 0,
         "noneOfThese": 9,
-        "asked": 22,
+        "asked": 16,
         "slips": {
           "verdict": 0,
           "reading": 0
         },
-        "usd": 1.41
+        "usd": 1.425
       }
     },
     {

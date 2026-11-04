@@ -781,3 +781,64 @@ the fictional company. Conditions: `KOKOROE_OWN=1`, 127.0.0.1 only, data outside
   - The evaluation refuses to run with `KOKOROE_OWN=1` set.
   - The month must be an integer.
 
+
+## D-058 · 2026-11-04 · Accepted (Kento) · Busy months: no "you marked ○ last time" hint; a known limit
+
+**Context.** In the persona run (`docs/personas-2026-11-05.md`) the busy-month master had the lowest ○+△ among the personas whose
+words were intact (85%). Its lenient ○ in busy months taught nothing there; its strict △ (「もう一工夫」) in calm months sent the
+interpreter looking for a difference that was not there. A display-only fix was proposed: show 「前回この取引先の似た場面には
+○ を付けています」 next to the marks.
+
+**Decision.** Not adopted.
+- **Why:** a master who is going easy, shown a past ○, may lean further towards ○ (anchoring). The hint could make the drift worse.
+- **Recorded as a known limit:** marks given in a busy month can be lenient.
+- **What is true today, and what the README says:**
+  - A lenient ○ writes nothing into the 心得帳.
+  - Every 心得 keeps its date and the scene and mark it came from, so the master can look again later and delete it in the 心得帳.
+    The deletion stays in its 沿革.
+
+## D-057 · 2026-11-04 · Accepted (Kento) · 「どこが違う？」 with 「どれでもない」: an optional hint for the second readings
+
+**Context.** In the persona run, silent and vague masters lost more lessons to 「どれでもない」 (31% of readings shown for the
+textbook master; 45–52% for these two). With no words to go on, the interpreter's second readings rarely found what was meant
+(6 of 27).
+
+**Decision.**
+- **The tap:** when the master taps 「どれでもない」 on the first readings, the same tap can say where the draft was off: 宛先 /
+  手段 / 時期 / 裏の一言 / 書式 / その他.
+  - It is shown on every first-round 「どれでもない」, whatever the remark (Kento's choice). The 「なんか違う」 master always says
+    something, so a "no remark" condition would never reach them.
+  - Optional: 「どれでもない（場所は選ばない）」 goes on as before. It is one tap, not an extra one. Second readings end with a plain
+    「どれでもない」.
+- **Only a hint:** the area goes to the second interpretation, worded as a hint ("put readings about these fields first; not a
+  reason to invent a difference").
+  - It writes nothing and filters no reading.
+  - It leaves alone: the floor (money, contract terms and first contact always go to the master; D-044 still drops any reading
+    that would stop routing to the master), 確かめ稽古, regression checks and generalization.
+  - The 帳場 shows 「…」を手がかりに on the second readings; the session keeps it (`Pending.area`).
+- **Areas → draft fields** (`src/learning/area.ts`):
+
+  | Area | Draft fields |
+  |---|---|
+  | 宛先 | formalTo |
+  | 手段 | channel, meeting |
+  | 時期 | timing |
+  | 裏の一言 | backchannelTo |
+  | 書式 | format |
+  | その他 | followUp, posture, escalateToMaster |
+- **Simulated master:** taps the area of the field that would clear its most serious failed check, the way a real master knows
+  their own objection.
+  - It skips at a set rate, drawn from its own random stream so the remarks are unchanged: 20% by default (the textbook master,
+    and the official measurement), 50% for the silent persona, 30% for the vague one. These rates are assumptions.
+- **The official measurement (`eval:final`, 11/7) runs on this version.**
+
+**Checked.**
+- **hitl-reviewer:** no blockers. Its smaller points were applied:
+  - a strict parse of the button value, with a test;
+  - the stored area is checked again before use;
+  - the hint wording was softened.
+- Tests pass; `eval:smoke` and `eval:quick` were run (they use the naive apprentice, so they cannot show this change).
+- **Persona rerun** (fictional data, one path each, seed 101, $2.80; `docs/personas-2026-11-05.md`):
+  - **With an area tapped:** the second readings found what was meant in 7 of 13 cases; without one, 1 of 13.
+  - **Silent master:** 「どれでもない」 at the end 52% → 30%; rules 17 → 20; match 70% → 75%.
+  - **Vague master:** 45% → 50%. It skipped the area 7 times, and all of those missed. Match 65% → 70%.

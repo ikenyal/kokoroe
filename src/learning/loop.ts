@@ -14,6 +14,7 @@ import type { Candidate, JudgmentRecord, Master } from "./types";
 import { verifyChange, type Verification } from "./verify";
 import { maybeGeneralize, type GeneralizeResult } from "./generalize";
 import { guardScope } from "./scope";
+import type { DiffArea } from "./area";
 
 export type InterpretFn = typeof interpret;
 
@@ -30,6 +31,7 @@ export interface StepResult {
   verification: Verification | null;
   generalization?: GeneralizeResult | null;
   secondRound?: boolean; // the master said "none of these" and was shown a second set of readings
+  area?: DiffArea | null; // 「どこが違う？」: where the master said the draft was off, with 「どれでもない」 (null = not answered)
 }
 
 export async function learnStep(args: {
@@ -76,9 +78,12 @@ export async function learnStep(args: {
   let chosen = asked ? await master.choose({ scene, client, proposal, candidates: cands }) : 0;
   let taps = asked ? 2 : 1;
   let shown = cands;
+  let area: DiffArea | null = null;
   if (asked && chosen === null) {
+    // 「どこが違う？」 (D-057): in the same tap as 「どれでもない」 the master may point at where the draft was off (optional).
+    area = master.where ? await master.where({ scene, client, proposal, candidates: cands }) : null;
     // Second round (D-025): "none of these" → new readings that differ from the rejected ones; one more tap.
-    interpretation = await interpretFn({ scene, client, judgment, existing, usage: args.usage, rejected: cands });
+    interpretation = await interpretFn({ scene, client, judgment, existing, usage: args.usage, rejected: cands, area });
     shown = interpretation.candidates;
     secondRound = true;
     if (shown.length) {
@@ -87,7 +92,7 @@ export async function learnStep(args: {
     }
   }
   if (chosen === null || !shown[chosen]) {
-    return { ...base, interpretation, asked, chosen: null, changes: [], masterTaps: taps, secondRound };
+    return { ...base, interpretation, asked, chosen: null, changes: [], masterTaps: taps, secondRound, area };
   }
   const pick: Candidate = guardScope(shown[chosen], judgment.remark);
   const snapshot = pick.action === "revise" && pick.targetRuleId ? await store.getRule(pick.targetRuleId) : undefined;
@@ -120,5 +125,5 @@ export async function learnStep(args: {
     });
     taps += generalization?.taps ?? 0;
   }
-  return { ...base, interpretation, asked, chosen, changes: [change], trigger, masterTaps: taps, verification, generalization, secondRound };
+  return { ...base, interpretation, asked, chosen, changes: [change], trigger, masterTaps: taps, verification, generalization, secondRound, area };
 }

@@ -5,6 +5,7 @@
  * Each session is a copy in its own JSON file (the KokoroeStore adapter), so visitors never touch each other's data.
  * Only fictional data (だいだい工房). Nothing about a session is logged.
  */
+import type { DiffArea } from "@/src/learning/area";
 import { randomUUID } from "node:crypto";
 import { headers } from "next/headers";
 import { isLocalRequest } from "./own";
@@ -50,6 +51,7 @@ export interface Pending {
   pick?: number | null; // the master's tap while status is "choosing" (null = none of these)
   candidates?: Candidate[];
   round?: 1 | 2;
+  area?: DiffArea; // 「どこが違う？」: tapped with the first 「どれでもない」 (D-057); only a hint for round 2
   ruleId?: string;
   note?: string;
   exclude?: string; // D-045: a follow-up correction from 確かめ稽古 may not rewrite this rule (the one just written)

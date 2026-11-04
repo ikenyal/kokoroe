@@ -8,6 +8,7 @@ import { makeDiscipleV1 } from "@/src/disciple/v1";
 import { applyCandidate } from "@/src/learning/compile";
 import { interpret } from "@/src/learning/interpret";
 import { guardScope } from "@/src/learning/scope";
+import { isDiffArea } from "@/src/learning/area";
 import type { Usage } from "@/src/lib/claude";
 import { allowLive, recordSpend } from "./limits";
 import { openSession, readMeta, type Mode, type Pending, type Session } from "./session";
@@ -37,9 +38,10 @@ export async function interpretInBackground(mode: Mode, sid: string, judgmentId:
   try {
     update(s, judgmentId, { status: "interpreting", round });
     const { judgment, scene, client, existing } = await context(s, judgmentId);
-    const rejected = round === 2 ? readMeta(mode, sid).pending.find((p) => p.judgmentId === judgmentId)?.candidates : undefined;
+    const before = round === 2 ? readMeta(mode, sid).pending.find((p) => p.judgmentId === judgmentId) : undefined;
+    const rejected = before?.candidates;
     const usage: Usage[] = [];
-    const interp = await interpret({ scene, client, judgment, existing, rejected, usage }).finally(() => recordSpend(usage));
+    const interp = await interpret({ scene, client, judgment, existing, rejected, area: isDiffArea(before?.area) ? before.area : null, usage }).finally(() => recordSpend(usage));
     const ex = readMeta(mode, sid).pending.find((p) => p.judgmentId === judgmentId)?.exclude;
     const cands = interp.candidates.map((c) => (ex && c.targetRuleId === ex ? { ...c, action: "add" as const, targetRuleId: null } : c));
     if (!cands.length) return update(s, judgmentId, { status: "nothing-learned", note: "読み取れる違いがありませんでした" });

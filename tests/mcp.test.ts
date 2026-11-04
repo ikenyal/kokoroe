@@ -127,5 +127,5 @@ describe("kokoroe MCP entry point", () => {
     const r = spawnSync("npx", ["tsx", "src/mcp/main.ts", "--store", path.join("data", "hidden", "rules.json")], { cwd: path.resolve(__dirname, ".."), encoding: "utf8" });
     expect(r.status).toBe(2);
     expect(r.stderr).toContain("not a kokoroe-chō");
-  });
+  }, 30_000); // a cold `npx tsx` process takes 2–17 s on this machine; the 5 s default made the test flaky
 });

@@ -9,6 +9,7 @@ import { SCENE_TYPE_LABELS, type Client, type Proposal, type Scene, type Verdict
 import { cachedSystem, getClaude, MODELS, usageOf } from "@/src/lib/claude";
 import type { Usage } from "@/src/disciple/v0";
 import { describeProposal, describeRules } from "./describe";
+import { DIFF_AREA_FIELDS, DIFF_AREA_JA, DIFF_AREAS, type DiffArea } from "./area";
 import { FIX_VALUES_HELP } from "./fix";
 import type { JudgmentRecord, KokoroeRule } from "./types";
 
@@ -70,15 +71,24 @@ export async function interpret(args: {
   conflict?: { ruleId: string; ruleText: string; scene: Scene; before: Proposal; after: Proposal; verdict: Verdict; remark: string };
   /** Second round: the master tapped "none of these" for these readings. */
   rejected?: { text: string; when: string | null; fix: { field: string; value: string } }[];
+  /** With `rejected`: where the master tapped the draft was off (「どこが違う？」, D-057). A hint, not a filter. */
+  area?: DiffArea | null;
 }): Promise<Interpretation> {
-  const { scene, client, judgment, existing, conflict, rejected } = args;
+  const { scene, client, judgment, existing, conflict, rejected, area } = args;
+  const named = DIFF_AREAS.filter((a) => a !== "other").map((a) => DIFF_AREA_JA[a]).join("・");
+  const areaLine = area
+    ? `
+The master also tapped where the draft was off: 「${DIFF_AREA_JA[area]}」${area === "other" ? `（none of ${named}）` : ""}, i.e. the field(s) ${DIFF_AREA_FIELDS[area].join(" / ")}.
+Treat this as a hint from the master: put readings about these fields first. It is not a reason to invent a difference
+that the situation and the client do not support.`
+    : "";
   const rejectedBlock = rejected?.length
     ? `
 <rejected_readings>
 The master tapped "none of these" for these readings — none of them was what they meant:
 ${rejected.map((c) => `- ${c.text}${c.when ? `（${c.when}）` : ""} [${c.fix.field}=${c.fix.value}]`).join("\n")}
 Give 2–3 NEW readings that differ from all of the above in what was wrong (other fields, or other values for the same field).
-Set ambiguous=true.
+Set ambiguous=true.${areaLine}
 </rejected_readings>`
     : "";
   const conflictBlock = conflict

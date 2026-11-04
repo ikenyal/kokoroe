@@ -1,4 +1,5 @@
 import { LimitNote } from "../limit-note";
+import { DIFF_AREA_JA, DIFF_AREAS } from "@/src/learning/area";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { CHANNEL_JA, FORMAT_JA, MEETING_JA, POSTURE_JA, TIMING_JA, who } from "@/src/core/labels";
@@ -166,7 +167,7 @@ function PendingItem({ p, beforeOf, ruleText, words }: { p: Pending; beforeOf: (
     <li className="border-t border-keisen py-3 first:border-t-0">
       <p className="text-[13px] text-nibi">
         {words(p.sceneId)}　{STATUS[p.status]}
-        {p.round === 2 && p.status === "needs-choice" ? "（別の読み方）" : ""}
+        {p.round === 2 && p.status === "needs-choice" ? `（別の読み方${p.area ? `：「${DIFF_AREA_JA[p.area]}」を手がかりに` : ""}）` : ""}
       </p>
       {p.status === "offline" && <OfflineExample sceneId={p.sceneId} />}
       {p.ruleId && (
@@ -187,9 +188,26 @@ function PendingItem({ p, beforeOf, ruleText, words }: { p: Pending; beforeOf: (
               {c.when && <span className="text-nibi">（{c.when}）</span>}
             </button>
           ))}
-          <button name="pick" value="none" className="text-[14px] text-nibi underline-offset-4 hover:underline">
-            どれでもない
-          </button>
+          {(p.round ?? 1) === 1 ? (
+            // 「どこが違う？」 (D-057): in the same tap as 「どれでもない」, optional. Only a hint for the next readings.
+            <fieldset className="border-t border-keisen pt-2">
+              <legend className="text-[13px] text-nibi">どれでもないとき、どこが違いますか（押さなくても進めます）</legend>
+              <div className="mt-1 flex flex-wrap gap-2">
+                {DIFF_AREAS.map((a) => (
+                  <button key={a} name="pick" value={`none:${a}`} className="h-10 min-w-12 rounded-[3px] border border-keisen px-3 text-[14px] hover:border-ai hover:bg-ai-soft">
+                    {DIFF_AREA_JA[a]}
+                  </button>
+                ))}
+                <button name="pick" value="none" className="h-10 px-2 text-[14px] text-nibi underline-offset-4 hover:underline">
+                  どれでもない（場所は選ばない）
+                </button>
+              </div>
+            </fieldset>
+          ) : (
+            <button name="pick" value="none" className="text-[14px] text-nibi underline-offset-4 hover:underline">
+              どれでもない
+            </button>
+          )}
         </form>
       )}
       {p.status === "needs-confirm" && p.verify?.retried && p.note && <p className="text-[13px] text-nibi">{p.note}</p>}

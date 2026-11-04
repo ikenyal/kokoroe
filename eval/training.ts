@@ -5,6 +5,7 @@ import { getClient, TRAIN_SCENES } from "@/src/core/world";
 import type { Scene } from "@/src/core/types";
 import type { Usage } from "@/src/disciple/v0";
 import { makeDiscipleV1 } from "@/src/disciple/v1";
+import { DIFF_AREA_JA } from "@/src/learning/area";
 import { learnStep, type StepResult } from "@/src/learning/loop";
 import type { KokoroeStore } from "@/src/learning/store";
 import { createSimulatedMaster } from "./simulator/master";
@@ -46,7 +47,7 @@ export async function trainScenes(args: {
       `${scene.id} ${scene.clientId} ${scene.type.padEnd(3)} ${r.judgment.verdict} ${r.judgment.remark ? `「${r.judgment.remark}」` : "（一言なし）"}` +
         ` shown[${r.rulesShown.join(",")}]${used} (${step.sec.toFixed(1)}s) hidden-fail:${step.hiddenFailing.join(",") || "-"}`,
     );
-    if (r.secondRound) log("    （1巡目は「どれでもない」→ 2巡目の候補）");
+    if (r.secondRound) log(`    （1巡目は「どれでもない」${r.area ? `、どこが違う？→ ${DIFF_AREA_JA[r.area]}` : ""} → 2巡目の候補）`);
     if (r.interpretation && r.asked) {
       r.interpretation.candidates.forEach((c, i) =>
         log(`    ${i === r.chosen ? "▶" : " "} 候補${i + 1}: ${c.text}${c.when ? `（${c.when}）` : ""}  [${c.fix.field}=${c.fix.value}]`),

@@ -4,8 +4,11 @@
  *   choose — which reading the master meant: apply each candidate's implied fix to the draft and keep the one that
  *            clears the most serious failed check (the way a real master knows their own intent). None → null.
  *   why    — if the hidden rule behind the reading has a history, say the trigger in one breath; otherwise nothing.
+ *   where  — with 「どれでもない」 (D-057): the area of the draft field that would clear the most serious failed check, as a
+ *            real master knows where their own objection lies. Skipped at a set rate (not every master answers).
  */
-import type { Client, Proposal, Scene } from "@/src/core/types";
+import { POSTURE_TAGS, type Client, type Proposal, type Scene } from "@/src/core/types";
+import { areaOfField, type DiffArea } from "@/src/learning/area";
 import { applyFix } from "@/src/learning/fix";
 import type { Candidate, Master, ProposalFix } from "@/src/learning/types";
 import { getRule, HIDDEN_RULES } from "./hidden";
@@ -18,6 +21,9 @@ export interface SimulatedMaster extends Master {
   /** Log only: failed hidden rules of every judgment so far, in order. */
   failingLog(): string[][];
 }
+
+/** How often the textbook master leaves 「どこが違う？」 unanswered (an assumption, D-057: not every master answers). */
+export const WHERE_SKIP_DEFAULT = 0.2;
 
 const norm = (s: string) => s.replace(/[\s、。・（）()「」:：,.]/g, "");
 
@@ -46,8 +52,35 @@ export function hiddenRuleFixedBy(scene: Scene, client: Client, proposal: Propos
   return order.find((f) => after.find((a) => a.ruleId === f.ruleId)?.outcome === "ok")?.ruleId ?? null;
 }
 
-export function createSimulatedMaster(seed = 7): SimulatedMaster {
+/** Every single-field change the learning loop can express (the same space as a reading's "fix"). */
+const ALL_FIXES: ProposalFix[] = [
+  ...["mail", "chat", "phone", "letter", "none"].map((value) => ({ field: "channel" as const, value })),
+  ...["none", "zoom", "teams", "in_person", "phone_call"].map((value) => ({ field: "meeting" as const, value })),
+  ...["contact", "decider"].map((value) => ({ field: "formalTo" as const, value })),
+  ...["contact", "decider", "null"].map((value) => ({ field: "backchannelTo" as const, value })),
+  ...["now", "postpone", "heads_up_then_later"].map((value) => ({ field: "timing" as const, value })),
+  ...["true", "false"].map((value) => ({ field: "followUp" as const, value })),
+  ...["client", "own", "negotiate", "not_applicable"].map((value) => ({ field: "format" as const, value })),
+  ...POSTURE_TAGS.map((value) => ({ field: "posture" as const, value: value as string })),
+  { field: "escalateToMaster", value: "true" },
+];
+
+/** The area of the most serious failed check that one field change would clear; null when no single change clears any. */
+export function areaToFix(scene: Scene, client: Client, proposal: Proposal): DiffArea | null {
+  const failing = judge(scene, client, proposal).checks.filter((c) => c.outcome !== "ok");
+  const order = [...failing.filter((x) => x.outcome === "violation"), ...failing.filter((x) => x.outcome === "partial")];
+  for (const f of order) {
+    const fix = ALL_FIXES.find((x) => judge(scene, client, applyFix(proposal, x)).checks.find((a) => a.ruleId === f.ruleId)?.outcome === "ok");
+    if (fix) return areaOfField(fix.field);
+  }
+  return null;
+}
+
+export function createSimulatedMaster(seed = 7, opts: { whereSkip?: number } = {}): SimulatedMaster {
   const rand = rng(seed);
+  // Its own random stream, so answering 「どこが違う？」 does not shift the remarks drawn from `rand`.
+  const randWhere = rng(seed * 17 + 3);
+  const whereSkip = opts.whereSkip ?? WHERE_SKIP_DEFAULT;
   let last: { scene: Scene; client: Client; proposal: Proposal; failing: RuleCheck[] } | null = null;
   const log: string[][] = [];
 
@@ -83,6 +116,11 @@ export function createSimulatedMaster(seed = 7): SimulatedMaster {
         if (best === null || severity(r) < severity(ruleClearedBy(candidates[best]))) best = i;
       }
       return best; // null = none of these
+    },
+
+    async where() {
+      if (!last || randWhere() < whereSkip) return null;
+      return areaToFix(last.scene, last.client, last.proposal);
     },
 
     async confirmGeneralization({ members }) {
