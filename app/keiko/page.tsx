@@ -69,9 +69,12 @@ export default function KeikoPage() {
                 <span className="block text-[12.5px] text-nibi">取引先の経緯を聞く8問のうち</span>
               </th>
               <td className="font-mincho text-[24px] leading-none">{hist[0].mean.toFixed(0)}<span className="text-[14px] text-nibi"> / 8</span></td>
-              <td className="font-mincho text-[24px] leading-none text-ai">
-                {hist.at(-1)!.mean.toFixed(1)}
-                <span className="text-[14px] text-nibi"> / 8</span>
+              <td>
+                <span className="font-mincho text-[24px] leading-none text-ai">
+                  {hist.at(-1)!.mean.toFixed(1)}
+                  <span className="text-[14px] text-nibi"> / 8</span>
+                </span>
+                {"sd" in hist.at(-1)! && <span className="block text-[12.5px] text-nibi">同じ心得帳で3回測った平均（ばらつき ±{(hist.at(-1)! as { sd: number }).sd.toFixed(1)}）</span>}
               </td>
             </tr>
           </tbody>
@@ -115,7 +118,7 @@ export default function KeikoPage() {
           <h2 id="curve-h" className="font-mincho text-[18px]">師匠の手間と、一致の伸び</h2>
           <p className="mt-1 text-[13px] text-nibi">横は師匠が押した回数、縦は ○ の割合。細い灰色の線は改良の途中の版（参考）、藍の点と縦線は今の構成を学習{paths?.n ?? 0}本で測った平均と幅{results.official ? "（正式な計測）" : "（途中経過）"}です。</p>
           <div className="mt-4">
-            <p className="mb-1 text-[12px] text-nibi sm:hidden">図は横にずらせます。右端が今の構成の結果です。</p>
+            <p className="mb-1 text-[12.5px] text-nibi sm:hidden">図は横にずらせます。右端が今の構成の結果です。</p>
             <CurveChart curves={curves} emphasis={paths ? null : latest.key} before={results.before} paths={paths} />
           </div>
           <details className="mt-3 text-[13.5px]">

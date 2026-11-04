@@ -22,7 +22,7 @@ export default function ErrorPage({ error, retry }: { error: unknown; retry: () 
         <Link className="text-[15px] text-ai underline underline-offset-4" href="/choba">帳場に戻る</Link>
         <Link className="text-[15px] text-ai underline underline-offset-4" href="/">はじめから</Link>
       </div>
-      {digest && <p className="mt-6 text-[12px] text-nibi">問い合わせ用の番号: {digest}</p>}
+      {digest && <p className="mt-6 text-[12.5px] text-nibi">問い合わせ用の番号: {digest}</p>}
     </section>
   );
 }

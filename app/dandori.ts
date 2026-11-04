@@ -27,15 +27,36 @@ export const quietWord = (p: Proposal, c: Client) => (p.backchannelTo ? `${who(c
  */
 export function sceneRange() {
   const q = trial.queue as unknown as { scene: { type: SceneType; clientId: string }; draft: Proposal }[];
-  const score = (p: Proposal) => (p.channel !== "mail" ? 2 : 0) + (p.meeting !== "none" ? 2 : 0) + (p.backchannelTo ? 1 : 0);
+  // Prefer drafts that are not just an email: a call or a letter first, then chat; a live conversation; a quiet word on the side.
+  const score = (p: Proposal) =>
+    (p.channel === "phone" || p.channel === "letter" ? 3 : p.channel !== "mail" ? 2 : 0) + (p.meeting !== "none" ? 2 : 0) + (p.backchannelTo ? 2 : 0);
   return (Object.keys(SCENE_TYPE_LABELS) as SceneType[]).map((t) => {
     const best = q.filter((x) => x.scene.type === t).sort((a, b) => score(b.draft) - score(a.draft))[0];
     if (!best) return { type: t, label: SCENE_TYPE_LABELS[t], example: null, quiet: null };
     const c = getClient(best.scene.clientId);
     const quiet = quietWord(best.draft, c);
     const to = toWhom(best.draft, c);
-    return { type: t, label: SCENE_TYPE_LABELS[t], client: c.name, example: `${to === "—" ? "" : `${to}へ、`}${means(best.draft)}`, quiet };
+    return { type: t, label: SCENE_TYPE_LABELS[t], client: c.name, example: `${to === "—" ? "" : `${to}へ、`}${means(best.draft)}`, quiet, channel: best.draft.channel, score: score(best.draft) };
   });
+}
+
+/**
+ * The home page shows three of the ten at once: the ones that show the range of means at a glance — one by letter, one by phone,
+ * one by chat (the richest of each: a live conversation and a quiet word count), never an email. The rest open on request.
+ */
+export function sceneRangeSplit() {
+  const all = sceneRange();
+  const shown: typeof all = [];
+  // Phone first (only one kind of scene has a call), then letter and chat; a client already shown is passed over when possible.
+  for (const ch of ["phone", "letter", "chat"] as const) {
+    const cands = all
+      .filter((x) => "channel" in x && x.channel === ch && !shown.includes(x))
+      .sort((a, b) => (("score" in b && b.score) || 0) - (("score" in a && a.score) || 0));
+    const r = cands.find((x) => !shown.some((y) => "client" in y && "client" in x && y.client === x.client)) ?? cands[0];
+    if (r) shown.push(r);
+  }
+  shown.sort((a, b) => all.indexOf(a) - all.indexOf(b));
+  return { shown, rest: all.filter((x) => !shown.includes(x)) };
 }
 
 /**

@@ -62,7 +62,7 @@ export function JudgeForm({ sceneId }: { sceneId: string }) {
                 }`}
               >
                 <input type="radio" name="verdict" value={v} aria-label={`${v} ${VERDICT_WORD[v]}`} className="sr-only" checked={on} onChange={() => pick(v)} />
-                <span aria-hidden className="absolute top-1 left-1.5 hidden text-[12px] tabular-nums text-nibi sm:block">{i + 1}</span>
+                <span aria-hidden className="absolute top-1 left-1.5 hidden text-[12.5px] tabular-nums text-nibi sm:block">{i + 1}</span>
                 <Mark v={v} size={48} className={on ? "inkan" : ""} />
                 <span aria-hidden className={`text-[13px] ${on ? "text-shu" : "text-sumi"}`}>{VERDICT_WORD[v]}</span>
               </label>
@@ -78,7 +78,7 @@ export function JudgeForm({ sceneId }: { sceneId: string }) {
             name="remark"
             maxLength={120}
             autoComplete="off"
-            placeholder="例：先に工場長へ電話。社長にも一言"
+            placeholder="例：結論を先に。資料は一枚にまとめて"
             className="mt-1 block h-12 w-full rounded-[3px] border border-waku bg-kami px-3 font-mincho text-[16px] placeholder:text-nibi focus:border-ai"
           />
         </label>

@@ -66,7 +66,13 @@ function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => str
             <h3 className="text-[13px] text-ai">心得帳あり（理由と経緯つき）</h3>
             <div className="mt-1">{mine}</div>
             <p className="mt-3 border-t border-keisen pt-2 text-[13.5px] text-sumi">
-              根拠・経緯：{t.citations.length ? `心得 ${t.citations.length} つ（下に、わけと沿革）` : "なし（心得帳に記録がないので、師匠に確認を勧める）"}
+              根拠・経緯：
+              {(() => {
+                const fact = t.citations.filter((c) => /出典[:：]\s*台帳/.test(c.history)).length;
+                const rule = t.citations.length - fact;
+                if (!t.citations.length) return "なし（心得帳に記録がないので、師匠に確認を勧める）";
+                return [rule && `心得 ${rule} つ`, fact && `台帳の事実 ${fact} つ`].filter(Boolean).join("・") + "（下に、わけと沿革）";
+              })()}
             </p>
           </section>
         </div>
@@ -78,6 +84,7 @@ function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => str
         <div className="mt-5 grid gap-x-5 border-t border-keisen pt-3 sm:grid-cols-[2.2rem_1fr]">
           <h3 className="font-mincho text-[14px] tracking-[0.2em] sm:tate">根拠の心得</h3>
           <ul className="mt-1 space-y-3 sm:mt-0">
+            {t.source === "recorded" && <li className="text-[12.5px] text-nibi">評価のときの心得帳の言い回しです。いまの心得帳とは言い回しが違うことがあります。</li>}
             {t.citations.map((c, i) => {
               const h = citationParts(c.history);
               const live = t.source === "live" && ruleText(c.ruleId);

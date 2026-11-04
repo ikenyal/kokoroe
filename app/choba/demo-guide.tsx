@@ -48,12 +48,12 @@ export function DemoGuide({ live }: { live: boolean }) {
             localStorage.setItem(KEY, "1");
             window.dispatchEvent(new Event(CHANGED));
           }}
-          className="-mt-1 inline-flex min-h-10 shrink-0 items-center text-[12.5px] text-nibi underline-offset-4 hover:underline"
+          className="-mt-1 inline-flex min-h-11 shrink-0 items-center px-1 text-[13px] text-nibi underline-offset-4 hover:underline"
         >
           案内を閉じる
         </button>
       </div>
-      {!live && <p className="mt-1 text-[12px] text-nibi">このデモは記録済みのデータで動きます。「変化」は、記録した稽古で師匠が直したあとの案です。</p>}
+      {!live && <p className="mt-1 text-[12.5px] text-nibi">このデモは記録済みのデータで動きます。「変化」は、記録した稽古で師匠が直したあとの案です。</p>}
     </nav>
   );
 }
