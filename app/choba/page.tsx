@@ -4,8 +4,8 @@ import { DIFF_AREAS } from "@/src/learning/area";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { FORMAT_JA, POSTURE_JA, TIMING_JA, who } from "@/src/core/labels";
-import { AREA_ON_SCREEN, means, quietWord, toWhom, VISIT_ROWS } from "../dandori";
-import { SCENE_TYPE_LABELS, type Client, type Proposal } from "@/src/core/types";
+import { AREA_ON_SCREEN, means, noIds, quietWord, toWhom, VISIT_ROWS } from "../dandori";
+import { SCENE_TYPE_LABELS, type Client, type Proposal, type Scene } from "@/src/core/types";
 import { getClient, TRAIN_SCENES } from "@/src/core/world";
 import type { KokoroeRule } from "@/src/learning/types";
 import demo from "@/data/demo/demo-snapshot.json";
@@ -102,7 +102,7 @@ function VisitView({ v }: { v: NonNullable<Proposal["visit"]> }) {
     <Ledger label="訪問" note="訪問するときの段取り。違えば、判定の一言で直してください。">
       <dl>
         {VISIT_ROWS.map(([k, label]) => (
-          <Row key={k} label={label}>{v[k] || <span className="text-nibi">—</span>}</Row>
+          <Row key={k} label={label}>{noIds(v[k]) || <span className="text-nibi">—</span>}</Row>
         ))}
       </dl>
     </Ledger>
@@ -137,9 +137,10 @@ const DECISION_ROWS: [keyof Proposal, string, (p: Proposal, c: Client) => string
 ];
 
 /** One-tap check of a re-solved scene. For regression, only the decision fields that changed are shown. */
-function CheckCard({ p, step, sceneId, proposal, before }: { p: Pending; step: "confirm" | "regression"; sceneId: string; proposal: Proposal; before?: Proposal }) {
-  const scene = TRAIN_SCENES.find((t) => t.id === sceneId);
-  const client = getClient(scene?.clientId ?? "C01");
+function CheckCard({ p, step, sceneId, proposal, before, sceneOf }: { p: Pending; step: "confirm" | "regression"; sceneId: string; proposal: Proposal; before?: Proposal; sceneOf: SceneOf }) {
+  // Own mode: the scene lives in the session's queue, not in the fictional training scenes (it used to fall back to C01 and crash).
+  const scene = sceneOf(sceneId);
+  const client = getClient(scene?.clientId ?? CLIENTS[0].id);
   const rows = DECISION_ROWS.filter(([k, , f]) => !before || f(before, client) !== f(proposal, client) || k === "channel" || k === "formalTo");
   return (
     <form action={verifyCheck} className="mt-2 rounded-[3px] border border-keisen p-3">
@@ -163,7 +164,7 @@ function CheckCard({ p, step, sceneId, proposal, before }: { p: Pending; step: "
           VISIT_ROWS.map(([k, label]) => (
             <div key={k} className="grid grid-cols-[7.5em_1fr] gap-2">
               <dt className="text-nibi">{label}</dt>
-              <dd className="yomi">{proposal.visit![k] || "—"}</dd>
+              <dd className="yomi">{noIds(proposal.visit![k]) || "—"}</dd>
             </div>
           ))}
       </dl>
@@ -212,7 +213,9 @@ function OfflineExample({ sceneId }: { sceneId: string }) {
   );
 }
 
-function PendingItem({ p, beforeOf, ruleText, words }: { p: Pending; beforeOf: (judgmentId: string) => Proposal | undefined; ruleText: (id: string) => string; words: Words }) {
+type SceneOf = (sceneId: string) => Scene | undefined;
+
+function PendingItem({ p, beforeOf, ruleText, words, sceneOf }: { p: Pending; beforeOf: (judgmentId: string) => Proposal | undefined; ruleText: (id: string) => string; words: Words; sceneOf: SceneOf }) {
   return (
     <li className="border-t border-keisen py-3 first:border-t-0">
       <p className="text-[13px] text-nibi">
@@ -261,9 +264,9 @@ function PendingItem({ p, beforeOf, ruleText, words }: { p: Pending; beforeOf: (
         </form>
       )}
       {p.status === "needs-confirm" && p.verify?.retried && p.note && <p className="text-[13px] text-nibi">{p.note}</p>}
-      {p.status === "needs-confirm" && p.verify?.confirm && <CheckCard p={p} step="confirm" sceneId={p.sceneId} proposal={p.verify.confirm.proposal} />}
+      {p.status === "needs-confirm" && p.verify?.confirm && <CheckCard p={p} step="confirm" sceneId={p.sceneId} proposal={p.verify.confirm.proposal} sceneOf={sceneOf} />}
       {p.status === "needs-regression" && p.verify?.current && (
-        <CheckCard p={p} step="regression" sceneId={p.verify.current.sceneId} proposal={p.verify.current.proposal} before={beforeOf(p.verify.current.pastJudgmentId)} />
+        <CheckCard p={p} step="regression" sceneId={p.verify.current.sceneId} proposal={p.verify.current.proposal} before={beforeOf(p.verify.current.pastJudgmentId)} sceneOf={sceneOf} />
       )}
       {(p.status === "applied" || p.status === "rolled-back") && p.note?.startsWith("確かめ済み") && <p className="text-[13px] text-nibi">{p.note}</p>}
       {(p.status === "rolled-back" || p.status === "withdrawn") && p.note && <p className="text-[13px] text-shu">{p.note}</p>}
@@ -466,7 +469,7 @@ export default async function ChobaPage() {
         <h2 id="bg-h" className="font-mincho text-[18px] tracking-[0.04em]">弟子の読み取り</h2>
         <p className="mt-1 text-[13px] text-nibi">△・× の意味を弟子が読み取り、心得帳に書きます。待たずに次の案へ進めます。</p>
         {recent.length ? (
-          <ul className="mt-3">{recent.map((p) => <PendingItem key={p.judgmentId} p={p} ruleText={ruleText} words={words} beforeOf={(id) => judgments.find((j) => j.id === id)?.proposal} />)}</ul>
+          <ul className="mt-3">{recent.map((p) => <PendingItem key={p.judgmentId} p={p} ruleText={ruleText} words={words} sceneOf={(id) => meta.queue.find((q) => q.scene.id === id)?.scene ?? TRAIN_SCENES.find((t) => t.id === id)} beforeOf={(id) => judgments.find((j) => j.id === id)?.proposal} />)}</ul>
         ) : (
           <p className="mt-4 text-[14px] text-nibi">まだ直しはありません。△ か × を付けると、ここに弟子の読み取りが出ます。</p>
         )}

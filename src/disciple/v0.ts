@@ -45,7 +45,7 @@ const VISIT_PART = `
 When the plan includes visiting the client in person (meeting "in_person"), also fill "visit": what to wear, what to bring
 (or that nothing should be brought), what to check before going, who goes from our side, and how to address the people you
 meet. Use the client card and the kokoroe-chō; where nothing specific is known, write the ordinary sensible choice briefly.
-Set "visit" to null when there is no visit. The visit plan never offers or promises prices, discounts, free work or
+Set "visit" to null when there is no visit. Do not write rule ids in the visit text (put them in basedOnRules). The visit plan never offers or promises prices, discounts, free work or
 contract terms; those go to the master (escalateToMaster).`;
 
 /** The app turns visits on unless KOKOROE_VISIT=off. The evaluation turns them on only with KOKOROE_EVAL_VISIT=on (default off). */

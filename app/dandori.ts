@@ -49,3 +49,6 @@ export const VISIT_ROWS = [
   ["attendees", "同席者"],
   ["address", "呼び方"],
 ] as const;
+
+/** No internal ids on screen (D-053): the model sometimes cites 「（K-001）」 inside free text; the 根拠 row links the rule instead. */
+export const noIds = (t: string) => t.replace(/\s*[（(]\s*K-\d+(?:\s*[、,・]\s*K-\d+)*\s*[）)]/g, "").trim();

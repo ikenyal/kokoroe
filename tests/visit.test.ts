@@ -150,3 +150,12 @@ describe("the HITL floor reads the visit plan (D-061, hitl-reviewer B1)", () => 
     expect(src).toContain("if (visitInEval()) throw");
   });
 });
+
+describe("no internal ids in the visit text on screen (D-053)", () => {
+  it("strips 「（K-001）」 and lists", async () => {
+    const { noIds } = await import("@/app/dandori");
+    expect(noIds("スーツではなく作業着で伺う（K-001）")).toBe("スーツではなく作業着で伺う");
+    expect(noIds("先に確かめる (K-001、K-012)")).toBe("先に確かめる");
+    expect(noIds("K-001 という語はそのまま")).toBe("K-001 という語はそのまま");
+  });
+});
