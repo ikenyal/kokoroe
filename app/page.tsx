@@ -139,13 +139,14 @@ export default async function Home(props: PageProps<"/">) {
                 <span className="text-nibi">後任が聞くと</span>
                 <span className="yomi">
                   <span className="text-nibi">「{ex.question}」</span>
-                  <span className="mt-1 block">
-                    <span className="text-[12.5px] text-nibi">写し（Skill）から　</span>
+                  {/* Each source on its own line above its answer, so the two read as two answers (ui-critic 11/5). */}
+                  <span className="mt-2 block">
+                    <span className="block text-[13px] text-sumi/75">写し（Skill）から</span>
                     {ex.answer}
                   </span>
                   {ex.answerMcp && (
-                    <span className="mt-1 block">
-                      <span className="text-[12.5px] text-nibi">いまの心得帳（MCP）から　</span>
+                    <span className="mt-3 block">
+                      <span className="block text-[13px] text-sumi/75">いまの心得帳（MCP）から</span>
                       {ex.answerMcp}
                     </span>
                   )}
