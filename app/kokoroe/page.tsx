@@ -110,13 +110,14 @@ function Rule({ r, fact = false, used = [] }: { r: KokoroeRule; fact?: boolean; 
         <div className="mt-1.5 flex flex-wrap items-start justify-between gap-x-6 text-[13px]">
           <details>
             <summary className="inline-flex min-h-11 cursor-pointer items-center text-ai select-none">出典の一覧</summary>
+            <p className="text-[12.5px] text-nibi">この心得のもとになった、師匠の印と一言（どの場面の、いつのものか）。</p>
             <ul className="mb-2 space-y-1">{r.sources.map((s, i) => <SourceLine key={i} s={s} />)}</ul>
           </details>
           <details className="text-right">
             <summary className="inline-flex min-h-11 cursor-pointer items-center text-sumi/80 select-none">この{fact ? "事実" : "心得"}を消す</summary>
             <form action={retireRule} className="mb-2 flex items-center justify-end gap-3">
               <input type="hidden" name="ruleId" value={r.id} />
-              <span className="text-nibi">消した記録は沿革に残ります。</span>
+              <span className="text-nibi">消した記録は、いちばん下の「消した・まとめた・取り消した項目」に、沿革と一緒に残ります。</span>
               <button className="rounded-[3px] border border-sumi/60 min-h-11 px-4 text-sumi hover:bg-kami-2">消す</button>
             </form>
           </details>
@@ -151,10 +152,18 @@ function Groups({ groups, fact = false, judgments = [] }: { groups: Group[]; fac
   );
 }
 
-export default async function KokoroePage() {
+/**
+ * Per visitor (it reads the session), so never prerendered; after 「消す」 it reads ?gone= to say what was removed. Next 16's
+ * instant-navigation check flags URL data outside <Suspense> in dev; opt this page out of the check, as documented (11/6).
+ */
+export const instant = false;
+
+export default async function KokoroePage({ searchParams }: { searchParams: Promise<{ gone?: string }> }) {
   const s = await getSession();
   if (!s) redirect("/");
   const rules = await s.store.listRules();
+  const goneId = (await searchParams).gone;
+  const gone = goneId && /^K-\d{3}$/.test(goneId) ? rules.find((r) => r.id === goneId && r.status !== "active") : undefined;
   const judgments = await s.store.listJudgments();
   const active = rules.filter((r) => r.status === "active");
   // D-052: 心得 = one piece of the master's practice; facts copied from the client ledger are listed apart.
@@ -199,6 +208,11 @@ export default async function KokoroePage() {
         )}
       </nav>
       <div className="space-y-14">
+        {gone && (
+          <p role="status" className="border-l-4 border-ai bg-ai-soft px-4 py-2 text-[14px]">
+            「{gone.text}」を消しました。記録は、<a href="#gone" className="text-ai underline underline-offset-4">いちばん下の「消した・まとめた・取り消した項目」</a>に、沿革と一緒に残っています。
+          </p>
+        )}
         <section aria-labelledby="k-h">
           <h2 id="k-h" className="font-mincho text-[22px] tracking-[0.06em]">師匠から覚えた心得</h2>
           <p className="mt-1 mb-6 text-[13px] text-nibi">心得は、師匠の作法の一つ一つ。いつ・どの印と一言から・なぜ、を添えて綴ったものが心得帳です。</p>
@@ -219,7 +233,7 @@ export default async function KokoroePage() {
           </details>
         )}
         {inactive.length > 0 && (
-          <details className="text-[14px]">
+          <details id="gone" className="scroll-mt-6 text-[14px]" open={!!gone}>
             <summary className="cursor-pointer text-nibi">消した・まとめた・取り消した項目（{inactive.length}）</summary>
             <ul className="mt-2">{inactive.map((r) => <Rule key={r.id} r={r} />)}</ul>
           </details>

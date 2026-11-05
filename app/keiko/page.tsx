@@ -123,7 +123,8 @@ export default function KeikoPage() {
           </div>
           <details className="mt-3 text-[13.5px]">
             <summary className="cursor-pointer text-ai select-none">表で見る</summary>
-            <table className="mt-2 w-full border-collapse tabular-nums">
+            <div className="overflow-x-auto">
+            <table className="mt-2 w-full min-w-[34rem] border-collapse whitespace-nowrap tabular-nums">
               <thead>
                 <tr className="border-b border-keisen text-left text-nibi">
                   <th className="py-1 font-normal">版</th>
@@ -151,6 +152,10 @@ export default function KeikoPage() {
                 )}
               </tbody>
             </table>
+            </div>
+            <p className="mt-2 text-[12.5px] text-nibi">
+              ± は、同じ心得帳で評価用20場面を3回測ったばらつき（±0 は3回とも同じ値）。沿革の質問は、取引先の経緯を聞く8問のうち、なぜそうなったかまで答えられた数。タップ0の行は、その版の学習の始め（それぞれの版を測ったときの台帳で）。図の「はじめ 55%」は、直した台帳で測り直した値です（数字の注記）。
+            </p>
           </details>
         </div>
       </section>

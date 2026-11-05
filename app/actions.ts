@@ -51,6 +51,8 @@ export async function retireRule(formData: FormData) {
   r.history.push({ date: today, before: r.when ? `${r.text}（${r.when}）` : r.text, after: "（師匠が削除）", trigger: null, judgmentId: "MASTER", masterWords: "", reason: "師匠が心得帳から消した" });
   await s.store.saveRule(r);
   revalidatePath("/kokoroe");
+  // Display only: the page says what was removed and where its record is (ui-critic 11/6). What is written above is unchanged.
+  redirect(`/kokoroe?gone=${id}`);
 }
 
 const VERDICTS = new Set(["○", "△", "×"]);
