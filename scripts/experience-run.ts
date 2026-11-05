@@ -5,6 +5,7 @@
  * until the next card's draft is on screen, samples what the screen shows while waiting, and follows the side panel after a △.
  * The key comes from .env.local and goes to the server process only; it is never printed. The server is always stopped.
  *   npx tsx scripts/experience-run.ts [--cards 4] [--cap 0.5] [--read 10]
+ * --choose: after the △, pick the first reading, leave a わけ, and time each step until 確かめ asks the master (11/5).
  * --read: seconds the master spends reading each card before marking it (11/5 before 先読み: 0; the 師匠役テスト median was 53.5 s).
  * → prints a timing table and writes docs/results/experience-<date>.json (numbers and on-screen words only; fictional data).
  */
@@ -15,7 +16,7 @@ import path from "node:path";
 import { parseArgs } from "node:util";
 import { chromium, type Page } from "playwright";
 
-const { values } = parseArgs({ options: { cards: { type: "string", default: "4" }, read: { type: "string", default: "0" }, cap: { type: "string", default: "0.5" }, port: { type: "string", default: "3124" } } });
+const { values } = parseArgs({ options: { cards: { type: "string", default: "4" }, read: { type: "string", default: "0" }, choose: { type: "boolean", default: false }, cap: { type: "string", default: "0.5" }, port: { type: "string", default: "3124" } } });
 const ROOT = path.resolve(__dirname, "..");
 const BASE = `http://127.0.0.1:${values.port}`;
 
@@ -70,6 +71,19 @@ const cardShown = (page: Page) => async () => (await page.locator('section[aria-
       if (m !== "○") {
         // The side panel after a △: how long until the apprentice's reading asks the master something (or finishes).
         steps.push({ step: "△ のあと、右の欄に弟子の読み取りが出るまで", ...(await waitFor(page, async () => /どの意味でしたか|心得帳に書きました|何も覚えていません|解釈できませんでした|上限/.test(await page.locator("aside, [aria-label='弟子の読み取り']").first().innerText().catch(() => "")), 120000)) });
+        if (values.choose) {
+          const aside = () => page.locator("aside").first().innerText().catch(() => "");
+          if (await page.locator('aside button[name="pick"][value="0"]').count()) {
+            await page.waitForTimeout(Number(values.read) * 1000); // reading the candidates
+            await page.locator('aside button[name="pick"][value="0"]').click();
+            steps.push({ step: "読み方を選ぶ → 心得帳に書くまで", ...(await waitFor(page, async () => /わけを一言|確かめ|解き直して|心得帳に書きました/.test(await aside()), 120000)) });
+          }
+          if (await page.locator('aside input[name="why"]').count()) {
+            await page.locator('aside input[name="why"]').fill("以前、先方と行き違いがあった");
+            await page.locator('aside button:has-text("わけを残す")').click();
+            steps.push({ step: "わけを残す → 確かめ（直した場面を新しい心得で解き直す）が出るまで", ...(await waitFor(page, async () => /確かめ：|回帰の確認|取り下げ|差し戻し|確かめました/.test(await aside()), 120000)) });
+          }
+        }
       }
     }
     await browser.close();
