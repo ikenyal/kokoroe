@@ -44,9 +44,9 @@ video/assemble.sh                                        # → video/out/kokoroe
 | 2:01.5 | `s07b-mcp` | anim | 10.5 | 7.6 s |
 | 2:12.5 | `s07c-ask` | anim | 3.6 | 3.2 s |
 | 2:16.6 | `s08-pile` | anim | 10.9 | 10.6 s |
-| 2:28.0 | `s08b-keiko` | screen | 9.0 | 8.7 s |
-| 2:37.5 | `s09-edo` (chapter: noren) | anim | 0.5 + 6.3 | 6.0 s |
-| 2:44.8 | `s09b-end` — ココロエ / Kokoroe | anim | 10.0 | 8.9 s |
+| 2:28.0 | `s08b-keiko` | screen | 10.4 | 10.1 s |
+| 2:38.9 | `s09-edo` (chapter: noren) | anim | 0.5 + 6.3 | 6.0 s |
+| 2:46.2 | `s09b-end` — ココロエ / Kokoroe | anim | 10.0 | 8.9 s |
 
 Each scene but the last is followed by a 0.5 s breath (silence, its last frame held). "0.5 +" is the closed noren held before a
 chapter scene. The narration starts 0.15 s into each scene (`lead`).
@@ -107,7 +107,7 @@ entrant's own MCP server. So the video says it on screen (no narration change):
   「心得帳に書きました」 (the Opus step; 6.1 s after △ in 体験の目 2). In fixed mode it is empty. If the reading is not in yet when the
   camera would move on, hold on the right column instead of the visit plan. Keep a still of it.
 - [x] s02 (Kento 11/5 night): a note from 11.6 s, when the mail goes out: 「作者が初見で ○ を付けた18件のうち、15件は、師匠なら直す案でした」
-  with its conditions (fictional data, simulator judge, the author's master-role test of 20, D-059;
+  with its conditions (fictional data, 20 training scenes, the author as a master who did not know the history, simulator: △ 8 · × 7, D-059;
   `docs/results/master-role-vs-simulator-2026-11-05.json`). On screen only: the narration is unchanged, because a sentence would
   take the total to about 3:00 and would move s02's beats, which follow the narration. Stills: `docs/screens/video-dryrun/s02-problem-1..3.jpg`.
 - [ ] End card: add the public demo URL above the GitHub URL once it exists (11/6).
