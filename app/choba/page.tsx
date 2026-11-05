@@ -390,6 +390,13 @@ function NewScene() {
   );
 }
 
+/**
+ * The 帳場 blocks by design: with live Claude it drafts the card before the page is sent (the wait line says so). Next 16's
+ * instant-navigation check flagged that in dev (11/6, the limit-state review); opt this segment out of the check, as documented
+ * (\`instant = false\`: navigation blocks on the server, which is what it already does).
+ */
+export const instant = false;
+
 export default async function ChobaPage() {
   const s = await getSession();
   if (!s) redirect("/");
@@ -442,7 +449,7 @@ export default async function ChobaPage() {
           {/* phones: the status on its own row, the bar and 「ここで区切る」 together below it (ui-critic 11/5) */}
           <p className="basis-full text-[13px] text-nibi sm:basis-auto">
             {label}　<span className="tabular-nums">{done} / {meta.queue.length}</span> 件 済み
-            {!live && <span className="block sm:inline"><span className="hidden sm:inline">　</span>記録済みの案を表示しています</span>}
+            {(!live || (item && !item.live)) && <span className="block sm:inline"><span className="hidden sm:inline">　</span>記録済みの案を表示しています</span>}
           </p>
           <div aria-hidden className="h-1.5 min-w-24 flex-1 rounded-full bg-keisen">
             <div className="h-full rounded-full bg-ai-fill" style={{ width: `${(100 * done) / Math.max(1, meta.queue.length)}%` }} />

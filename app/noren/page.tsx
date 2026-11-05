@@ -146,7 +146,7 @@ export default async function NorenPage() {
   );
   return (
     <div className="max-w-4xl">
-      <div className="-mb-6 empty:hidden"><LimitNote reason={s.meta.limit} /></div>
+      <div className="empty:hidden"><LimitNote reason={s.meta.limit} /></div>
       <section aria-labelledby="noren-h">
         <h1 id="noren-h" className="font-mincho text-[24px] tracking-[0.06em]">暖簾を継ぐ</h1>
         <p className="yomi mt-2 max-w-[36em] text-[15.5px]">
@@ -177,6 +177,7 @@ export default async function NorenPage() {
           <AskButton live={live} />
         </form>
         {!live && <p className="mt-2 text-[13px] text-nibi">このデモでは、下の質問に記録済みの答えで返します。自由な質問には、公開版のライブで答えます。</p>}
+        {live && s.meta.limit && <p className="mt-2 text-[13px] text-nibi">上限のあいだは、下の質問に記録済みの答えで返します。</p>}
         {answers.length > 0 && <div className="mt-10 space-y-10">{answers.map((t, i) => <Turn key={i} t={t} ruleText={ruleText} />)}</div>}
         {examples}
         {ownEnabled() && !answers.length && <p className="mt-8 text-[14px] text-nibi">取引先を選んで、質問を入れてください。</p>}

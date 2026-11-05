@@ -6,9 +6,10 @@ export default function NotFound() {
     <section className="max-w-[34em]">
       <h1 className="font-mincho text-[24px] tracking-[0.06em]"><span className="inline-block">その頁は、</span><span className="inline-block">この帳面にありません</span></h1>
       <p className="yomi mt-4 text-[15px]">
-        アドレスが違うか、なくなった頁です。
-        <Link className="text-ai underline underline-offset-4" href="/">はじめから</Link>
-        開くか、上の帳場・心得帳・暖簾を継ぐ・稽古の記録から選んでください。
+        アドレスが違うか、なくなった頁です。上の帳場・心得帳・暖簾を継ぐ・稽古の記録から選ぶか、最初の画面に戻ってください。
+      </p>
+      <p className="mt-5">
+        <Link className="inline-flex min-h-11 items-center text-[15px] text-ai underline underline-offset-4" href="/">最初の画面に戻る</Link>
       </p>
     </section>
   );

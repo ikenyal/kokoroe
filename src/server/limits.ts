@@ -11,6 +11,7 @@ import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "
 import { ownEnabled } from "@/src/core/own-world";
 import path from "node:path";
 import { headers } from "next/headers";
+import { connection } from "next/server";
 import type { Usage } from "@/src/lib/claude";
 import { estimateUsd } from "@/src/lib/cost";
 
@@ -74,6 +75,8 @@ export type LimitReason = "session" | "ip" | "daily";
 
 /** Reserve one live call. Returns null if allowed, or the reason it isn't. */
 export async function allowLive(sid: string): Promise<LimitReason | null> {
+  // The counters read the clock: tell Next this runs at request time, never while prerendering (dev flagged Date.now(), 11/6).
+  await connection();
   // Own mode (local, your own key): the per-session cap would stop your one lasting 心得帳 for the day; the daily spend cap stays.
   return reserve(sid, await clientIp(), { sessionCap: !ownEnabled() });
 }
@@ -121,7 +124,7 @@ export function dailyExhausted(): boolean {
 }
 
 export const LIMIT_MESSAGE: Record<LimitReason, string> = {
-  session: "このセッションのお試し上限に達しました。ここからは記録済みのデータで動きます。",
+  session: "このセッションのお試し上限に達しました。ここからは記録済みのデータで動きます。心得帳・稽古の記録は、そのまま見られます。",
   ip: "短い時間に多くの操作がありました。しばらくしてから試すか、記録済みのデータでご覧ください。",
-  daily: "本日のお試し上限に達しました。ここからは記録済みのデータで動きます（明日また試せます）。",
+  daily: "本日のお試し上限に達しました。ここからは記録済みのデータで動きます。日本時間の0時にまた試せます。心得帳・稽古の記録は、そのまま見られます。",
 };
