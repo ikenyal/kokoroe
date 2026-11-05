@@ -1202,7 +1202,10 @@ answering from a ledger fact, and a few lines out of step with the screen.
   before re-recording.
 - Only the recorded visit plans were written again (`eval/add-visits.ts --redo`, 13 plans, ≈ $0.07; every 段取り field checked
   unchanged). A test checks that no recorded attendee line names the apprentice (`tests/demo-visits.test.ts`).
-- デモの続き opens on 丸新酒造's bad-news card (T22: 裏で蔵元にも一言), order only.
+- デモの続き opens on 浜風運輸's card T26, where 「変化」 shows (K-015, from the master's correction on T15), order only. Kento first asked
+  for a 丸新酒造 card with 「変化」; none exists in デモの続き (K-011 first took effect on T13, in the recorded training run), so he chose
+  T26 — the same client as the video's s07 and README picture 3. s07b keeps its 丸新酒造 question (Kento): only 丸新 and まちなか have a
+  心得 added after the Skill copy, which is what the MCP comparison shows.
 - Video: s07 asks 浜風運輸's delay question (answered from the master's × and its わけ, as README picture 3); s05's line reads
   「冒頭の1行のもとは、裏で蔵元へ、そっと一言。」 to match the screen's 「裏で誰に」 row; the end card has one small line, 「開発そのものも、
   製品と同じ形で進みました」 (the README's 「二つ目の帳場」). No narration added; scene lengths unchanged.
