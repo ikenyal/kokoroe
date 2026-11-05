@@ -14,6 +14,7 @@ import type { Usage } from "@/src/lib/claude";
 import { allowLive, recordSpend } from "./limits";
 import { openSession, readMeta, type Mode, type Pending, type Session } from "./session";
 import { newVerification, startVerification } from "./verify-ui";
+import { claimPrefetch, discardPrefetch, runPrefetch, slotOf, takePrefetch } from "./prefetch";
 
 function update(s: Session, judgmentId: string, patch: Partial<Pending>) {
   const meta = readMeta(s.mode, s.sid);
@@ -88,24 +89,52 @@ export async function applyChoice(mode: Mode, sid: string, judgmentId: string, i
 
 const drafting = new Set<string>(); // in-process guard: AutoRefresh renders must not draft (and pay) twice
 
+/**
+ * 先読み of card `index` while the current card is shown (live only). The call is reserved now, during the request (limits read
+ * the visitor's address); the drafting runs after the response. Not saved anywhere until draftLive takes it.
+ */
+export async function startPrefetch(s: Session, index: number): Promise<(() => Promise<void>) | null> {
+  // Read and claim with no await between: judge() moves pos and drops prefetches in one synchronous step, so a render that read
+  // an older pos cannot claim a card the master has already moved past (hitl-reviewer 11/5).
+  const meta = readMeta(s.mode, s.sid);
+  const item = meta.queue[index];
+  if (meta.pos !== index - 1 || meta.paused || !item || item.live || drafting.has(`${s.mode}-${s.sid}-${index}`) || !claimPrefetch(s, index, item.scene.id)) return null;
+  const slot = slotOf(s, index); // the slot just claimed (no await between): the run fills this one only
+  if (await allowLive(s.sid)) {
+    discardPrefetch(s, index); // over a limit: no prefetch; the real draft will meet the same limit and say so
+    return null;
+  }
+  return () =>
+    runPrefetch(s, index, item.scene, getClient(item.scene.clientId), async (scene, client) => {
+      const d = makeDiscipleV1(s.store, "v1-live", { visit: visitInApp() }); // the same apprentice as draftLive
+      return d.propose(scene, client).finally(() => recordSpend(d.usage)); // counted even if it is discarded later
+    }, slot);
+}
+
 /** Live mode: draft the next card with the current kokoroe-chō (instead of the recorded draft). */
 export async function draftLive(s: Session, index: number) {
   const key = `${s.mode}-${s.sid}-${index}`;
   const item = readMeta(s.mode, s.sid).queue[index];
   if (!item || item.live || drafting.has(key)) return;
-  const refused = await allowLive(s.sid);
-  if (refused) {
-    const meta = readMeta(s.mode, s.sid);
-    meta.limit = refused;
-    s.saveMeta(meta);
-    return; // keep the recorded draft
-  }
-  drafting.add(key);
-  const d = makeDiscipleV1(s.store, "v1-live", { visit: visitInApp() }); // 訪問の段取り (D-061): on in the app
+  drafting.add(key); // held from here to the end, so a refresh meanwhile neither drafts twice nor takes the prefetch twice
   try {
-    const draft = await d.propose(item.scene, getClient(item.scene.clientId)).finally(() => recordSpend(d.usage));
+    // 先読み: used only after ○ and with the same 心得帳 (src/server/prefetch.ts); otherwise drafted now, as before.
+    const pre = await takePrefetch(s, index, item.scene.id);
+    let draft = pre;
+    if (!draft) {
+      const refused = await allowLive(s.sid);
+      if (refused) {
+        const meta = readMeta(s.mode, s.sid);
+        meta.limit = refused;
+        s.saveMeta(meta);
+        return; // keep the recorded draft
+      }
+      const d = makeDiscipleV1(s.store, "v1-live", { visit: visitInApp() }); // 訪問の段取り (D-061): on in the app
+      draft = await d.propose(item.scene, getClient(item.scene.clientId)).finally(() => recordSpend(d.usage));
+    }
     // Re-read after the await and patch only this card, so background updates made meanwhile are kept.
     const meta = readMeta(s.mode, s.sid);
+    if (meta.queue[index]?.scene.id !== item.scene.id) return;
     meta.queue[index] = { ...meta.queue[index], draft, live: true };
     s.saveMeta(meta);
   } finally {

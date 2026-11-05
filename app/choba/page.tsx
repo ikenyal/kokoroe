@@ -13,7 +13,8 @@ import demo from "@/data/demo/demo-snapshot.json";
 import { lastUndoable } from "@/src/server/undo";
 import { ScrollToAction } from "./scroll-to-action";
 import { standing } from "@/src/core/rank";
-import { draftLive } from "@/src/server/background";
+import { draftLive, startPrefetch } from "@/src/server/background";
+import { after } from "next/server";
 import { getSession, liveEnabled, type Pending } from "@/src/server/session";
 import { answerWhy, choose, ownAddScene, pause, undo, verifyCheck } from "../actions";
 import { CLIENTS } from "@/src/core/world";
@@ -385,6 +386,11 @@ export default async function ChobaPage() {
   const heldBack = heldForProse;
   if (live && !s.meta.paused && s.meta.queue[s.meta.pos] && !s.meta.queue[s.meta.pos].live && !heldBack(s.meta, s.meta.pos)) await draftLive(s, s.meta.pos);
   const meta = (await getSession())!.meta;
+  // 先読み of the next card while this one is read (live only; used after ○ with the same 心得帳: src/server/prefetch.ts).
+  if (live && !meta.paused && meta.queue[meta.pos]?.live && meta.queue[meta.pos + 1] && !meta.queue[meta.pos + 1].live && !heldBack(meta, meta.pos + 1)) {
+    const run = await startPrefetch(s, meta.pos + 1);
+    if (run) after(run);
+  }
   const words = sceneWordsFrom(meta.queue);
   const item = meta.paused ? undefined : meta.queue[meta.pos];
   const busy = meta.pending.some((p) => ["queued", "interpreting", "choosing", "verifying"].includes(p.status));

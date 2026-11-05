@@ -4,7 +4,8 @@
  * throwaway data dir), presses 「師匠になって試す」 and marks a few cards from the start. It times, for each step, how long
  * until the next card's draft is on screen, samples what the screen shows while waiting, and follows the side panel after a △.
  * The key comes from .env.local and goes to the server process only; it is never printed. The server is always stopped.
- *   npx tsx scripts/experience-run.ts [--cards 4] [--cap 0.5]
+ *   npx tsx scripts/experience-run.ts [--cards 4] [--cap 0.5] [--read 10]
+ * --read: seconds the master spends reading each card before marking it (11/5 before 先読み: 0; the 師匠役テスト median was 53.5 s).
  * → prints a timing table and writes docs/results/experience-<date>.json (numbers and on-screen words only; fictional data).
  */
 import { spawn } from "node:child_process";
@@ -14,7 +15,7 @@ import path from "node:path";
 import { parseArgs } from "node:util";
 import { chromium, type Page } from "playwright";
 
-const { values } = parseArgs({ options: { cards: { type: "string", default: "4" }, cap: { type: "string", default: "0.5" }, port: { type: "string", default: "3124" } } });
+const { values } = parseArgs({ options: { cards: { type: "string", default: "4" }, read: { type: "string", default: "0" }, cap: { type: "string", default: "0.5" }, port: { type: "string", default: "3124" } } });
 const ROOT = path.resolve(__dirname, "..");
 const BASE = `http://127.0.0.1:${values.port}`;
 
@@ -45,7 +46,7 @@ const cardShown = (page: Page) => async () => (await page.locator('section[aria-
   const dataDir = mkdtempSync(path.join(tmpdir(), "kokoroe-exp-"));
   const env: NodeJS.ProcessEnv = {
     PATH: process.env.PATH, NODE_ENV: "production", HOSTNAME: "127.0.0.1", PORT: values.port,
-    KOKOROE_DATA_DIR: dataDir, KOKOROE_LIVE: "1", KOKOROE_DAILY_USD: values.cap, ANTHROPIC_API_KEY: keyFromEnvLocal(),
+    KOKOROE_DATA_DIR: dataDir, KOKOROE_LIVE: "1", KOKOROE_DAILY_USD: values.cap, ...(process.env.KOKOROE_PREFETCH_DEBUG ? { KOKOROE_PREFETCH_DEBUG: "1" } : {}), ANTHROPIC_API_KEY: keyFromEnvLocal(),
   };
   const server = spawn("node", ["server.js"], { cwd: path.join(ROOT, ".image"), env, stdio: ["ignore", "ignore", "inherit"] });
   const steps: { step: string; ms: number; seen: { at: number; text: string }[] }[] = [];
@@ -59,10 +60,11 @@ const cardShown = (page: Page) => async () => (await page.locator('section[aria-
     const marks = ["△", "○", "○", "○", "○", "○"].slice(0, Number(values.cards));
     for (const [n, m] of marks.entries()) {
       const client = (await page.locator("#card-h").innerText().catch(() => "?")).replace(/\s+/g, "");
+      await page.waitForTimeout(Number(values.read) * 1000);
       await page.locator(`label:has(input[value="${m}"])`).first().click();
       if (m !== "○") await page.locator('textarea, input[name="remark"]').first().fill("先に電話で一言");
       await page.locator('button:has-text("で記録する")').first().click();
-      if (n === 1) page.waitForTimeout(1500).then(() => page.screenshot({ path: path.join(ROOT, "docs/screens/ui-polish/27-experience/waiting.png") })).catch(() => {});
+      if (n === marks.length - 1) page.waitForTimeout(1500).then(() => page.screenshot({ path: path.join(ROOT, "docs/screens/ui-polish/27-experience/waiting.png") })).catch(() => {});
       // The next card: same layout, different scene. Wait until the status line names what was recorded and a card is shown.
       steps.push({ step: `${n + 1}枚目（${client}）に ${m} → 次の案`, ...(await waitFor(page, async () => (await cardShown(page)()) && (await page.locator("#card-h").innerText().catch(() => "")).replace(/\s+/g, "") !== client, 90000)) });
       if (m !== "○") {
@@ -82,7 +84,7 @@ const cardShown = (page: Page) => async () => (await page.locator('section[aria-
     }
     console.log(`spend (server's estimate) ≈ $${usd.toFixed(3)} | server stopped`);
     const out = path.join(ROOT, "docs/results", `experience-${new Date(Date.now() + 9 * 3600_000).toISOString().slice(0, 16).replace(":", "")}.json`);
-    writeFileSync(out, JSON.stringify({ note: "体験の目: production build on 127.0.0.1, live, fictional data. ms = time until the next state is on screen (-1 = not within the limit).", usd, steps }, null, 2) + "\n");
+    writeFileSync(out, JSON.stringify({ note: "体験の目: production build on 127.0.0.1, live, fictional data. ms = time until the next state is on screen (-1 = not within the limit).", readSeconds: Number(values.read), usd, steps }, null, 2) + "\n");
     console.log(path.relative(ROOT, out));
   }
 })();
