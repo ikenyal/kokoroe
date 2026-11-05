@@ -253,7 +253,8 @@ Each Claude Code feature had one job:
 
 - **Models by role.** Sonnet 5.5 for the apprentice's plans and the successor's answers (the master marks one card at a time, so it
   must come back in seconds); Opus 5.5 for reading a correction and writing the 心得帳 (judgment-heavy, can run in the background). Managed Agents' memory store was built as an alternative 心得帳 store and timed on
-  the real API (session start ≈ 2.1 s, reads/writes 0.2–0.7 s); it showed no advantage at this scale, so it is opt-in
+  the real API (creating and seeding one 帳場 session's store with 16 rules and 27 judgments ≈ 2.1 s, reads/writes 0.2–0.7 s; no agent
+  sessions were used); it showed no advantage at this scale, so it is opt-in
   (`KOKOROE_STORE=memory`, D-002).
 - **Measured, not assumed.** Every change was measured on the held-out set with repeated runs; prompt caching was A/B-tested
   (−37% cost, verdicts unchanged); the Before was re-measured and replaced when the prompt layout changed.
