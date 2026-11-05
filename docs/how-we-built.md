@@ -464,3 +464,7 @@ Short entries, appended every work session. Source material for the README secti
   pinned the result with a test, and re-recorded the four affected video scenes on recorded data. D-065.
 - **Measure, change, measure again.** The experience eye timed the wait (7–9 s), Kento set the conditions for prefetching the next
   draft, `hitl-reviewer` blocked the first version on two races, and the same script timed the result (0.3 s after ○). D-066.
+- **A read-only judge, a third time.** `judge-critic` read the README, the submission draft and the video against the judging
+  criteria. It found that "18 of 20 marked ○" read as praise for the AI unless the code judge's 15 △/× followed it. Claude moved that
+  fact up, and also added a one-line lead under the title, a provenance line on the MCP scene, and an 11/7 check that the live take
+  shows the reading. Every change cites a record (ui-polish-log, B round 3).
