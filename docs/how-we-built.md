@@ -468,3 +468,6 @@ Short entries, appended every work session. Source material for the README secti
   criteria. It found that "18 of 20 marked ○" read as praise for the AI unless the code judge's 15 △/× followed it. Claude moved that
   fact up, and also added a one-line lead under the title, a provenance line on the MCP scene, and an 11/7 check that the live take
   shows the reading. Every change cites a record (ui-polish-log, B round 3).
+- **Checking a finding before fixing it.** The experience eye ran the live public build at phone width. One screenshot showed
+  the apprentice's question scrolled out of view. Before changing any layout, Claude re-ran just that card ($0.04) and recorded
+  the heading's position. It was already at the top: the screenshot had caught the scroll halfway. Nothing was changed.

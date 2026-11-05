@@ -6,6 +6,8 @@
  * The key comes from .env.local and goes to the server process only; it is never printed. The server is always stopped.
  *   npx tsx scripts/experience-run.ts [--cards 4] [--cap 0.5] [--read 10]
  * --choose: after the △, pick the first reading, leave a わけ, and time each step until 確かめ asks the master (11/5).
+ * --marks ×,○,○: the marks to give, in order (default △ then ○). --mobile: a phone viewport (390×844). --shots <dir>: screenshot
+ *   folder under docs/screens/ui-polish/ (11/5, 体験の目 3).
  * --read: seconds the master spends reading each card before marking it (11/5 before 先読み: 0; the 師匠役テスト median was 53.5 s).
  * → prints a timing table and writes docs/results/experience-<date>.json (numbers and on-screen words only; fictional data).
  */
@@ -16,7 +18,7 @@ import path from "node:path";
 import { parseArgs } from "node:util";
 import { chromium, type Page } from "playwright";
 
-const { values } = parseArgs({ options: { cards: { type: "string", default: "4" }, read: { type: "string", default: "0" }, choose: { type: "boolean", default: false }, cap: { type: "string", default: "0.5" }, port: { type: "string", default: "3124" } } });
+const { values } = parseArgs({ options: { cards: { type: "string", default: "4" }, read: { type: "string", default: "0" }, choose: { type: "boolean", default: false }, cap: { type: "string", default: "0.5" }, port: { type: "string", default: "3124" }, marks: { type: "string", default: "△,○,○,○,○,○" }, mobile: { type: "boolean", default: false }, shots: { type: "string", default: "27-experience" } } });
 const ROOT = path.resolve(__dirname, "..");
 const BASE = `http://127.0.0.1:${values.port}`;
 
@@ -54,23 +56,32 @@ const cardShown = (page: Page) => async () => (await page.locator('section[aria-
   try {
     for (let i = 0; i < 60; i++) { try { if ((await fetch(BASE + "/")).ok) break; } catch {} await new Promise((r) => setTimeout(r, 500)); }
     const browser = await chromium.launch();
-    const page = await (await browser.newContext({ viewport: { width: 1280, height: 900 }, locale: "ja-JP" })).newPage();
+    const page = await (await browser.newContext({ viewport: values.mobile ? { width: 390, height: 844 } : { width: 1280, height: 900 }, ...(values.mobile ? { isMobile: true, hasTouch: true, deviceScaleFactor: 2 } : {}), locale: "ja-JP" })).newPage();
     await page.goto(BASE);
     await page.locator('form:has(input[value="trial"]) button').click();
     steps.push({ step: "師匠になって試す → 最初の案", ...(await waitFor(page, cardShown(page), 90000)) });
-    const marks = ["△", "○", "○", "○", "○", "○"].slice(0, Number(values.cards));
+    const marks = values.marks.split(",").slice(0, Number(values.cards));
+    const SHOTS = path.join(ROOT, "docs/screens/ui-polish", values.shots);
+    mkdirSync(SHOTS, { recursive: true });
+    const shot = (name: string, fullPage = false) => page.screenshot({ path: path.join(SHOTS, `${name}.png`), fullPage }).catch(() => {});
     for (const [n, m] of marks.entries()) {
       const client = (await page.locator("#card-h").innerText().catch(() => "?")).replace(/\s+/g, "");
       await page.waitForTimeout(Number(values.read) * 1000);
+      if (n === 0) await shot("card-1", true);
       await page.locator(`label:has(input[value="${m}"])`).first().click();
       if (m !== "○") await page.locator('textarea, input[name="remark"]').first().fill("先に電話で一言");
       await page.locator('button:has-text("で記録する")').first().click();
-      if (n === marks.length - 1) page.waitForTimeout(1500).then(() => page.screenshot({ path: path.join(ROOT, "docs/screens/ui-polish/27-experience/waiting.png") })).catch(() => {});
+      if (n === marks.length - 1) page.waitForTimeout(1500).then(() => shot("waiting")).catch(() => {});
       // The next card: same layout, different scene. Wait until the status line names what was recorded and a card is shown.
       steps.push({ step: `${n + 1}枚目（${client}）に ${m} → 次の案`, ...(await waitFor(page, async () => (await cardShown(page)()) && (await page.locator("#card-h").innerText().catch(() => "")).replace(/\s+/g, "") !== client, 90000)) });
       if (m !== "○") {
         // The side panel after a △: how long until the apprentice's reading asks the master something (or finishes).
-        steps.push({ step: "△ のあと、右の欄に弟子の読み取りが出るまで", ...(await waitFor(page, async () => /どの意味でしたか|心得帳に書きました|何も覚えていません|解釈できませんでした|上限/.test(await page.locator("aside, [aria-label='弟子の読み取り']").first().innerText().catch(() => "")), 120000)) });
+        steps.push({ step: `${m} のあと、右の欄に弟子の読み取りが出るまで`, ...(await waitFor(page, async () => /どの意味でしたか|心得帳に書きました|何も覚えていません|解釈できませんでした|上限/.test(await page.locator("aside, [aria-label='弟子の読み取り']").first().innerText().catch(() => "")), 120000)) });
+        // On a phone the panel sits above the card: is it in view once the apprentice asks (ScrollToAction)?
+        await page.waitForTimeout(1500);
+        steps.push({ step: "（画面）読み取りの欄の見出しの位置", ms: 0, seen: [{ at: 0, text: JSON.stringify(await page.evaluate(() => ({ scrollY: Math.round(scrollY), headingTop: Math.round(document.getElementById("bg-h")?.getBoundingClientRect().top ?? NaN), innerHeight }))) }] });
+        await shot("after-correction-viewport");
+        await shot("after-correction-full", true);
         if (values.choose) {
           const aside = () => page.locator("aside").first().innerText().catch(() => "");
           if (await page.locator('aside button[name="pick"][value="0"]').count()) {
@@ -83,6 +94,7 @@ const cardShown = (page: Page) => async () => (await page.locator('section[aria-
             await page.locator('aside button:has-text("わけを残す")').click();
             steps.push({ step: "わけを残す → 確かめ（直した場面を新しい心得で解き直す）が出るまで", ...(await waitFor(page, async () => /確かめ：|回帰の確認|取り下げ|差し戻し|確かめました/.test(await aside()), 120000)) });
           }
+          await shot("after-why-full", true);
         }
       }
     }
