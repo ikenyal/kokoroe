@@ -173,7 +173,7 @@ const STATUS: Record<Pending["status"], string> = {
   "needs-why": "心得帳に書きました。よければ、わけを一言",
   applied: "心得帳に書きました",
   "nothing-learned": "今回は何も覚えていません",
-  offline: "このデモでは、弟子の読み取りは行いません（公開版のライブでは行います）",
+  offline: "次の案は下です（このデモでは弟子の読み取りは行いません。公開版のライブでは行います）",
   error: "解釈できませんでした",
 };
 
@@ -249,7 +249,7 @@ const sceneWords = sceneWordsFrom([]); // fictional scenes only (the recorded ex
  * Without a key nothing is interpreted. Show instead what the live version writes, from the recorded demo kokoroe-chō: the rule
  * learned from this same scene if there is one, otherwise the 丸新酒造 example (a quiet word to the 蔵元).
  */
-function OfflineExample({ sceneId }: { sceneId: string }) {
+function OfflineExample({ sceneId, verdict }: { sceneId: string; verdict?: string }) {
   const rules = demo.store.rules as KokoroeRule[];
   const learned = (r: KokoroeRule) => r.sources.some((x) => x.kind !== "ledger");
   const r = rules.find((x) => learned(x) && x.sources.some((y) => y.sceneId === sceneId)) ?? rules.find((x) => learned(x) && x.text.includes("蔵元"));
@@ -257,7 +257,15 @@ function OfflineExample({ sceneId }: { sceneId: string }) {
   const from = r.sources.find((x) => x.kind !== "ledger");
   return (
     <div className="mt-2 border-t border-keisen pt-2 text-[13.5px]">
-      <p className="text-nibi">公開版のライブでは、ここで弟子が {from?.verdict ?? "△"} の意味を読み取り、心得帳にこう書きます（記録済みの例{from && from.sceneId !== sceneId ? `：${sceneWords(from.sceneId)}の` : ""}<span className="whitespace-nowrap">{from && from.sceneId !== sceneId ? "場面から" : ""}）。</span></p>
+      {/* The mark is the one just recorded (ui-critic 11/5: after × it said △); an example from another scene says so first. */}
+      <p className="text-nibi">
+        公開版のライブでは、ここで弟子がこの {verdict ?? from?.verdict ?? "△"} の意味を読み取り、心得帳に書きます。
+        {from && from.sceneId !== sceneId ? (
+          <>たとえば記録した稽古では、別の場面（{sceneWords(from.sceneId)}）の {from.verdict} から、<span className="whitespace-nowrap">こう書きました。</span></>
+        ) : (
+          <>記録した稽古では、この場面から<span className="whitespace-nowrap">こう書きました。</span></>
+        )}
+      </p>
       <p className="yomi mt-1 text-[15px]">「{r.text}」</p>
       {r.when && <p className="yomi text-nibi">条件：{r.when}</p>}
     </div>
@@ -266,14 +274,14 @@ function OfflineExample({ sceneId }: { sceneId: string }) {
 
 type SceneOf = (sceneId: string) => Scene | undefined;
 
-function PendingItem({ p, beforeOf, ruleText, words, sceneOf }: { p: Pending; beforeOf: (judgmentId: string) => Proposal | undefined; ruleText: (id: string) => string; words: Words; sceneOf: SceneOf }) {
+function PendingItem({ p, verdict, beforeOf, ruleText, words, sceneOf }: { p: Pending; verdict?: string; beforeOf: (judgmentId: string) => Proposal | undefined; ruleText: (id: string) => string; words: Words; sceneOf: SceneOf }) {
   return (
     <li className="border-t border-keisen py-3 first:border-t-0">
       <p className="text-[13px] text-nibi">
         {words(p.sceneId)}{/* offline: the status line above already says it; the example below says what the live version does */}{p.status === "offline" ? "" : `　${STATUS[p.status]}`}
         {p.round === 2 && p.status === "needs-choice" ? `（別の読み方${p.area ? `：「${AREA_ON_SCREEN[p.area]}」を手がかりに` : ""}）` : ""}
       </p>
-      {p.status === "offline" && <OfflineExample sceneId={p.sceneId} />}
+      {p.status === "offline" && <OfflineExample sceneId={p.sceneId} verdict={verdict} />}
       {p.ruleId && (
         <p className="text-[13px] text-nibi">
           書いた心得：
@@ -427,9 +435,10 @@ export default async function ChobaPage() {
       <div className="lg:col-span-2 -mb-6 empty:hidden"><LimitNote reason={meta.limit} /></div>
       <section aria-labelledby="card-h">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-          <p className="text-[13px] text-nibi">
+          {/* phones: the status on its own row, the bar and 「ここで区切る」 together below it (ui-critic 11/5) */}
+          <p className="basis-full text-[13px] text-nibi sm:basis-auto">
             {label}　<span className="tabular-nums">{done} / {meta.queue.length}</span> 件 済み
-            {!live && <span className="hidden sm:inline">　記録済みの案を表示しています</span>}
+            {!live && <span className="block sm:inline"><span className="hidden sm:inline">　</span>記録済みの案を表示しています</span>}
           </p>
           <div aria-hidden className="h-1.5 min-w-24 flex-1 rounded-full bg-keisen/60">
             <div className="h-full rounded-full bg-ai-fill" style={{ width: `${(100 * done) / Math.max(1, meta.queue.length)}%` }} />
@@ -544,9 +553,9 @@ export default async function ChobaPage() {
 
       <aside aria-labelledby="bg-h" className={`scroll-mt-4 lg:order-none lg:border-l-2 lg:border-keisen lg:pl-6 ${asking.length ? "order-first" : ""}`}>
         <h2 id="bg-h" className="font-mincho text-[18px] tracking-[0.04em]">弟子の読み取り</h2>
-        <p className="mt-1 text-[13px] text-nibi">△・× の意味を弟子が読み取り、心得帳に書きます。待たずに次の案へ進めます。</p>
+        <p className="mt-1 text-[13px] text-nibi">△・× の意味を弟子が読み取り、心得帳に書きます{live ? "" : "（公開版のライブで）"}。待たずに次の案へ進めます。</p>
         {recent.length ? (
-          <ul className="mt-3">{recent.map((p) => <PendingItem key={p.judgmentId} p={p} ruleText={ruleText} words={words} sceneOf={(id) => meta.queue.find((q) => q.scene.id === id)?.scene ?? TRAIN_SCENES.find((t) => t.id === id)} beforeOf={(id) => judgments.find((j) => j.id === id)?.proposal} />)}</ul>
+          <ul className="mt-3">{recent.map((p) => <PendingItem key={p.judgmentId} p={p} verdict={judgments.find((j) => j.id === p.judgmentId)?.verdict} ruleText={ruleText} words={words} sceneOf={(id) => meta.queue.find((q) => q.scene.id === id)?.scene ?? TRAIN_SCENES.find((t) => t.id === id)} beforeOf={(id) => judgments.find((j) => j.id === id)?.proposal} />)}</ul>
         ) : (
           <p className="mt-4 text-[14px] text-nibi">このセッションで付けた △・× は、まだありません。付けると、ここに弟子の読み取りが出ます。{effect && effectRecorded && "案の「変化」は、記録した稽古での直しから出たものです。"}</p>
         )}

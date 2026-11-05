@@ -5,7 +5,7 @@ import { isLedgerFact } from "@/src/learning/export";
 import { SCENE_TYPE_LABELS } from "@/src/core/types";
 import type { JudgmentRecord, KokoroeRule, RuleSource } from "@/src/learning/types";
 import { draftsThatUsed } from "../dandori";
-import { getSession } from "@/src/server/session";
+import { getSession, liveEnabled } from "@/src/server/session";
 import { retireRule } from "../actions";
 import { Mark } from "../marks";
 
@@ -161,6 +161,7 @@ export default async function KokoroePage() {
   const kokoroe = groupsOf(active.filter((r) => !isLedgerFact(r)), "k");
   const facts = groupsOf(active.filter(isLedgerFact), "f");
   const nK = active.filter((r) => !isLedgerFact(r)).length;
+  const live = liveEnabled();
   const nF = active.length - nK;
   const inactive = rules.filter((r) => r.status !== "active");
 
@@ -174,11 +175,11 @@ export default async function KokoroePage() {
         <a
           href="/kokoroe/export"
           download
-          className="mt-4 block rounded-[3px] bg-ai-fill px-3 py-2.5 text-center text-[14px] text-on-fill hover:opacity-95"
+          className={`mt-4 block rounded-[3px] px-3 py-2.5 text-center text-[14px] ${nK ? "bg-ai-fill text-on-fill hover:opacity-95" : "border border-ai text-ai hover:bg-ai-soft"}`}
         >
           心得帳を後任に渡す
         </a>
-        <p className="mt-1.5 hidden text-[12.5px] text-nibi md:block">Agent Skills の形（SKILL.md と取引先ごとのファイル）で書き出します。後任の Claude Code の .claude/skills/ に置くと使えます。</p>
+        <p className="mt-1.5 text-[12.5px] text-nibi">Agent Skills の形（SKILL.md と取引先ごとのファイル）で書き出します。後任の Claude Code の .claude/skills/ に置くと使えます。{nK ? "" : "いまは台帳の事実だけです。心得が付いてから渡すのがおすすめです。"}</p>
         {kokoroe.length > 0 && <p className="mt-5 hidden text-[12.5px] text-nibi md:block">心得</p>}
         <ol className="mt-1 hidden space-y-1 text-[14px] md:block">
           {kokoroe.map((g) => (
@@ -202,7 +203,7 @@ export default async function KokoroePage() {
           <h2 id="k-h" className="font-mincho text-[22px] tracking-[0.06em]">師匠から覚えた心得</h2>
           <p className="mt-1 mb-6 text-[13px] text-nibi">心得は、師匠の作法の一つ一つ。いつ・どの印と一言から・なぜ、を添えて綴ったものが心得帳です。</p>
           {kokoroe.length ? <Groups groups={kokoroe} judgments={judgments} /> : <p className="yomi text-nibi">
-              まだありません。<Link className="text-ai underline underline-offset-4" href="/choba">帳場</Link>で △ か × を付けると、直したところが、わけと一緒にここに残ります。
+              まだありません。<Link className="text-ai underline underline-offset-4" href="/choba">帳場</Link>で △ か × を付けると、直したところが、わけと一緒にここに残ります{live ? "" : "（公開版のライブで。記録済みの案を表示しているあいだは書かれません）"}。
             </p>}
         </section>
         {facts.length > 0 && (
