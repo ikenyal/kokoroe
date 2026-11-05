@@ -109,6 +109,25 @@ const OWN_SCREEN = (text: string) => `
   });`;
 const TAGS: Record<string, string> = { "s07-noren": "ココロエの画面（自作）\n答えの文面は、\nClaude の API が\n心得帳から書きます" };
 
+/** Scroll the page slowly (ease in and out, `ms` long) so that the element sits in the lower middle of the screen. Playwright's
+ *  own scrolling before a click is instant, which reads as a jump in the video. */
+async function glideTo(p: Page, l: Locator, ms: number) {
+  const box = await l.first().boundingBox(); // in viewport coordinates
+  if (!box) return;
+  // Sent as a string: tsx wraps named functions in a __name() helper that does not exist in the page.
+  await p.evaluate(`new Promise((done) => {
+    const from = window.scrollY, ms = ${ms};
+    const to = Math.max(0, Math.min(from + ${box.y} - window.innerHeight * 0.35, document.documentElement.scrollHeight - window.innerHeight));
+    const t0 = performance.now();
+    const step = (now) => {
+      const k = Math.min(1, (now - t0) / ms);
+      window.scrollTo(0, from + (to - from) * (k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2));
+      if (k < 1) requestAnimationFrame(step); else done();
+    };
+    requestAnimationFrame(step);
+  })`);
+}
+
 const shown = (l: Locator, timeout: number) => l.first().waitFor({ timeout }).then(() => true, () => false);
 
 /** Scripted steps for real-screen scenes. Finalized with the narration after the feature freeze; timing is logged per scene. */
@@ -116,7 +135,12 @@ const STEPS: Record<string, (p: Page, base: string, live: boolean) => Promise<vo
   // お試し with KOKOROE_VIDEO_QUEUE=T05,T13 (video/shoot.ts): △ + one line on T05, then the next similar scene (T13).
   "s05-choba": async (p, _base, live) => {
     const card = p.locator('section[aria-labelledby="card-h"]');
-    await p.waitForTimeout(8000); // read the T05 draft (表: 奥様, 裏: none) while the narration describes it; △ on 「師匠は、△。」
+    // Read the T05 draft (表: 奥様, 裏: none) while the narration describes it; △ on 「師匠は、△。」 at about 8 s, as before.
+    // The card is long since visit plans were added, so the camera first glides down to 判定 (Kento 11/5: no jump on the click,
+    // so the viewer sees where the master presses). The time comes out of the reading pause; the scene length is unchanged.
+    await p.waitForTimeout(6400);
+    await glideTo(p, card.locator('section[aria-label="判定"]'), 1400);
+    await p.waitForTimeout(200);
     await card.locator('label:has(input[value="△"])').click();
     await p.waitForTimeout(1200); // the remark is typed while the narration answers the cold open (「答えは、蔵元への、裏の一言でした。」)
     await card.locator('input[name="remark"]').pressSequentially("裏で蔵元に一言", { delay: 150 });
