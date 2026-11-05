@@ -723,14 +723,20 @@ still 「分からない、師匠に確認を」, and that must be checked. Q05 
 - **Measured** (`eval/successor-guard.ts`, same 4 grown kokoroe-chō as above, one run each, fictional data; before/after the
   first wording; `docs/results/successor-guard-2026-11-06-{before,after}.json`):
 
+Totals over the 4 stores, as in the table above. History is the mean per store, as above.
+
 | | before | after |
 |---|---|---|
-| History questions (8) | 5.50 | 5.75 |
-| Answers presented as quotes but not in the book | 0.50 | 0.25 |
-| Far questions not in the book (6 × 4 = 24): answered anyway | 0/24 | 0/24 |
-| Near-miss questions (4): answered | 1.50 | 1.25 |
-| Price questions sent to the master | 2/2 | 2/2 |
-| Answers showing internal labels (of 20) | 18.5 | 1.5 |
+| History questions (8), mean per store | 5.50 | 5.75 |
+| History answers presented as quotes but not in the book (of 32) | 2 | 1 |
+| Far questions not in the book: answered anyway | 0/24 | 0/24 |
+| Near-miss questions: answered | 6/16 | 5/16 |
+| Price questions sent to the master | 8/8 | 8/8 |
+| Answers showing internal labels (of 80) | 74 | 6 |
+
+- **Noise** (judge-critic 11/6): the change was wording only, so the history +0.25 is within run-to-run variation. The
+  misquotes show this too: on 11/4 the same prompt, on the same 4 stores, gave 0 misquotes; on 11/6 the before run gave 2.
+  What the change is meant to move is the last row. The far-question row is the one that must not move.
 
 - **Final wording** (after hitl-reviewer), checked on 1 of the 4 stores (`…-after-final-1store.json`). Against the same store
   before: history 5 → 5, far made-up 0 → 0, near 1 → 1, price 2/2, internal labels 18 → 1. The one left is a K-id inside a

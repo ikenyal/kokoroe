@@ -32,7 +32,7 @@
 <body><div class="stage"><div class="wrap">
   <p class="q"><small>後任の手元の <b>Claude Code（Anthropic の既製品）</b>に、同じ質問</small><span id="q"></span></p>
   <div class="cols">
-    <div class="col" style="--d:.6s"><h2>Skill だけ<span>ココロエが書き出した Skill（書き出した時点の写し）</span></h2><p class="lead" id="a1"></p><p class="why" id="w1"></p></div>
+    <div class="col" style="--d:.6s"><h2>Skill だけ<span>ココロエが書き出した Skill（書き出した時点の写し）</span></h2><p class="lead" id="a1"></p><p class="why" id="w1"></p><p class="why" id="x1"></p></div>
     <div class="col mcp" style="--d:4.2s"><h2>Skill ＋ MCP<span>ココロエの MCP サーバー（読み取り専用）で、いまの心得帳に</span></h2><p class="lead" id="a2"></p><p class="why" id="w2"></p></div>
   </div>
   <p class="note"><span class="mark">藍の下線</span>＝写しの後の変更（ココロエの MCP サーバーから）<span class="tag">Skill から</span><span class="tag mcp">MCP から</span>＝根拠の出どころ<br>答えの文は、後任役の Claude Code（claude -p、空のディレクトリ、11/3）が実際に書いたもの（抜粋）</p>
@@ -51,6 +51,9 @@
     document.getElementById("a1").textContent = lead(a);
     const why = (id, from, text) => { const w = document.getElementById(id); w.innerHTML = '<span class="tag' + (from === "MCP" ? " mcp" : "") + '">' + from + ' から</span>'; w.append("根拠: " + text); };
     why("w1", "Skill", rule(a));
+    // What the copy does not know, as the recorded answer says it (judge-critic 11/6: without it both leads read "not enough").
+    const unknown = (plain(a).match(/師匠に確認してほしいこと\s*\n\s*-\s*([^\n]+)/) ?? [])[1];
+    if (unknown) document.getElementById("x1").textContent = "心得帳に記録なし → 師匠に確認: " + unknown.trim();
     // Mark the sentences of the MCP lead that the Skill-only answer doesn't say (most of their 2-character pieces are new).
     const pairs = (t) => new Set([...t].slice(1).map((c, i) => t[i] + c));
     const seen = pairs(plain(a));
