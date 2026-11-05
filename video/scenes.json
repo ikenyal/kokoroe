@@ -72,7 +72,7 @@
       "page": "/choba",
       "part": "5 帳場",
       "action": "お試し with KOKOROE_VIDEO_QUEUE=T05,T13: T05 △ + remark → (live) reading chosen → 確かめ ○ → T13 draft now has the quiet word to the 蔵元",
-      "narration": "丸新酒造への、新しい提案です。弟子は、窓口の奥様にだけ送る案を出しました。師匠は、△。冒頭の1行は、蔵元への、裏の一言でした。次の根回しの場面では、弟子が自分から、それを添えるようになりました。",
+      "narration": "丸新酒造への、新しい提案です。弟子は、窓口の奥様にだけ送る案を出しました。師匠は、△。冒頭の1行のもとは、裏で蔵元へ、そっと一言。次の根回しの場面では、弟子が自分から、それを添えるようになりました。",
       "pauseMs": 300,
       "wipe": "noren"
     },
@@ -101,8 +101,8 @@
       "seconds": 10.5,
       "page": "/noren",
       "part": "7 暖簾を継ぐ",
-      "action": "successor asks Q01 (Zoom link?) → answer with rule id + 沿革",
-      "narration": "後任が、「Zoomで送っていいですか」と聞くと、心得帳が、理由ごと答えます。"
+      "action": "successor asks Q03 (浜風運輸: the delay notice after it is settled?) → the answer comes from the master's × and its わけ (Kento 11/5; README picture 3)",
+      "narration": "後任が、「遅延の連絡は、確定してからでいいですか」と聞くと、心得帳が、理由ごと答えます。"
     },
     {
       "id": "s07b-mcp",

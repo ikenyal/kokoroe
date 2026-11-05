@@ -174,7 +174,7 @@ const STEPS: Record<string, (p: Page, base: string, live: boolean) => Promise<vo
   },
   "s07-noren": async (p) => {
     await p.waitForTimeout(2000);
-    await p.locator('button[value="Q01"]').click();
+    await p.locator('button[value="Q03"]').click(); // 浜風運輸: answered from the master's × (Kento 11/5)
     await p.waitForTimeout(4000);
     await p.mouse.wheel(0, 320);
   },
