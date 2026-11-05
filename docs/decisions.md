@@ -948,6 +948,14 @@ textbook master; 45–52% for these two). With no words to go on, the interprete
 **Separate from the persona simulation** (`docs/personas-2026-11-04.md`), which checks tolerance to variation between people with
 the machine judge. This test is one real person's time on the real screen. The two are reported side by side, never mixed.
 
+**Addendum (11/5, Kento: record it whichever way it comes out).** The same 20 drafts were scored by the code judge
+(`eval/master-role-vs-simulator.ts`, no API; `docs/results/master-role-vs-simulator-2026-11-05.json`). Of the 18 the author
+marked ○, the hidden ground truth marks 3 ○, 8 △ and 7 ×; of the author's two △, one × and one ○; the same mark on 3 of 20.
+Conditions: the drafts as the author saw and marked them (stored with each judgment, after the money/contract floor), drafted
+live during the test from that session's 心得帳 (the ledger's constraints plus the two 心得 learned from the author's △); the judge
+`eval/simulator/judge.ts` over `data/hidden`, frozen since 11/3 (D-017); the contact plan only (visit plans are not in the
+ground truth, D-061). This is the ground truth of one simulated master, not of a real veteran.
+
 ## D-060 · 2026-11-04 · Accepted (Kento) · Own-company comparison: prose first, then judging; only times and counts leave
 
 **Context.** In the master-role test (D-059) the author had no history with the fictional clients, so writing the etiquette as

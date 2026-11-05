@@ -40,7 +40,7 @@ away from family succession.
 
 This setting is one the author lives day to day: client-specific etiquette in Japanese business ([docs/evolution.md](docs/evolution.md),
 background). The successor's side was seen in the author's own run as the master on fictional scenes: someone who does not know the
-history marks polite, plausible drafts ○ (18 of 20; see *Try it*). And before the kickoff, a small self-trial showed that
+history marks polite, plausible drafts ○ (18 of 20; see *What was tested*). And before the kickoff, a small self-trial showed that
 corrections are rarely a pure ○ or ×: most are "OK, but…" — which is why the master has a third mark, △ ([docs/evolution.md](docs/evolution.md), background).
 
 **Who it is for.** The veteran about to retire (the 師匠), who keeps their etiquette by saying "no" as usual, without being asked
@@ -105,34 +105,6 @@ daily plans; the 心得帳 grows as a by-product of that work. To start with you
   ```
   `--hostname 127.0.0.1` keeps the server reachable from your machine only. For live Claude calls (optional), put
   `ANTHROPIC_API_KEY=...` and `KOKOROE_LIVE=1` in `.env.local` (template: `.env.example`).
-- **Master-role test (author only, local):** the author plays the master on fictional scenes in the 帳場 and the app times each
-  action ([docs/master-role-test.md](docs/master-role-test.md)). It is not a test with real clients or in a real workplace.
-  - **Result (11/4, one person, 20 fictional scenes; D-059):** marking a card took a median of **53.5 s**, including reading the
-    draft and its message (about 18 minutes for 20). Adding a remark and recording it took a median of 1.3 s; almost none were
-    written.
-  - **18 of 20 were marked ○.** The author has never dealt with this fictional company, and to a first-time reader the polite,
-    plausible drafts looked fine. This is exactly the successor who would send the AI's draft as it is. Only someone who knows
-    the history can correct the tacit part.
-  - **Not measured:** writing the same etiquette as prose was not done (the author had no experience to write from). So there is
-    no comparison of judging time with writing time, and no count of how much etiquette comes out.
-  Internally it is still named `field` (`KOKOROE_FIELD=1`, `npm run field:save`).
-- **Persona simulation (not a real-world test):** master and successor personas played by Claude (a silent master, one who only
-  says 「違う」, a busy-month master, a fat-fingered one, an abbreviating one; an indirect newcomer, a curt asker, and others).
-  This checked **tolerance to variation between people**; whether a draft is right is still decided by the machine judge, and the
-  personas only change how things are said and tapped.
-  - **Result:** no collapse. Silent and vague masters lose more lessons to 「どれでもない」. No successor persona made up an answer
-    to a question the 心得帳 does not cover.
-  - **「どこが違う？」:** as a result, a master who gave **no remark** can say where the draft was off (誰に, 何で, いつ, 裏で誰に,
-    書式, その他) in the same tap as 「どれでもない」; it is optional.
-    - With an area, the second readings found what was meant in 7 of 13 cases; without one, in 1 of 13 (fictional data, simulated masters, one training path each; D-057).
-    - Offered after every 「どれでもない」, it lowered ○+△ for masters who do speak (on/off × 3 pairs, one training path each, held-out ○+△ on the fictional 20 scenes: on 80–85%, off 90–100%).
-      So it is now offered only when the remark is empty (D-057).
-    - How often a simulated master leaves the area out (50% / 30% / 20%) is an assumption.
-  - **Marks in busy months:** they tend to be lenient (a known limit). A lenient ○ writes nothing. Every 心得 keeps the date it was
-    written and the scene and mark it came from, so what was written in a busy month can be reviewed later and deleted in the
-    心得帳 (the deletion stays in its 沿革).
-  - **Details:** [docs/personas-2026-11-04.md](docs/personas-2026-11-04.md).
-  - It is a different thing from the master-role test above.
 - **Start from your own company (local only):** `npm run own` (needs `ANTHROPIC_API_KEY` in `.env.local`) opens
   http://127.0.0.1:3000 on your own client ledger instead of the fictional company.
   - **Setup:** enter the company and the ledger (form or CSV) under 台帳. In the 帳場 you write a situation, the apprentice
@@ -190,6 +162,44 @@ always off in evaluation runs (D-061).
   20% for the master in these numbers (the official 11/7 measurement uses 20% too); 50% and 30% for the silent and vague
   personas. A real master may answer less often.
 
+## What was tested, and what was not
+
+Besides the held-out evaluation above, two kinds of test. Neither is a test with real clients or in a real workplace.
+
+- **Master-role test (author only, local):** the author plays the master on fictional scenes in the 帳場 and the app times each
+  action ([docs/master-role-test.md](docs/master-role-test.md)). It is not a test with real clients or in a real workplace.
+  - **Result (11/4, one person, 20 fictional scenes; D-059):** marking a card took a median of **53.5 s**, including reading the
+    draft and its message (about 18 minutes for 20). Adding a remark and recording it took a median of 1.3 s; almost none were
+    written.
+  - **18 of 20 were marked ○.** The author has never dealt with this fictional company, and to a first-time reader the polite,
+    plausible drafts looked fine. This is exactly the successor who would send the AI's draft as it is. Only someone who knows
+    the history can correct the tacit part.
+  - **The same 20 drafts, scored by the code judge** (the simulator's hidden ground truth; no API; 11/5): of the 18 the author
+    marked ○, it marks **3 ○, 8 △ and 7 ×**. Of the author's two △, it marks one × and one ○. Same mark on 3 of 20. Conditions:
+    the drafts the author saw (made live during the test from the ledger's constraints plus the two 心得 learned on the way),
+    the judge frozen since 11/3 (D-017), the contact plan only (D-061). It is one simulated master's ground truth, not a real
+    veteran's ([docs/results/master-role-vs-simulator-2026-11-05.json](docs/results/master-role-vs-simulator-2026-11-05.json)).
+  - **Not measured:** writing the same etiquette as prose was not done (the author had no experience to write from). So there is
+    no comparison of judging time with writing time, and no count of how much etiquette comes out.
+  Internally it is still named `field` (`KOKOROE_FIELD=1`, `npm run field:save`).
+- **Persona simulation (not a real-world test):** master and successor personas played by Claude (a silent master, one who only
+  says 「違う」, a busy-month master, a fat-fingered one, an abbreviating one; an indirect newcomer, a curt asker, and others).
+  This checked **tolerance to variation between people**; whether a draft is right is still decided by the machine judge, and the
+  personas only change how things are said and tapped.
+  - **Result:** no collapse. Silent and vague masters lose more lessons to 「どれでもない」. No successor persona made up an answer
+    to a question the 心得帳 does not cover.
+  - **「どこが違う？」:** as a result, a master who gave **no remark** can say where the draft was off (誰に, 何で, いつ, 裏で誰に,
+    書式, その他) in the same tap as 「どれでもない」; it is optional.
+    - With an area, the second readings found what was meant in 7 of 13 cases; without one, in 1 of 13 (fictional data, simulated masters, one training path each; D-057).
+    - Offered after every 「どれでもない」, it lowered ○+△ for masters who do speak (on/off × 3 pairs, one training path each, held-out ○+△ on the fictional 20 scenes: on 80–85%, off 90–100%).
+      So it is now offered only when the remark is empty (D-057).
+    - How often a simulated master leaves the area out (50% / 30% / 20%) is an assumption.
+  - **Marks in busy months:** they tend to be lenient (a known limit). A lenient ○ writes nothing. Every 心得 keeps the date it was
+    written and the scene and mark it came from, so what was written in a busy month can be reviewed later and deleted in the
+    心得帳 (the deletion stays in its 沿革).
+  - **Details:** [docs/personas-2026-11-04.md](docs/personas-2026-11-04.md).
+  - It is a different thing from the master-role test above.
+
 ## What was made with Claude, and what was not
 
 What this entry asks to be judged on is what was made with Claude. The line is drawn here.
@@ -223,23 +233,18 @@ it possible in a week, from evaluation to deployment and video, was handing Clau
 
 - **Evaluation first.** Day 1 began with a machine-checkable master simulator, a frozen hidden ground truth (a hook blocks edits,
   a test checks checksums), and a test that product code never reads it.
-- **Hooks as guardrails.** MCP calls are blocked in this repo; a secret scan runs before every commit; editing core or prompt code
-  runs the fast tests at once and blocks the commit until a small API eval has run.
-- **Subagents.** Subagents following the `world-keeper` definition (run as general-purpose) wrote the 40 training scenes in
-  parallel. `hitl-reviewer` reviewed the UI and found three blocking bugs before they shipped: a master's choice never applied,
-  a rule written without a tap, and lost updates. Later reviews blocked more before commit, e.g. four in own mode (D-056) and,
-  for the visit plan, a money check that did not read it (D-061), and for the prefetch of the next draft, two races that could
-  have shown a draft made before a △ (D-066).
-- **Skills.** `world-consistency` and `decision-log` for this repo; the product itself exports Agent Skills.
-- **Plan mode** on day 1: Claude read the planning notes outside the repo (read only, nothing copied) and proposed the order:
-  evaluation first.
-- **Headless `claude -p`** to reproduce the successor's Claude Code under the same conditions (Skill only / Skill + MCP), in an
-  empty directory outside the repo, and record the answers.
-- **Critics that only look.** `ui-critic` sees only screenshots and answers as a first-time judge would, after each UI change
-  ([docs/ui-polish-log.md](docs/ui-polish-log.md)); `judge-critic` reads the README, the submission and the video against the
-  judging criteria ([docs/judging.md](docs/judging.md)) and may only suggest what the records back.
-- **MCP, used for a purpose.** Blocked while developing, so work connectors attached to the developer's Claude Code can't leak into
-  a public repo (D-003); shipped in the product as a read-only server, so a successor's Claude Code can look at the current 心得帳.
+
+Each Claude Code feature had one job:
+
+| Feature | What it was for | What it did here | Where it is recorded |
+|---|---|---|---|
+| **Hooks** | Rules that must hold even when an instruction is forgotten | Block every MCP call in this repo; scan for secrets before each commit; block edits to the frozen ground truth; after a core or prompt edit, run the fast tests and hold the commit until a small API eval has run | `.claude/settings.json`, D-003, D-017 |
+| **Subagents** | Work that needs a separate eye or runs in parallel | `world-keeper` wrote the 40 training scenes in parallel. `hitl-reviewer` blocked bugs before commit: three in the first UI (a master's choice never applied, a rule written without a tap, lost updates), four in own mode (D-056), a money check that did not read the visit plan (D-061), two races in the next-draft prefetch (D-066). `ui-critic` sees only screenshots; `judge-critic` reads the submission against the judging criteria ([docs/judging.md](docs/judging.md)) and may only suggest what the records back | `.claude/agents/`, [docs/ui-polish-log.md](docs/ui-polish-log.md) |
+| **Skills** | Knowledge the next session must not get wrong | `world-consistency` (the fictional world's canon) and `decision-log` (how to record); the product itself exports its 心得帳 as an Agent Skill | `.claude/skills/` |
+| **MCP** | Kept out of development, built into the product | Blocked while developing, so work connectors attached to the developer's Claude Code can't leak into a public repo; shipped as a read-only server, so a successor's Claude Code can ask the current 心得帳 | D-003, `src/mcp/server.ts` |
+| **Plan mode** | Decide the order before any code | Day 1: read the planning notes outside the repo (read only, nothing copied) and chose evaluation first | [docs/how-we-built.md](docs/how-we-built.md) |
+| **Headless `claude -p`** | Reproduce the successor's side under fixed conditions | Ran the successor's Claude Code in an empty directory outside the repo, with the Skill only and with Skill + MCP, and recorded the answers | `demo/successor-mcp/` |
+
 - **Models by role.** Sonnet 5.5 for the apprentice's plans and the successor's answers (the master marks one card at a time, so it
   must come back in seconds); Opus 5.5 for reading a correction and writing the 心得帳 (judgment-heavy, can run in the background). Managed Agents' memory store was built as an alternative 心得帳 store and timed on
   the real API (session start ≈ 2.1 s, reads/writes 0.2–0.7 s); it showed no advantage at this scale, so it is opt-in
