@@ -9,6 +9,8 @@
  * --marks ×,○,○: the marks to give, in order (default △ then ○). --mobile: a phone viewport (390×844). --shots <dir>: screenshot
  *   folder under docs/screens/ui-polish/ (11/5, 体験の目 3).
  * --ask "<question>" [--client 浜風運輸]: after the cards, ask 暖簾を継ぐ a free question live and time the answer (11/5, 体験の目 4).
+ * --no-remark: mark △/× without a remark (「どこが違う？」 is offered only then).
+ * --none-area timing: at the first readings, tap 「どれでもない」 with that 「どこが違う？」 area and time the second readings (D-057).
  * --read: seconds the master spends reading each card before marking it (11/5 before 先読み: 0; the 師匠役テスト median was 53.5 s).
  * → prints a timing table and writes docs/results/experience-<date>.json (numbers and on-screen words only; fictional data).
  */
@@ -19,7 +21,7 @@ import path from "node:path";
 import { parseArgs } from "node:util";
 import { chromium, type Page } from "playwright";
 
-const { values } = parseArgs({ options: { cards: { type: "string", default: "4" }, read: { type: "string", default: "0" }, choose: { type: "boolean", default: false }, cap: { type: "string", default: "0.5" }, port: { type: "string", default: "3124" }, marks: { type: "string", default: "△,○,○,○,○,○" }, mobile: { type: "boolean", default: false }, shots: { type: "string", default: "27-experience" }, ask: { type: "string" }, client: { type: "string", default: "浜風運輸" } } });
+const { values } = parseArgs({ options: { cards: { type: "string", default: "4" }, read: { type: "string", default: "0" }, choose: { type: "boolean", default: false }, cap: { type: "string", default: "0.5" }, port: { type: "string", default: "3124" }, marks: { type: "string", default: "△,○,○,○,○,○" }, mobile: { type: "boolean", default: false }, shots: { type: "string", default: "27-experience" }, ask: { type: "string" }, "none-area": { type: "string" }, "no-remark": { type: "boolean", default: false }, client: { type: "string", default: "浜風運輸" } } });
 const ROOT = path.resolve(__dirname, "..");
 const BASE = `http://127.0.0.1:${values.port}`;
 
@@ -70,7 +72,7 @@ const cardShown = (page: Page) => async () => (await page.locator('section[aria-
       await page.waitForTimeout(Number(values.read) * 1000);
       if (n === 0) await shot("card-1", true);
       await page.locator(`label:has(input[value="${m}"])`).first().click();
-      if (m !== "○") await page.locator('textarea, input[name="remark"]').first().fill("先に電話で一言");
+      if (m !== "○" && !values["no-remark"]) await page.locator('textarea, input[name="remark"]').first().fill("先に電話で一言");
       await page.locator('button:has-text("で記録する")').first().click();
       if (n === marks.length - 1) page.waitForTimeout(1500).then(() => shot("waiting")).catch(() => {});
       // The next card: same layout, different scene. Wait until the status line names what was recorded and a card is shown.
@@ -85,6 +87,13 @@ const cardShown = (page: Page) => async () => (await page.locator('section[aria-
         await shot("after-correction-full", true);
         if (values.choose) {
           const aside = () => page.locator("aside").first().innerText().catch(() => "");
+          const noneArea = values["none-area"];
+          if (noneArea && (await page.locator(`aside button[name="pick"][value="none:${noneArea}"]`).count())) {
+            await page.waitForTimeout(Number(values.read) * 1000);
+            await page.locator(`aside button[name="pick"][value="none:${noneArea}"]`).click();
+            steps.push({ step: `「どれでもない」＋どこが違う？（${noneArea}）→ 2巡目の読み方が出るまで`, ...(await waitFor(page, async () => /別の読み方|心得帳に書きました|何も覚えていません|わけを一言/.test(await aside()), 120000)) });
+            await shot("second-round", true);
+          }
           if (await page.locator('aside button[name="pick"][value="0"]').count()) {
             await page.waitForTimeout(Number(values.read) * 1000); // reading the candidates
             await page.locator('aside button[name="pick"][value="0"]').click();

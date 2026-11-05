@@ -160,6 +160,10 @@ function VisitView({ v }: { v: NonNullable<Proposal["visit"]> }) {
   );
 }
 
+/** The status words for one pending item. After 「どれでもない」 the pick is null and nothing is written yet: the apprentice is
+ *  making other readings (体験の目 8, 11/6: it said 「選んだ読み方を心得帳に書いています」 for ~3 s). Display only. */
+const statusOf = (p: Pending) => (p.status === "choosing" && p.pick === null ? "ほかの読み方を考えています" : STATUS[p.status]);
+
 const STATUS: Record<Pending["status"], string> = {
   queued: "解釈の順番待ち",
   interpreting: "どこが違ったか読み取っています",
@@ -282,7 +286,7 @@ function PendingItem({ p, verdict, beforeOf, ruleText, words, sceneOf }: { p: Pe
   return (
     <li className="border-t border-keisen py-3 first:border-t-0">
       <p className="text-[13px] text-nibi">
-        {words(p.sceneId)}{/* offline: the status line above already says it; the example below says what the live version does */}{p.status === "offline" ? "" : `　${STATUS[p.status]}`}
+        {words(p.sceneId)}{/* offline: the status line above already says it; the example below says what the live version does */}{p.status === "offline" ? "" : `　${statusOf(p)}`}
         {p.round === 2 && p.status === "needs-choice" ? `（別の読み方${p.area ? `：「${AREA_ON_SCREEN[p.area]}」を手がかりに` : ""}）` : ""}
       </p>
       {p.status === "offline" && <OfflineExample sceneId={p.sceneId} verdict={verdict} />}
@@ -473,7 +477,7 @@ export default async function ChobaPage() {
             {(() => {
               // What happened to it, without looking at the side panel.
               const p = meta.pending.find((x) => x.judgmentId === undoable.judgment.id);
-              const said = !p ? "を記録しました。○ は心得帳を変えません" : `を記録しました。${STATUS[p.status]}`;
+              const said = !p ? "を記録しました。○ は心得帳を変えません" : `を記録しました。${statusOf(p)}`;
               return (
                 <>
                   <span className="text-sumi">{said}</span>
