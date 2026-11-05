@@ -100,6 +100,10 @@ entrant's own MCP server. So the video says it on screen (no narration change):
 - [x] Real screens from the production bundle (`.image/`, same as the container) on 127.0.0.1, stopped after shooting — no dev indicator.
 - [x] Structure v3 rough cut with fixed data and the Takumi narration (11/4): 2:59 (v2 was 2:50). In fixed mode T13's draft is a recorded one;
       the causal change (△ on T05 → the quiet word on T13) is shot live on 11/7 (`--live`).
+- [ ] 11/7 live s05 (judge-critic 11/5): the master types 「裏で蔵元に一言」, so the 「変化」 panel on T13 must cite that remark, not
+  「一言なし」 (in fixed mode it shows the recorded run's mark, which had no remark). If it still says 一言なし, leave the remark empty in
+  the s05 action or re-shoot. Also check no frame shows 橙丸 under 同席者 (D-065).
+- [ ] End card: add the public demo URL above the GitHub URL once it exists (11/6).
 - [ ] 11/7: re-record the demo snapshot so 心得帳 shows a rule with a multi-entry 沿革 (today every rule in it has one entry).
 - [ ] s08b: the official Before/After (same ledger, 5 training paths) → re-run `narration.ts --yes --only s08b-keiko`; the
       interim Before and After were measured with different ledger wording (D-033).
