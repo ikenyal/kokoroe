@@ -255,7 +255,7 @@ function OfflineExample({ sceneId }: { sceneId: string }) {
   const from = r.sources.find((x) => x.kind !== "ledger");
   return (
     <div className="mt-2 border-t border-keisen pt-2 text-[13.5px]">
-      <p className="text-nibi">ライブ版なら、ここで弟子が {from?.verdict ?? "△"} の意味を読み取り、心得帳にこう書きます（記録済みの例{from && from.sceneId !== sceneId ? `：${sceneWords(from.sceneId)}の場面から` : ""}）。</p>
+      <p className="text-nibi">公開版のライブでは、ここで弟子が {from?.verdict ?? "△"} の意味を読み取り、心得帳にこう書きます（記録済みの例{from && from.sceneId !== sceneId ? `：${sceneWords(from.sceneId)}の場面から` : ""}）。</p>
       <p className="yomi mt-1 text-[15px]">「{r.text}」</p>
       {r.when && <p className="yomi text-nibi">条件：{r.when}</p>}
     </div>
@@ -268,7 +268,7 @@ function PendingItem({ p, beforeOf, ruleText, words, sceneOf }: { p: Pending; be
   return (
     <li className="border-t border-keisen py-3 first:border-t-0">
       <p className="text-[13px] text-nibi">
-        {words(p.sceneId)}　{STATUS[p.status]}
+        {words(p.sceneId)}{/* offline: the status line above already says it; the example below says what the live version does */}{p.status === "offline" ? "" : `　${STATUS[p.status]}`}
         {p.round === 2 && p.status === "needs-choice" ? `（別の読み方${p.area ? `：「${AREA_ON_SCREEN[p.area]}」を手がかりに` : ""}）` : ""}
       </p>
       {p.status === "offline" && <OfflineExample sceneId={p.sceneId} />}
