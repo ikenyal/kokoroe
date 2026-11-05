@@ -10,6 +10,26 @@ import { ownEnabled } from "@/src/core/own-world";
 import general from "@/data/demo/recorded-answers-general.json";
 import recorded from "@/data/demo/recorded-answers.json";
 
+/**
+ * The rule as it is now, with only the words added since 前は marked (character LCS against 前は; one-character gaps inside a
+ * changed run are marked too, so incidental matches do not split it; ui-critic 11/6).
+ */
+function Changed({ before, after }: { before: string; after: string }) {
+  const b = [...before], a = [...after];
+  const L = Array.from({ length: a.length + 1 }, () => new Array<number>(b.length + 1).fill(0));
+  for (let i = a.length - 1; i >= 0; i--) for (let j = b.length - 1; j >= 0; j--) L[i][j] = a[i] === b[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+  const added = new Array<boolean>(a.length).fill(true);
+  for (let i = 0, j = 0; i < a.length && j < b.length; ) {
+    if (a[i] === b[j]) { added[i] = false; i++; j++; } else if (L[i + 1][j] >= L[i][j + 1]) i++; else j++;
+  }
+  for (let i = 1; i < a.length - 1; i++) if (!added[i] && added[i - 1] && added[i + 1]) added[i] = true;
+  const marked = added.filter(Boolean).length;
+  if (!marked || marked > a.length * 0.6) return <>{after}</>; // nothing, or nearly everything, changed: no marking
+  const parts: { text: string; on: boolean }[] = [];
+  a.forEach((ch, i) => (parts.at(-1)?.on === added[i] ? (parts.at(-1)!.text += ch) : parts.push({ text: ch, on: added[i] })));
+  return <>{parts.map((x, k) => (x.on ? <mark key={k} className="bg-transparent font-bold text-ai underline decoration-ai/50 underline-offset-4">{x.text}</mark> : <span key={k}>{x.text}</span>))}</>;
+}
+
 const ANSWER: Record<SuccessorTurn["answer"], { word: string; tone: string }> = {
   yes: { word: "はい", tone: "text-ai" },
   no: { word: "いいえ", tone: "text-sumi" }, // vermilion is only for the master's marks
@@ -57,13 +77,13 @@ function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => str
       <p className="yomi mt-1 text-[17px]">{t.question}</p>
       {g ? (
         <div className="mt-4 grid gap-x-8 gap-y-5 sm:grid-cols-2">
-          <section aria-label="心得帳なしの答え" className="border-t border-keisen pt-2 sm:order-none">
-            <h3 className="text-[13px] text-nibi">心得帳なし（一般論だけ）</h3>
+          <section aria-label="心得帳なしの答え" className="order-2 border-t border-keisen pt-2 sm:order-none">
+            <h3 className="text-[13px] text-nibi">心得帳なし（取引先台帳だけ）</h3>
             <p className="mt-1 font-mincho text-[19px] text-sumi/80">{g.answer === "unknown" ? "判断できない" : ANSWER[g.answer].word}</p>
             <p className="yomi mt-1 text-[15px] text-sumi/80">{plainText(g.explanation)}</p>
             <p className="mt-3 border-t border-keisen pt-2 text-[13.5px] text-sumi/80">根拠・経緯：なし（心得帳を渡していない）</p>
           </section>
-          <section aria-label="心得帳ありの答え" className="border-t-2 border-ai pt-2">
+          <section aria-label="心得帳ありの答え" className="order-1 border-t-2 border-ai pt-2 sm:order-none">
             <h3 className="text-[13px] text-ai">心得帳あり（理由と経緯つき）</h3>
             <div className="mt-1">{mine}</div>
             <p className="mt-3 border-t border-keisen pt-2 text-[13.5px] text-sumi">
@@ -72,7 +92,7 @@ function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => str
                 const fact = t.citations.filter((c) => /出典[:：]\s*台帳/.test(c.history)).length;
                 const rule = t.citations.length - fact;
                 if (!t.citations.length) return "なし（心得帳に記録がないので、師匠に確認を勧める）";
-                return [rule && `心得${rule}つ`, fact && `台帳の事実${fact}つ`].filter(Boolean).join("・") + "（下に、わけと沿革）";
+                return [rule && `心得${rule}つ`, fact && `取引先台帳の決まりごと${fact}つ`].filter(Boolean).join("・") + "（下に、わけと沿革）";
               })()}
             </p>
           </section>
@@ -85,7 +105,7 @@ function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => str
         <div className="mt-5 grid gap-x-5 border-t border-keisen pt-3 sm:grid-cols-[2.2rem_1fr]">
           <h3 className="font-mincho text-[14px] tracking-[0.2em] sm:tate">根拠の心得</h3>
           <ul className="mt-1 space-y-3 sm:mt-0">
-            {t.source === "recorded" && <li className="text-[12.5px] text-nibi">評価のときの心得帳の言い回しです。いまの心得帳とは言い回しが違うことがあります。</li>}
+            {t.source === "recorded" && <li className="text-[13px] text-nibi">記録したときの心得帳の言い回しです。いまの心得帳とは、言い回しが違うことがあります。</li>}
             {t.citations.map((c, i) => {
               const h = citationParts(c.history);
               const live = t.source === "live" && ruleText(c.ruleId);
@@ -94,13 +114,13 @@ function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => str
                   {live ? (
                     <Link className="yomi text-[16.5px] text-ai underline-offset-4 hover:underline" href={`/kokoroe#${c.ruleId}`}>{h.rule}</Link>
                   ) : (
-                    <p className="yomi text-[16.5px]">{h.rule}</p>
+                    <p className="yomi text-[16.5px]">{h.before ? <Changed before={h.before} after={h.rule} /> : h.rule}</p>
                   )}
-                  {h.before && <p className="yomi text-[14px] text-nibi">前は：{h.before}</p>}
+                  {h.before && <p className="yomi text-[14px]"><span className="text-nibi">前は：</span>{h.before}</p>}
                   {h.why && <p className="yomi text-[14px]"><span className="text-nibi">わけ：</span>{h.why}</p>}
-                  <p className="text-[12.5px] text-nibi">
-                    {h.source && <>出どころ：{h.source}　</>}
-                    {h.written && <>心得帳に書いた日：{h.written}</>}
+                  <p className="text-[13px] text-nibi">
+                    {h.source && <span className="inline-block whitespace-nowrap">出どころ：{h.source.replace("台帳（取引先台帳の明示的な制約）", "取引先台帳")}　</span>}
+                    {h.written && <span className="inline-block whitespace-nowrap">心得帳に書いた日：{h.written}</span>}
                   </p>
                 </li>
               );
@@ -109,7 +129,7 @@ function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => str
         </div>
       )}
       {t.source === "recorded" ? (
-        <p className="mt-3 text-[12.5px] text-nibi">記録済みの回答（評価のときの心得帳で答えたもの）を表示しています。{g && "心得帳なしの答えも、同じ評価で記録したものです。"}</p>
+        <p className="mt-3 text-[13px] text-nibi">記録済みの答え（記録したときの心得帳で答えたもの）を表示しています。{g && "心得帳なしの答えも、同じときに、心得帳を渡さずに記録したものです。"}</p>
       ) : (
         g && <p className="mt-3 text-[12.5px] text-nibi">心得帳なしの答えは、評価で記録したものです（同じ質問、心得帳を渡さずに答えたもの）。</p>
       )}
