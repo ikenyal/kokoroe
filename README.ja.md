@@ -139,12 +139,12 @@ _途中経過（11/3）: Before は修正後の台帳（D-033）、After は修�
 審査の対象は Claude で作ったものです。その境目をここに書きます。
 
 **Claude で作ったもの**
-- **このリポジトリのコードと文書。** ハッカソンの期間中（2026-11-02 から）に Claude Code で作りました。アプリ、師匠シミュレータと評価、スクリプト・テスト・フック、架空のデータファイル、README と記録、動画の場面のページとナレーションの台本です。どこが作者の判断で、何を Claude Code がしたかは [docs/how-we-built.md](docs/how-we-built.md)（と下の「二つ目の帳場」）にあります。
+- **このリポジトリのコードと文書。** ハッカソンの期間中（2026-11-02 から）に Claude Code で作りました。アプリ、師匠シミュレータと評価、スクリプト・テスト・フック、架空のデータファイル、README と記録、動画の場面のページとナレーションの台本です（台本は Claude と作り、一部は作者が短くした。D-049）。どこが作者の判断で、何を Claude Code がしたかは [docs/how-we-built.md](docs/how-we-built.md)（と下の「二つ目の帳場」）にあります。
 - **アプリの中で Claude が書くもの**（Anthropic の API を直接呼び出し）：弟子の段取りの案・文面の下書き・訪問の段取り、師匠の一言の読み方の候補とそこから書く心得、全社共通の心得の提案、後任への答え。評価では、ペルソナの言い回し（Haiku。`eval/personas-texts.json` に保存）。案が正しいかどうかは Claude ではなく、コード（機械で判定するシミュレータ）が決めます。
 - **ココロエの Skill と MCP サーバー。** Agent Skill（`SKILL.md`）として書き出す心得帳と、読み取り専用の MCP サーバー（`src/mcp/server.ts`）は、この作品の一部です。**Claude Code そのものは Anthropic の既製品で、そのまま使っています。** 動画では、後任の Claude Code がココロエの Skill を読み、ココロエの MCP サーバーに問い合わせて答えます。答えのどこがどちらから来たかを、画面に示しています。
 
 **Claude 以外のもの**
-- ナレーションの音声：Amazon Polly（音声合成。台本は上のとおり Claude で作成）。ホスティング：Amazon Lightsail。
+- ナレーションの音声：Amazon Polly（音声合成。台本は上のとおり Claude と作り、一部は作者が短くした）。ホスティング：Amazon Lightsail。
 - 主なオープンソース：Next.js、React、Tailwind CSS、Zod、MCP の TypeScript SDK、Playwright（画面の録画）、ffmpeg（動画の組み立て）、Vitest。フォント：しっぽり明朝、Zen 角ゴシック New（Google Fonts、SIL Open Font License）。
 - README と動画で引用する統計：帝国データバンク（後継者不在率の調査、2025年）、総務省統計局（労働力調査、2025年）。
 - 外部の画像・音楽は使っていません。動画の絵は、HTML/CSS で作ったページと、アプリそのものの画面です。
