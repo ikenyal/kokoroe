@@ -23,7 +23,8 @@ delete every entry.
 <img src="docs/readme/2-kokoroe-history.webp" alt="心得帳 entry for 浜風運輸: tell bad news to the dispatch manager early, before it is certain; × with the words 'to the dispatch manager, early'; why: in 2019 they were told too late and could not rearrange the trucks" width="720">
 
 **3. The successor gets an answer with its reason (暖簾を継ぐ).** The same question: without the 心得帳, "can't judge"; with it,
-an answer that cites the 心得 and its history.
+an answer that cites the 心得 and its history. (This answer was recorded with the 心得帳 at evaluation time, so its wording of
+浜風運輸's 心得 differs from picture 2; the answer itself tells how the 心得 was reworded on 11/3.)
 
 <img src="docs/readme/3-noren-with-without.webp" alt="暖簾を継ぐ: a question about a delay notice to 浜風運輸. Without the 心得帳: can't judge. With it: no, with the 2019 reason" width="720">
 
@@ -39,12 +40,13 @@ away from family succession.
 
 This setting is one the author lives day to day: client-specific etiquette in Japanese business ([docs/evolution.md](docs/evolution.md),
 background). The successor's side was seen in the author's own run as the master on fictional scenes: someone who does not know the
-history marks polite, plausible drafts ○ (18 of 20; see *Try it*).
+history marks polite, plausible drafts ○ (18 of 20; see *Try it*). And before the kickoff, a small self-trial showed that
+corrections are rarely a pure ○ or ×: most are "OK, but…" — which is why the master has a third mark, △ ([docs/evolution.md](docs/evolution.md), background).
 
 **Who it is for.** The veteran about to retire (the 師匠), who keeps their etiquette by saying "no" as usual, without being asked
 to explain; and whoever takes over (someone inside, or a buyer of the business), who gets answers with their reasons and history.
 **When it is used:** the months between the retirement being decided and the hand-over, while the master checks the apprentice's
-daily plans; the 心得帳 grows as a by-product of that work.
+daily plans; the 心得帳 grows as a by-product of that work. To start with your own clients: *Try it* → "Start from your own company".
 
 ## What Kokoroe does
 
@@ -92,7 +94,8 @@ daily plans; the 心得帳 grows as a by-product of that work.
 ## Try it
 
 - **Public demo:** _URL to be added (11/6)._ Two modes: **デモの続き** (button 「デモの続きから見る」: a recorded run stopped half-way) and **お試し**
-  (button 「師匠になって試す」: you are the master).
+  (button 「師匠になって試す」: you are the master). Live calls have limits per session and per day; when one is reached, the
+  screen says so (「本日のお試し上限に達しました…」) and the demo goes on with recorded data.
 - **Run locally** (Node 22+, npm; checked from a fresh clone: all four on 11/3; install, tests, eval:quick and a production build again on 11/5):
   ```bash
   npm ci
@@ -175,6 +178,7 @@ The evaluation covers the contact plan. The visit plan (dress, gifts…) is not 
 always off in evaluation runs (D-061).
 
 **Reading the numbers honestly.**
+- **On 20 held-out scenes, one scene is 5 points.** 55% → 64% (a mean over runs) is under two scenes; the lower end of the range (58%) is less than one scene above the Before.
 - **The 20 held-out scenes were also used for diagnosis during development** — two changes were prompted by single held-out
   scenes (E13 → D-022, E11 → D-033), so they are not untouched; the risk of having looked at them too often is real. Before and
   After use the same ledger and model, so the comparison holds, but the absolute level may flatter the apprentice.
@@ -214,7 +218,8 @@ What this entry asks to be judged on is what was made with Claude. The line is d
 
 ## How we built it with Claude Code
 
-Built in one week by one person with Claude Code at the center (full log: [docs/how-we-built.md](docs/how-we-built.md)).
+Built in one week by one person with Claude Code at the center (full log: [docs/how-we-built.md](docs/how-we-built.md)). What made
+it possible in a week, from evaluation to deployment and video, was handing Claude Code not only the work but the guardrails.
 
 - **Evaluation first.** Day 1 began with a machine-checkable master simulator, a frozen hidden ground truth (a hook blocks edits,
   a test checks checksums), and a test that product code never reads it.
@@ -223,7 +228,8 @@ Built in one week by one person with Claude Code at the center (full log: [docs/
 - **Subagents.** Subagents following the `world-keeper` definition (run as general-purpose) wrote the 40 training scenes in
   parallel. `hitl-reviewer` reviewed the UI and found three blocking bugs before they shipped: a master's choice never applied,
   a rule written without a tap, and lost updates. Later reviews blocked more before commit, e.g. four in own mode (D-056) and,
-  for the visit plan, a money check that did not read it (D-061).
+  for the visit plan, a money check that did not read it (D-061), and for the prefetch of the next draft, two races that could
+  have shown a draft made before a △ (D-066).
 - **Skills.** `world-consistency` and `decision-log` for this repo; the product itself exports Agent Skills.
 - **Plan mode** on day 1: Claude read the planning notes outside the repo (read only, nothing copied) and proposed the order:
   evaluation first.
@@ -235,7 +241,9 @@ Built in one week by one person with Claude Code at the center (full log: [docs/
 - **MCP, used for a purpose.** Blocked while developing, so work connectors attached to the developer's Claude Code can't leak into
   a public repo (D-003); shipped in the product as a read-only server, so a successor's Claude Code can look at the current 心得帳.
 - **Models by role.** Sonnet 5.5 for the apprentice's plans and the successor's answers (the master marks one card at a time, so it
-  must come back in seconds); Opus 5.5 for reading a correction and writing the 心得帳 (judgment-heavy, can run in the background).
+  must come back in seconds); Opus 5.5 for reading a correction and writing the 心得帳 (judgment-heavy, can run in the background). Managed Agents' memory store was built as an alternative 心得帳 store and timed on
+  the real API (session start ≈ 2.1 s, reads/writes 0.2–0.7 s); it showed no advantage at this scale, so it is opt-in
+  (`KOKOROE_STORE=memory`, D-002).
 - **Measured, not assumed.** Every change was measured on the held-out set with repeated runs; prompt caching was A/B-tested
   (−37% cost, verdicts unchanged); the Before was re-measured and replaced when the prompt layout changed.
 - **Decisions on record.** 60+ decision records ([docs/decisions.md](docs/decisions.md)) and an idea log ([docs/evolution.md](docs/evolution.md)).
