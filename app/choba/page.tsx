@@ -454,14 +454,19 @@ export default async function ChobaPage() {
           <div aria-hidden className="h-1.5 min-w-24 flex-1 rounded-full bg-keisen">
             <div className="h-full rounded-full bg-ai-fill" style={{ width: `${(100 * done) / Math.max(1, meta.queue.length)}%` }} />
           </div>
-          {item && (
+          {item && done > 0 && (
             <form action={pause}>
               <button className="inline-flex min-h-11 items-center px-1 text-[13.5px] text-ai underline-offset-4 hover:underline">ここで区切る</button>
             </form>
           )}
         </div>
-        {s.mode === "demo" && <DemoGuide live={live} />}
-        {undoable && (
+        {s.mode === "demo" && !meta.paused && <DemoGuide live={live} />}
+        {meta.undone && item?.scene.id === meta.undone.sceneId && (
+          <p role="status" aria-live="polite" className="mt-3 border-l-2 border-ai pl-3 text-[13.5px] text-sumi">
+            {words(meta.undone.sceneId)}の <span className="font-mincho text-[18px] font-bold text-shu">{meta.undone.verdict}</span> を取り消しました。この案を、もう一度判定できます。
+          </p>
+        )}
+        {undoable && !meta.paused && !(meta.undone && item?.scene.id === meta.undone.sceneId) && (
           <form action={undo} role="status" aria-live="polite" className="mt-3 border-l-2 border-ai pl-3 text-[13.5px] text-nibi">
             <input type="hidden" name="judgmentId" value={undoable.judgment.id} />
             <span className="text-sumi">{words(undoable.judgment.sceneId)}に</span> <span className="font-mincho text-[18px] font-bold text-shu">{undoable.judgment.verdict}</span>
@@ -543,11 +548,13 @@ export default async function ChobaPage() {
           <div className="mt-6">
             <h1 className="font-mincho text-[22px]">ここで区切りました</h1>
             <p className="yomi mt-2">
-              {done} 件まで見ました。それまでに育った心得帳は、<Link className="text-ai underline" href="/kokoroe">心得帳</Link>と<Link className="text-ai underline" href="/noren">暖簾を継ぐ</Link>でそのまま使えます。
+              {done} 件まで見ました。
+              {meta.pending.length ? "それまでに育った心得帳は、" : "この回の印は ○ だけなので、心得帳は変わっていません。いまの心得帳は、"}
+              <Link className="text-ai underline" href="/kokoroe">心得帳</Link>と<Link className="text-ai underline" href="/noren">暖簾を継ぐ</Link>でそのまま使えます。稽古の数字は<Link className="text-ai underline" href="/keiko">稽古の記録</Link>に。
             </p>
             <form action={pause} className="mt-4">
               <input type="hidden" name="resume" value="1" />
-              <button className="rounded-[3px] bg-sumi px-5 py-2.5 text-[15px] text-kami">続きから</button>
+              <button className="rounded-[3px] bg-sumi px-5 py-2.5 text-[15px] text-kami">{done + 1} 件目から続ける</button>
             </form>
           </div>
         ) : s.mode === "own" ? (

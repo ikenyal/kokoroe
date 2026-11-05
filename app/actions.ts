@@ -118,7 +118,14 @@ export async function undo(formData: FormData) {
   if (!s) redirect("/");
   const judgmentId = String(formData.get("judgmentId") ?? "");
   if (!/^J-\d{4}$/.test(judgmentId)) throw new Error("invalid judgment");
-  await undoLast(s, judgmentId);
+  const j = (await s.store.listJudgments()).find((x) => x.id === judgmentId);
+  const result = await undoLast(s, judgmentId);
+  if (result === "done" && j) {
+    // Display only: the card shown again says its mark was taken back (ui-critic 11/6). Nothing learned depends on it.
+    const meta = readMeta(s.mode, s.sid);
+    meta.undone = { sceneId: j.sceneId, verdict: j.verdict };
+    s.saveMeta(meta);
+  }
   revalidatePath("/choba");
   revalidatePath("/kokoroe");
 }
