@@ -111,7 +111,12 @@ entrant's own MCP server. So the video says it on screen (no narration change):
   `docs/results/master-role-vs-simulator-2026-11-05.json`). On screen only: the narration is unchanged, because a sentence would
   take the total to about 3:00 and would move s02's beats, which follow the narration. Stills: `docs/screens/video-dryrun/s02-problem-1..3.jpg`.
 - [ ] End card: add the public demo URL above the GitHub URL once it exists (11/6).
-- [ ] 11/7: re-record the demo snapshot so 心得帳 shows a rule with a multi-entry 沿革 (today every rule in it has one entry).
+- [ ] 11/7: re-record the demo snapshot so 心得帳 shows a rule with a multi-entry 沿革 (today every rule in it has one entry). If it
+      is re-recorded, also regenerate the README pictures (`scripts/readme-shots.ts`, then `cwebp -q 82`; picture 2 shows the 心得帳)
+      and check the s06 stills.
+- [ ] s07c asks a new question (Kento 11/6): 「直すだけで、本当に、弟子は育つのでしょうか。」 Re-run
+      `narration.ts --yes --only s07c-ask` (together with s08b below). If its audio is longer than 3.6 s, fix the scene's seconds
+      in `scenes.json` before shooting.
 - [ ] s08b: the official Before/After (same ledger, 5 training paths) → re-run `narration.ts --yes --only s08b-keiko`; the
       interim Before and After were measured with different ledger wording (D-033).
 - [ ] s04 no longer says 「一瞬で、」 (11/5, D-062: the master-role test measured a median of 53.5 s per card, and writing vs.
