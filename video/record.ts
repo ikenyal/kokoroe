@@ -91,7 +91,7 @@ const WIPE = (t0: number) => `
 const INTERIM = `
   window.addEventListener("DOMContentLoaded", () => {
     const el = document.createElement("div");
-    el.textContent = "途中経過（11/3）の数字です。正式な数字は 11/7 の計測で差し替えます。架空の取引先10社・評価用20場面。";
+    el.textContent = window.OFFICIAL_BANNER ?? "途中経過（11/3）の数字。11/7 の計測で差し替えます。架空の10社・評価用20場面、師匠はシミュレータ（コードで判定）。";
     el.style.cssText = "position:fixed;left:0;right:0;top:0;padding:10px 24px;background:#2b4a6f;color:#f3f2ee;" +
       "font:600 22px/1.5 'Hiragino Sans','Yu Gothic',sans-serif;text-align:center;z-index:2147483647;pointer-events:none";
     document.body.appendChild(el);
@@ -107,7 +107,10 @@ const OWN_SCREEN = (text: string) => `
       "color:#2b4a6f;font:600 17px/1.55 'Hiragino Sans','Yu Gothic',sans-serif;z-index:2147483646;pointer-events:none";
     document.body.appendChild(el);
   });`;
-const TAGS: Record<string, string> = { "s07-noren": "ココロエの画面（自作）\n答えの文面は、\nClaude の API が\n心得帳から書きます" };
+const TAGS: Record<string, string> = {
+  // The second part (judge-critic 11/6): the recorded answer's 浜風運輸 wording differs from the 心得帳 shown just before in s06.
+  "s07-noren": "ココロエの画面（自作）\n答えの文面は、\nClaude の API が\n心得帳から書きます\n\n記録した答えなので、\n心得の言い回しは\n前の画面と違います",
+};
 
 /** Scroll the page slowly (ease in and out, `ms` long) so that the element sits in the lower middle of the screen. Playwright's
  *  own scrolling before a click is instant, which reads as a jump in the video. */
@@ -175,8 +178,8 @@ const STEPS: Record<string, (p: Page, base: string, live: boolean) => Promise<vo
     const s = (await multi.count()) ? multi.first() : p.locator('p:has-text("わけ")').first().locator("xpath=following::summary[1]");
     await s.scrollIntoViewIfNeeded();
     await s.click();
-    await p.waitForTimeout(1200);
-    await p.mouse.wheel(0, 220);
+    // Stay on this rule and its わけ (judge-critic 11/6: scrolling on ended on 丸新's rule 「（一言なし）」, seconds after the viewer
+    // watched the master type a remark in s05; s07 then quotes this わけ).
   },
   "s07-noren": async (p) => {
     await p.waitForTimeout(2000);
@@ -219,7 +222,12 @@ const STEPS: Record<string, (p: Page, base: string, live: boolean) => Promise<vo
     const t0 = Date.now();
     // Screen scenes are recorded at 1536 px and scaled to 1280, so their subtitles are drawn larger to look the same.
     await ctx.addInitScript(SUBTITLE(cues, at, end, t0, s.kind === "screen" ? 31 : 26));
-    if (s.id === "s08b-keiko" && !official) await ctx.addInitScript(INTERIM);
+    // s08b always says the numbers are fictional and the master is the simulator (judge-critic 11/6: "114 taps" otherwise reads as a
+    // person); while the numbers are interim it says that too.
+    if (s.id === "s08b-keiko") {
+      if (official) await ctx.addInitScript(`window.OFFICIAL_BANNER = "架空の取引先10社・評価用20場面。師匠はシミュレータ（隠しの正解に照らして、コードで判定）。";`);
+      await ctx.addInitScript(INTERIM);
+    }
     if (TAGS[s.id]) await ctx.addInitScript(OWN_SCREEN(TAGS[s.id]));
     if (s.wipe === "noren") await ctx.addInitScript(WIPE(t0));
     const p = await ctx.newPage();

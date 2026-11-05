@@ -114,6 +114,10 @@ entrant's own MCP server. So the video says it on screen (no narration change):
 - [ ] 11/7: re-record the demo snapshot so 心得帳 shows a rule with a multi-entry 沿革 (today every rule in it has one entry). If it
       is re-recorded, also regenerate the README pictures (`scripts/readme-shots.ts`, then `cwebp -q 82`; picture 2 shows the 心得帳)
       and check the s06 stills.
+- [ ] s06 and s07 (judge-critic 11/6): every screen scene starts a fresh demo session, so s06 shows the recorded snapshot's
+      心得帳, not what the live s05 wrote. s06 now stays on the first rule with a わけ (浜風運輸) instead of scrolling on to 丸新酒造's
+      「（一言なし）」; s07's corner tag says the recorded answer's wording differs from the screen before. If the snapshot is
+      re-recorded, check that s06's 浜風 rule and s07's 根拠の心得 still read as the same 心得 (or the tag still explains it).
 - [ ] s07c asks a new question (Kento 11/6): 「直すだけで、本当に、弟子は育つのでしょうか。」 Re-run
       `narration.ts --yes --only s07c-ask` (together with s08b below). If its audio is longer than 3.6 s, fix the scene's seconds
       in `scenes.json` before shooting.
