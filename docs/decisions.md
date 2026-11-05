@@ -1212,3 +1212,18 @@ answering from a ledger fact, and a few lines out of step with the screen.
 
 **Consequences.** Rule ids the old visit plans had added to a draft's 根拠 stay (the snapshot cannot tell which call cited them;
 hitl-reviewer: minor). The drafts' messages are still signed 「橙丸でございます」 by the first call; not changed here.
+
+## D-066 · 2026-11-05 · Accepted (Kento's conditions) · 先読み: the next draft is made while the master reads, used only after ○ with the same 心得帳
+
+**Context.** 体験の目 measured 7–9 s between recording ○ and the next live draft (production build, 127.0.0.1).
+
+**Decision (Kento 11/5, conditions).** While a card is shown (live only), the next card is drafted in the background. It is used only
+when the master marks ○ (judge(○) approves it; nothing else does) and the 心得帳 is unchanged since it started (hash of every rule
+and its history). △/× and 取り消し discard every prefetch of the session, so 「直したら、次が変わる」 is never a card late. Until used it
+lives in process memory only — not saved, shown or learned from. Other flows (確かめ稽古, regression, the money/contract floor) keep
+their order; a used draft gets the same floor. Discarded prefetches count toward cost and limits. A failure falls back to the
+previous flow. The evaluation never prefetches (import-boundary test). hitl-reviewer blocked the first version on two races (a stale
+render claiming after △; a prefetch surviving an undo) and a long wait; fixed before commit.
+
+**Result.** ○ → next draft 0.3 s when the master reads ≥ 10 s (was 7.4–9.1 s); unchanged after △/× (4.6–5.2 s). Estimated +20–30 %
+spend per visitor, so about 20 % fewer visitors before the public $5 daily cap (docs/ui-polish-log.md).

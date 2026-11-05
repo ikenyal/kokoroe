@@ -10,6 +10,7 @@ import { after } from "next/server";
 import { getSession, liveEnabled, readMeta, startSession, type Mode } from "@/src/server/session";
 import { areaToStore, askWhere, parsePick } from "@/src/learning/area";
 import { applyChoice, interpretInBackground } from "@/src/server/background";
+import { approvePrefetch, discardAllPrefetch } from "@/src/server/prefetch";
 import { afterConfirm, afterRegression, confirmWithoutLive, startVerification } from "@/src/server/verify-ui";
 import { undoLast } from "@/src/server/undo";
 import { recordTrigger } from "@/src/learning/compile";
@@ -100,6 +101,11 @@ export async function judge(formData: FormData) {
   const refused = verdict !== "○" && liveEnabled() ? await allowLive(s.sid) : null;
   const live = verdict !== "○" && liveEnabled() && !refused;
   if (refused) meta.limit = refused;
+  // 先読み: a △/× changes what the next draft should read, so the prefetched next card is never used (src/server/prefetch.ts).
+  if (verdict === "○") {
+    const next = meta.queue[meta.pos];
+    if (next) approvePrefetch(s, meta.pos, next.scene.id);
+  } else discardAllPrefetch(s);
   if (verdict !== "○") meta.pending.unshift({ judgmentId: j.id, sceneId: item.scene.id, status: live ? "queued" : "offline", ...(askWhere(remark) ? { noRemark: true } : {}) });
   s.saveMeta(meta);
   if (live) after(() => interpretInBackground(s.mode, s.sid, j.id));

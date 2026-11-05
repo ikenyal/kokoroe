@@ -10,6 +10,7 @@
  * The judgment record stays, marked `undone` (with the 確かめ judgments made for it); learning and regression checks skip them.
  * Hardened after the hitl-reviewer's review (11/4): error-after-write, other pendings, idempotent retry.
  */
+import { discardAllPrefetch } from "./prefetch";
 import { rollbackChange } from "@/src/learning/verify";
 import type { JudgmentRecord, KokoroeRule } from "@/src/learning/types";
 import { readMeta, type Pending, type Session } from "./session";
@@ -82,6 +83,7 @@ export async function undoLast(s: Session, judgmentId: string): Promise<"done" |
   }
   // The judgment and the 確かめ/regression judgments made for it no longer count as the master's marks.
   for (const x of [u.judgment, ...followUps(await s.store.listJudgments(), u.judgment, p)]) await s.store.markUndone(x.id, at);
+  discardAllPrefetch(s); // 先読み: the card order goes back; no prefetch made before the undo is used
   meta.pos = Math.max(0, meta.pos - 1);
   meta.paused = false;
   meta.pending = meta.pending.filter((x) => x.judgmentId !== judgmentId);

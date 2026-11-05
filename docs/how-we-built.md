@@ -462,3 +462,5 @@ Short entries, appended every work session. Source material for the README secti
 - **Kento answered the five open questions in one message;** Claude changed the visit prompt (the app-only second call), ran
   `hitl-reviewer` (which caught that the old visit plan would be fed back as "decided"), regenerated only the recorded visit plans,
   pinned the result with a test, and re-recorded the four affected video scenes on recorded data. D-065.
+- **Measure, change, measure again.** The experience eye timed the wait (7–9 s), Kento set the conditions for prefetching the next
+  draft, `hitl-reviewer` blocked the first version on two races, and the same script timed the result (0.3 s after ○). D-066.
