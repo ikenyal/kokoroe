@@ -1235,3 +1235,9 @@ render claiming after △; a prefetch surviving an undo) and a long wait; fixed 
 
 **Result.** ○ → next draft 0.3 s when the master reads ≥ 10 s (was 7.4–9.1 s); unchanged after △/× (4.6–5.2 s). Estimated +20–30 %
 spend per visitor, so about 20 % fewer visitors before the public $5 daily cap (docs/ui-polish-log.md).
+
+**Addendum (11/5 evening, Kento).** When the 心得帳 changes before the prefetch is used, it is made again from the new 心得帳: the
+run that finds the book changed under it drafts again in the same slot (one at a time, at most 3 redos per slot), and a render
+that finds a finished prefetch out of date replaces it. Each redo is reserved against the limits with the visitor's address taken
+during the request, and its cost is recorded even if discarded. The conditions of use are unchanged. hitl-reviewer: OK. Result:
+the first ○ after a correction 10.1 s → 1.3–1.6 s; about one or two more drafts per correction.

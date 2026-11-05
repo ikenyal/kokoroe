@@ -7,6 +7,10 @@
  *     A reading that finished meanwhile, a 確かめ, an undo… any change discards it.
  * In code that is a positive check, not only a discard: judge(○) approves the prefetch of the card it moves to, and only an
  * approved one is ever taken. △/× and 取り消し drop every prefetch of the session (hitl-reviewer 11/5).
+ * When the 心得帳 changes before it is used (a reading written, a わけ added…), it is made again from the new 心得帳 (Kento 11/5,
+ * after 体験の目 2): one at a time — the run that finds the book changed under it drafts again in the same slot, and a render that
+ * finds a finished prefetch out of date replaces it. Never two drafting calls for one slot; at most MAX_REDOS redos per slot (a slot replaced after a later change is a new
+ * slot, so the drafts per card are bounded by the 心得帳's changes and the live limits — "the latest one only").
  * Until it is used, a prefetched draft is in this process's memory only: not saved in the session, not shown, not learned from.
  * Its call is reserved against the limits like any live call and its cost recorded even when it is discarded.
  * A failed prefetch is the same as none: the page drafts as before. The evaluation never comes here (tests/prefetch.test.ts).
@@ -25,6 +29,8 @@ interface Entry {
   sceneId: string;
   startedAt: number;
   approved: boolean; // set only by judge(○) on the card before this one
+  running: boolean; // a drafting call for this slot is in flight
+  version?: string; // the 心得帳 the last finished draft started from
   result: Promise<{ version: string; draft: Proposal } | null>;
   settle: (v: { version: string; draft: Proposal } | null) => void;
 }
@@ -43,7 +49,7 @@ export function claimPrefetch(c: PrefetchCtx, index: number, sceneId: string): b
   if (entries.has(k)) return false;
   let settle!: Entry["settle"];
   const result = new Promise<{ version: string; draft: Proposal } | null>((r) => (settle = r));
-  entries.set(k, { sceneId, startedAt: Date.now(), approved: false, result, settle });
+  entries.set(k, { sceneId, startedAt: Date.now(), approved: false, running: false, result, settle });
   return true;
 }
 
@@ -74,7 +80,13 @@ export function approvePrefetch(c: Pick<PrefetchCtx, "mode" | "sid">, index: num
   if (e && e.sceneId === sceneId) e.approved = true;
 }
 
-/** Draft the claimed card. `propose` makes the draft and records its own cost; any failure leaves no prefetch. */
+export const MAX_REDOS = 3;
+
+/**
+ * Draft the claimed card. `propose` makes the draft and records its own cost; any failure leaves no prefetch. If the 心得帳
+ * changed while drafting and the slot is still this one and not yet approved, draft again from the new book — only when
+ * `again()` reserves another live call (limits), and at most MAX_REDOS times.
+ */
 export async function runPrefetch(
   c: PrefetchCtx,
   index: number,
@@ -82,17 +94,48 @@ export async function runPrefetch(
   client: Client,
   propose: (scene: Scene, client: Client) => Promise<Proposal>,
   slot?: object,
+  again: () => boolean = () => false,
 ) {
-  const e = entries.get(keyOf(c, index));
-  if (!e || e.sceneId !== scene.id || (slot && e !== slot)) return;
+  const k = keyOf(c, index);
+  const e = entries.get(k);
+  if (!e || e.sceneId !== scene.id || (slot && e !== slot) || e.running) return;
+  e.running = true;
   try {
-    const version = await bookVersion(c.store); // before drafting: the book the draft reads is this one or a later one
-    const draft = await propose(scene, client);
-    e.settle({ version, draft });
+    for (let redo = 0; ; redo++) {
+      const version = await bookVersion(c.store); // before drafting: the book the draft reads is this one or a later one
+      e.startedAt = Date.now(); // the wait budget counts from the draft in flight
+      const draft = await propose(scene, client);
+      if (entries.get(k) !== e) {
+        // Taken (draftLive is waiting on it) or discarded (△/×, undo — already settled to null, so this is a no-op): no redo.
+        e.settle({ version, draft });
+        return;
+      }
+      e.version = version;
+      const changed = (await bookVersion(c.store)) !== version;
+      if (!changed || e.approved || redo >= MAX_REDOS || entries.get(k) !== e || !again()) {
+        e.settle({ version, draft }); // out of date if changed: takePrefetch will not use it
+        return;
+      }
+    }
   } catch (err) {
     console.error("prefetch skipped", scene.id, err instanceof Error ? err.message : err);
     e.settle(null);
+  } finally {
+    e.running = false;
   }
+}
+
+/**
+ * A render that finds a finished, unapproved prefetch made from an older 心得帳 drops it, so it can be made again from the new
+ * one. One still drafting is left alone (it checks the book itself when it finishes).
+ */
+export async function dropIfStale(c: PrefetchCtx, index: number): Promise<boolean> {
+  const e = entries.get(keyOf(c, index));
+  if (!e || e.running || e.approved || e.version === undefined) return false;
+  if (e.version === (await bookVersion(c.store))) return false;
+  if (entries.get(keyOf(c, index)) !== e || e.running || e.approved) return false; // changed while reading the book
+  discardPrefetch(c, index);
+  return true;
 }
 
 /**
