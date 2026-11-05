@@ -471,3 +471,8 @@ Short entries, appended every work session. Source material for the README secti
 - **Checking a finding before fixing it.** The experience eye ran the live public build at phone width. One screenshot showed
   the apprentice's question scrolled out of view. Before changing any layout, Claude re-ran just that card ($0.04) and recorded
   the heading's position. It was already at the top: the screenshot had caught the scroll halfway. Nothing was changed.
+- **A prompt change measured before and after, under a cap.** Kento asked for plain words in the successor's answers, with nothing
+  else changed and $1 to spend. Claude first added a leak counter to the existing guard eval, then ran it before ($0.41) and after
+  ($0.42) the change: internal labels in 18.5 → 1.5 of 20 answers, made-up answers to far questions 0/24 both times. `hitl-reviewer`
+  said OK and suggested two more honest wordings. With $0.17 left, Claude checked the final wording on one store rather than
+  skipping the check. D-054 addendum.

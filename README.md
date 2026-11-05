@@ -298,8 +298,10 @@ screening or design review. A general-purpose 帳場 is a possible next step, no
   comes back often enough to measure.
 
 ## Related work
-Learning from human corrections and widening autonomy step by step is not new (e.g. *The Digital Apprentice*, arXiv 2606.04321;
-Seedentia/CMDA, arXiv 2603.24858). Kokoroe's focus is different: handing what was learned to **another person**, keeping **why it
+Learning from human corrections and widening autonomy step by step is not new. *The Digital Apprentice* (Weber and Taneja, arXiv
+2606.04321) turns a professional's corrections into preference data and lets an agent earn autonomy per skill; *Seedentia* (Wolter
+et al., arXiv 2603.24858, "Context-Mediated Domain Adaptation in Multi-Agent Sensemaking Systems") takes a domain expert's edits
+to AI output as knowledge for later reasoning. (Both checked on arxiv.org on 2026-11-06.) Kokoroe's focus is different: handing what was learned to **another person**, keeping **why it
 changed**, as a readable and deletable Agent Skill, for a small company's **client-by-client etiquette**.
 
 ## Data
