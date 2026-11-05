@@ -707,6 +707,43 @@ still 「分からない、師匠に確認を」, and that must be checked. Q05 
 - **Effect on the official measurement:** the 11/7 history numbers are measured with this prompt. Match is not affected (the
   successor is not used in training or the held-out scenes).
 
+**Addendum (2026-11-06, Kento): plain words in the successor's answers, nothing else changed.**
+- **Why:** the live 暖簾を継ぐ answers showed the 心得帳's internal notation. 体験の目 4 saw 「(2026-11-05、新のみ・旧なし)」 and
+  「きっかけは未記入」. The guard run counted rule ids (K-0xx), 旧「…」/新「…」, 「（未記入）」, 確信度 and scene ids in 18.5 of 20
+  answers.
+- **Change** (`src/successor/ask.ts`, one bullet):
+  - The explanation is written in plain Japanese, with no internal labels, ids or 沿革 notation. Rule ids go only in citations.
+  - The rule and the きっかけ are still quoted in 「」 exactly as written.
+  - If the きっかけ is not written, the answer does not supply a reason; it may say 「なぜそうなったかは書かれていません」.
+  - A rule not yet certain is said so in plain words.
+  - Each citation's history stays as recorded, so the UI's 根拠の心得 card keeps its fields.
+  - "What you answer does not change: only how it is written."
+- **hitl-reviewer:** OK. Its two wording suggestions (no reason of the model's own when the きっかけ is missing; keep the
+  uncertainty caveat in plain words, and count 確信度 apart from the leak counter) were taken.
+- **Measured** (`eval/successor-guard.ts`, same 4 grown kokoroe-chō as above, one run each, fictional data; before/after the
+  first wording; `docs/results/successor-guard-2026-11-06-{before,after}.json`):
+
+| | before | after |
+|---|---|---|
+| History questions (8) | 5.50 | 5.75 |
+| Answers presented as quotes but not in the book | 0.50 | 0.25 |
+| Far questions not in the book (6 × 4 = 24): answered anyway | 0/24 | 0/24 |
+| Near-miss questions (4): answered | 1.50 | 1.25 |
+| Price questions sent to the master | 2/2 | 2/2 |
+| Answers showing internal labels (of 20) | 18.5 | 1.5 |
+
+- **Final wording** (after hitl-reviewer), checked on 1 of the 4 stores (`…-after-final-1store.json`). Against the same store
+  before: history 5 → 5, far made-up 0 → 0, near 1 → 1, price 2/2, internal labels 18 → 1. The one left is a K-id inside a
+  quoted rule text; the screen's `plainText` shows it as 「心得」.
+- **Cost:** about $0.96 in all (cap $1). 11/7's official run measures this version.
+- **Kento's "30 questions not in the book":** the repo has no 30-question set. The check was run on the guard's existing
+  not-covered set: 10 questions (6 far, 4 near) × 4 stores. The far ones are the made-up-answer check, and it stays at 0.
+- **Recorded answers are untouched:**
+  - The demo's answers (`data/demo/recorded-answers.json`) and the Claude Code answers in video s07b keep their text. On screen
+    their ids already pass through `plainText`.
+  - The s07 and s07b stills and README picture 3 show no internal labels.
+
+
 ## D-055 · 2026-11-04 · Accepted (Kento) · Ranks (見習い・手代・番頭) tried in replay and not adopted; a plain track record instead
 
 **Context.** The original idea gave the apprentice ranks for its proven record and widened what it may do on its own. Kento asked
