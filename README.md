@@ -2,6 +2,10 @@
 
 [日本語版 README](README.ja.md) · Built with Claude: Japan 2026
 
+**For a small company's veteran about to retire, and whoever takes over.** The veteran can't explain their client etiquette, but
+sees at once what is wrong: they only mark the AI apprentice's drafts ○ / △ / ×. Each correction becomes a 心得 with why it came to
+be, kept in a 心得帳 and handed to the successor as an Agent Skill.
+
 > **Draft.** Numbers marked _(interim)_ are from 2026-11-03 and will be replaced on 11/7 by the official run (5 training paths).
 > All companies, people and situations are fictional (株式会社だいだい工房 and its 10 clients).
 
@@ -40,7 +44,8 @@ away from family succession.
 
 This setting is one the author lives day to day: client-specific etiquette in Japanese business ([docs/evolution.md](docs/evolution.md),
 background). The successor's side was seen in the author's own run as the master on fictional scenes: someone who does not know the
-history marks polite, plausible drafts ○ (18 of 20; see *What was tested*). And before the kickoff, a small self-trial showed that
+history marks polite, plausible drafts ○ (18 of 20) — and of those 18, the code judge (one simulated master's ground truth, not a
+real veteran) marks 15 △ or × (see *What was tested*). And before the kickoff, a small self-trial showed that
 corrections are rarely a pure ○ or ×: most are "OK, but…" — which is why the master has a third mark, △ ([docs/evolution.md](docs/evolution.md), background).
 
 **Who it is for.** The veteran about to retire (the 師匠), who keeps their etiquette by saying "no" as usual, without being asked

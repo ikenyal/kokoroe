@@ -103,6 +103,9 @@ entrant's own MCP server. So the video says it on screen (no narration change):
 - [ ] 11/7 live s05 (judge-critic 11/5): the master types 「裏で蔵元に一言」, so the 「変化」 panel on T13 must cite that remark, not
   「一言なし」 (in fixed mode it shows the recorded run's mark, which had no remark). If it still says 一言なし, leave the remark empty in
   the s05 action or re-shoot. Also check no frame shows 橙丸 under 同席者 (D-065).
+- [ ] 11/7 live s05 (judge-critic 11/5, round 3): after the △, the right column must visibly show the apprentice's reading and
+  「心得帳に書きました」 (the Opus step; 6.1 s after △ in 体験の目 2). In fixed mode it is empty. If the reading is not in yet when the
+  camera would move on, hold on the right column instead of the visit plan. Keep a still of it.
 - [ ] End card: add the public demo URL above the GitHub URL once it exists (11/6).
 - [ ] 11/7: re-record the demo snapshot so 心得帳 shows a rule with a multi-entry 沿革 (today every rule in it has one entry).
 - [ ] s08b: the official Before/After (same ledger, 5 training paths) → re-run `narration.ts --yes --only s08b-keiko`; the
