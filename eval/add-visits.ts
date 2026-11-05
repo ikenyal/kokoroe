@@ -3,6 +3,7 @@
  * draft that visits (meeting "in_person") and has no visit plan yet, the second call (planVisit) writes only the visit plan,
  * reading the snapshot's own kokoroe-chō as the app would. Any change to a 段取り field stops the script without writing.
  *   npx tsx --env-file-if-exists=.env.local eval/add-visits.ts --yes [--front demo]
+ * --redo: write the visit plan again where one exists (11/5: the prompt now says the AI apprentice never goes; 段取り unchanged).
  * --front demo: the demo queue opens with its first visit (order only). field-snapshot.json (師匠役テスト) is not touched.
  * Fictional data only. Live API (a few cents per draft).
  */
@@ -10,7 +11,7 @@ import { readFileSync, writeFileSync, mkdtempSync, rmSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { parseArgs } from "node:util";
-import { getClient } from "@/src/core/world";
+import { COMPANY, getClient } from "@/src/core/world";
 import type { Proposal } from "@/src/core/types";
 import { planVisit } from "@/src/disciple/v0";
 import { isPureLedger } from "@/src/disciple/v1";
@@ -21,7 +22,7 @@ import { estimateUsd } from "@/src/lib/cost";
 import type { Usage } from "@/src/lib/claude";
 import type { Snapshot } from "@/src/server/session";
 
-const { values } = parseArgs({ options: { yes: { type: "boolean", default: false }, front: { type: "string", multiple: true, default: [] } } });
+const { values } = parseArgs({ options: { yes: { type: "boolean", default: false }, front: { type: "string", multiple: true, default: [] }, redo: { type: "boolean", default: false } } });
 if (!values.yes) throw new Error("live API calls: pass --yes");
 
 const DANDORI = ["channel", "meeting", "formalTo", "backchannelTo", "timing", "followUp", "format", "posture", "message"] as const;
@@ -37,10 +38,13 @@ async function main() {
     const store = new LocalJsonStore(storeFile);
     for (const q of snap.queue) {
       const d = q.draft as Proposal;
-      if (d.meeting !== "in_person" || d.visit) continue;
+      if (d.meeting !== "in_person" || (d.visit && !values.redo)) continue;
       const client = getClient(q.scene.clientId);
       const kokoroe = describeRules((await store.rulesFor(client.id, q.scene.type)).filter((r) => !isPureLedger(r)));
-      const v = await planVisit(q.scene, client, d, kokoroe);
+      // The old visit plan is not shown as "decided" (hitl-reviewer 11/5: it would pull the answer back to the old attendees).
+      const v = await planVisit(q.scene, client, { ...d, visit: undefined }, kokoroe);
+      // The AI apprentice never goes (Kento 11/5): stop without writing if it is still named among those who go.
+      if (v.visit.attendees.includes(COMPANY.apprentice.name.replace(/（.*$/, ""))) throw new Error(`${mode} ${q.scene.id}: the apprentice is still an attendee — stopped: ${v.visit.attendees}`);
       usage.push(v.usage);
       const next = enforceHitl(q.scene, { ...d, basedOnRules: [...new Set([...d.basedOnRules, ...v.basedOnRules])], visit: v.visit });
       for (const k of DANDORI) if (JSON.stringify(next[k]) !== JSON.stringify(d[k])) throw new Error(`${mode} ${q.scene.id}: ${k} changed — stopped`);

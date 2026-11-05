@@ -1187,3 +1187,25 @@ anything that was not measured (D-062).
     - Each 根拠 carries 「Skill から」 or 「MCP から」.
     - The 藍 underline is explained as what Kokoroe's MCP server returned after the copy.
 - **Not changed:** the app's behaviour, the evaluation, the narration.
+
+## D-065 · 2026-11-05 · Accepted (Kento, after judge-critic's first pass) · The AI apprentice never goes on a visit; demo order and video lines
+
+**Context.** judge-critic (reading the submission as a judge, `docs/judging.md`) found the recorded visit plans naming the AI
+apprentice among those who go (「橙丸が主担当で伺う」; all 13 recorded visit plans named 橙丸). The visit prompt began "You are
+橙丸, an apprentice salesperson", so the model treated itself as a person who visits. It also found the video's hand-off scene
+answering from a ledger fact, and a few lines out of step with the screen.
+
+**Decision (Kento 11/5).**
+- The visit-plan prompt (the second, app-only call, D-061) says those who go are people (the person in charge, the master); the AI
+  apprentice never visits and is never named among them. The first call (the 段取り, the evaluation's request) is unchanged: the
+  fingerprint tests pass as before. hitl-reviewer: OK; its catch (the old visit plan was passed back as "decided") was fixed
+  before re-recording.
+- Only the recorded visit plans were written again (`eval/add-visits.ts --redo`, 13 plans, ≈ $0.07; every 段取り field checked
+  unchanged). A test checks that no recorded attendee line names the apprentice (`tests/demo-visits.test.ts`).
+- デモの続き opens on 丸新酒造's bad-news card (T22: 裏で蔵元にも一言), order only.
+- Video: s07 asks 浜風運輸's delay question (answered from the master's × and its わけ, as README picture 3); s05's line reads
+  「冒頭の1行のもとは、裏で蔵元へ、そっと一言。」 to match the screen's 「裏で誰に」 row; the end card has one small line, 「開発そのものも、
+  製品と同じ形で進みました」 (the README's 「二つ目の帳場」). No narration added; scene lengths unchanged.
+
+**Consequences.** Rule ids the old visit plans had added to a draft's 根拠 stay (the snapshot cannot tell which call cited them;
+hitl-reviewer: minor). The drafts' messages are still signed 「橙丸でございます」 by the first call; not changed here.

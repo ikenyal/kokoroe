@@ -453,3 +453,12 @@ Short entries, appended every work session. Source material for the README secti
     scrolls to the 「裏で誰に」 row by its label.
   - Three new labels wrapped or covered the app's logo.
   The README's three pictures are taken by a script (`scripts/readme-shots.ts`) from the same recorded data.
+
+## 2026-11-05 (afternoon) — a judge's eye, then the master's answers
+
+- **A new read-only subagent, `judge-critic`,** reads the README, the submission draft, the video's script and stills, and the
+  screenshots against the judging criteria (`docs/judging.md`), and may only suggest fixes the repository's records back (D-062).
+  Its first pass found what the screen critic could not: the recorded visit plans named the AI apprentice among those who visit.
+- **Kento answered the five open questions in one message;** Claude changed the visit prompt (the app-only second call), ran
+  `hitl-reviewer` (which caught that the old visit plan would be fed back as "decided"), regenerated only the recorded visit plans,
+  pinned the result with a test, and re-recorded the four affected video scenes on recorded data. D-065.

@@ -39,7 +39,7 @@ export const VisitSchema = z.object({
   attire: z.string().describe("服装: what to wear for this client (e.g. whether a suit suits them). Short Japanese."),
   gift: z.string().describe("手土産: what to bring, or that nothing should be brought. Short Japanese."),
   checkFirst: z.string().describe("事前に確かめておく話題: what to check or prepare before going. Short Japanese."),
-  attendees: z.string().describe("同席者: who goes from our side. Short Japanese."),
+  attendees: z.string().describe("同席者: who goes from our side — people only (the person in charge, the master); never the AI apprentice. Short Japanese."),
   address: z.string().describe("呼び方: how to address the people met (title, name, 先代/当代 etc.). Short Japanese."),
 });
 
