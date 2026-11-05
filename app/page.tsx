@@ -70,7 +70,7 @@ export default async function Home(props: PageProps<"/">) {
         {s && (
           <p className="mt-4 text-[13px] text-nibi">
             続きがあります（{s.mode === "demo" ? "デモの続き" : s.mode === "field" ? "師匠役テスト" : "お試し"}）。<Link className="underline" href="/choba">帳場に戻る</Link>
-            。上のボタンを押すと、最初からやり直します。
+            。上のどのボタンで始めても、最初からやり直しになります。
           </p>
         )}
         <section aria-labelledby="range-h" className="mt-10 max-w-[32em] border-t-2 border-sumi/80 pt-4">
@@ -78,7 +78,7 @@ export default async function Home(props: PageProps<"/">) {
           {(() => {
             const { shown, rest } = sceneRangeSplit();
             const row = (r: (typeof shown)[number]) => (
-              <li key={r.type} className="grid grid-cols-[9.5em_1fr] gap-x-3 border-t border-keisen py-1.5 text-[14px] first:border-t-0">
+              <li key={r.type} className="grid grid-cols-[10.5em_1fr] gap-x-3 border-t border-keisen py-1.5 text-[14px] first:border-t-0">
                 <span className="text-sumi">{r.label}</span>
                 <span className="yomi text-sumi/80">
                   {r.example ?? "—"}

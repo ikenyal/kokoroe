@@ -34,13 +34,13 @@ export default function KeikoPage() {
       </p>
 
       <section aria-labelledby="ba-h" className="mt-8">
-        <h2 id="ba-h" className="font-mincho text-[18px]">はじめと、ダメ出し40場面のあと{results.official ? "" : "（途中経過）"}</h2>
+        <h2 id="ba-h" className="font-mincho text-[18px]">はじめと、ダメ出し40場面のあと{results.official ? "" : <span className="inline-block">（途中経過）</span>}</h2>
         <table className="mt-3 w-full max-w-4xl border-collapse border-y-2 border-sumi/80 text-left">
           <thead>
             <tr className="border-b border-keisen text-[13px] text-nibi">
               <th className="py-2 font-normal">測ったこと</th>
-              <th className="w-[22%] font-normal">はじめ（台帳だけ）</th>
-              <th className="w-[26%] font-normal">40場面のあと</th>
+              <th className="w-[24%] font-normal">はじめ<span className="block whitespace-nowrap text-[12.5px]">（台帳だけ）</span></th>
+              <th className="w-[24%] font-normal">40場面のあと</th>
             </tr>
           </thead>
           <tbody className="tabular-nums">
