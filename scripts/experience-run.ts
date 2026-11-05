@@ -108,7 +108,7 @@ const cardShown = (page: Page) => async () => (await page.locator('section[aria-
       await page.locator('input[name="question"]').fill(values.ask);
       await page.locator('form:has(input[name="question"]) button').first().click();
       page.waitForTimeout(1500).then(() => shot("noren-waiting")).catch(() => {});
-      steps.push({ step: `暖簾を継ぐで自由な質問 → 答え（${values.client}）`, ...(await waitFor(page, async () => (await page.locator("main").first().innerText()).includes(values.ask!) && /根拠・経緯|心得帳にありません|師匠に確認|上限/.test(await page.locator("main").first().innerText()), 120000)) });
+      steps.push({ step: `暖簾を継ぐで自由な質問 → 答え（${values.client}）`, ...(await waitFor(page, async () => (await page.locator("main").first().innerText()).includes(values.ask!) && /根拠・経緯|根拠の心得|心得帳にありません|師匠に確認|上限/.test(await page.locator("main").first().innerText()), 120000)) });
       await shot("noren-live-answer", true);
     }
     await browser.close();
