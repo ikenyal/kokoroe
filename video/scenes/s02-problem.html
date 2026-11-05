@@ -6,6 +6,8 @@
      9.1  後任が、悪い知らせを、決まってからメールで送る。 → (phase B) the week on a line; the mail goes out on Thursday
      13.6 それだけで、長年の段取りが崩れます。          → 浜風運輸's switch-over plan comes apart
      (The cold open already says he retires next spring, so this scene no longer repeats it.)
+     11.6 (on the mail going out) a measured note, Kento 11/5 night: of the 18 drafts the author passed ○ at first sight, 15 were
+     ones the master would correct (code judge on the master-role test, D-059; docs/results/master-role-vs-simulator-2026-11-05.json).
      Clients are the fictional ones of data/world/clients.json. Colors: 墨 and 藍 only (no master in the room). -->
 <style>
   .pa { animation: fade-out .5s 8.5s ease forwards; }
@@ -47,6 +49,9 @@
     color: var(--ai); transform-origin: var(--o, left bottom); animation: fall 1.3s var(--d) cubic-bezier(.55,0,.75,.6) forwards; }
   @keyframes fall { 30% { transform: rotate(var(--r)); } to { transform: translate(var(--x), var(--y)) rotate(calc(var(--r) * 2.4)); opacity: .25; } }
   .slot { position: absolute; height: 46px; border: 1.5px dashed var(--usuzumi); opacity: 0; animation: fade .6s var(--d) ease forwards; }
+  .fact { position: absolute; left: 110px; right: 110px; top: 516px; padding-top: 14px; border-top: 1px solid var(--keisen);
+    font-size: 23px; line-height: 1.6; letter-spacing: .03em; opacity: 0; animation: fade .6s 11.6s ease forwards; }
+  .fact small { display: block; font-size: 16px; color: var(--nibi); letter-spacing: .04em; }
 </style></head>
 <body>
 <p class="corner-note gothic">架空の会社・だいだい工房</p>
@@ -114,6 +119,7 @@
     <div class="blk" style="left:248px;top:204px;width:224px;--d:15.2s;--r:-6deg;--x:-20px;--y:60px">旧システム停止</div>
   </div>
 </div>
+<p class="fact gothic">作者が初見で ○ を付けた18件のうち、15件は、師匠なら直す案でした。<small>架空のデータ・シミュレータの判定（作者が師匠役をしたテスト、20件。D-059）</small></p>
 
 </div>
 </body></html>

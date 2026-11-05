@@ -106,6 +106,10 @@ entrant's own MCP server. So the video says it on screen (no narration change):
 - [ ] 11/7 live s05 (judge-critic 11/5, round 3): after the △, the right column must visibly show the apprentice's reading and
   「心得帳に書きました」 (the Opus step; 6.1 s after △ in 体験の目 2). In fixed mode it is empty. If the reading is not in yet when the
   camera would move on, hold on the right column instead of the visit plan. Keep a still of it.
+- [x] s02 (Kento 11/5 night): a note from 11.6 s, when the mail goes out: 「作者が初見で ○ を付けた18件のうち、15件は、師匠なら直す案でした」
+  with its conditions (fictional data, simulator judge, the author's master-role test of 20, D-059;
+  `docs/results/master-role-vs-simulator-2026-11-05.json`). On screen only: the narration is unchanged, because a sentence would
+  take the total to about 3:00 and would move s02's beats, which follow the narration. Stills: `docs/screens/video-dryrun/s02-problem-1..3.jpg`.
 - [ ] End card: add the public demo URL above the GitHub URL once it exists (11/6).
 - [ ] 11/7: re-record the demo snapshot so 心得帳 shows a rule with a multi-entry 沿革 (today every rule in it has one entry).
 - [ ] s08b: the official Before/After (same ledger, 5 training paths) → re-run `narration.ts --yes --only s08b-keiko`; the
