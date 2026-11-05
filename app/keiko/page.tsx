@@ -27,7 +27,7 @@ export default function KeikoPage() {
         <span className="tabular-nums text-ai">{hist.at(-1)!.mean.toFixed(1)}</span>問になりました。
       </p>
       <p className="mt-1 text-[13px] text-nibi">
-        {results.official ? "" : "途中経過。"}架空の取引先10社、学習に使わない評価用の20場面で測った値です。
+        {results.official ? "" : "途中経過（はじめと今で台帳が異なるため、そのままは比べられません）。"}架空の取引先10社、学習に使わない評価用の20場面で測った値です。
       </p>
       <p className="yomi mt-2 max-w-[40em] text-[15.5px]">
         弟子の案が、師匠の考えとどれだけ合うようになったかの記録です。架空の取引先10社で、師匠はシミュレータ（隠しの正解に照らして、コードで ○・△・× を付けます）。
