@@ -37,6 +37,15 @@ successor lined up. Among newly appointed presidents, promotion from inside (36.
 "M&A and others" — mostly acquisitions or secondments — took 20.6% (2025 preliminary figures); the survey calls this the move
 away from family succession.
 
+This setting is one the author lives day to day: client-specific etiquette in Japanese business ([docs/evolution.md](docs/evolution.md),
+background). The successor's side was seen in the author's own run as the master on fictional scenes: someone who does not know the
+history marks polite, plausible drafts ○ (18 of 20; see *Try it*).
+
+**Who it is for.** The veteran about to retire (the 師匠), who keeps their etiquette by saying "no" as usual, without being asked
+to explain; and whoever takes over (someone inside, or a buyer of the business), who gets answers with their reasons and history.
+**When it is used:** the months between the retirement being decided and the hand-over, while the master checks the apprentice's
+daily plans; the 心得帳 grows as a by-product of that work.
+
 ## What Kokoroe does
 
 - **The apprentice drafts first.** For each client situation (a delay, a quote, a new proposal, a greeting…), the AI apprentice
@@ -158,6 +167,10 @@ with code against a hidden ground truth (frozen, checksummed); the apprentice ne
 _Interim (11/3): the Before uses the corrected ledger (D-033), the interim After the previous one — not directly comparable. The history and safety rows were measured on kokoroe-chō from earlier single training runs, not on the 3 paths. All are re-taken on 11/7 with the same ledger and 5 training paths._
 <!-- results:end -->
 
+**What keeps the other drafts safe.** Nothing is sent by the apprentice; the master marks every draft (lighter review after a run of
+○ was tried on recorded runs and not adopted, D-055). Discounts, contract terms and first contact with key clients always go to the
+master, enforced in code as well as asked in the prompt (`mustReview`, D-044).
+
 The evaluation covers the contact plan. The visit plan (dress, gifts…) is not in the hidden ground truth, so it is out of scope and
 always off in evaluation runs (D-061).
 
@@ -212,6 +225,17 @@ Built in one week by one person with Claude Code at the center (full log: [docs/
   a rule written without a tap, and lost updates. Later reviews blocked more before commit, e.g. four in own mode (D-056) and,
   for the visit plan, a money check that did not read it (D-061).
 - **Skills.** `world-consistency` and `decision-log` for this repo; the product itself exports Agent Skills.
+- **Plan mode** on day 1: Claude read the planning notes outside the repo (read only, nothing copied) and proposed the order:
+  evaluation first.
+- **Headless `claude -p`** to reproduce the successor's Claude Code under the same conditions (Skill only / Skill + MCP), in an
+  empty directory outside the repo, and record the answers.
+- **Critics that only look.** `ui-critic` sees only screenshots and answers as a first-time judge would, after each UI change
+  ([docs/ui-polish-log.md](docs/ui-polish-log.md)); `judge-critic` reads the README, the submission and the video against the
+  judging criteria ([docs/judging.md](docs/judging.md)) and may only suggest what the records back.
+- **MCP, used for a purpose.** Blocked while developing, so work connectors attached to the developer's Claude Code can't leak into
+  a public repo (D-003); shipped in the product as a read-only server, so a successor's Claude Code can look at the current 心得帳.
+- **Models by role.** Sonnet 5.5 for the apprentice's plans and the successor's answers (the master marks one card at a time, so it
+  must come back in seconds); Opus 5.5 for reading a correction and writing the 心得帳 (judgment-heavy, can run in the background).
 - **Measured, not assumed.** Every change was measured on the held-out set with repeated runs; prompt caching was A/B-tested
   (−37% cost, verdicts unchanged); the Before was re-measured and replaced when the prompt layout changed.
 - **Decisions on record.** 60+ decision records ([docs/decisions.md](docs/decisions.md)) and an idea log ([docs/evolution.md](docs/evolution.md)).

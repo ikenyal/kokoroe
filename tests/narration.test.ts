@@ -24,11 +24,11 @@ describe("narration SSML (Takumi, 105%, accents; decided 11/4)", () => {
 
 describe("numbers in the narration come from results.json", () => {
   const r = { official: false, before: { match: 0.55 }, paths: { mean: 0.6444, taps: { mean: 114 } } };
-  const text = "{interim}台帳だけの弟子は、{before}%。師匠の{taps}回の確認で、{after}%に。";
+  const text = "{interim}台帳だけの弟子は、{before}%。師匠の{taps}回のタップで、{after}%に。";
   it("says interim numbers are interim", () => {
-    expect(fillNumbers(text, r)).toBe("途中経過では、台帳だけの弟子は、55%。師匠の114回の確認で、64%に。");
+    expect(fillNumbers(text, r)).toBe("途中経過では、台帳だけの弟子は、55%。師匠の114回のタップで、64%に。");
   });
   it("drops the interim words once the numbers are official", () => {
-    expect(fillNumbers(text, { ...r, official: true })).toBe("台帳だけの弟子は、55%。師匠の114回の確認で、64%に。");
+    expect(fillNumbers(text, { ...r, official: true })).toBe("台帳だけの弟子は、55%。師匠の114回のタップで、64%に。");
   });
 });
