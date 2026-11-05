@@ -176,7 +176,7 @@ export function marushinStory(demo: { store: { rules: unknown[]; judgments: unkn
     rule: rule.text,
     next: { type: SCENE_TYPE_LABELS[t13.scene.type], quiet: quietWord(t13.draft, c) },
     question: mcp.question,
-    answer: answer.replace(/\*\*/g, "").trim(),
-    answerMcp: withMcp ? withMcp.replace(/\*\*/g, "").trim() : null,
+    answer: answer.replace(/\*\*/g, "").replace(/([。、])\s+/g, "$1").trim(), // a space after 。 is typesetting noise in Japanese (ui-critic 11/5)
+    answerMcp: withMcp ? withMcp.replace(/\*\*/g, "").replace(/([。、])\s+/g, "$1").trim() : null,
   };
 }
