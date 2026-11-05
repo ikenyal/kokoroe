@@ -203,7 +203,8 @@ export default async function KokoroePage() {
           <h2 id="k-h" className="font-mincho text-[22px] tracking-[0.06em]">師匠から覚えた心得</h2>
           <p className="mt-1 mb-6 text-[13px] text-nibi">心得は、師匠の作法の一つ一つ。いつ・どの印と一言から・なぜ、を添えて綴ったものが心得帳です。</p>
           {kokoroe.length ? <Groups groups={kokoroe} judgments={judgments} /> : <p className="yomi text-nibi">
-              まだありません。<Link className="text-ai underline underline-offset-4" href="/choba">帳場</Link>で △ か × を付けると、直したところが、わけと一緒にここに残ります{live ? "" : "（公開版のライブで。記録済みの案を表示しているあいだは書かれません）"}。
+              まだありません。<Link className="text-ai underline underline-offset-4" href="/choba">帳場</Link>で △ か × を付けると、直したところが、わけと一緒にここに残ります。
+              {!live && <span className="mt-1 block font-sans text-[12.5px]">公開版のライブで書かれます。記録済みの案を表示しているあいだは書かれません。</span>}
             </p>}
         </section>
         {facts.length > 0 && (

@@ -173,7 +173,7 @@ const STATUS: Record<Pending["status"], string> = {
   "needs-why": "心得帳に書きました。よければ、わけを一言",
   applied: "心得帳に書きました",
   "nothing-learned": "今回は何も覚えていません",
-  offline: "次の案は下です（このデモでは弟子の読み取りは行いません。公開版のライブでは行います）",
+  offline: "次の案は下です",
   error: "解釈できませんでした",
 };
 
@@ -266,8 +266,12 @@ function OfflineExample({ sceneId, verdict }: { sceneId: string; verdict?: strin
           <>記録した稽古では、この場面から<span className="whitespace-nowrap">こう書きました。</span></>
         )}
       </p>
-      <p className="yomi mt-1 text-[15px]">「{r.text}」</p>
-      {r.when && <p className="yomi text-nibi">条件：{r.when}</p>}
+      {/* Ruled off under its own label: it is a recorded example, not what this mark produced (ui-critic 11/6). */}
+      <div className="mt-2 border-l-2 border-keisen pl-3">
+        <p className="text-[12px] text-nibi">記録した稽古の例{from && from.sceneId !== sceneId ? "（別の場面）" : ""}</p>
+        <p className="yomi text-[15px]">「{r.text}」</p>
+        {r.when && <p className="yomi text-nibi">条件：{r.when}</p>}
+      </div>
     </div>
   );
 }
@@ -440,7 +444,7 @@ export default async function ChobaPage() {
             {label}　<span className="tabular-nums">{done} / {meta.queue.length}</span> 件 済み
             {!live && <span className="block sm:inline"><span className="hidden sm:inline">　</span>記録済みの案を表示しています</span>}
           </p>
-          <div aria-hidden className="h-1.5 min-w-24 flex-1 rounded-full bg-keisen/60">
+          <div aria-hidden className="h-1.5 min-w-24 flex-1 rounded-full bg-keisen">
             <div className="h-full rounded-full bg-ai-fill" style={{ width: `${(100 * done) / Math.max(1, meta.queue.length)}%` }} />
           </div>
           {item && (
@@ -453,12 +457,17 @@ export default async function ChobaPage() {
         {undoable && (
           <form action={undo} role="status" aria-live="polite" className="mt-3 border-l-2 border-ai pl-3 text-[13.5px] text-nibi">
             <input type="hidden" name="judgmentId" value={undoable.judgment.id} />
-            {words(undoable.judgment.sceneId)}に <span className="font-mincho text-[15px] text-shu">{undoable.judgment.verdict}</span>
+            <span className="text-sumi">{words(undoable.judgment.sceneId)}に</span> <span className="font-mincho text-[18px] font-bold text-shu">{undoable.judgment.verdict}</span>
             {(() => {
               // What happened to it, without looking at the side panel.
               const p = meta.pending.find((x) => x.judgmentId === undoable.judgment.id);
               const said = !p ? "を記録しました。○ は心得帳を変えません" : `を記録しました。${STATUS[p.status]}`;
-              return <span className="text-sumi">{said}</span>;
+              return (
+                <>
+                  <span className="text-sumi">{said}</span>
+                  {p?.status === "offline" && <span className="block text-[12.5px]">このデモでは弟子の読み取りは行いません（公開版のライブでは行います）。</span>}
+                </>
+              );
             })()}
             {undoable.block === "busy" ? (
               <span>（弟子が読み取り中です。終わると取り消せます）</span>
