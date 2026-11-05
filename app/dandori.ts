@@ -165,6 +165,8 @@ export function marushinStory(demo: { store: { rules: unknown[]; judgments: unkn
   const src = rule?.sources.find((s) => s.kind !== "ledger");
   const judged = (demo.store.judgments as JudgmentRecord[]).find((j) => j.id === src?.judgmentId);
   const answer = mcp.answers["skill-only"]?.result.split("\n").find((l) => l.trim());
+  // The same question with the read-only MCP server: its first line (it found a 心得 added after the Skill copy, K-018).
+  const withMcp = mcp.answers["with-mcp"]?.result.split("\n").find((l) => l.trim());
   if (!t05 || !t13 || !rule || !judged || !answer) return null;
   const c = getClient(t05.scene.clientId);
   return {
@@ -175,5 +177,6 @@ export function marushinStory(demo: { store: { rules: unknown[]; judgments: unkn
     next: { type: SCENE_TYPE_LABELS[t13.scene.type], quiet: quietWord(t13.draft, c) },
     question: mcp.question,
     answer: answer.replace(/\*\*/g, "").trim(),
+    answerMcp: withMcp ? withMcp.replace(/\*\*/g, "").trim() : null,
   };
 }

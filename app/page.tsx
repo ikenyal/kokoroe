@@ -139,12 +139,21 @@ export default async function Home(props: PageProps<"/">) {
                 <span className="text-nibi">後任が聞くと</span>
                 <span className="yomi">
                   <span className="text-nibi">「{ex.question}」</span>
-                  <span className="mt-1 block">{ex.answer}</span>
+                  <span className="mt-1 block">
+                    <span className="text-[12.5px] text-nibi">写し（Skill）から　</span>
+                    {ex.answer}
+                  </span>
+                  {ex.answerMcp && (
+                    <span className="mt-1 block">
+                      <span className="text-[12.5px] text-nibi">いまの心得帳（MCP）から　</span>
+                      {ex.answerMcp}
+                    </span>
+                  )}
                 </span>
               </li>
             </ol>
             <figcaption className="mt-2 text-[12.5px] text-nibi">
-              記録した稽古の案と判定、そこから書かれた心得、後任の手元の Claude Code（心得帳を Skill として渡したもの）で記録した答えです。架空の取引先。
+              記録した稽古の案と判定、そこから書かれた心得、後任の手元の Claude Code で記録した答え（心得帳の写しを Skill として渡したもの、読み取り専用の MCP サーバーでいまの心得帳にも問い合わせたもの）です。架空の取引先。
             </figcaption>
           </figure>
         )}

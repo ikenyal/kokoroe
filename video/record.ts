@@ -138,9 +138,15 @@ const STEPS: Record<string, (p: Page, base: string, live: boolean) => Promise<vo
     // Read the T05 draft (表: 奥様, 裏: none) while the narration describes it; △ on 「師匠は、△。」 at about 8 s, as before.
     // The card is long since visit plans were added, so the camera first glides down to 判定 (Kento 11/5: no jump on the click,
     // so the viewer sees where the master presses). The time comes out of the reading pause; the scene length is unchanged.
-    await p.waitForTimeout(6400);
-    await glideTo(p, card.locator('section[aria-label="判定"]'), 1400);
-    await p.waitForTimeout(200);
+    // On the way, the camera rests on the visit plan for a moment (Kento 11/5: the range of etiquette beyond mail is worth seeing),
+    // then goes on to 判定; the △ is pressed when its subtitle appears.
+    await p.waitForTimeout(3600);
+    await glideTo(p, card.locator('section[aria-label="訪問"]'), 1000);
+    await p.waitForTimeout(1200);
+    await glideTo(p, card.locator('section[aria-label="判定"]'), 1000);
+    // △ on the subtitle 「師匠は、△。」 itself: the page's load time varies from run to run, the subtitle's clock does not.
+    await p.getByText("師匠は、△。", { exact: true }).waitFor({ state: "visible", timeout: 15000 });
+    await p.waitForTimeout(150);
     await card.locator('label:has(input[value="△"])').click();
     await p.waitForTimeout(1200); // the remark is typed while the narration answers the cold open (「答えは、蔵元への、裏の一言でした。」)
     await card.locator('input[name="remark"]').pressSequentially("裏で蔵元に一言", { delay: 150 });
