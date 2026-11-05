@@ -61,7 +61,7 @@ function ProposalView({ p, client, ruleText }: { p: Proposal; client: Client; ru
           <Row main label="誰に" gloss="表の連絡、正式に">{toWhom(p, client)}</Row>
           <Row main label="何で">{means(p)}</Row>
           <Row main label="いつ">{TIMING_JA[p.timing]}</Row>
-          <Row main label="裏で誰に" gloss="決裁者などへ根回し">{quiet ?? <span className="text-nibi">なし</span>}</Row>
+          <Row main label="裏で誰に" gloss="決裁者へ根回し">{quiet ?? <span className="text-nibi">なし</span>}</Row>
           <Row main label="後日">{p.followUp ? "あらためて、あいさつを入れる" : <span className="text-nibi">なし</span>}</Row>
         </dl>
         {p.escalateToMaster && (
@@ -124,8 +124,8 @@ function EffectView({ effect, client, draft, words, ruleHref, recorded }: { effe
         return (
           <>
             {point && (
-              <dl className="mt-3 grid grid-cols-[4.5rem_1fr] gap-x-3 gap-y-1.5 border-y border-keisen py-3">
-                <dt className="text-[13px] text-sumi">{({ 何で: "何で（手段）", いつ: "いつ（時期）" } as Record<string, string>)[point.label] ?? point.label}</dt>
+              <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 border-y border-keisen py-3">
+                <dt className="whitespace-nowrap text-[13px] text-sumi">{({ 何で: "何で（手段）", いつ: "いつ（時期）" } as Record<string, string>)[point.label] ?? point.label}</dt>
                 <dd className="grid gap-1">
                   <span className="text-[12.5px] text-sumi/75">
                     直したのは、{words(before.sceneId)}の案（師匠 <span className="font-mincho text-shu">{before.verdict}</span>
@@ -541,7 +541,7 @@ export default async function ChobaPage() {
         {recent.length ? (
           <ul className="mt-3">{recent.map((p) => <PendingItem key={p.judgmentId} p={p} ruleText={ruleText} words={words} sceneOf={(id) => meta.queue.find((q) => q.scene.id === id)?.scene ?? TRAIN_SCENES.find((t) => t.id === id)} beforeOf={(id) => judgments.find((j) => j.id === id)?.proposal} />)}</ul>
         ) : (
-          <p className="mt-4 text-[14px] text-nibi">このセッションで付けた △・× は、まだありません。付けると、ここに弟子の読み取りが出ます。{effect && effectRecorded && "左の「変化」は、記録した稽古での直しから出たものです。"}</p>
+          <p className="mt-4 text-[14px] text-nibi">このセッションで付けた △・× は、まだありません。付けると、ここに弟子の読み取りが出ます。{effect && effectRecorded && "案の「変化」は、記録した稽古での直しから出たものです。"}</p>
         )}
       </aside>
     </div>

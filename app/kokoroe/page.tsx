@@ -75,7 +75,7 @@ function Rule({ r, fact = false, used = [] }: { r: KokoroeRule; fact?: boolean; 
                 </p>
                 {h.before && (
                   <p className="yomi text-[14px] text-nibi">
-                    前は <del className="decoration-sumi/40">{h.before}</del>
+                    前は：{h.before}
                   </p>
                 )}
                 {h.trigger && (
