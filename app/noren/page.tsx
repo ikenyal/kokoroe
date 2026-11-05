@@ -1,4 +1,5 @@
 import { LimitNote } from "../limit-note";
+import { AskButton } from "./ask-button";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { CLIENTS, COMPANY, getClient, HISTORY_QUESTIONS } from "@/src/core/world";
@@ -173,7 +174,7 @@ export default async function NorenPage() {
               className="mt-1 block h-12 w-full rounded-[3px] border border-waku bg-kami px-3 font-mincho text-[16px] placeholder:text-nibi"
             />
           </label>
-          <button className="h-12 rounded-[3px] bg-ai-fill px-5 text-[15px] text-on-fill">尋ねる</button>
+          <AskButton live={live} />
         </form>
         {!live && <p className="mt-2 text-[13px] text-nibi">このデモでは、下の質問に記録済みの答えで返します。自由な質問には、公開版のライブで答えます。</p>}
         {answers.length > 0 && <div className="mt-10 space-y-10">{answers.map((t, i) => <Turn key={i} t={t} ruleText={ruleText} />)}</div>}

@@ -8,6 +8,7 @@
  * --choose: after the △, pick the first reading, leave a わけ, and time each step until 確かめ asks the master (11/5).
  * --marks ×,○,○: the marks to give, in order (default △ then ○). --mobile: a phone viewport (390×844). --shots <dir>: screenshot
  *   folder under docs/screens/ui-polish/ (11/5, 体験の目 3).
+ * --ask "<question>" [--client 浜風運輸]: after the cards, ask 暖簾を継ぐ a free question live and time the answer (11/5, 体験の目 4).
  * --read: seconds the master spends reading each card before marking it (11/5 before 先読み: 0; the 師匠役テスト median was 53.5 s).
  * → prints a timing table and writes docs/results/experience-<date>.json (numbers and on-screen words only; fictional data).
  */
@@ -18,7 +19,7 @@ import path from "node:path";
 import { parseArgs } from "node:util";
 import { chromium, type Page } from "playwright";
 
-const { values } = parseArgs({ options: { cards: { type: "string", default: "4" }, read: { type: "string", default: "0" }, choose: { type: "boolean", default: false }, cap: { type: "string", default: "0.5" }, port: { type: "string", default: "3124" }, marks: { type: "string", default: "△,○,○,○,○,○" }, mobile: { type: "boolean", default: false }, shots: { type: "string", default: "27-experience" } } });
+const { values } = parseArgs({ options: { cards: { type: "string", default: "4" }, read: { type: "string", default: "0" }, choose: { type: "boolean", default: false }, cap: { type: "string", default: "0.5" }, port: { type: "string", default: "3124" }, marks: { type: "string", default: "△,○,○,○,○,○" }, mobile: { type: "boolean", default: false }, shots: { type: "string", default: "27-experience" }, ask: { type: "string" }, client: { type: "string", default: "浜風運輸" } } });
 const ROOT = path.resolve(__dirname, "..");
 const BASE = `http://127.0.0.1:${values.port}`;
 
@@ -97,6 +98,18 @@ const cardShown = (page: Page) => async () => (await page.locator('section[aria-
           await shot("after-why-full", true);
         }
       }
+    }
+    if (values.ask) {
+      await page.goto(BASE + "/noren");
+      await page.locator('select[name="clientId"]').selectOption({ label: values.client! }).catch(async () => {
+        const v = await page.locator('select[name="clientId"] option', { hasText: values.client! }).first().getAttribute("value");
+        await page.locator('select[name="clientId"]').selectOption(v!);
+      });
+      await page.locator('input[name="question"]').fill(values.ask);
+      await page.locator('form:has(input[name="question"]) button').first().click();
+      page.waitForTimeout(1500).then(() => shot("noren-waiting")).catch(() => {});
+      steps.push({ step: `暖簾を継ぐで自由な質問 → 答え（${values.client}）`, ...(await waitFor(page, async () => (await page.locator("main").first().innerText()).includes(values.ask!) && /根拠・経緯|心得帳にありません|師匠に確認|上限/.test(await page.locator("main").first().innerText()), 120000)) });
+      await shot("noren-live-answer", true);
     }
     await browser.close();
   } finally {
