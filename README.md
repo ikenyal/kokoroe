@@ -213,7 +213,7 @@ What this entry asks to be judged on is what was made with Claude. The line is d
 **Made with Claude**
 - **This repository's code and documents**, written with Claude Code during the hackathon (from 2026-11-02): the app, the master
   simulator and evaluation, scripts, tests and hooks, the fictional data files, the README and the records, and the video's scene
-  pages and narration script. Which calls were the author's and what Claude Code did is in
+  pages and narration script (made with Claude; the author shortened one part, D-049). Which calls were the author's and what Claude Code did is in
   [docs/how-we-built.md](docs/how-we-built.md) (and in "A second 帳場" below).
 - **What Claude writes inside the app** (Anthropic API, called directly): the apprentice's 段取り drafts, message drafts and visit
   plans; the readings of the master's remark and the 心得 written from them; company-wide rule proposals; the successor's answers.
@@ -225,7 +225,7 @@ What this entry asks to be judged on is what was made with Claude. The line is d
   came from which.
 
 **Not made with Claude**
-- Narration voice: Amazon Polly (text-to-speech; the script is Claude-made as above). Hosting: Amazon Lightsail.
+- Narration voice: Amazon Polly (text-to-speech; the script was made with Claude, and the author shortened one part, D-049). Hosting: Amazon Lightsail.
 - Main open-source software: Next.js, React, Tailwind CSS, Zod, the MCP TypeScript SDK, Playwright (screen recording), ffmpeg (video
   assembly), Vitest. Fonts: Shippori Mincho and Zen Kaku Gothic New (Google Fonts, SIL Open Font License).
 - Statistics quoted in the README and the video: Teikoku Databank (successor survey, 2025) and the Statistics Bureau of Japan
