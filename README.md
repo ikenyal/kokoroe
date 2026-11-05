@@ -27,11 +27,11 @@ delete every entry.
 
 <img src="docs/readme/2-kokoroe-history.webp" alt="心得帳 entry for 浜風運輸: tell bad news to the dispatch manager early, before it is certain; × with the words 'to the dispatch manager, early'; why: in 2019 they were told too late and could not rearrange the trucks" width="720">
 
-**3. The successor gets an answer with its reason (暖簾を継ぐ).** The same question: without the 心得帳, "can't judge"; with it,
+**3. The successor gets an answer with its reason (暖簾を継ぐ).** The same question: without the 心得帳 (client ledger only), "can't judge"; with it,
 an answer that cites the 心得 and its history. (This answer was recorded with the 心得帳 at evaluation time, so its wording of
 浜風運輸's 心得 differs from picture 2; the answer itself tells how the 心得 was reworded on 11/3.)
 
-<img src="docs/readme/3-noren-with-without.webp" alt="暖簾を継ぐ: a question about a delay notice to 浜風運輸. Without the 心得帳: can't judge. With it: no, with the 2019 reason" width="720">
+<img src="docs/readme/3-noren-with-without.webp" alt="暖簾を継ぐ: a question about a delay notice to 浜風運輸. Without the 心得帳 (client ledger only): can't judge. With it: no, with the 2019 reason" width="720">
 
 ## The problem
 
