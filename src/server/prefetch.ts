@@ -36,6 +36,11 @@ interface Entry {
 }
 
 const entries = new Map<string, Entry>();
+/** Debug trace (KOKOROE_PREFETCH_DEBUG=1, 体験の目 only): what the prefetch did and when. Never the draft or the book's text. */
+const T0 = Date.now();
+const dbg = (what: string, info: Record<string, unknown> = {}) => {
+  if (process.env.KOKOROE_PREFETCH_DEBUG) console.error(`[prefetch +${((Date.now() - T0) / 1000).toFixed(1)}s] ${what}`, info);
+};
 const keyOf = (c: PrefetchCtx, index: number) => `${c.mode}-${c.sid}-${index}`;
 
 /** The 心得帳's version: any change to any rule (text, scope, status, 沿革) changes it. */
@@ -50,6 +55,7 @@ export function claimPrefetch(c: PrefetchCtx, index: number, sceneId: string): b
   let settle!: Entry["settle"];
   const result = new Promise<{ version: string; draft: Proposal } | null>((r) => (settle = r));
   entries.set(k, { sceneId, startedAt: Date.now(), approved: false, running: false, result, settle });
+  dbg("claim", { index, sceneId });
   return true;
 }
 
@@ -68,6 +74,7 @@ export function discardPrefetch(c: Pick<PrefetchCtx, "mode" | "sid">, index: num
 /** △/× or 取り消し: drop every prefetch of this session, whatever card it was for. */
 export function discardAllPrefetch(c: Pick<PrefetchCtx, "mode" | "sid">) {
   const prefix = `${c.mode}-${c.sid}-`;
+  dbg("discard all (△/×/undo)", { slots: [...entries.keys()].filter((k) => k.startsWith(prefix)).length });
   for (const [k, e] of entries) if (k.startsWith(prefix)) {
     e.settle(null);
     entries.delete(k);
@@ -78,6 +85,7 @@ export function discardAllPrefetch(c: Pick<PrefetchCtx, "mode" | "sid">) {
 export function approvePrefetch(c: Pick<PrefetchCtx, "mode" | "sid">, index: number, sceneId: string) {
   const e = entries.get(`${c.mode}-${c.sid}-${index}`);
   if (e && e.sceneId === sceneId) e.approved = true;
+  dbg("approve (○)", { index, found: !!e, running: e?.running ?? null, hasDraft: e?.version !== undefined });
 }
 
 export const MAX_REDOS = 3;
@@ -104,6 +112,7 @@ export async function runPrefetch(
     for (let redo = 0; ; redo++) {
       const version = await bookVersion(c.store); // before drafting: the book the draft reads is this one or a later one
       e.startedAt = Date.now(); // the wait budget counts from the draft in flight
+      dbg(redo ? "redo start" : "draft start", { index, redo, book: version.slice(0, 8) });
       const draft = await propose(scene, client);
       if (entries.get(k) !== e) {
         // Taken (draftLive is waiting on it) or discarded (△/×, undo — already settled to null, so this is a no-op): no redo.
@@ -112,6 +121,7 @@ export async function runPrefetch(
       }
       e.version = version;
       const changed = (await bookVersion(c.store)) !== version;
+      dbg("draft done", { index, redo, bookChanged: changed, approved: e.approved, ms: Date.now() - e.startedAt });
       if (!changed || e.approved || redo >= MAX_REDOS || entries.get(k) !== e || !again()) {
         e.settle({ version, draft }); // out of date if changed: takePrefetch will not use it
         return;
@@ -134,6 +144,7 @@ export async function dropIfStale(c: PrefetchCtx, index: number): Promise<boolea
   if (!e || e.running || e.approved || e.version === undefined) return false;
   if (e.version === (await bookVersion(c.store))) return false;
   if (entries.get(keyOf(c, index)) !== e || e.running || e.approved) return false; // changed while reading the book
+  dbg("drop stale (render)", { index });
   discardPrefetch(c, index);
   return true;
 }
