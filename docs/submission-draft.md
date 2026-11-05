@@ -68,7 +68,7 @@ URL: 〔11/7 の撮影のあと、YouTube に限定公開でアップロード�
 | ✓ | **Claude Code CLI** | 開発のすべて。プランモードで初日の計画。フック（MCP を止める・秘密情報の検査・凍結した正解を守る・評価なしのコミットを止める・AWS のプロファイル）。サブエージェント（hitl-reviewer・ui-critic・judge-critic ほか）。Skills（world-consistency・decision-log）。`claude -p` で後任の手元の Claude Code を再現（`docs/how-we-built.md`、`.claude/`） |
 | ✓ | **Claude API** | 製品の中身。弟子の段取りの案と後任の答えは Sonnet 5.5、師匠の一言の読み取りと心得帳は Opus 5.5。`@anthropic-ai/sdk` で直接呼ぶ（CLAUDE.md の表、README「モデルの分担」） |
 | ✓ | **Managed Agents** | メモリストアだけを心得帳の別の保存先として実装し、実際の API で速さを測った（エージェントのセッションは使っていない。帳場のセッションごとにストアを作り、心得16件・判定27件を入れるのに約2.1秒、読み書きは0.2〜0.7秒）。今の範囲では利点が出ないため、既定はオフ（`KOKOROE_STORE=memory` で切り替え、D-002） |
-| ✓ | **Claude.ai** | 【Kento が確認】作者が計画と指示の相談に使った。記録にあるのは、動画の構成（v2・v3 の追加分）とナレーションの台本を Claude とのチャットで作ったこと（台本の一部は作者が短くした。D-049・D-050、`video/scenes.json` の注記） |
+| ✓ | **Claude.ai** | 作者が計画と指示の相談に使った（Kento 11/6 に確認）。記録にあるのは、動画の構成（v2・v3 の追加分）とナレーションの台本を Claude とのチャットで作ったこと（台本の一部は作者が短くした。D-049・D-050、`video/scenes.json` の注記） |
 | — | Claude Code IDE 拡張 / Claude Code Desktop / Cowork / Agent SDK | 使った記録なし（`claude -p` は Claude Code CLI のヘッドレス実行で、Agent SDK ではない） |
 | — | その他 | なし |
 
