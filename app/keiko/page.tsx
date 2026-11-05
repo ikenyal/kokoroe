@@ -19,7 +19,7 @@ export default function KeikoPage() {
       <h1 className="font-mincho text-[24px] tracking-[0.06em]">稽古の記録</h1>
       {/* What changed, and by how much, in one sentence — the same numbers as the table below (results.json). */}
       <p className="yomi mt-3 max-w-[34em] font-mincho text-[19px] leading-relaxed sm:text-[21px]">
-        師匠が{paths ? `約${paths.taps}回` : `${end.taps}回`}のタップで直すと、○ が付く案は
+        {results.official ? "" : "途中経過では、"}師匠が{paths ? `約${paths.taps}回` : `${end.taps}回`}のタップで直すと、○ が付く案は
         <span className="tabular-nums">{pct(results.before.match)}</span>から
         <span className="tabular-nums text-ai">{paths ? pct(paths.mean) : pct(end.match)}</span>
         に、後任が経緯ごと答えられた質問は8問中
@@ -30,7 +30,7 @@ export default function KeikoPage() {
         {results.official ? "" : "途中経過（はじめと今で台帳が異なるため、そのままは比べられません）。"}架空の取引先10社、学習に使わない評価用の20場面で測った値です。
       </p>
       <p className="yomi mt-2 max-w-[40em] text-[15.5px]">
-        弟子の案が、師匠の考えとどれだけ合うようになったかの記録です。架空の取引先10社で、師匠はシミュレータ（隠しの正解に照らして、コードで ○・△・× を付けます）。
+        弟子の案が、師匠の考えとどれだけ合うようになったかの記録です。架空の取引先10社で、師匠はシミュレータ（隠しの正解に照らして、コードで ○・△・× を<span className="whitespace-nowrap">付けます）。</span>
       </p>
 
       <section aria-labelledby="ba-h" className="mt-8">
@@ -74,7 +74,7 @@ export default function KeikoPage() {
                   {hist.at(-1)!.mean.toFixed(1)}
                   <span className="text-[14px] text-nibi"> / 8</span>
                 </span>
-                {"sd" in hist.at(-1)! && <span className="block text-[12.5px] text-nibi">同じ心得帳で3回測った平均（ばらつき ±{(hist.at(-1)! as { sd: number }).sd.toFixed(1)}）</span>}
+                {"sd" in hist.at(-1)! && <span className="block text-[12.5px] text-nibi">同じ心得帳で3回測った平均<span className="whitespace-nowrap">（ばらつき ±{(hist.at(-1)! as { sd: number }).sd.toFixed(1)}）</span></span>}
               </td>
             </tr>
           </tbody>
@@ -118,7 +118,7 @@ export default function KeikoPage() {
           <h2 id="curve-h" className="font-mincho text-[18px]">師匠の手間と、一致の伸び</h2>
           <p className="mt-1 text-[13px] text-nibi">横は師匠が押した回数、縦は ○ の割合。細い灰色の線は改良の途中の版（参考）、藍の点と縦線は今の構成を学習{paths?.n ?? 0}本で測った平均と幅{results.official ? "（正式な計測）" : "（途中経過）"}です。</p>
           <div className="mt-4">
-            <p className="mb-1 text-[12.5px] text-nibi sm:hidden">図は横にずらせます。右端が今の構成の結果です。</p>
+            <p className="mb-1 text-[12.5px] text-nibi sm:hidden">図は横にずらせます（右端の藍の点が今の構成の結果）。</p>
             <CurveChart curves={curves} emphasis={paths ? null : latest.key} before={results.before} paths={paths} />
           </div>
           <details className="mt-3 text-[13.5px]">

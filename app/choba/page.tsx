@@ -129,8 +129,9 @@ function EffectView({ effect, client, draft, words, ruleHref, recorded }: { effe
                 <dt className="whitespace-nowrap text-[13px] text-sumi">{({ 何で: "何で（手段）", いつ: "いつ（時期）" } as Record<string, string>)[point.label] ?? point.label}</dt>
                 <dd className="grid gap-1">
                   <span className="text-[12.5px] text-sumi/75">
-                    直したのは、{words(before.sceneId)}の案（師匠 <span className="font-mincho text-shu">{before.verdict}</span>
-                    {before.remark ? `「${before.remark}」` : "、一言なし"}）
+                    {/* Always another scene (ruleEffect skips the corrected one): say so, so it does not read as the wrong scene (ui-critic 11/5). */}
+                    直したのは、別の場面（{words(before.sceneId)}）の案<span className="whitespace-nowrap">（師匠 <span className="font-mincho text-shu">{before.verdict}</span>
+                    {before.remark ? `「${before.remark}」` : "、一言なし"}）</span>
                   </span>
                   {/* No strikethrough: a line through 「なし」 reads as 「な七」 (ui-critic 11/5). The two labels say which is which. */}
                   <span className="text-[14.5px] text-sumi/75">その案：{point.was}</span>
@@ -256,7 +257,7 @@ function OfflineExample({ sceneId }: { sceneId: string }) {
   const from = r.sources.find((x) => x.kind !== "ledger");
   return (
     <div className="mt-2 border-t border-keisen pt-2 text-[13.5px]">
-      <p className="text-nibi">公開版のライブでは、ここで弟子が {from?.verdict ?? "△"} の意味を読み取り、心得帳にこう書きます（記録済みの例{from && from.sceneId !== sceneId ? `：${sceneWords(from.sceneId)}の場面から` : ""}）。</p>
+      <p className="text-nibi">公開版のライブでは、ここで弟子が {from?.verdict ?? "△"} の意味を読み取り、心得帳にこう書きます（記録済みの例{from && from.sceneId !== sceneId ? `：${sceneWords(from.sceneId)}の` : ""}<span className="whitespace-nowrap">{from && from.sceneId !== sceneId ? "場面から" : ""}）。</span></p>
       <p className="yomi mt-1 text-[15px]">「{r.text}」</p>
       {r.when && <p className="yomi text-nibi">条件：{r.when}</p>}
     </div>

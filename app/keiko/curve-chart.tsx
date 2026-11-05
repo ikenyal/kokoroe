@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export interface CurvePoint {
   scenes: number;
@@ -47,6 +47,12 @@ export function CurveChart({
   paths?: PathsResult | null; // current setup, end points of several training paths (mean + range)
 }) {
   const [hover, setHover] = useState<number | null>(null); // checkpoint index
+  // On a phone the chart scrolls sideways: open it at the right end, where the current setup's result is (ui-critic 11/5).
+  const scroller = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = scroller.current;
+    if (el && el.scrollWidth > el.clientWidth) el.scrollLeft = el.scrollWidth;
+  }, []);
   const maxTaps = Math.max(...curves.flatMap((c) => c.points.map((p) => p.taps)), paths?.taps ?? 0);
   const xMax = Math.ceil(maxTaps / 20) * 20;
   const x = (t: number) => M.left + (t / xMax) * (W - M.left - M.right);
@@ -56,7 +62,7 @@ export function CurveChart({
 
   return (
     // On a phone the 720-wide chart would shrink its labels to ~6px: keep a readable minimum width and let it scroll sideways.
-    <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="学習曲線（横にスクロールできます）">
+    <div ref={scroller} className="overflow-x-auto" tabIndex={0} role="region" aria-label="学習曲線（横にスクロールできます）">
     <figure className="relative min-w-[560px]">
       <svg
         viewBox={`0 0 ${W} ${H}`}
