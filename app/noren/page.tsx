@@ -71,7 +71,7 @@ function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => str
                 const fact = t.citations.filter((c) => /出典[:：]\s*台帳/.test(c.history)).length;
                 const rule = t.citations.length - fact;
                 if (!t.citations.length) return "なし（心得帳に記録がないので、師匠に確認を勧める）";
-                return [rule && `心得 ${rule} つ`, fact && `台帳の事実 ${fact} つ`].filter(Boolean).join("・") + "（下に、わけと沿革）";
+                return [rule && `心得${rule}つ`, fact && `台帳の事実${fact}つ`].filter(Boolean).join("・") + "（下に、わけと沿革）";
               })()}
             </p>
           </section>
@@ -95,7 +95,7 @@ function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => str
                   ) : (
                     <p className="yomi text-[16.5px]">{h.rule}</p>
                   )}
-                  {h.before && <p className="yomi text-[14px] text-nibi">前は <del className="decoration-sumi/40">{h.before}</del></p>}
+                  {h.before && <p className="yomi text-[14px] text-nibi">前は：{h.before}</p>}
                   {h.why && <p className="yomi text-[14px]"><span className="text-nibi">わけ：</span>{h.why}</p>}
                   <p className="text-[12.5px] text-nibi">
                     {h.source && <>出どころ：{h.source}　</>}
@@ -127,7 +127,8 @@ export default async function NorenPage() {
     <section aria-labelledby="ex-h" className="mt-10">
       <h2 id="ex-h" className="font-mincho text-[18px]">{answers.length ? "ほかに聞けること" : "たとえば、後任がよく迷うこと"}</h2>
       <form action={ask} className="mt-3 border-y border-sumi/50">
-        {examplesInOrder().map((q) => (
+        {/* The question just answered is not offered again (ui-critic 11/5: tapping it looks like nothing happened). */}
+        {examplesInOrder().filter((q) => !(answers[0] && q.clientId === answers[0].clientId && q.question === answers[0].question)).map((q) => (
           <button
             key={q.id}
             name="preset"
