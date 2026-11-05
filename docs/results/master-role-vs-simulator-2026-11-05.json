@@ -1,0 +1,225 @@
+{
+  "note": "師匠役テスト（11/4、作者1人、架空データ、D-059）の20枚を、コードの判定（シミュレータ、隠しの正解）でも採点したもの。API なし。案は作者が見て印を付けたもの（判定とともに保存された案。値引き・契約の床のあと）で、テストの最中にその回の心得帳（台帳の制約＋途中で作者の △ から加わった2つの心得）でライブに作られた。判定は eval/simulator/judge.ts と data/hidden（11/3 から凍結、D-017）。連絡の段取りだけ（訪問の段取りは隠しの正解にない、D-061）。",
+  "session": {
+    "createdAt": "2026-11-04T06:55:30.094Z"
+  },
+  "summary": {
+    "cards": 20,
+    "authorOk": 18,
+    "ofAuthorOk": {
+      "simulatorOk": 3,
+      "simulatorPartial": 8,
+      "simulatorWrong": 7
+    },
+    "authorCorrected": [
+      {
+        "sceneId": "T13",
+        "author": "△",
+        "simulator": "×"
+      },
+      {
+        "sceneId": "T19",
+        "author": "△",
+        "simulator": "○"
+      }
+    ],
+    "sameVerdict": 3
+  },
+  "rows": [
+    {
+      "sceneId": "T05",
+      "clientId": "C06",
+      "sceneType": "T4",
+      "author": "○",
+      "simulator": "△",
+      "notOk": [
+        "R04:partial"
+      ]
+    },
+    {
+      "sceneId": "T06",
+      "clientId": "C09",
+      "sceneType": "T2",
+      "author": "○",
+      "simulator": "×",
+      "notOk": [
+        "R02:violation"
+      ]
+    },
+    {
+      "sceneId": "T07",
+      "clientId": "C04",
+      "sceneType": "T6",
+      "author": "○",
+      "simulator": "△",
+      "notOk": [
+        "R08:partial"
+      ]
+    },
+    {
+      "sceneId": "T09",
+      "clientId": "C02",
+      "sceneType": "T3",
+      "author": "○",
+      "simulator": "×",
+      "notOk": [
+        "R03:violation",
+        "R05:violation",
+        "R06:partial"
+      ]
+    },
+    {
+      "sceneId": "T10",
+      "clientId": "C08",
+      "sceneType": "T10",
+      "author": "○",
+      "simulator": "×",
+      "notOk": [
+        "R04:violation"
+      ]
+    },
+    {
+      "sceneId": "T13",
+      "clientId": "C06",
+      "sceneType": "T9",
+      "author": "△",
+      "simulator": "×",
+      "notOk": [
+        "R04:violation"
+      ]
+    },
+    {
+      "sceneId": "T14",
+      "clientId": "C07",
+      "sceneType": "T3",
+      "author": "○",
+      "simulator": "○",
+      "notOk": []
+    },
+    {
+      "sceneId": "T15",
+      "clientId": "C01",
+      "sceneType": "T1",
+      "author": "○",
+      "simulator": "×",
+      "notOk": [
+        "R10:violation"
+      ]
+    },
+    {
+      "sceneId": "T16",
+      "clientId": "C09",
+      "sceneType": "T6",
+      "author": "○",
+      "simulator": "△",
+      "notOk": [
+        "R08:partial"
+      ]
+    },
+    {
+      "sceneId": "T18",
+      "clientId": "C05",
+      "sceneType": "T3",
+      "author": "○",
+      "simulator": "○",
+      "notOk": []
+    },
+    {
+      "sceneId": "T19",
+      "clientId": "C02",
+      "sceneType": "T6",
+      "author": "△",
+      "simulator": "○",
+      "notOk": []
+    },
+    {
+      "sceneId": "T21",
+      "clientId": "C03",
+      "sceneType": "T3",
+      "author": "○",
+      "simulator": "×",
+      "notOk": [
+        "R05:violation"
+      ]
+    },
+    {
+      "sceneId": "T25",
+      "clientId": "C04",
+      "sceneType": "T4",
+      "author": "○",
+      "simulator": "○",
+      "notOk": []
+    },
+    {
+      "sceneId": "T26",
+      "clientId": "C01",
+      "sceneType": "T8",
+      "author": "○",
+      "simulator": "×",
+      "notOk": [
+        "R10:violation"
+      ]
+    },
+    {
+      "sceneId": "T27",
+      "clientId": "C10",
+      "sceneType": "T4",
+      "author": "○",
+      "simulator": "△",
+      "notOk": [
+        "R19:partial"
+      ]
+    },
+    {
+      "sceneId": "T28",
+      "clientId": "C07",
+      "sceneType": "T6",
+      "author": "○",
+      "simulator": "△",
+      "notOk": [
+        "R08:partial"
+      ]
+    },
+    {
+      "sceneId": "T30",
+      "clientId": "C05",
+      "sceneType": "T5",
+      "author": "○",
+      "simulator": "△",
+      "notOk": [
+        "R07:partial"
+      ]
+    },
+    {
+      "sceneId": "T31",
+      "clientId": "C03",
+      "sceneType": "T4",
+      "author": "○",
+      "simulator": "△",
+      "notOk": [
+        "R04:partial"
+      ]
+    },
+    {
+      "sceneId": "T37",
+      "clientId": "C10",
+      "sceneType": "T10",
+      "author": "○",
+      "simulator": "×",
+      "notOk": [
+        "R19:violation"
+      ]
+    },
+    {
+      "sceneId": "T39",
+      "clientId": "C08",
+      "sceneType": "T9",
+      "author": "○",
+      "simulator": "△",
+      "notOk": [
+        "R04:partial",
+        "R17:partial"
+      ]
+    }
+  ]
+}

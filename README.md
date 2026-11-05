@@ -113,6 +113,11 @@ daily plans; the 心得帳 grows as a by-product of that work. To start with you
   - **18 of 20 were marked ○.** The author has never dealt with this fictional company, and to a first-time reader the polite,
     plausible drafts looked fine. This is exactly the successor who would send the AI's draft as it is. Only someone who knows
     the history can correct the tacit part.
+  - **The same 20 drafts, scored by the code judge** (the simulator's hidden ground truth; no API; 11/5): of the 18 the author
+    marked ○, it marks **3 ○, 8 △ and 7 ×**. Of the author's two △, it marks one × and one ○. Same mark on 3 of 20. Conditions:
+    the drafts the author saw (made live during the test from the ledger's constraints plus the two 心得 learned on the way),
+    the judge frozen since 11/3 (D-017), the contact plan only (D-061). It is one simulated master's ground truth, not a real
+    veteran's ([docs/results/master-role-vs-simulator-2026-11-05.json](docs/results/master-role-vs-simulator-2026-11-05.json)).
   - **Not measured:** writing the same etiquette as prose was not done (the author had no experience to write from). So there is
     no comparison of judging time with writing time, and no count of how much etiquette comes out.
   Internally it is still named `field` (`KOKOROE_FIELD=1`, `npm run field:save`).
