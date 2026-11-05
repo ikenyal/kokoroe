@@ -17,7 +17,8 @@ each entry keeps its *沿革* (history: old → new, the trigger, the master's w
 ## See it on screen (recorded demo, fictional data)
 
 **1. Correct it, and the next draft changes (帳場).** After the master marked a draft for 丸新酒造 △ (no remark), the
-apprentice's next draft for a similar situation added, on its own, a quiet word to the 蔵元 (the owner, who decides).
+apprentice's next draft for a similar situation added, on its own, a quiet word to the 蔵元 (the owner, who decides). The same scene is the home page's example and the
+video's 帳場 scene; in the public demo's 「デモの続き」, the first card shows the same kind of 「変化」 for 浜風運輸.
 
 <img src="docs/readme/1-choba-change.webp" alt="The 帳場's 「変化」 panel: the 心得 'when writing formally to the owner's wife, give the owner a word first'; behind the scenes: the earlier draft said none, this draft says a quiet word to the owner" width="720">
 
