@@ -19,9 +19,23 @@ function Send({ verdict }: { verdict: Verdict | null }) {
   );
 }
 
+/**
+ * While the mark is being recorded with live Claude, the next card is drafted before the page comes back (measured 11/5 on the
+ * production build: 5–9 s). Say what the wait is, instead of a button that only says 「記録しています」 (体験の目, display only).
+ */
+function Waiting({ live }: { live: boolean }) {
+  const { pending } = useFormStatus();
+  if (!pending || !live) return null;
+  return (
+    <p role="status" aria-live="polite" className="mt-3 border-l-2 border-ai pl-3 text-[14px] text-sumi">
+      記録しています。続けて弟子が、いまの心得帳で次の場面の案を作ります（10秒ほど）。
+    </p>
+  );
+}
+
 const KEYS: Record<string, Verdict> = { "1": "○", "2": "△", "3": "×" };
 
-export function JudgeForm({ sceneId }: { sceneId: string }) {
+export function JudgeForm({ sceneId, live = false }: { sceneId: string; live?: boolean }) {
   const [verdict, setVerdict] = useState<Verdict | null>(null);
   const [markedAt, setMarkedAt] = useState<number | null>(null); // first tap on a mark (師匠役テスト: time to judge)
   const pick = (v: Verdict) => {
@@ -71,6 +85,7 @@ export function JudgeForm({ sceneId }: { sceneId: string }) {
         </div>
         <p className="mt-2 hidden text-[12.5px] text-nibi sm:block">キーボードの 1・2・3 でも押せます。</p>
       </fieldset>
+      <Waiting live={live} />
       <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-end">
         <label className="flex-1">
           <span className="text-[13px] text-nibi">一言（なくても送れます）</span>

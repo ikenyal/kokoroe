@@ -503,7 +503,7 @@ export default async function ChobaPage() {
               )}
               <ProposalView p={shown!} client={getClient(item.scene.clientId)} ruleText={ruleText} />
               <Ledger label="判定">
-                <JudgeForm key={item.scene.id} sceneId={item.scene.id} />
+                <JudgeForm key={item.scene.id} sceneId={item.scene.id} live={live} />
               </Ledger>
             </div>
           </article>
