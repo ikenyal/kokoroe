@@ -64,7 +64,8 @@ export function trustedClientIp(xff: string | null, trustedHops = Number(process
   return ip.slice(0, 64);
 }
 
-async function clientIp(): Promise<string> {
+/** The visitor's address, read during a request (a background redo reserves later against the same address). */
+export async function clientIp(): Promise<string> {
   const h = await headers();
   return trustedClientIp(h.get("x-forwarded-for"));
 }

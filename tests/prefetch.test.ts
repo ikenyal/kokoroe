@@ -6,7 +6,7 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { beforeEach, describe, expect, it } from "vitest";
 import type { Client, Proposal, Scene } from "@/src/core/types";
-import { _entries, approvePrefetch, claimPrefetch, discardAllPrefetch, runPrefetch, takePrefetch } from "@/src/server/prefetch";
+import { _entries, approvePrefetch, claimPrefetch, discardAllPrefetch, dropIfStale, MAX_REDOS, runPrefetch, takePrefetch } from "@/src/server/prefetch";
 
 const scene = { id: "T02", clientId: "C07", type: "T1" } as unknown as Scene;
 const client = { id: "C07" } as unknown as Client;
@@ -116,6 +116,82 @@ describe("先読み: races (hitl-reviewer 11/5)", () => {
     const t0 = Date.now();
     expect(await takePrefetch(c, 1, scene.id, 50)).toBeNull();
     expect(Date.now() - t0).toBeLessThan(1000);
+  });
+});
+
+describe("先読み: made again when the 心得帳 changes (Kento 11/5)", () => {
+  beforeEach(() => _entries.clear());
+  const second = { ...draft, message: "新しい心得帳での案" } as unknown as Proposal;
+
+  it("a change while drafting: drafted again from the new book, and that draft is used after ○", async () => {
+    const c = ctx();
+    claimPrefetch(c, 1, scene.id);
+    let calls = 0;
+    await runPrefetch(c, 1, scene, client, async () => {
+      calls++;
+      if (calls === 1) c.rules.push({ id: "K-002", text: "読み取りが書いた心得" }); // written while the first draft was made
+      return calls === 1 ? draft : second;
+    }, undefined, () => true);
+    expect(calls).toBe(2);
+    approvePrefetch(c, 1, scene.id);
+    expect(await takePrefetch(c, 1, scene.id)).toEqual(second);
+  });
+
+  it("no redo when the limits refuse another call: the old draft is kept but never used", async () => {
+    const c = ctx();
+    claimPrefetch(c, 1, scene.id);
+    let calls = 0;
+    await runPrefetch(c, 1, scene, client, async () => {
+      calls++;
+      c.rules.push({ id: `K-1${calls}`, text: "変わる" });
+      return draft;
+    }, undefined, () => false);
+    expect(calls).toBe(1);
+    approvePrefetch(c, 1, scene.id);
+    expect(await takePrefetch(c, 1, scene.id)).toBeNull();
+  });
+
+  it("at most MAX_REDOS redos, one at a time", async () => {
+    const c = ctx();
+    claimPrefetch(c, 1, scene.id);
+    let calls = 0, inFlight = 0, most = 0;
+    const propose = async () => {
+      calls++; inFlight++; most = Math.max(most, inFlight);
+      c.rules.push({ id: `K-2${calls}`, text: "毎回変わる" });
+      await new Promise((r) => setTimeout(r, 1));
+      inFlight--;
+      return draft;
+    };
+    const a = runPrefetch(c, 1, scene, client, propose, undefined, () => true);
+    const b = runPrefetch(c, 1, scene, client, propose, undefined, () => true); // a second render: nothing new starts
+    await Promise.all([a, b]);
+    expect(calls).toBe(1 + MAX_REDOS);
+    expect(most).toBe(1);
+  });
+
+  it("a render drops a finished prefetch made from an older book, but not one still drafting or already approved", async () => {
+    const c = ctx();
+    claimPrefetch(c, 1, scene.id);
+    await runPrefetch(c, 1, scene, client, async () => draft);
+    expect(await dropIfStale(c, 1)).toBe(false); // same book
+    c.rules.push({ id: "K-003", text: "あとで書かれた心得" });
+    expect(await dropIfStale(c, 1)).toBe(true);
+    expect(claimPrefetch(c, 1, scene.id)).toBe(true); // made again from the new book
+
+    let release!: () => void;
+    const running = runPrefetch(c, 1, scene, client, () => new Promise<Proposal>((r) => (release = () => r(draft))));
+    await new Promise((r) => setTimeout(r, 0));
+    c.rules.push({ id: "K-004", text: "さらに" });
+    expect(await dropIfStale(c, 1)).toBe(false); // still drafting: it checks the book itself when it finishes
+    release();
+    await running;
+
+    const c2 = ctx();
+    claimPrefetch(c2, 1, scene.id);
+    await runPrefetch(c2, 1, scene, client, async () => draft);
+    approvePrefetch(c2, 1, scene.id);
+    c2.rules.push({ id: "K-005", text: "○ のあとに" });
+    expect(await dropIfStale(c2, 1)).toBe(false); // approved: the take compares the book and drafts fresh
   });
 });
 

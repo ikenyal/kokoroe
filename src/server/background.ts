@@ -11,10 +11,11 @@ import { interpret } from "@/src/learning/interpret";
 import { guardScope } from "@/src/learning/scope";
 import { isDiffArea } from "@/src/learning/area";
 import type { Usage } from "@/src/lib/claude";
-import { allowLive, recordSpend } from "./limits";
+import { allowLive, clientIp, recordSpend, reserve } from "./limits";
 import { openSession, readMeta, type Mode, type Pending, type Session } from "./session";
 import { newVerification, startVerification } from "./verify-ui";
-import { claimPrefetch, discardPrefetch, runPrefetch, slotOf, takePrefetch } from "./prefetch";
+import { claimPrefetch, discardPrefetch, dropIfStale, runPrefetch, slotOf, takePrefetch } from "./prefetch";
+import { ownEnabled } from "@/src/core/own-world";
 
 function update(s: Session, judgmentId: string, patch: Partial<Pending>) {
   const meta = readMeta(s.mode, s.sid);
@@ -94,6 +95,8 @@ const drafting = new Set<string>(); // in-process guard: AutoRefresh renders mus
  * the visitor's address); the drafting runs after the response. Not saved anywhere until draftLive takes it.
  */
 export async function startPrefetch(s: Session, index: number): Promise<(() => Promise<void>) | null> {
+  await dropIfStale(s, index); // made from an older 心得帳 and finished: make it again from the current one
+  const ip = await clientIp(); // a redo after the response reserves against the same visitor
   // Read and claim with no await between: judge() moves pos and drops prefetches in one synchronous step, so a render that read
   // an older pos cannot claim a card the master has already moved past (hitl-reviewer 11/5).
   const meta = readMeta(s.mode, s.sid);
@@ -108,7 +111,7 @@ export async function startPrefetch(s: Session, index: number): Promise<(() => P
     runPrefetch(s, index, item.scene, getClient(item.scene.clientId), async (scene, client) => {
       const d = makeDiscipleV1(s.store, "v1-live", { visit: visitInApp() }); // the same apprentice as draftLive
       return d.propose(scene, client).finally(() => recordSpend(d.usage)); // counted even if it is discarded later
-    }, slot);
+    }, slot, () => reserve(s.sid, ip, { sessionCap: !ownEnabled() }) === null); // a redo is a live call like any other
 }
 
 /** Live mode: draft the next card with the current kokoroe-chō (instead of the recorded draft). */
