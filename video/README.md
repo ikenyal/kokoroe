@@ -115,6 +115,12 @@ entrant's own MCP server. So the video says it on screen (no narration change):
   frame whose right column shows 「心得帳に書きました」. If the take falls back to an empty remark (「一言なし」) or shows
   「このデモでは心得帳は書き足されません」, change the sentence in `scenes.json` to 「弟子はその △ の意味を読み取り、心得帳に書きました。」 and
   re-make the s05 narration with it.
+- [ ] 11/7 live s05 (judge-critic 11/7 01:38): keep the right column on screen while 「弟子はその一言を読み取り、心得帳に書きました。」
+  plays; start the scroll to T13 only at the speech mark of 「次の根回しの場面では…」 (`video/out/audio/Takumi/s05-choba.marks.json`).
+  Keep a still of the right column under that sentence.
+- [ ] 11/7 narration (judge-critic 11/7 01:38): s02, s04b, s06 and s08b lines changed tonight (no 「頭の中にしかありません」 twice in a row;
+  一言 optional; 「わけと出どころごと」 as on the 心得帳 screen; 「シミュレータの師匠の」 taps). Re-make them with the others and re-set
+  their seconds from the new audio (s08b had only 0.3 s spare).
 - [x] s02 (Kento 11/5 night): a note from about 8.9 s (11.6 s before item 24; set on 11/7 from the new audio), when the mail goes out: 「作者が初見で ○ を付けた18件のうち、15件は、師匠なら直す案でした」
   with its conditions (fictional data, 20 training scenes, the author as a master who did not know the history, simulator: △ 8 · × 7, D-059;
   `docs/results/master-role-vs-simulator-2026-11-05.json`). On screen only: the narration is unchanged, because a sentence would

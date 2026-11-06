@@ -3,7 +3,7 @@
 A new session (even on another account) starts here. It remembers nothing; this file, `CLAUDE.md` and the logs are the memory.
 Updated at the end of every round.
 
-## Where things stand (updated 2026-11-07 01:40 JST)
+## Where things stand (updated 2026-11-07 01:55 JST)
 
 - Branches: work on `ui-polish`; after each round merge to `main` (`--no-ff`) and push both (normal push, never force).
 - Commit author must stay the repository setting: `ikenyal` / the GitHub noreply address (`git config user.email` shows it).
@@ -19,8 +19,8 @@ Updated at the end of every round.
 - Public site: still the old build. First rebuild tonight after Kento OKs the interim freeze report
   (`docs/freeze-report.md`); a second rebuild after 11/7's final version. See "Rebuild" below.
 - Console: workspace `kokoroe-public` has a $100/month cap (alert at $50); Kento set it.
-- Last round: A 36 (01:23) — dark phone: muted grey, 「この案」 highlight and hairlines one step lighter (dark theme only).
-  Next eye: B, then C (after 01:53), D, A.
+- Last round: B 26 (01:38) — video script vs tonight's screens: s02/s04b/s06/s08b lines changed (re-voiced 11/7), s05 scroll timing in the 11/7 checklist.
+  Next eye: C (after 01:53), then D, A, B.
 - API spent on rounds: 11/6 since 18:00 about $0.61; 11/7 from 00:00: about $0.10 so far (cap $5 for rounds; eval:final ≈ $9.75 is separate and needs Kento's go).
 
 ## The 15-minute rotation
@@ -68,7 +68,7 @@ Updated at the end of every round.
 
 1. Interim freeze report → Kento's OK → rebuild (above).
 2. Continue the rotation until 07:00 (next eye: see the log's last section).
-3. 11/7 after the freeze: `eval:final`, narration for s01/s02/s05/s07c/s08b, re-shoot, README numbers, second rebuild.
+3. 11/7 after the freeze: `eval:final`, narration for s01/s02/s04b/s05/s06/s07c/s08b, re-shoot, README numbers, second rebuild.
 
 ## The cron prompt (paste as-is when re-creating)
 
