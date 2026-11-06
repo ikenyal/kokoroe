@@ -170,7 +170,7 @@ const STATUS: Record<Pending["status"], string> = {
   "needs-choice": "どの意味でしたか",
   choosing: "選んだ読み方を心得帳に書いています",
   verifying: "新しい心得で解き直して、確かめています",
-  "needs-confirm": "新しい心得で、直した場面を解き直しました（右の欄）",
+  "needs-confirm": "新しい心得で、直した場面を解き直しました（弟子の読み取りの欄）",
   "needs-regression": "回帰の確認：以前は ○ だった場面の案が変わりました",
   "rolled-back": "差し戻しました",
   withdrawn: "確かめで外れたため取り下げました",
@@ -290,7 +290,7 @@ function PendingItem({ p, verdict, beforeOf, ruleText, words, sceneOf }: { p: Pe
   return (
     <li className="border-t border-keisen py-3 first:border-t-0">
       <p className="text-[13px] text-nibi">
-        {words(p.sceneId)}{/* offline: the status line above already says it; the example below says what the live version does */}{p.status === "offline" ? "" : `　${statusOf(p).replace("（右の欄）", "")}`}
+        {words(p.sceneId)}{/* offline: the status line above already says it; the example below says what the live version does */}{p.status === "offline" ? "" : `　${statusOf(p).replace("（弟子の読み取りの欄）", "")}`}
         {p.round === 2 && p.status === "needs-choice" ? `（別の読み方${p.area ? `：「${AREA_ON_SCREEN[p.area]}」を手がかりに` : ""}）` : ""}
       </p>
       {p.status === "offline" && <OfflineExample sceneId={p.sceneId} verdict={verdict} />}
