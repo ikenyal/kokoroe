@@ -170,7 +170,7 @@ export default async function NorenPage() {
       <section aria-labelledby="noren-h">
         <h1 id="noren-h" className="font-mincho text-[24px] tracking-[0.06em]">暖簾を継ぐ</h1>
         <p className="yomi mt-2 max-w-[36em] text-[15.5px]">
-          後任の{COMPANY.successor.name}が取引先のことを尋ねると、橙丸が心得帳だけを根拠に答⁠え⁠ま⁠す。答えには、根拠の心得と、なぜそうなったか（沿革）を必ず添えます。心⁠得⁠帳にないことには答えず、師匠への確認を勧めます。
+          後任の{COMPANY.successor.name}が取引先のことを尋ねると、橙丸が心得帳だけを根拠に答⁠え⁠ま⁠す。答えには、根拠の心得と、なぜそうなったか（沿革）を必ず添⁠え⁠ま⁠す。心⁠得⁠帳にないことには答えず、師匠への確認を勧めます。
         </p>
         <form action={ask} className="mt-6 grid gap-3 sm:grid-cols-[11rem_1fr_auto] sm:items-end">
           <label>
