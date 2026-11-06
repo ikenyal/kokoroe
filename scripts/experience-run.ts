@@ -13,6 +13,7 @@
  *   --visitor-cap) give visitors a different daily cap — to check that judges stay live when visitors are out (11/6).
  * --judge-late: with --judge-code, start without the code; after the first △/× (refused by the visitors' cap), go home,
  *   enter the code, return to the 帳場 and carry on — to see whether the session goes live again (11/6, 体験の目 13).
+ * --mode demo: start 「デモの続きから見る」 instead of 「師匠になって試す」 (11/7, 体験の目 20: marks in the recorded run on a live server).
  * --no-remark: mark △/× without a remark (「どこが違う？」 is offered only then).
  * --none-area timing: at the first readings, tap 「どれでもない」 with that 「どこが違う？」 area and time the second readings (D-057).
  * --read: seconds the master spends reading each card before marking it (11/5 before 先読み: 0; the 師匠役テスト median was 53.5 s).
@@ -25,7 +26,7 @@ import path from "node:path";
 import { parseArgs } from "node:util";
 import { chromium, type Page } from "playwright";
 
-const { values } = parseArgs({ options: { cards: { type: "string", default: "4" }, read: { type: "string", default: "0" }, choose: { type: "boolean", default: false }, cap: { type: "string", default: "0.5" }, port: { type: "string", default: "3124" }, marks: { type: "string", default: "△,○,○,○,○,○" }, mobile: { type: "boolean", default: false }, shots: { type: "string", default: "27-experience" }, ask: { type: "string" }, "none-area": { type: "string" }, "no-remark": { type: "boolean", default: false }, "judge-code": { type: "string" }, "judge-late": { type: "boolean", default: false }, "visitor-cap": { type: "string" }, client: { type: "string", default: "浜風運輸" } } });
+const { values } = parseArgs({ options: { cards: { type: "string", default: "4" }, read: { type: "string", default: "0" }, choose: { type: "boolean", default: false }, cap: { type: "string", default: "0.5" }, port: { type: "string", default: "3124" }, marks: { type: "string", default: "△,○,○,○,○,○" }, mobile: { type: "boolean", default: false }, shots: { type: "string", default: "27-experience" }, ask: { type: "string" }, "none-area": { type: "string" }, "no-remark": { type: "boolean", default: false }, "judge-code": { type: "string" }, "judge-late": { type: "boolean", default: false }, mode: { type: "string", default: "trial" }, "visitor-cap": { type: "string" }, client: { type: "string", default: "浜風運輸" } } });
 const ROOT = path.resolve(__dirname, "..");
 const BASE = `http://127.0.0.1:${values.port}`;
 
@@ -73,7 +74,7 @@ const cardShown = (page: Page) => async () => (await page.locator('section[aria-
       steps.push({ step: "審査用のコードを入れた", ms: 0, seen: [] });
     };
     if (values["judge-code"] && !values["judge-late"]) await enterCode();
-    await page.locator('form:has(input[value="trial"]) button').click();
+    await page.locator(`form:has(input[value="${values.mode}"]) button`).click();
     steps.push({ step: "師匠になって試す → 最初の案", ...(await waitFor(page, cardShown(page), 90000)) });
     const marks = values.marks.split(",").slice(0, Number(values.cards));
     const SHOTS = path.join(ROOT, "docs/screens/ui-polish", values.shots);
