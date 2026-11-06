@@ -92,7 +92,7 @@ function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => str
                 const fact = t.citations.filter((c) => /出典[:：]\s*台帳/.test(c.history)).length;
                 const rule = t.citations.length - fact;
                 if (!t.citations.length) return "なし（心得帳に記録がないので、師匠に確認を勧める）";
-                return [rule && `心得${rule}つ`, fact && `取引先台帳の決まりごと${fact}つ`].filter(Boolean).join("・") + "（下に、わけと沿革）";
+                return [rule && `心得${rule}つ`, fact && `取引先台帳の決まりごと${fact}つ`].filter(Boolean).join("・") + "（下に、わ⁠け⁠と⁠沿⁠革⁠）";
               })()}
             </p>
           </section>
@@ -170,7 +170,7 @@ export default async function NorenPage() {
       <section aria-labelledby="noren-h">
         <h1 id="noren-h" className="font-mincho text-[24px] tracking-[0.06em]">暖簾を継ぐ</h1>
         <p className="yomi mt-2 max-w-[36em] text-[15.5px]">
-          後任の{COMPANY.successor.name}が取引先のことを尋ねると、橙丸が心得帳だけを根拠に答えます。答えには、根拠の心得と、なぜそうなったか（沿革）を必ず添えます。心得帳にないことには答えず、師匠への確認を勧めます。
+          後任の{COMPANY.successor.name}が取引先のことを尋ねると、橙丸が心得帳だけを根拠に答⁠え⁠ま⁠す。答えには、根拠の心得と、なぜそうなったか（沿革）を必ず添えます。心⁠得⁠帳にないことには答えず、師匠への確認を勧めます。
         </p>
         <form action={ask} className="mt-6 grid gap-3 sm:grid-cols-[11rem_1fr_auto] sm:items-end">
           <label>

@@ -63,7 +63,7 @@ function ProposalView({ p, client, ruleText }: { p: Proposal; client: Client; ru
           <Row main label="何で">{means(p)}</Row>
           <Row main label="いつ">{TIMING_JA[p.timing]}</Row>
           <Row main label="裏で誰に" gloss="決裁者へ根回し">{quiet ?? <span className="text-nibi">なし</span>}</Row>
-          <Row main label="後日">{p.followUp ? "あらためて、あいさつを入れる" : <span className="text-nibi">なし</span>}</Row>
+          <Row main label="後日">{p.followUp ? "あらためて、あいさつを入⁠れ⁠る" : <span className="text-nibi">なし</span>}</Row>
         </dl>
         {p.escalateToMaster && (
           <p className="mt-3 border-y border-sumi/40 py-2 text-[15px] text-sumi">
