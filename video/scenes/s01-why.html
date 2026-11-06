@@ -1,18 +1,17 @@
 <!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
-<!-- s01 (v5, why now — three forces, each one moving; 17.0 s). Panels open with the narration's sentences (+0.15 s lead):
+<!-- s01 (v6, why now — two forces, each one moving; 13.0 s. Kento 11/6 item 24: the AI sentence and its panel were cut so the
+     real screens come sooner; the seconds went to s05). Panels open with the narration's sentences (+0.15 s lead):
      0.15 中小企業の半数あまりで、跡継ぎが決まっていません。 → the number counts up to 51.2%; a tag hangs on half of the companies
           (帝国データバンク「全国『後継者不在率』動向調査（2025年）」, of the small and medium firms surveyed)
      4.6  仕事を変える人は、一年に三百三十万人。 → people walk out one after another through a noren; 330万人 counts up; 異動も
           (総務省統計局「労働力調査（詳細集計）2025年（令和7年）平均結果」, 転職者数; job transfers have no clear public figure)
-     9.0  そしてAIは、書かれたものしか使えません。 → an AI reads a page: only the written lines light up; the words in a person's
-          head stay grey
-     13.0 頭の中にしかない知恵を、いま、渡せる形に。 → the panels step back; the conclusion in ink
+     9.0  頭の中にしかない知恵を、いま、渡せる形に。 → the panels step back; the conclusion in ink
      Numbers count with CSS (@property integers), so stills can stop at any moment. Colors: 墨, 藍; no 朱 (no master here). -->
 <style>
   @property --n { syntax: "<integer>"; inherits: false; initial-value: 0; }
-  .panels { position: absolute; left: 26px; top: 84px; zoom: 1.08; display: grid; grid-template-columns: repeat(3, 360px); gap: 30px;
-    animation: back .7s 12.9s ease forwards; }
+  .panels { position: absolute; left: 216px; top: 84px; zoom: 1.08; display: grid; grid-template-columns: repeat(2, 360px); gap: 30px;
+    animation: back .7s 8.9s ease forwards; }
   @keyframes back { to { opacity: 0; transform: translateY(-14px); } }
   .p { height: 470px; border-top: 3px solid var(--sumi); padding-top: 12px; opacity: 0; animation: fade .5s var(--d) ease forwards; }
   .stage2 { position: relative; height: 230px; overflow: hidden; }
@@ -50,22 +49,9 @@
   .walker svg { overflow: visible; animation: bob .34s var(--t) 5 ease-in-out; }
   @keyframes bob { 50% { transform: translateY(-4px); } }
 
-  /* panel 3: the AI reads a page; only written lines light up; the head's words stay grey */
-  .page { position: absolute; left: 6px; top: 18px; width: 170px; height: 196px; background: #faf9f6; border: 1.4px solid var(--sumi); padding: 16px 14px; }
-  .page p { font-size: 13px; line-height: 2.05; color: var(--sumi); white-space: nowrap; transition: none;
-    animation: read .35s var(--t) ease forwards; }
-  @keyframes read { to { background: rgba(43,74,111,.18); color: var(--ai); } }
-  .scan { position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--ai); box-shadow: 0 0 10px var(--ai); opacity: 0;
-    animation: scan 1.6s 9.4s linear forwards; }
-  @keyframes scan { 0% { opacity: .9; transform: translateY(10px); } 95% { opacity: .9; } 100% { opacity: 0; transform: translateY(186px); } }
-  .ai { position: absolute; left: 70px; top: -2px; font-size: 13px; color: #f3f2ee; background: var(--ai); padding: 1px 8px; border-radius: 2px;
-    opacity: 0; animation: fade .3s 9.2s forwards; }
-  .head3 { position: absolute; left: 214px; top: 86px; }
-  .bubble { position: absolute; left: 196px; top: 10px; width: 140px; padding: 8px 10px; border: 1.4px dashed var(--usuzumi); border-radius: 14px;
-    font-size: 14px; line-height: 1.6; color: var(--usuzumi); background: #f6f5f1; }
 
   .end { position: absolute; left: 0; right: 0; top: 250px; text-align: center; font-size: 46px; letter-spacing: .1em; line-height: 1.7;
-    opacity: 0; animation: fade .8s 13.1s ease forwards; }
+    opacity: 0; animation: fade .8s 9.1s ease forwards; }
   .end .now { color: var(--ai); }
 </style></head>
 <body>
@@ -86,26 +72,6 @@
     <p class="src gothic">出典：総務省統計局「労働力調査（詳細集計）2025年平均結果」、転職者数</p>
     <!-- judge-critic 11/6: kept apart from the number (in-house transfers have no public figure and are not in the 330万) -->
     <p class="what" style="margin-top:10px;font-size:19px;white-space:nowrap"><span class="also">（このほか、異動も当たり前に）</span></p>
-  </div>
-  <div class="p" style="--d:9.0s">
-    <div class="stage2">
-      <div class="page">
-        <div class="scan"></div>
-        <p style="--t:9.6s">丸新酒造</p>
-        <p style="--t:9.9s">窓口は奥様</p>
-        <p style="--t:10.2s">集計は月末に</p>
-        <p style="--t:10.5s">見積りは書式A</p>
-      </div>
-      <span class="ai gothic">AI</span>
-      <div class="bubble">蔵元にも、<br>そっと一言。</div>
-      <svg class="head3" width="150" height="150" viewBox="0 0 150 150">
-        <path d="M30,150 Q34,118 58,110 L58,98 Q50,95 49,89 L47,85 Q49,83 47,80 L49,76 Q45,72 44,67 L49,62 Q49,55 51,50 Q56,22 86,20 Q114,22 116,52 Q118,78 104,94 L102,110 Q128,116 136,150"
-          fill="var(--kami-2)" stroke="var(--sumi)" stroke-width="1.8" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    <p class="what">AIが使える知恵</p>
-    <p class="num words">書かれたものだけ</p>
-    <p class="src gothic">頭の中にあるものは、使えない</p>
   </div>
 </div>
 <p class="end">頭の中にしかない知恵を、<br><span class="now">いま</span>、渡せる形に。</p>

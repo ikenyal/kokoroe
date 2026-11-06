@@ -22,20 +22,20 @@
     {
       "id": "s01-why",
       "kind": "anim",
-      "seconds": 17.0,
+      "seconds": 13.0,
       "page": "video/scenes/s01-why.html",
-      "part": "なぜ今か（3つの力）",
+      "part": "なぜ今か（2つの力）",
       "source": "帝国データバンク「全国『後継者不在率』動向調査（2025年）」調査対象の中小企業のうち51.2%／総務省統計局「労働力調査（詳細集計）2025年平均結果」転職者数330万人（https://www.stat.go.jp/data/roudou/sokuhou/nen/dt/index.html）",
-      "narration": "中小企業の半数あまりで、跡継ぎが決まっていません。仕事を変える人は、一年に三百三十万人。そしてAIは、書かれたものしか使えません。頭の中にしかない知恵を、いま、渡せる形に。",
+      "narration": "中小企業の半数あまりで、跡継ぎが決まっていません。仕事を変える人は、一年に三百三十万人。頭の中にしかない知恵を、いま、渡せる形に。",
       "pauseMs": 300
     },
     {
       "id": "s02-problem",
       "kind": "anim",
-      "seconds": 16.6,
+      "seconds": 13.9,
       "page": "video/scenes/s02-problem.html",
       "part": "1・2 課題と何が起きるか（統合）",
-      "narration": "どの取引先に、何を、どう伝えるか。三十年分の作法は、部長の頭の中にしかありません。後任が、悪い知らせを、決まってからメールで送る。それだけで、長年の段取りが崩れます。",
+      "narration": "取引先ごとの伝え方、三十年分の作法は、部長の頭の中にしかありません。後任が、悪い知らせを、決まってからメールで送る。それだけで、長年の段取りが崩れます。",
       "pauseMs": 300
     },
     {
@@ -68,10 +68,10 @@
     {
       "id": "s05-choba",
       "kind": "screen",
-      "seconds": 22.0,
+      "seconds": 28.7,
       "page": "/choba",
       "part": "5 帳場",
-      "action": "お試し with KOKOROE_VIDEO_QUEUE=T05,T13: T05 △ + remark → (live) reading chosen → 確かめ ○ → T13 draft now has the quiet word to the 蔵元",
+      "action": "お試し with KOKOROE_VIDEO_QUEUE=T05,T13: T05 △ + remark → (live) reading chosen → 確かめ ○ → T13 draft now has the quiet word to the 蔵元. Kento 11/6 item 24: +6.7 s from s01/s02, spent holding on the right column (the apprentice's reading and 「心得帳に書きました」) before scrolling to T13; final seconds set on 11/7 from the live take",
       "narration": "丸新酒造への、新しい提案です。弟子は、窓口の奥様にだけ送る案を出しました。師匠は、△。冒頭の1行のもとは、裏で蔵元へ、そっと一言。次の根回しの場面では、弟子が自分から、それを添えるようになりました。",
       "pauseMs": 300,
       "wipe": "noren"

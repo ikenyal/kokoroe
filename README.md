@@ -6,6 +6,9 @@
 sees at once what is wrong: they only mark the AI apprentice's drafts ○ / △ / ×. Each correction becomes a 心得 with why it came to
 be, kept in a 心得帳 and handed to the successor as an Agent Skill.
 
+> Through my work and community activities, I have been involved with a great many companies and organizations. Every one of
+> them has excellent people, each with a feel for the work that is theirs alone. — the author ([more under The problem](#the-problem))
+
 > **Draft.** Numbers marked _(interim)_ are from 2026-11-03 and will be replaced on 11/7 by the official run (5 training paths).
 > All companies, people and situations are fictional (株式会社だいだい工房 and its 10 clients).
 
