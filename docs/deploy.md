@@ -58,6 +58,8 @@ Verified on the public URL (`docs/screens/public-live-confirm.png`, `public-live
   `KOKOROE_OWN` unset).
 - **Image:** built on the host, then `podman build` with the separate tag `localhost/kokoroe` (nothing of HODOKU's changed). The
   push needs the socket path of the running machine (`podman machine inspect <name>`); without the name the template came back empty.
+- **At the second rebuild (after 11/7's final version):** keep `KOKOROE_JUDGE_CODE` exactly as it is (carry the deployed
+  environment over as in step 4); a new code would stop the one Kento put in the submission form. Change it only if Kento asks.
 - **Verified on the public URL with Playwright:** `/`, `/keiko`, `/kokoroe`, `/noren` 200, an unknown page 404; the AI banner;
   the 「審査用のコード」 field shows; the code is accepted; お試し's first card drafted live in 6.7 s on the judges' budget (one card
   only). Screenshots: `docs/screens/public-v5-*.png`.

@@ -65,7 +65,7 @@ export default async function Home(props: PageProps<"/">) {
           {/* ui-critic 11/7 on the public site: the code field sits at the bottom; a judge may press a start button first.
               Inside the block (above its closing rule) so it reads as a start step. */}
           {live && judgeEnabled() && !(await isJudgeRequest()) && (
-            <p className="border-t border-keisen py-2.5 text-[13px] text-nibi">審査員の方へ：始める前に、ページ最下部の「審査用のコード」を入れてください。</p>
+            <p className="border-t border-keisen py-2.5 text-[13px] text-nibi">審査員の方へ：始める前に、ページ最下部の「審査用のコード」を開いて入れてください。</p>
           )}
         </div>
         {fieldEnabled() && (
