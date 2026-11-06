@@ -235,7 +235,7 @@ export default async function KokoroePage({ searchParams }: { searchParams: Prom
             </p>}
         </section>
         {facts.length > 0 && (
-          <details id="facts" className="scroll-mt-6 border-t-2 border-sumi/80 pt-4">
+          <details id="facts" className="scroll-mt-6 border-t-2 border-rule pt-4">
             <summary className="cursor-pointer select-none">
               <h2 className="inline font-mincho text-[20px] tracking-[0.06em]">台帳から写した事実（{nF}）</h2>
               <span className="mt-1 block text-[13px] text-nibi">取引先台帳に書かれていたこと。師匠の作法ではなく、作法の前提になる事実です。師匠が直すと、心得に移ります。</span>
@@ -247,7 +247,7 @@ export default async function KokoroePage({ searchParams }: { searchParams: Prom
         )}
         {inactive.length > 0 && (
           <details id="gone" className="scroll-mt-6" open={!!gone}>
-            <summary className="cursor-pointer select-none border-t-2 border-sumi/80 pt-4">
+            <summary className="cursor-pointer select-none border-t-2 border-rule pt-4">
               <h2 className="inline font-mincho text-[20px] tracking-[0.06em]">消した・まとめた・取り消した項目（{inactive.length}）</h2>
               <span className="mt-1 block text-[13px] text-nibi">心得帳から外したものも、沿革と一緒にここに残ります。</span>
             </summary>

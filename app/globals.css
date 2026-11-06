@@ -5,6 +5,7 @@
  * 紙 paper / 墨 ink / 藍 indigo (the noren, navigation and selection) / 朱 vermilion (only the master's marks) / 鈍 muted.
  */
 :root {
+  --rule: color-mix(in oklab, var(--sumi) 80%, transparent); /* heavy ink rules (was border-rule; same in the light theme) */
   --kami: #f3f2ee;
   --kami-2: #e9e7e1; /* a page under a page */
   --sumi: #1f2328;
@@ -23,6 +24,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --rule: color-mix(in oklab, var(--sumi) 45%, transparent); /* heavy ink rules: near-white bars at night otherwise (ui-critic 11/7) */
     --kami: #16191d;
     --kami-2: #1d2126;
     --sumi: #e6e4df;
@@ -41,6 +43,7 @@
 }
 
 @theme inline {
+  --color-rule: var(--rule);
   --color-kami: var(--kami);
   --color-kami-2: var(--kami-2);
   --color-sumi: var(--sumi);
@@ -120,3 +123,4 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+

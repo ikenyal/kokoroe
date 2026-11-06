@@ -72,7 +72,7 @@ function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => str
     </>
   );
   return (
-    <article className="border-t-2 border-sumi/80 pt-4">
+    <article className="border-t-2 border-rule pt-4">
       <p className="text-[13px] text-nibi">
         {COMPANY.successor.name}の質問　{getClient(t.clientId).name}
       </p>

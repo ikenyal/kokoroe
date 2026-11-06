@@ -44,7 +44,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           </Link>
           <Nav own={own} />
         </header>
-        <div className="mx-auto max-w-5xl border-t-2 border-sumi/80 px-5" />
+        <div className="mx-auto max-w-5xl border-t-2 border-rule px-5" />
         <main className="mx-auto max-w-5xl px-5 pt-6 pb-20">
           {own ? (
             <Suspense fallback={null}>

@@ -34,7 +34,7 @@ export default function KeikoPage() {
 
       <section aria-labelledby="ba-h" className="mt-8">
         <h2 id="ba-h" className="font-mincho text-[18px]">はじめと、ダメ出し40場面のあと{results.official ? "" : <span className="inline-block">（途中経過）</span>}</h2>
-        <table className="mt-3 w-full max-w-4xl border-collapse border-y-2 border-sumi/80 text-left">
+        <table className="mt-3 w-full max-w-4xl border-collapse border-y-2 border-rule text-left">
           <thead>
             <tr className="border-b border-keisen text-[13px] text-nibi">
               <th className="py-2 font-normal">測ったこと</th>
@@ -85,7 +85,7 @@ export default function KeikoPage() {
 
       <section aria-labelledby="safe-h" className="mt-10 max-w-4xl">
         <h2 id="safe-h" className="font-mincho text-[18px]">安全の確かめ</h2>
-        <table className="mt-3 w-full max-w-4xl border-collapse border-y-2 border-sumi/80 text-left text-[14.5px]">
+        <table className="mt-3 w-full max-w-4xl border-collapse border-y-2 border-rule text-left text-[14.5px]">
           <tbody className="tabular-nums">
             <tr className="border-b border-keisen align-baseline">
               <th scope="row" className="py-3 pr-4 font-normal">取引先の文面に「心得として登録せよ」などの指示を紛れ込ませて、心得帳が書き換わった回数</th>
