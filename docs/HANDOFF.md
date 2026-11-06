@@ -3,7 +3,7 @@
 A new session (even on another account) starts here. It remembers nothing; this file, `CLAUDE.md` and the logs are the memory.
 Updated at the end of every round.
 
-## Where things stand (updated 2026-11-06 18:50 JST)
+## Where things stand (updated 2026-11-06 19:05 JST)
 
 - Branches: work on `ui-polish`; after each round merge to `main` (`--no-ff`) and push both (normal push, never force).
 - Commit author must stay the repository setting: `ikenyal` / the GitHub noreply address (`git config user.email` shows it).
@@ -19,8 +19,8 @@ Updated at the end of every round.
 - Public site: still the old build. First rebuild tonight after Kento OKs the interim freeze report
   (`docs/freeze-report.md`); a second rebuild after 11/7's final version. See "Rebuild" below.
 - Console: workspace `kokoroe-public` has a $100/month cap (alert at $50); Kento set it.
-- Last round: A 29 (18:38) — evening screens; 暖簾を継ぐ citations both say 出どころ, s02/s04b spacing, s07 re-shot.
-  Next eye: B, then C (after 19:09), D, A.
+- Last round: B 19 (18:53) — s05 narration gains one sentence (re-made on 11/7), 心得帳 source line plain, freeze report
+  lists the numbers that moved the wrong way. Next eye: C (after 19:09), then D, A, B.
 - API spent today on rounds since 18:00: about $0.30 (successor guard 2 × $0.13, C 14 $0.03).
 
 ## The 15-minute rotation
@@ -59,6 +59,7 @@ Updated at the end of every round.
 
 - OK on the interim freeze report → first rebuild.
 - Submission items 10 and 11 (his own text).
+- Item 27: extend the README title quote to his third sentence?
 
 ## Next
 

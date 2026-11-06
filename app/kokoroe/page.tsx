@@ -17,7 +17,7 @@ function sceneWords(sceneId: string) {
 }
 
 function SourceLine({ s }: { s: RuleSource }) {
-  if (s.kind === "ledger") return <li>{s.date}　取引先台帳の明示的な制約</li>;
+  if (s.kind === "ledger") return <li>{s.date}　取引先台帳から写したもの</li>; // the date is when it was copied in (D-054 second addendum: no 「明示的な制約」)
   return (
     <li>
       {s.date}　師匠の判定 <span className="font-mincho text-shu">{s.verdict && VERDICT_LABEL[s.verdict]}</span>
