@@ -476,3 +476,35 @@ Short entries, appended every work session. Source material for the README secti
   ($0.42) the change: internal labels in 18.5 → 1.5 of 20 answers, made-up answers to far questions 0/24 both times. `hitl-reviewer`
   said OK and suggested two more honest wordings. With $0.17 left, Claude checked the final wording on one store rather than
   skipping the check. D-054 addendum.
+
+## 2026-11-06 — four eyes on a 15-minute clock, until the freeze
+
+- **A scheduled loop with rules that stop it spinning.** Kento set a session cron job (every 15 minutes) that runs one of four eyes in
+  turn:
+  - A, ui-critic on screenshots;
+  - B, judge-critic on the submission;
+  - C, a live timed run on the production build;
+  - D, a walk-through checking pages and documents against each other.
+
+  The rules:
+  - Never overlap two rounds.
+  - Skip an eye after two empty rounds.
+  - C at most once an hour, since it costs API money.
+  - Push both branches after every merge (after a Wi-Fi drop the night before left 57 commits unpushed).
+  - Fall back to 30 minutes if usage runs low.
+
+  Each round ends with a log entry: what was found, fixed, and left (`docs/ui-polish-log.md`).
+- **A question answered from a trace, not a guess.** The first ○ after a correction took 4.5 s instead of ~2 s. Claude added
+  env-gated debug lines to the prefetch and ran it again. The prefetch was used every time; the test had read each card for 5 s
+  instead of 8, so the ○ arrived while the next draft was still being made. Nothing in the product changed.
+- **The submission draft rebuilt to the real form.** When Kento saw the form's items, the draft was redone in their order.
+  - Every answer is backed by a record, and Kento's own opinions are left as marked blanks.
+  - A test fills the number slots with the current values and checks the 500-character limit.
+  - Two arXiv references were checked on arxiv.org before being kept; one had been described as doing more than it does.
+- **Edge states a judge might reach.** ui-critic was shown states the earlier rounds never saw: the daily limit reached, 404, undo,
+  「ここで区切る」, deleting a 心得, dark mode of each. That surfaced a real dev-only error on the live 帳場 (the limit check read the
+  clock while Next was prerendering). It was fixed with Next 16's documented `connection()`, and the 帳場 and 心得帳 opt out of the
+  instant-navigation check with the documented `instant = false`.
+- **The video as one piece.** judge-critic read only the video's script and stills. It found that two stills, seconds apart,
+  contradicted each other: s06 ended on 「一言なし」 right after the master typed a remark. It also found that "114 taps" would sound
+  like a person once the interim banner went away. Four scenes were re-shot on recorded data before noon.
