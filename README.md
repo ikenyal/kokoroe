@@ -127,7 +127,7 @@ daily plans; the 心得帳 grows as a by-product of that work. To start with you
   npm run eval:quick                    # simulator on the held-out scenes (naive apprentice, no API)
   ```
   `--hostname 127.0.0.1` keeps the server reachable from your machine only. For live Claude calls (optional), put
-  `ANTHROPIC_API_KEY=...` and `KOKOROE_LIVE=1` in `.env.local` (template: `.env.example`). Without a key, marks are recorded but
+  `ANTHROPIC_API_KEY=...` and `KOKOROE_LIVE=1` in `.env.local` (template: `.env.example`). Without both, marks are recorded but
   not read, and the 心得帳 does not grow; the 帳場 shows, as an example, what the live version wrote in the recorded run.
 - **Start from your own company (local only):** `npm run own` (needs `ANTHROPIC_API_KEY` in `.env.local`) opens
   http://127.0.0.1:3000 on your own client ledger instead of the fictional company.
@@ -154,7 +154,7 @@ daily plans; the 心得帳 grows as a by-product of that work. To start with you
 Fictional data: 10 clients, 40 training scenes, 20 held-out scenes, 8 history questions. The master is a simulator that judges
 with code against a hidden ground truth (frozen, checksummed); the apprentice never sees it.
 
-| | Before (client ledger only) | After 40 corrections _(interim)_ |
+| | Before (client ledger, with its constraints) | After 40 corrections _(interim)_ |
 |---|---|---|
 | Held-out match (○) | 55% ± 0% (3 runs) | **64%** (58–70%, 3 training paths × 3 runs) |
 | ○ + △ | 70% | **92%** (90–95%) |
