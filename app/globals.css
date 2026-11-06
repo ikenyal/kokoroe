@@ -26,14 +26,14 @@
     --kami: #16191d;
     --kami-2: #1d2126;
     --sumi: #e6e4df;
-    --nibi: #a3a6ab;
+    --nibi: #b3b6bb; /* one step lighter: the honesty notes are small grey text (ui-critic 11/7, dark phone) */
     --ai: #8fb0d6;
-    --ai-soft: #24303d;
+    --ai-soft: #2d3e53; /* 「この案」 in 変化 must read as a highlight in the dark */
     --ai-fill: #35567d; /* stays a deep indigo in the dark: no pale sky-blue fills */
     --on-fill: #ecebe7;
     --shu: #e07a64;
     --shu-soft: #3a2420;
-    --keisen: #2e333a;
+    --keisen: #3b414a; /* hairlines and the progress track were nearly invisible */
     --waku: #6a7078;
     --sukime: rgb(255 255 255 / 0.01);
     --mura: rgb(255 255 255 / 0.02);
