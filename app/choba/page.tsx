@@ -130,7 +130,7 @@ function EffectView({ effect, client, draft, words, ruleHref, recorded }: { effe
                 <dd className="grid gap-1">
                   <span className="text-[12.5px] text-sumi/75">
                     {/* Always another scene (ruleEffect skips the corrected one): say so, so it does not read as the wrong scene (ui-critic 11/5). */}
-                    直したのは、別の場面（{words(before.sceneId)}）の案<span className="whitespace-nowrap">（師匠 <span className="font-mincho text-shu">{before.verdict}</span>
+                    出どころ：別の場面（{words(before.sceneId)}）の案への直し<span className="whitespace-nowrap">（師匠 <span className="font-mincho text-shu">{before.verdict}</span>
                     {before.remark ? `「${before.remark}」` : "、一言なし"}）</span>
                   </span>
                   {/* No strikethrough: a line through 「なし」 reads as 「な七」 (ui-critic 11/5). The two labels say which is which. */}
@@ -226,7 +226,7 @@ function CheckCard({ p, step, sceneId, proposal, before, sceneOf }: { p: Pending
             </div>
           ))}
       </dl>
-      <input name="remark" maxLength={120} autoComplete="off" aria-label="一言（なくても送れます）" placeholder="一言（なくても送れます）" className="mt-2 block h-9 w-full rounded-[3px] border border-waku bg-kami px-2 font-mincho text-[14px]" />
+      <input name="remark" maxLength={120} autoComplete="off" aria-label="一言（なくても記録できます）" placeholder="一言（なくても記録できます）" className="mt-2 block h-9 w-full rounded-[3px] border border-waku bg-kami px-2 font-mincho text-[14px]" />
       <div className="mt-2 flex gap-2">
         {(["○", "△", "×"] as const).map((v) => (
           <button key={v} name="verdict" value={v} aria-label={`${v} ${VERDICT_WORD[v]}`} className="flex h-14 w-14 flex-col items-center justify-center gap-0.5 rounded-[3px] border border-keisen text-shu hover:border-shu hover:bg-shu-soft">
@@ -491,7 +491,7 @@ export default async function ChobaPage() {
               return (
                 <>
                   <span className="text-sumi">{said}</span>
-                  {p?.status === "offline" && <span className="block text-[12.5px]">{meta.limit ? "上限に達したため、いまは弟子の読み取りを行いません（上限が戻れば行います）。" : "このデモでは弟子の読み取りは行いません（公開版のライブでは行います）。"}</span>}
+                  {p?.status === "offline" && <span className="block text-[12.5px]">{meta.limit ? "上限に達したため、いまは弟子の読み取りを行いません（上限が戻れば行います）。" : "このデモでは心得帳は書き足されません（公開版のライブでは、弟子がこの印を読み取り、心得帳に書き足します）。"}</span>}
                 </>
               );
             })()}
