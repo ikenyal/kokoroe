@@ -22,7 +22,7 @@ export function DemoGuide({ live }: { live: boolean }) {
   if (closed) return null;
   const steps: React.ReactNode[] = [
     "案を読む",
-    "違えば △・× と一言で直す",
+    "違えば △・× で直す（一言は任意）",
     "次の案に「変化」が出る",
     <>
       <Link href="/kokoroe" className="text-ai underline-offset-4 hover:underline">心得帳</Link>に経緯ごと残る

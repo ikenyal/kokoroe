@@ -1,6 +1,6 @@
 # Kokoroe — an AI apprentice that inherits the unwritten etiquette of business
 
-[日本語版 README](README.ja.md) · Built with Claude: Japan 2026
+[日本語版 README](README.ja.md) · Built with Claude: Japan 2026 · D-0xx in the text are decision records in [docs/decisions.md](docs/decisions.md)
 
 **For a small company's veteran about to retire, and whoever takes over.** The veteran can't explain their client etiquette, but
 sees at once what is wrong: they only mark the AI apprentice's drafts ○ / △ / ×. Each correction becomes a 心得 with why it came to
@@ -25,7 +25,7 @@ video's 帳場 scene; in the public demo's 「デモの続き」, the first card
 
 <img src="docs/readme/1-choba-change.webp" alt="The 帳場's 「変化」 panel: the 心得 'when writing formally to the owner's wife, give the owner a word first'; behind the scenes: the earlier draft said none, this draft says a quiet word to the owner" width="720">
 
-**2. The 心得帳 keeps it with its history:** when, from which mark and words of the master, and why. The master can read and
+**2. The 心得帳 keeps it with its history:** when, from which of the master's marks (and words, if any), and why. The master can read and
 delete every entry.
 
 <img src="docs/readme/2-kokoroe-history.webp" alt="心得帳 entry for 浜風運輸: tell bad news to the dispatch manager early, before it is certain; × with the words 'to the dispatch manager, early'; why: in 2019 they were told too late and could not rearrange the trucks" width="720">
@@ -105,9 +105,9 @@ daily plans; the 心得帳 grows as a by-product of that work. To start with you
   Claude, no client-written text. Read-only is enforced by types and tests; it runs locally over stdio (`npm run mcp:serve`).
   Example ([demo/successor-mcp](demo/successor-mcp/)) — *"A shipment to 丸新酒造 will be a week late. Is a phone call to the
   owner's wife enough?"*
-  - **Skill only:** answers from the copy — tell the 蔵元 (the brewery owner) first (K-011). Whether a call is enough is not in the
+  - **Skill only:** answers from the copy ("when sending formally to the wife, give the 蔵元, the brewery owner, a word first") — a call alone is probably not enough; tell the 蔵元 first. Whether a call is enough is not in the
     copy, so it says to ask the master.
-  - **Skill + server:** finds K-018, learned after the copy ("bad news: don't settle it by phone — go to the brewery and say it in
+  - **Skill + server:** finds a 心得 learned after the copy ("bad news: don't settle it by phone — go to the brewery and say it in
     person"), and answers: a call is not enough; visit the brewery.
 
 ## Try it
@@ -205,7 +205,6 @@ Besides the held-out evaluation above, two kinds of test. Neither is a test with
     veteran's ([docs/results/master-role-vs-simulator-2026-11-05.json](docs/results/master-role-vs-simulator-2026-11-05.json)).
   - **Not measured:** writing the same etiquette as prose was not done (the author had no experience to write from). So there is
     no comparison of judging time with writing time, and no count of how much etiquette comes out.
-  Internally it is still named `field` (`KOKOROE_FIELD=1`, `npm run field:save`).
 - **Persona simulation (not a real-world test):** master and successor personas played by Claude (a silent master, one who only
   says 「違う」, a busy-month master, a fat-fingered one, an abbreviating one; an indirect newcomer, a curt asker, and others).
   This checked **tolerance to variation between people**; whether a draft is right is still decided by the machine judge, and the
@@ -234,8 +233,8 @@ What this entry asks to be judged on is what was made with Claude. The line is d
   pages and narration script (made with Claude; the author shortened one part, D-049). Which calls were the author's and what Claude Code did is in
   [docs/how-we-built.md](docs/how-we-built.md) (and in "A second 帳場" below).
 - **What Claude writes inside the app** (Anthropic API, called directly): the apprentice's 段取り drafts, message drafts and visit
-  plans; the readings of the master's remark and the 心得 written from them; company-wide rule proposals; the successor's answers.
-  In the evaluation, the personas' wording (Haiku; cached in `eval/personas-texts.json`). Whether a draft is right is decided by
+  plans; the readings of the master's remark and the 心得 written from them; the successor's answers.
+  In the training loop (evaluation), company-wide rule proposals and the personas' wording (Haiku; cached in `eval/personas-texts.json`). Whether a draft is right is decided by
   code (the machine-checkable simulator), not by Claude.
 - **Kokoroe's Skill and MCP server.** The 心得帳 exported as an Agent Skill (`SKILL.md`) and the read-only MCP server
   (`src/mcp/server.ts`) are part of this work. **Claude Code itself is Anthropic's product, used as it is** — in the video, the
@@ -252,8 +251,8 @@ What this entry asks to be judged on is what was made with Claude. The line is d
 
 ## How we built it with Claude Code
 
-Built in one week by one person with Claude Code at the center (full log: [docs/how-we-built.md](docs/how-we-built.md)). What made
-it possible in a week, from evaluation to deployment and video, was handing Claude Code not only the work but the guardrails.
+Built in one week by one person with Claude Code at the center (full log: [docs/how-we-built.md](docs/how-we-built.md)). Claude Code
+was given not only the work but the guardrails too (hooks, tests, reviewing subagents).
 
 - **Evaluation first.** Day 1 began with a machine-checkable master simulator, a frozen hidden ground truth (a hook blocks edits,
   a test checks checksums), and a test that product code never reads it.
@@ -308,7 +307,7 @@ screening or design review. A general-purpose 帳場 is a possible next step, no
 - **Same settings, different paths.** Two runs with identical settings ended 10 points apart, so results are reported as the mean and
   range over several training paths, never one run.
 - **The ledger trade-off.** Seeding the ledger's constraints and asking "why?" once each made the history answerable (港北: Zoom → Teams,
-  2024), but showing those constraints to the apprentice as the master's corrections made it over-formal; they now stay in the book only.
+  2024), but showing those constraints to the apprentice as the master's corrections made it over-formal; they now stay in the book as "facts copied from the ledger", apart from the master's 心得.
 - **Ranks, tried and dropped.** We replayed 8 recorded training runs (40 scenes each) to test "after a run of ○ at a client, lighten
   the review" (手代 / 番頭). Of the drafts that would have been marked "just confirm", 64–76% had actually been marked △/× — worse
   than the 55% △/× rate across all training drafts (175 of 320). Even at one client, each kind of situation needs its own etiquette, so a run of ○ does not predict
