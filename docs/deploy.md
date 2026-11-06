@@ -50,6 +50,18 @@ Verified on the public URL (`docs/screens/public-live-confirm.png`, `public-live
 - **Built with Podman on the only machine here** (`hodoku-build-rosetta-v2`), as a separate tag (`localhost/kokoroe`); nothing of
   HODOKU's images, settings or cache was changed.
 
+**Deployment 5 (2026-11-07 05:16, `:kokoroe.web.5`, approved by Kento after the interim freeze report):**
+- **From `main` at `733dfbf`.** Settings read into a 600-permission temp file outside the repo and deleted right after; nothing printed.
+- **Environment changes:** `KOKOROE_DAILY_USD=10`, `KOKOROE_JUDGE_DAILY_USD=10`, `KOKOROE_JUDGE_CODE` made with `openssl rand -hex 12`
+  (24 characters, 0-9a-f, so judges can type it without mixing up `O`/`0` or `+ / =`; Kento's choice), shown to Kento once and
+  written nowhere. Everything else unchanged (`KOKOROE_LIVE=1`, the call caps, `KOKOROE_TRUSTED_PROXY_HOPS`; `KOKOROE_FIELD` and
+  `KOKOROE_OWN` unset).
+- **Image:** built on the host, then `podman build` with the separate tag `localhost/kokoroe` (nothing of HODOKU's changed). The
+  push needs the socket path of the running machine (`podman machine inspect <name>`); without the name the template came back empty.
+- **Verified on the public URL with Playwright:** `/`, `/keiko`, `/kokoroe`, `/noren` 200, an unknown page 404; the AI banner;
+  the 「審査用のコード」 field shows; the code is accepted; お試し's first card drafted live in 6.7 s on the judges' budget (one card
+  only). Screenshots: `docs/screens/public-v5-*.png`.
+
 **Decided (Kento 11/6): option B.** At the freeze rebuild (11/6), set `KOKOROE_DAILY_USD` to 10. Kento sets the Claude Console
 monthly limit on the public workspace to $100 himself (raised from $60 when the judges' budget was added, D-067), after checking
 this month's spend so far. At the rebuild also set `KOKOROE_JUDGE_DAILY_USD=10` and `KOKOROE_JUDGE_CODE` (made then with `openssl rand`, 16+ characters, shown to Kento once and written nowhere else;
