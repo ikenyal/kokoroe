@@ -3,7 +3,7 @@
 A new session (even on another account) starts here. It remembers nothing; this file, `CLAUDE.md` and the logs are the memory.
 Updated at the end of every round.
 
-## Where things stand (updated 2026-11-06 19:50 JST)
+## Where things stand (updated 2026-11-06 20:05 JST)
 
 - Branches: work on `ui-polish`; after each round merge to `main` (`--no-ff`) and push both (normal push, never force).
 - Commit author must stay the repository setting: `ikenyal` / the GitHub noreply address (`git config user.email` shows it).
@@ -19,8 +19,8 @@ Updated at the end of every round.
 - Public site: still the old build. First rebuild tonight after Kento OKs the interim freeze report
   (`docs/freeze-report.md`); a second rebuild after 11/7's final version. See "Rebuild" below.
 - Console: workspace `kokoroe-public` has a $100/month cap (alert at $50); Kento set it.
-- Last round: A 30 (19:38) — 心得帳: ledger facts no longer described as the master's; 「出典の一覧」 → 「出どころ」; s06 re-shot.
-  Next eye: B, then C (after 20:08), D, A. Note: `screens.ts --open "details summary"` opens every fold.
+- Last round: B 20 (19:53) — submission draft read item by item: remark optional, taps explained, D-numbers and jargon out.
+  Next eye: C (after 20:08), then D, A, B. Note: `screens.ts --open "details summary"` opens every fold.
 - API spent today on rounds since 18:00: about $0.40 (successor guard 2 × $0.13, C 14 $0.03, C 15 $0.10).
 
 ## The 15-minute rotation
@@ -60,6 +60,7 @@ Updated at the end of every round.
 - OK on the interim freeze report → first rebuild.
 - Submission items 10 and 11 (his own text).
 - Item 27: extend the README title quote to his third sentence?
+- Item 28: keep 「すぐ」 in 「案を見れば「違う」とすぐ言えます」 (overview, README.ja, home)?
 
 ## Next
 
