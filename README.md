@@ -3,11 +3,12 @@
 [日本語版 README](README.ja.md) · Built with Claude: Japan 2026 · D-0xx in the text are decision records in [docs/decisions.md](docs/decisions.md)
 
 **For a small company's veteran about to retire, and whoever takes over.** The veteran can't explain their client etiquette, but
-sees at once what is wrong: they only mark the AI apprentice's drafts ○ / △ / × (OK / OK with a condition / no). Each correction becomes a 心得
+sees what is wrong when shown a draft: they only mark the AI apprentice's drafts ○ / △ / × (OK / OK with a condition / no). Each correction becomes a 心得
 (one lesson) with why it came to be, kept in a 心得帳 (the book of them) and handed to the successor as an Agent Skill.
 
 > Through my work and community activities, I have been involved with a great many companies and organizations. Every one of
-> them has excellent people, each with a feel for the work that is theirs alone. — the author ([more under The problem](#the-problem))
+> them has excellent people, each with a feel for the work that is theirs alone. But most of it lives only in their heads; it is never
+> written down, and it is lost each time people change. — the author ([more under The problem](#the-problem))
 
 > **Draft.** Numbers marked _(interim)_ are from 2026-11-03 and will be replaced on 11/7 by the official run (5 training paths).
 > All companies, people and situations are fictional (株式会社だいだい工房 and its 10 clients).
@@ -50,7 +51,7 @@ the hardest kinds of this to put into words: how to deal with each client.
 
 In a small Japanese company, how to deal with each client lives in one veteran's head: whom to tell first, what to send by mail and
 what to say face to face, when to stay away, who must hear it quietly before it becomes official. Asked to explain, the veteran
-can't — it was never put into words. But show them a draft and they instantly say "no, not like that".
+can't — it was never put into words. But show them a draft and they can say "no, not like that".
 When they retire, the etiquette and *why it became so* leave with them. In Teikoku Databank's [nationwide successor survey (2025)](https://www.tdb.co.jp/report/economic/20251121-successor25y/), 51.2% of the small and medium companies it covered had no
 successor lined up. Among newly appointed presidents, promotion from inside (36.1%) overtook family succession (32.3%) and
 "M&A and others" — mostly acquisitions or secondments — took 20.6% (2025 preliminary figures); the survey calls this the move
