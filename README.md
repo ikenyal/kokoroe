@@ -35,6 +35,15 @@ an answer that cites the 心得 and its history. (This answer was recorded with 
 
 ## The problem
 
+Through my work and community activities, I have been involved with a great many companies and organizations. Every one of them
+has excellent people, each with a feel for the work that is theirs alone. But most of it lives only in their heads; it is never
+written down, and it is lost each time people change. That is a real waste. This is not the story of one company. Given how many
+companies have [no successor](https://www.tdb.co.jp/report/economic/20251121-successor25y/) and that some 3.3 million people change jobs in a year, the same thing is
+happening across Japan — and, by extension, it could happen anywhere in the world where people work. Kokoroe starts with one of
+the hardest kinds of this to put into words: how to deal with each client.
+(Sources: no successor — the Teikoku Databank survey in the next paragraph; 3.3 million — Statistics Bureau of Japan, Labour Force
+Survey (Detailed Tabulation), 2025 average, number of job changers.)
+
 In a small Japanese company, how to deal with each client lives in one veteran's head: whom to tell first, what to send by mail and
 what to say face to face, when to stay away, who must hear it quietly before it becomes official. Asked to explain, the veteran
 can't — it was never put into words. But show them a draft and they instantly say "no, not like that".
@@ -43,8 +52,7 @@ successor lined up. Among newly appointed presidents, promotion from inside (36.
 "M&A and others" — mostly acquisitions or secondments — took 20.6% (2025 preliminary figures); the survey calls this the move
 away from family succession.
 
-This setting is one the author lives day to day: client-specific etiquette in Japanese business ([docs/evolution.md](docs/evolution.md),
-background). The successor's side was seen in the author's own run as the master on fictional scenes: someone who does not know the
+The successor's side was seen in the author's own run as the master on fictional scenes: someone who does not know the
 history marks polite, plausible drafts ○ (18 of 20) — and of those 18, the code judge (one simulated master's ground truth, not a
 real veteran) marks 15 △ or × (see *What was tested*). And before the kickoff, a small self-trial showed that
 corrections are rarely a pure ○ or ×: most are "OK, but…" — which is why the master has a third mark, △ ([docs/evolution.md](docs/evolution.md), background).
