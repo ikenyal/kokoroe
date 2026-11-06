@@ -9,6 +9,8 @@
  * --marks ×,○,○: the marks to give, in order (default △ then ○). --mobile: a phone viewport (390×844). --shots <dir>: screenshot
  *   folder under docs/screens/ui-polish/ (11/5, 体験の目 3).
  * --ask "<question>" [--client 浜風運輸]: after the cards, ask 暖簾を継ぐ a free question live and time the answer (11/5, 体験の目 4).
+ * --judge-code <code> [--visitor-cap 0]: start the server with that 審査用のコード, enter it on the home page first, and (with
+ *   --visitor-cap) give visitors a different daily cap — to check that judges stay live when visitors are out (11/6).
  * --no-remark: mark △/× without a remark (「どこが違う？」 is offered only then).
  * --none-area timing: at the first readings, tap 「どれでもない」 with that 「どこが違う？」 area and time the second readings (D-057).
  * --read: seconds the master spends reading each card before marking it (11/5 before 先読み: 0; the 師匠役テスト median was 53.5 s).
@@ -21,7 +23,7 @@ import path from "node:path";
 import { parseArgs } from "node:util";
 import { chromium, type Page } from "playwright";
 
-const { values } = parseArgs({ options: { cards: { type: "string", default: "4" }, read: { type: "string", default: "0" }, choose: { type: "boolean", default: false }, cap: { type: "string", default: "0.5" }, port: { type: "string", default: "3124" }, marks: { type: "string", default: "△,○,○,○,○,○" }, mobile: { type: "boolean", default: false }, shots: { type: "string", default: "27-experience" }, ask: { type: "string" }, "none-area": { type: "string" }, "no-remark": { type: "boolean", default: false }, client: { type: "string", default: "浜風運輸" } } });
+const { values } = parseArgs({ options: { cards: { type: "string", default: "4" }, read: { type: "string", default: "0" }, choose: { type: "boolean", default: false }, cap: { type: "string", default: "0.5" }, port: { type: "string", default: "3124" }, marks: { type: "string", default: "△,○,○,○,○,○" }, mobile: { type: "boolean", default: false }, shots: { type: "string", default: "27-experience" }, ask: { type: "string" }, "none-area": { type: "string" }, "no-remark": { type: "boolean", default: false }, "judge-code": { type: "string" }, "visitor-cap": { type: "string" }, client: { type: "string", default: "浜風運輸" } } });
 const ROOT = path.resolve(__dirname, "..");
 const BASE = `http://127.0.0.1:${values.port}`;
 
@@ -52,7 +54,7 @@ const cardShown = (page: Page) => async () => (await page.locator('section[aria-
   const dataDir = mkdtempSync(path.join(tmpdir(), "kokoroe-exp-"));
   const env: NodeJS.ProcessEnv = {
     PATH: process.env.PATH, NODE_ENV: "production", HOSTNAME: "127.0.0.1", PORT: values.port,
-    KOKOROE_DATA_DIR: dataDir, KOKOROE_LIVE: "1", KOKOROE_DAILY_USD: values.cap, ...(process.env.KOKOROE_PREFETCH_DEBUG ? { KOKOROE_PREFETCH_DEBUG: "1" } : {}), ANTHROPIC_API_KEY: keyFromEnvLocal(),
+    KOKOROE_DATA_DIR: dataDir, KOKOROE_LIVE: "1", KOKOROE_DAILY_USD: values["visitor-cap"] ?? values.cap, ...(values["judge-code"] ? { KOKOROE_JUDGE_CODE: values["judge-code"], KOKOROE_JUDGE_DAILY_USD: values.cap } : {}), ...(process.env.KOKOROE_PREFETCH_DEBUG ? { KOKOROE_PREFETCH_DEBUG: "1" } : {}), ANTHROPIC_API_KEY: keyFromEnvLocal(),
   };
   const server = spawn("node", ["server.js"], { cwd: path.join(ROOT, ".image"), env, stdio: ["ignore", "ignore", "inherit"] });
   const steps: { step: string; ms: number; seen: { at: number; text: string }[] }[] = [];
@@ -61,6 +63,13 @@ const cardShown = (page: Page) => async () => (await page.locator('section[aria-
     const browser = await chromium.launch();
     const page = await (await browser.newContext({ viewport: values.mobile ? { width: 390, height: 844 } : { width: 1280, height: 900 }, ...(values.mobile ? { isMobile: true, hasTouch: true, deviceScaleFactor: 2 } : {}), locale: "ja-JP" })).newPage();
     await page.goto(BASE);
+    if (values["judge-code"]) {
+      await page.locator("summary:has-text('審査用のコード')").click();
+      await page.locator('input[name="code"]').fill(values["judge-code"]);
+      await page.locator('button:has-text("確かめる")').click();
+      await page.locator("text=審査用のコードを確認しました").waitFor({ timeout: 10000 });
+      steps.push({ step: "審査用のコードを入れた", ms: 0, seen: [] });
+    }
     await page.locator('form:has(input[value="trial"]) button').click();
     steps.push({ step: "師匠になって試す → 最初の案", ...(await waitFor(page, cardShown(page), 90000)) });
     const marks = values.marks.split(",").slice(0, Number(values.cards));
@@ -124,13 +133,18 @@ const cardShown = (page: Page) => async () => (await page.locator('section[aria-
   } finally {
     server.kill("SIGTERM");
     let usd = NaN;
-    try { usd = JSON.parse(readFileSync(path.join(dataDir, "limits.json"), "utf8")).usd; } catch {}
+    let judgeUsd = 0;
+    try {
+      const l = JSON.parse(readFileSync(path.join(dataDir, "limits.json"), "utf8"));
+      usd = l.usd;
+      judgeUsd = l.judgeUsd ?? 0;
+    } catch {}
     rmSync(dataDir, { recursive: true, force: true });
     for (const s of steps) {
       console.log(`${(s.ms / 1000).toFixed(1).padStart(6)} s  ${s.step}`);
       for (const x of s.seen) console.log(`         ${(x.at / 1000).toFixed(1)} s: ${x.text}`);
     }
-    console.log(`spend (server's estimate) ≈ $${usd.toFixed(3)} | server stopped`);
+    console.log(`spend (server's estimate) ≈ $${usd.toFixed(3)} visitors, $${judgeUsd.toFixed(3)} judges | server stopped`);
     const out = path.join(ROOT, "docs/results", `experience-${new Date(Date.now() + 9 * 3600_000).toISOString().slice(0, 16).replace(":", "")}.json`);
     writeFileSync(out, JSON.stringify({ note: "体験の目: production build on 127.0.0.1, live, fictional data. ms = time until the next state is on screen (-1 = not within the limit).", readSeconds: Number(values.read), usd, steps }, null, 2) + "\n");
     console.log(path.relative(ROOT, out));
