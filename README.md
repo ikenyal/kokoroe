@@ -154,7 +154,7 @@ daily plans; the 心得帳 grows as a by-product of that work. To start with you
 Fictional data: 10 clients, 40 training scenes, 20 held-out scenes, 8 history questions. The master is a simulator that judges
 with code against a hidden ground truth (frozen, checksummed); the apprentice never sees it.
 
-| | Before (ledger + explicit constraints) | After 40 corrections _(interim)_ |
+| | Before (client ledger only) | After 40 corrections _(interim)_ |
 |---|---|---|
 | Held-out match (○) | 55% ± 0% (3 runs) | **64%** (58–70%, 3 training paths × 3 runs) |
 | ○ + △ | 70% | **92%** (90–95%) |
