@@ -91,7 +91,7 @@ function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => str
             <p className="mt-3 border-t border-keisen pt-2 text-[13.5px] text-sumi">
               根拠・経緯：
               {(() => {
-                const fact = t.citations.filter((c) => /出典[:：]\s*台帳/.test(c.history)).length;
+                const fact = t.citations.filter((c) => /出典[:：]\s*(取引先)?台帳/.test(c.history)).length;
                 const rule = t.citations.length - fact;
                 if (!t.citations.length) return "なし（心得帳に記録がないので、師匠に確認を勧める）";
                 return [rule && `心得${rule}つ`, fact && `取引先台帳の決まりごと${fact}つ`].filter(Boolean).join("・") + "（わ⁠け⁠は⁠下⁠に⁠）";
@@ -123,7 +123,7 @@ function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => str
                   <p className="text-[13px] text-nibi">
                     {/* Both kinds say where they came from (ui-critic 11/6 evening). A fact copied from the client ledger is shown
                         without its copy date (Kento 11/6 item 25: it is not when it began); the master's correction keeps its date. */}
-                    {h.source?.startsWith("台帳") ? (
+                    {/^(取引先)?台帳/.test(h.source ?? "") ? (
                       <span className="inline-block whitespace-nowrap">出どころ：取引先台帳</span>
                     ) : (
                       <span className="inline-block whitespace-nowrap">出どころ：師匠の直し{h.written && `（心得帳に書いた日 ${h.written}）`}</span>
