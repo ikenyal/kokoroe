@@ -48,7 +48,7 @@ function Rule({ r, fact = false, used = [] }: { r: KokoroeRule; fact?: boolean; 
           {fromLedger && fromMaster && "台帳の事実を、師匠の判定で直したもの"}
         </p>
       )}
-      <p className={`yomi ${fact ? "text-[16px]" : "text-[18px]"} ${r.status !== "active" ? "text-nibi line-through decoration-nibi/50" : ""}`}>{r.text}</p>
+      <p className={`yomi [text-wrap:pretty] ${fact ? "text-[16px]" : "text-[18px]"} ${r.status !== "active" ? "text-nibi line-through decoration-nibi/50" : ""}`}>{r.text}</p>
       {r.when && <p className="yomi text-[15px] text-nibi">条件：{r.when}</p>}
       {fact ? (
         trigger && (
