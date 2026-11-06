@@ -742,6 +742,16 @@ Totals over the 4 stores, as in the table above. History is the mean per store, 
   before: history 5 → 5, far made-up 0 → 0, near 1 → 1, price 2/2, internal labels 18 → 1. The one left is a K-id inside a
   quoted rule text; the screen's `plainText` shows it as 「心得」.
 - **Cost:** about $0.96 in all (cap $1). 11/7's official run measures this version.
+- **Second addendum (2026-11-06 evening, Kento's item 25): ledger wording and ledger dates.** A live answer said
+  「…2026年11月3日に取引先台帳の明示的な制約として書かれた…」: internal wording (it comes from the 沿革's 出典 label), and the
+  date is only when the ledger fact was copied in. The plain-words list now bans 「台帳の制約」「明示的な制約」 (say
+  「取引先台帳にそう書かれています」), and a 沿革 line whose 出典 is 台帳 is told without its 日付. Lines from the master's judgment
+  keep their dates, also inside 〔台帳＋師匠〕 rules (hitl-reviewer: key it on each line's 出典, not on the rule's marker).
+  Checked on 1 store (`successor-guard-2026-11-06-after-25-final-1store.json`, ≈ $0.13; the first wording ≈ $0.13 too):
+  history 5 → 6 of 8, far questions made up 0 → 0, near 1 → 2 (of 4; within the run-to-run spread seen above), price → master
+  2/2, 「明示的な制約」 2 → 0, internal labels 1 → 1 (a K-id; the screen shows it as 「心得」). The master-taught rule's date
+  (11/3, with its 2019 きっかけ) is still said. `eval:quick` runs the fixed textbook baseline and does not exercise the
+  successor (0% / 45%, unchanged from 11/4).
 - **Kento's "30 questions not in the book":** the repo has no 30-question set. The check was run on the guard's existing
   not-covered set: 10 questions (6 far, 4 near) × 4 stores. The far ones are the made-up-answer check, and it stays at 0.
 - **Recorded answers are untouched:**
