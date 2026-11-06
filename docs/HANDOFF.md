@@ -3,7 +3,7 @@
 A new session (even on another account) starts here. It remembers nothing; this file, `CLAUDE.md` and the logs are the memory.
 Updated at the end of every round.
 
-## Where things stand (updated 2026-11-07 04:55 JST)
+## Where things stand (updated 2026-11-07 05:25 JST)
 
 - Branches: work on `ui-polish`; after each round merge to `main` (`--no-ff`) and push both (normal push, never force).
 - Commit author must stay the repository setting: `ikenyal` / the GitHub noreply address (`git config user.email` shows it).
@@ -16,11 +16,11 @@ Updated at the end of every round.
   - 25: successor prompt plain words (ledger wording, no copy dates for ledger 沿革 lines). hitl-reviewer and the successor
     guard checked it (D-054 second addendum).
   - 26: Kento's first two sentences under the README titles (en/ja).
-- Public site: still the old build. First rebuild tonight after Kento OKs the interim freeze report
-  (`docs/freeze-report.md`); a second rebuild after 11/7's final version. See "Rebuild" below.
+- Public site: deployment 5 (`:kokoroe.web.5`, main `733dfbf`) since 11/7 05:16, with the judges' lane on. A second rebuild
+  after 11/7's final version (Kento's OK; a new judge code only if Kento asks — the current one is already in his hands).
 - Console: workspace `kokoroe-public` has a $100/month cap (alert at $50); Kento set it.
-- Last round: D 29 (04:53) — interim freeze report brought up to 04:55. From 05:00: no prompt/learning/eval changes.
-  Next eye: A, then B, C (after 05:38), D. At 07:00: final freeze report, then wait for Kento.
+- Last round: public rebuild (05:16) and Kento's items 27/28 (README quote, no 「すぐ」).
+  Next eye: A, then B, C, D until 07:00; then the final freeze report.
 - API spent on rounds: 11/6 since 18:00 about $0.61; 11/7 from 00:00: about $0.30 so far (cap $5 for rounds; eval:final ≈ $9.75 is separate and needs Kento's go).
 
 ## The 15-minute rotation
@@ -59,10 +59,8 @@ Updated at the end of every round.
 
 ## Waiting on Kento
 
-- OK on the interim freeze report → first rebuild.
 - Submission items 10 and 11 (his own text).
-- Item 27: extend the README title quote to his third sentence?
-- Item 28: keep 「すぐ」 in 「案を見れば「違う」とすぐ言えます」 (overview, README.ja, home)?
+
 
 ## Next
 
