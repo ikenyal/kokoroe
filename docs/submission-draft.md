@@ -79,7 +79,7 @@ URL: 〔11/7 の撮影のあと、YouTube に限定公開でアップロード�
 
 | 選ぶ | 製品・機能 | どこで何に使ったか（根拠） |
 |---|---|---|
-| ✓ | **Claude Code CLI** | 開発のすべて。プランモードで初日の計画。フック（MCP を止める・秘密情報の検査・凍結した正解を守る・評価なしのコミットを止める・AWS のプロファイル）。サブエージェント（hitl-reviewer・ui-critic・judge-critic ほか）。Skills（world-consistency・decision-log）。`claude -p` で後任の手元の Claude Code を再現（`docs/how-we-built.md`、`.claude/`） |
+| ✓ | **Claude Code CLI** | 開発のすべて。プランモードで初日の計画。フック（MCP を止める・秘密情報の検査・凍結した正解を守る・評価なしのコミットを止める・AWS のプロファイル）。サブエージェント（hitl-reviewer・ui-critic・judge-critic ほか）。Skills（world-consistency・decision-log）。`claude -p` で後任の手元の Claude Code を再現。セッションの cron で15分ごとに4つの目を順に回した（`docs/ui-polish-log.md`）。cron はセッションに結びつくので、引き継ぎを `docs/HANDOFF.md` に書いた（`docs/how-we-built.md`、`.claude/`） |
 | ✓ | **Claude API** | 製品の中身。弟子の段取りの案・文面の下書き・訪問の段取りと後任の答えは Sonnet 5.5、師匠の直しの読み取りと心得帳は Opus 5.5。学習のループ（評価）では全社の心得の提案と、ペルソナの言い回し（Haiku、`eval/personas-texts.json` に保存）。案の正否は Claude ではなくコードが判定。`@anthropic-ai/sdk` で直接呼ぶ（CLAUDE.md の表、README「役割でモデルを分ける」） |
 | ✓ | **Managed Agents** | メモリストアだけを心得帳の別の保存先として実装し、実際の API で速さを測った（エージェントのセッションは使っていない。帳場のセッションごとにストアを作り、心得16件・判定27件を入れるのに約2.1秒、読み書きは0.2〜0.7秒）。今の範囲では利点が出ないため、既定はオフ。 |
 | ✓ | **Claude.ai** | 作者が計画と指示の相談に使った（Kento 11/6 に確認）。記録にあるのは、動画の構成（v2・v3 の追加分）とナレーションの台本を Claude とのチャットで作ったこと（台本の一部は作者が短くした） |
