@@ -11,6 +11,8 @@
  * --ask "<question>" [--client 浜風運輸]: after the cards, ask 暖簾を継ぐ a free question live and time the answer (11/5, 体験の目 4).
  * --judge-code <code> [--visitor-cap 0]: start the server with that 審査用のコード, enter it on the home page first, and (with
  *   --visitor-cap) give visitors a different daily cap — to check that judges stay live when visitors are out (11/6).
+ * --judge-late: with --judge-code, start without the code; after the first △/× (refused by the visitors' cap), go home,
+ *   enter the code, return to the 帳場 and carry on — to see whether the session goes live again (11/6, 体験の目 13).
  * --no-remark: mark △/× without a remark (「どこが違う？」 is offered only then).
  * --none-area timing: at the first readings, tap 「どれでもない」 with that 「どこが違う？」 area and time the second readings (D-057).
  * --read: seconds the master spends reading each card before marking it (11/5 before 先読み: 0; the 師匠役テスト median was 53.5 s).
@@ -23,7 +25,7 @@ import path from "node:path";
 import { parseArgs } from "node:util";
 import { chromium, type Page } from "playwright";
 
-const { values } = parseArgs({ options: { cards: { type: "string", default: "4" }, read: { type: "string", default: "0" }, choose: { type: "boolean", default: false }, cap: { type: "string", default: "0.5" }, port: { type: "string", default: "3124" }, marks: { type: "string", default: "△,○,○,○,○,○" }, mobile: { type: "boolean", default: false }, shots: { type: "string", default: "27-experience" }, ask: { type: "string" }, "none-area": { type: "string" }, "no-remark": { type: "boolean", default: false }, "judge-code": { type: "string" }, "visitor-cap": { type: "string" }, client: { type: "string", default: "浜風運輸" } } });
+const { values } = parseArgs({ options: { cards: { type: "string", default: "4" }, read: { type: "string", default: "0" }, choose: { type: "boolean", default: false }, cap: { type: "string", default: "0.5" }, port: { type: "string", default: "3124" }, marks: { type: "string", default: "△,○,○,○,○,○" }, mobile: { type: "boolean", default: false }, shots: { type: "string", default: "27-experience" }, ask: { type: "string" }, "none-area": { type: "string" }, "no-remark": { type: "boolean", default: false }, "judge-code": { type: "string" }, "judge-late": { type: "boolean", default: false }, "visitor-cap": { type: "string" }, client: { type: "string", default: "浜風運輸" } } });
 const ROOT = path.resolve(__dirname, "..");
 const BASE = `http://127.0.0.1:${values.port}`;
 
@@ -63,13 +65,14 @@ const cardShown = (page: Page) => async () => (await page.locator('section[aria-
     const browser = await chromium.launch();
     const page = await (await browser.newContext({ viewport: values.mobile ? { width: 390, height: 844 } : { width: 1280, height: 900 }, ...(values.mobile ? { isMobile: true, hasTouch: true, deviceScaleFactor: 2 } : {}), locale: "ja-JP" })).newPage();
     await page.goto(BASE);
-    if (values["judge-code"]) {
+    const enterCode = async () => {
       await page.locator("summary:has-text('審査用のコード')").click();
-      await page.locator('input[name="code"]').fill(values["judge-code"]);
+      await page.locator('input[name="code"]').fill(values["judge-code"]!);
       await page.locator('button:has-text("確かめる")').click();
-      await page.locator("text=審査用のコードを確認しました").waitFor({ timeout: 10000 });
+      await page.locator("text=確認しました。このブラウザでは").waitFor({ timeout: 10000 });
       steps.push({ step: "審査用のコードを入れた", ms: 0, seen: [] });
-    }
+    };
+    if (values["judge-code"] && !values["judge-late"]) await enterCode();
     await page.locator('form:has(input[value="trial"]) button').click();
     steps.push({ step: "師匠になって試す → 最初の案", ...(await waitFor(page, cardShown(page), 90000)) });
     const marks = values.marks.split(",").slice(0, Number(values.cards));
@@ -94,6 +97,18 @@ const cardShown = (page: Page) => async () => (await page.locator('section[aria-
         steps.push({ step: "（画面）読み取りの欄の見出しの位置", ms: 0, seen: [{ at: 0, text: JSON.stringify(await page.evaluate(() => ({ scrollY: Math.round(scrollY), headingTop: Math.round(document.getElementById("bg-h")?.getBoundingClientRect().top ?? NaN), innerHeight }))) }] });
         await shot("after-correction-viewport");
         await shot("after-correction-full", true);
+        if (n === 0 && values["judge-late"] && values["judge-code"]) {
+          // 通しの目 16: a judge who reaches the visitors' limit first, then enters the code mid-session. Does the next card go live?
+          const note = (await page.locator("[role=status]").allInnerTexts().catch(() => [])).join(" / ").replace(/\s+/g, " ").slice(0, 300);
+          steps.push({ step: "（画面）上限のお知らせ", ms: 0, seen: [{ at: 0, text: note }] });
+          await page.goto(BASE);
+          await enterCode();
+          await page.goto(BASE + "/choba");
+          await page.waitForTimeout(1500);
+          const status = (await page.locator("main").first().innerText().catch(() => "")).replace(/\s+/g, " ").slice(0, 160);
+          steps.push({ step: "コードを入れて帳場に戻った（画面の上）", ms: 0, seen: [{ at: 0, text: status }] });
+          await shot("judge-late-back", true);
+        }
         if (values.choose) {
           const aside = () => page.locator("aside").first().innerText().catch(() => "");
           const noneArea = values["none-area"];

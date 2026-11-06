@@ -443,6 +443,16 @@ export async function enterJudgeCode(_prev: string, formData: FormData): Promise
   if (!reserveJudgeTry(await clientIp())) return "limit";
   if (!codeMatches(String(formData.get("code") ?? "").slice(0, 200))) return "ng";
   (await cookies()).set(JUDGE_COOKIE, judgeToken(), { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/", maxAge: 14 * 24 * 3600 });
+  // 体験の目 13: a judge who met the visitors' limit first, then entered the code, kept seeing that (now wrong) notice. The next
+  // live call is checked against the judges' budget anyway; only the stale notice of this browser's session is cleared.
+  const s = await getSession();
+  if (s) {
+    const m = readMeta(s.mode, s.sid);
+    if (m.limit) {
+      delete m.limit;
+      s.saveMeta(m);
+    }
+  }
   return "ok";
 }
 
