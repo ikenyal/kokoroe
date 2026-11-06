@@ -114,7 +114,8 @@ daily plans; the 心得帳 grows as a by-product of that work. To start with you
   screen says so (「本日のお試し上限に達しました…」) and the demo goes on with recorded data.
 - **For judges:** enter the code given in the submission form under 「審査用のコード」 at the bottom of the home page (open it first), and live calls
   come from a separate daily budget, so visitors using up theirs does not stop you. Without the code, every screen still works on
-  recorded data. The code changes only where the spend is counted, not drafting, learning, judging or the evaluation.
+  recorded data. The code changes only how the limits are counted (its own daily budget, no per-session cap), not drafting, learning, judging
+  or the evaluation.
 - **Run locally** (Node 22+, npm; checked from a fresh clone: all four on 11/3; install, tests, eval:quick and a production build again on 11/5):
   ```bash
   npm ci
