@@ -24,8 +24,8 @@ export function JudgeCodeForm({ already }: { already: boolean }) {
         <div className="mt-3">
           <p className="yomi text-nibi">審査員の方へ: 提出フォームでお渡ししたコードを入れると、ライブ（その場で弟子が案を作る）を、ほかの来場者とは別の枠で動かせます。コードがなくても、記録済みのデータですべての画面を見られます。</p>
           <form action={action} className="mt-2 flex flex-wrap items-center gap-2">
-            <input name="code" type="password" autoComplete="off" maxLength={200} aria-label="審査用のコード" value={code} onChange={(e) => setCode(e.target.value)} className="h-10 w-56 rounded-[3px] border border-waku bg-kami px-2 text-[14px] text-sumi" />
-            <button disabled={pending} className="h-10 rounded-[3px] border border-ai px-4 text-ai disabled:opacity-60">確かめる</button>
+            <input name="code" type="password" autoComplete="off" maxLength={200} aria-label="審査用のコード" value={code} onChange={(e) => setCode(e.target.value)} className="h-11 w-56 rounded-[3px] border border-waku bg-kami px-2 text-[14px] text-sumi" />
+            <button disabled={pending} className="h-11 rounded-[3px] border border-ai px-4 text-ai disabled:opacity-60">確かめる</button>
           </form>
           {state && SAID[state] && <p role="alert" className="mt-2 font-medium text-sumi">{SAID[state]}</p>}
         </div>
