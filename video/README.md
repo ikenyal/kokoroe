@@ -111,6 +111,10 @@ entrant's own MCP server. So the video says it on screen (no narration change):
 - [ ] 11/7 live s05 (judge-critic 11/5, round 3): after the △, the right column must visibly show the apprentice's reading and
   「心得帳に書きました」 (the Opus step; 6.1 s after △ in 体験の目 2). In fixed mode it is empty. If the reading is not in yet when the
   camera would move on, hold on the right column instead of the visit plan. Keep a still of it.
+- [ ] 11/7 live s05 (judge-critic 11/6 evening): the new sentence 「弟子はその一言を読み取り、心得帳に書きました。」 must play over a
+  frame whose right column shows 「心得帳に書きました」. If the take falls back to an empty remark (「一言なし」) or shows
+  「このデモでは心得帳は書き足されません」, change the sentence in `scenes.json` to 「弟子はその △ の意味を読み取り、心得帳に書きました。」 and
+  re-make the s05 narration with it.
 - [x] s02 (Kento 11/5 night): a note from about 8.9 s (11.6 s before item 24; set on 11/7 from the new audio), when the mail goes out: 「作者が初見で ○ を付けた18件のうち、15件は、師匠なら直す案でした」
   with its conditions (fictional data, 20 training scenes, the author as a master who did not know the history, simulator: △ 8 · × 7, D-059;
   `docs/results/master-role-vs-simulator-2026-11-05.json`). On screen only: the narration is unchanged, because a sentence would

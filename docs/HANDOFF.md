@@ -3,7 +3,7 @@
 A new session (even on another account) starts here. It remembers nothing; this file, `CLAUDE.md` and the logs are the memory.
 Updated at the end of every round.
 
-## Where things stand (updated 2026-11-06 21:35 JST)
+## Where things stand (updated 2026-11-06 21:50 JST)
 
 - Branches: work on `ui-polish`; after each round merge to `main` (`--no-ff`) and push both (normal push, never force).
 - Commit author must stay the repository setting: `ikenyal` / the GitHub noreply address (`git config user.email` shows it).
@@ -19,8 +19,8 @@ Updated at the end of every round.
 - Public site: still the old build. First rebuild tonight after Kento OKs the interim freeze report
   (`docs/freeze-report.md`); a second rebuild after 11/7's final version. See "Rebuild" below.
 - Console: workspace `kokoroe-public` has a $100/month cap (alert at $50); Kento set it.
-- Last round: A 32 (21:23) — 帳場: after-△ note says the 心得帳 is not added to in the demo; 出どころ on the 変化 line; 一言 「なくても記録できます」; s05 re-shot.
-  Next eye: B, then C, D, A. Note: `screens.ts --open "details summary"` opens every fold.
+- Last round: B 22 (21:38) — s05 fallback sentence in the 11/7 checklist; README says what a keyless run does; 心得帳 出どころ = 師匠の直し; 78 re-taken, s06 re-shot.
+  Next eye: C (runs again this cycle; after 21:38 is fine), then D, A, B.
 - API spent today on rounds since 18:00: about $0.51 (successor guard 2 × $0.13, C 14 $0.03, C 15 $0.10, C 16 $0.11).
 
 ## The 15-minute rotation
