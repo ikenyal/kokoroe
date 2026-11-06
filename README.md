@@ -113,7 +113,7 @@ daily plans; the 心得帳 grows as a by-product of that work. To start with you
 
 ## Try it
 
-- **Public demo:** _URL to be added (11/6)._ Two modes: **デモの続き** (button 「デモの続きから見る」: starts from the 心得帳 of a recorded training run stopped
+- **Public demo:** [https://kokoroe.xzan0gz3dgpb8.ap-northeast-1.cs.amazonlightsail.com/](https://kokoroe.xzan0gz3dgpb8.ap-northeast-1.cs.amazonlightsail.com/) — two modes: **デモの続き** (button 「デモの続きから見る」: starts from the 心得帳 of a recorded training run stopped
   half-way; on the public demo the apprentice drafts from there and reads your marks live) and **お試し** (button 「師匠になって試す」: you
   are the master, from an empty 心得帳). The first card takes about 10 s in デモの続き and about 5 s in お試し; the screen says so while
   you wait. Live calls have limits per session and per day; when one is reached, the
