@@ -90,7 +90,7 @@ export function JudgeForm({ sceneId, live = false }: { sceneId: string; live?: b
       <Waiting live={live} sent={sent} />
       <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-end">
         <label className="flex-1">
-          <span className="text-[13px] text-nibi">一言（なくても送れます）</span>
+          <span className="text-[13px] text-nibi">一言（なくても記録できます）</span>
           <input
             name="remark"
             maxLength={120}
