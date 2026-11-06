@@ -543,3 +543,14 @@ Short entries, appended every work session. Source material for the README secti
 - **A hand-over file for another account.** Kento may continue on another Claude Code account if usage runs out. Claude wrote
   `docs/HANDOFF.md`: the state, the rotation rules, the cron prompt to paste (crons are tied to a session), the stop time, what
   waits on Kento, and next steps. Every round updates it. Commits stay authored by the repository's noreply address.
+- **Through the night (19:30–01:10): small eyes, real catches.** The rotation kept running every 15 minutes. Most findings
+  were wording: the one-line remark is optional, a single word (出どころ) for where a 心得 came from on every screen, one name
+  for the Before (the client ledger with its constraints, D-011), and both READMEs read end to end. Three were real defects:
+  - **A live-only bug.** On 暖簾を継ぐ, live answers spell the ledger source differently from recorded ones, so a ledger fact was
+    labelled as the master's correction. Only a live run could show it (C 17); a test now pins both spellings.
+  - **A stale message after the judge's code.** A mark left unread by a limit said 「このデモでは…」 once the code cleared the
+    notice. Found by re-running the judges' lane live before the rebuild (C 19).
+  - **A ten-second silence.** 「デモの続き」 on a live server takes about 10 s to the first card; the 帳場 now says what is happening.
+  - **One process slip.** A round changed the README's generated results table by hand and committed while two tests failed,
+    because the command only printed the test output. It was fixed within minutes in the generator, and every later commit is
+    gated on the test exit code (`docs/ui-polish-log.md`, D 20).
