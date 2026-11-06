@@ -22,10 +22,10 @@ export function DemoGuide({ live }: { live: boolean }) {
   if (closed) return null;
   const steps: React.ReactNode[] = [
     "案を読む",
-    "違えば △・× で直す（一言は任意）",
+    "違えば △・×（一言は任意）",
     "次の案に「変化」が出る",
     <>
-      <Link href="/kokoroe" className="text-ai underline-offset-4 hover:underline">心得帳</Link>に経緯ごと残る
+      <Link href="/kokoroe" className="text-ai underline-offset-4 hover:underline">心得帳</Link>に経緯ごと残る{live ? "" : "（ライブ版で）"}
     </>,
     <>
       <Link href="/noren" className="text-ai underline-offset-4 hover:underline">暖簾を継ぐ</Link>で後任が理由つきで答える
