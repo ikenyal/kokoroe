@@ -3,7 +3,7 @@
 A new session (even on another account) starts here. It remembers nothing; this file, `CLAUDE.md` and the logs are the memory.
 Updated at the end of every round.
 
-## Where things stand (updated 2026-11-07 06:35 JST)
+## Where things stand (updated 2026-11-07 07:00 JST)
 
 - Branches: work on `ui-polish`; after each round merge to `main` (`--no-ff`) and push both (normal push, never force).
 - Commit author must stay the repository setting: `ikenyal` / the GitHub noreply address (`git config user.email` shows it).
@@ -19,8 +19,8 @@ Updated at the end of every round.
 - Public site: deployment 5 (`:kokoroe.web.5`, main `733dfbf`) since 11/7 05:16, with the judges' lane on. A second rebuild
   after 11/7's final version (Kento's OK; a new judge code only if Kento asks — the current one is already in his hands).
 - Console: workspace `kokoroe-public` has a $100/month cap (alert at $50); Kento set it.
-- Last round: B 31 (06:23) — pre-freeze check: no contradictions, judge code nowhere in the tree; hint says 'open', second rebuild keeps the same code.
-  Next eye: D (06:37; C skipped this cycle), then at 07:00 the final freeze report and wait.
+- **Frozen at 11/7 07:00.** Final freeze report written (`docs/freeze-report.md`, top section). No new improvements; rounds after
+  07:00 do nothing. Waiting for Kento (eval:final, narration, shoot, second rebuild — see the report).
 - API spent on rounds: 11/6 since 18:00 about $0.61; 11/7 from 00:00: about $0.30 so far (cap $5 for rounds; eval:final ≈ $9.75 is separate and needs Kento's go).
 
 ## The 15-minute rotation
@@ -65,7 +65,7 @@ Updated at the end of every round.
 ## Next
 
 1. ~~Interim freeze report → Kento's OK → rebuild~~ done 11/7 05:16 (deployment 5).
-2. At 07:00: write the final freeze report (`docs/freeze-report.md`) and wait for Kento.
+2. ~~At 07:00: final freeze report~~ written; waiting for Kento.
 3. 11/7 after the freeze: `eval:final`, narration for s01/s02/s04b/s05/s06/s07c/s08b, re-shoot, README numbers, second rebuild (Kento's OK; keep the same judge code).
 
 ## The cron prompt (paste as-is when re-creating)
