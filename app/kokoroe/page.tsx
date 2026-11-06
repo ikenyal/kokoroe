@@ -34,7 +34,13 @@ function Rule({ r, fact = false, used = [] }: { r: KokoroeRule; fact?: boolean; 
   const judgmentOf = (id: string) => r.sources.find((s) => s.kind !== "ledger" && "judgmentId" in s && s.judgmentId === id) as Extract<RuleSource, { verdict?: unknown }> | undefined;
   const trigger = r.history.map((h) => h.trigger).filter(Boolean).at(-1);
   return (
-    <li id={r.id} className="scroll-mt-6 border-t border-keisen py-4 first:border-t-0">
+    <li id={r.id} className={`scroll-mt-6 border-t border-keisen py-4 first:border-t-0 ${r.status !== "active" ? "text-sumi/70" : ""}`}>
+      {r.status !== "active" && (
+        // ui-critic 11/6: a removed item looked like a live 心得 (same heading, vermilion marks).
+        <p className="mb-1 inline-block rounded-[3px] border border-keisen px-2 text-[12.5px] text-nibi">
+          {r.mergedInto ? `${r.mergedInto} にまとめた` : r.history.at(-1)?.after.startsWith("（取り消し") ? "取り消した" : "消した"}
+        </p>
+      )}
       {(r.scope.sceneTypes || (fromLedger && fromMaster)) && (
         <p className="text-[12.5px] text-nibi">
           {r.scope.sceneTypes && `${r.scope.sceneTypes.map((t) => SCENE_TYPE_LABELS[t]).join("・")}のとき`}
@@ -42,7 +48,7 @@ function Rule({ r, fact = false, used = [] }: { r: KokoroeRule; fact?: boolean; 
           {fromLedger && fromMaster && "台帳の事実を、師匠の判定で直したもの"}
         </p>
       )}
-      <p className={`yomi ${fact ? "text-[16px]" : "text-[18px]"}`}>{r.text}</p>
+      <p className={`yomi ${fact ? "text-[16px]" : "text-[18px]"} ${r.status !== "active" ? "text-nibi line-through decoration-nibi/50" : ""}`}>{r.text}</p>
       {r.when && <p className="yomi text-[15px] text-nibi">条件：{r.when}</p>}
       {fact ? (
         trigger && (
@@ -58,7 +64,7 @@ function Rule({ r, fact = false, used = [] }: { r: KokoroeRule; fact?: boolean; 
             const words = h.masterWords || (j && "remark" in j ? j.remark : "");
             return (
               <li key={i} className="grid grid-cols-[1.75rem_1fr] gap-x-2">
-                <span className="pt-0.5 text-shu">
+                <span className={`pt-0.5 ${r.status === "active" ? "text-shu" : "text-nibi"}`}>
                   {j && "verdict" in j && j.verdict && (
                     <>
                       <Mark v={j.verdict} size={20} />
@@ -71,9 +77,9 @@ function Rule({ r, fact = false, used = [] }: { r: KokoroeRule; fact?: boolean; 
                   <span className="tabular-nums text-sumi/75">{h.date}</span>
                   {words ? <span className="yomi">「{words}」</span> : j ? <span className="text-sumi/75">（一言なし）</span> : null}
                   {j && "sceneId" in j && <span className="text-sumi/75">{sceneWords(j.sceneId)}</span>}
-                  {!j && h.judgmentId === "MASTER" && <span className="text-sumi/75">師匠が心得帳で直接</span>}
+                  {!j && h.judgmentId === "MASTER" && <span className="text-sumi/75">{h.after.startsWith("（師匠が削除") ? "師匠が心得帳で消した" : "師匠が心得帳で直した"}</span>}
                 </p>
-                {h.before && (
+                {h.before && h.before !== r.text && h.before !== (r.when ? `${r.text}（${r.when}）` : r.text) && (
                   <p className="yomi text-[14px] text-nibi">
                     前は：{h.before}
                   </p>
@@ -233,8 +239,11 @@ export default async function KokoroePage({ searchParams }: { searchParams: Prom
           </details>
         )}
         {inactive.length > 0 && (
-          <details id="gone" className="scroll-mt-6 text-[14px]" open={!!gone}>
-            <summary className="cursor-pointer text-nibi">消した・まとめた・取り消した項目（{inactive.length}）</summary>
+          <details id="gone" className="scroll-mt-6" open={!!gone}>
+            <summary className="cursor-pointer select-none border-t-2 border-sumi/80 pt-4">
+              <h2 className="inline font-mincho text-[20px] tracking-[0.06em]">消した・まとめた・取り消した項目（{inactive.length}）</h2>
+              <span className="mt-1 block text-[13px] text-nibi">心得帳から外したものも、沿革と一緒にここに残ります。</span>
+            </summary>
             <ul className="mt-2">{inactive.map((r) => <Rule key={r.id} r={r} />)}</ul>
           </details>
         )}
