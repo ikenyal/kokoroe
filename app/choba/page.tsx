@@ -491,7 +491,7 @@ export default async function ChobaPage() {
               return (
                 <>
                   <span className="text-sumi">{said}</span>
-                  {p?.status === "offline" && <span className="block text-[12.5px]">このデモでは弟子の読み取りは行いません（公開版のライブでは行います）。</span>}
+                  {p?.status === "offline" && <span className="block text-[12.5px]">{meta.limit ? "上限に達したため、いまは弟子の読み取りを行いません（ライブ中は行います）。" : "このデモでは弟子の読み取りは行いません（公開版のライブでは行います）。"}</span>}
                 </>
               );
             })()}
