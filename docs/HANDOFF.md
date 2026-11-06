@@ -3,7 +3,7 @@
 A new session (even on another account) starts here. It remembers nothing; this file, `CLAUDE.md` and the logs are the memory.
 Updated at the end of every round.
 
-## Where things stand (updated 2026-11-07 03:50 JST)
+## Where things stand (updated 2026-11-07 04:00 JST)
 
 - Branches: work on `ui-polish`; after each round merge to `main` (`--no-ff`) and push both (normal push, never force).
 - Commit author must stay the repository setting: `ikenyal` / the GitHub noreply address (`git config user.email` shows it).
@@ -19,8 +19,8 @@ Updated at the end of every round.
 - Public site: still the old build. First rebuild tonight after Kento OKs the interim freeze report
   (`docs/freeze-report.md`); a second rebuild after 11/7's final version. See "Rebuild" below.
 - Console: workspace `kokoroe-public` has a $100/month cap (alert at $50); Kento set it.
-- Last round: B 28 (03:38) — Claude usage: 'measured' line as recorded (D-013/D-054), hitl-reviewer's prompt catch, live-only bug as the example, session cron + HANDOFF in README and item 8.
-  Next eye: D (C skipped this cycle), then A, B, C (after 03:53 is fine next cycle).
+- Last round: D 28 (03:53; C skipped) — interim freeze report brought up to 03:55.
+  Next eye: A, then B, C (runs again; after 03:53), D. Prompt-touching changes allowed until 05:00 only.
 - API spent on rounds: 11/6 since 18:00 about $0.61; 11/7 from 00:00: about $0.22 so far (cap $5 for rounds; eval:final ≈ $9.75 is separate and needs Kento's go).
 
 ## The 15-minute rotation
