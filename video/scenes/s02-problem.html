@@ -1,17 +1,18 @@
 <!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
-<!-- s02 (v5: the problem and what goes wrong, one scene; 16.6 s). On the narration's sentences (+0.15 s lead):
-     0.15 どの取引先に、何を、どう伝えるか。            → the director from behind, the client ledger; 「誰に」「何を」「どう」
-     4.2  三十年分の作法は、部長の頭の中にしかありません。 → the three words go into his head
-     9.1  後任が、悪い知らせを、決まってからメールで送る。 → (phase B) the week on a line; the mail goes out on Thursday
-     13.6 それだけで、長年の段取りが崩れます。          → 浜風運輸's switch-over plan comes apart
+<!-- s02 (v6: the problem and what goes wrong, one scene; about 13.9 s. Kento 11/6 item 24: the first two sentences merged so the
+     real screens come sooner; times below are estimates, set from the new narration's speech marks on 11/7). On the narration's sentences (+0.15 s lead):
+     0.15 取引先ごとの伝え方、三十年分の作法は、部長の頭の中にしかありません。 → the director from behind, the client ledger;
+          「誰に」「何を」「どう」, then the three words go into his head
+     6.4  後任が、悪い知らせを、決まってからメールで送る。 → (phase B) the week on a line; the mail goes out on Thursday
+     10.9 それだけで、長年の段取りが崩れます。          → 浜風運輸's switch-over plan comes apart
      (The cold open already says he retires next spring, so this scene no longer repeats it.)
-     11.6 (on the mail going out) a measured note, Kento 11/5 night: of the 18 drafts the author passed ○ at first sight, 15 were
+     8.9 (on the mail going out) a measured note, Kento 11/5 night: of the 18 drafts the author passed ○ at first sight, 15 were
      ones the master would correct (code judge on the master-role test, D-059; docs/results/master-role-vs-simulator-2026-11-05.json).
      Clients are the fictional ones of data/world/clients.json. Colors: 墨 and 藍 only (no master in the room). -->
 <style>
-  .pa { animation: fade-out .5s 8.5s ease forwards; }
-  .pb { opacity: 0; animation: fade .3s 8.8s ease forwards; }
+  .pa { animation: fade-out .5s 5.8s ease forwards; }
+  .pb { opacity: 0; animation: fade .3s 6.1s ease forwards; }
 
   .person .draw { --t: 1.4s; }
   .who { position: absolute; left: 820px; top: 590px; width: 170px; text-align: center; font-size: 19px; color: var(--nibi); letter-spacing: .08em;
@@ -24,22 +25,22 @@
   .q { position: absolute; top: 520px; font-size: 38px; color: var(--ai); letter-spacing: .1em; opacity: 0; transform-origin: center;
     animation: fade .5s var(--d) ease forwards, into 1.6s var(--m) cubic-bezier(.45,.05,.3,1) forwards; }
   @keyframes into { to { transform: translate(var(--dx), var(--dy)) scale(.48); } }
-  .ring { opacity: 0; animation: fade 1s 6.2s ease forwards; }
+  .ring { opacity: 0; animation: fade 1s 4.8s ease forwards; }
 
   .axis { position: absolute; left: 110px; top: 156px; width: 520px; }
   .axis .line { position: absolute; left: 0; right: 0; top: 34px; height: 2px; background: var(--sumi); transform-origin: left; transform: scaleX(0);
-    animation: grow .9s 8.9s ease forwards; }
+    animation: grow .9s 6.2s ease forwards; }
   @keyframes grow { to { transform: scaleX(1); } }
   .day { position: absolute; top: 0; width: 80px; margin-left: -40px; text-align: center; font-size: 22px; opacity: 0; animation: fade .4s var(--d) ease forwards; }
   .tick { position: absolute; top: 28px; left: 50%; width: 2px; height: 14px; margin-left: -1px; background: var(--sumi); }
   .ev { position: absolute; top: 58px; width: 170px; margin-left: -85px; text-align: center; font-size: 18px; color: var(--nibi); line-height: 1.4;
     opacity: 0; animation: fade .5s var(--d) ease forwards; }
-  .gap { position: absolute; top: 31px; height: 8px; border-top: 2px dashed var(--usuzumi); opacity: 0; animation: fade .5s 10.6s ease forwards; }
+  .gap { position: absolute; top: 31px; height: 8px; border-top: 2px dashed var(--usuzumi); opacity: 0; animation: fade .5s 7.9s ease forwards; }
   .mail { position: absolute; left: 150px; top: 296px; width: 440px; padding: 18px 22px; background: #faf9f6; border: 1.5px solid var(--sumi);
-    font-size: 19px; line-height: 1.7; opacity: 0; animation: fade .5s 11.1s ease forwards, send 1.0s 12.2s cubic-bezier(.5,0,.6,1) forwards; }
+    font-size: 19px; line-height: 1.7; opacity: 0; animation: fade .5s 8.4s ease forwards, send 1.0s 9.5s cubic-bezier(.5,0,.6,1) forwards; }
   .mail .h { font-size: 15px; color: var(--nibi); }
   @keyframes send { to { transform: translate(600px, 40px) scale(.3); opacity: 0; } }
-  .board { position: absolute; left: 690px; top: 140px; width: 480px; opacity: 0; animation: fade .7s 9.5s ease forwards; }
+  .board { position: absolute; left: 690px; top: 140px; width: 480px; opacity: 0; animation: fade .7s 6.8s ease forwards; }
   .board h2 { font-size: 21px; font-weight: 600; letter-spacing: .06em; }
   .board h2 small { font-size: 15px; font-weight: 400; color: var(--nibi); margin-left: 10px; }
   .grid { position: relative; margin-top: 12px; height: 300px; border-top: 2px solid var(--sumi); border-bottom: 2px solid var(--sumi);
@@ -50,7 +51,7 @@
   @keyframes fall { 30% { transform: rotate(var(--r)); } to { transform: translate(var(--x), var(--y)) rotate(calc(var(--r) * 2.4)); opacity: .25; } }
   .slot { position: absolute; height: 46px; border: 1.5px dashed var(--usuzumi); opacity: 0; animation: fade .6s var(--d) ease forwards; }
   .fact { position: absolute; left: 110px; right: 110px; top: 516px; padding-top: 14px; border-top: 1px solid var(--keisen);
-    font-size: 23px; line-height: 1.6; letter-spacing: .03em; opacity: 0; animation: fade .6s 11.6s ease forwards; }
+    font-size: 23px; line-height: 1.6; letter-spacing: .03em; opacity: 0; animation: fade .6s 8.9s ease forwards; }
   .fact small { display: block; font-size: 16px; color: var(--nibi); letter-spacing: .04em; }
 </style></head>
 <body>
@@ -75,9 +76,9 @@
 </svg>
 <p class="who gothic" style="left:975px;top:160px;width:auto">営業部長</p>
 <div id="names"></div>
-<p class="q" style="left:190px;--d:.9s;--m:4.6s;--dx:675px;--dy:-338px">誰に</p>
-<p class="q" style="left:330px;--d:1.8s;--m:4.8s;--dx:535px;--dy:-308px">何を</p>
-<p class="q" style="left:470px;--d:2.7s;--m:5.0s;--dx:395px;--dy:-278px">どう</p>
+<p class="q" style="left:190px;--d:.6s;--m:3.6s;--dx:675px;--dy:-338px">誰に</p>
+<p class="q" style="left:330px;--d:1.2s;--m:3.8s;--dx:535px;--dy:-308px">何を</p>
+<p class="q" style="left:470px;--d:1.8s;--m:4.0s;--dx:395px;--dy:-278px">どう</p>
 <script>
   // Clients from data/world/clients.json (fictional), right → left like a ledger; one column each, written in turn.
   const NAMES = ["浜風運輸", "白樺製菓", "港北精機", "丸新酒造", "県産業振興財団", "大河原建材", "青葉ドラッグ", "ネクストリンク"];
@@ -95,12 +96,12 @@
 <div class="axis gothic">
   <div class="line"></div>
   <div class="gap" style="left:60px;width:330px"></div>
-  <div class="day" style="left:60px;--d:9.1s">月<div class="tick"></div></div>
-  <div class="day" style="left:170px;--d:9.3s">火<div class="tick"></div></div>
-  <div class="day" style="left:280px;--d:9.4s">水<div class="tick"></div></div>
-  <div class="day" style="left:390px;--d:9.5s">木<div class="tick"></div></div>
-  <div class="ev" style="left:60px;--d:9.9s">納期の遅れが<br>分かる</div>
-  <div class="ev" style="left:390px;--d:10.8s;color:var(--sumi)">遅れが決まる<br>→ メールを送る</div>
+  <div class="day" style="left:60px;--d:6.4s">月<div class="tick"></div></div>
+  <div class="day" style="left:170px;--d:6.6s">火<div class="tick"></div></div>
+  <div class="day" style="left:280px;--d:6.7s">水<div class="tick"></div></div>
+  <div class="day" style="left:390px;--d:6.8s">木<div class="tick"></div></div>
+  <div class="ev" style="left:60px;--d:7.2s">納期の遅れが<br>分かる</div>
+  <div class="ev" style="left:390px;--d:8.1s;color:var(--sumi)">遅れが決まる<br>→ メールを送る</div>
 </div>
 <div class="mail gothic">
   <p class="h">差出人：三上（後任）　宛先：浜風運輸 配車課長 様</p>
@@ -111,12 +112,12 @@
   <h2>浜風運輸の段取り<small>システム切り替えの週</small></h2>
   <div class="grid gothic">
     <div class="col" style="left:0">金</div><div class="col" style="left:120px">土</div><div class="col" style="left:240px">日</div><div class="col" style="left:360px">月</div>
-    <div class="slot" style="left:8px;top:52px;width:224px;--d:14.5s"></div>
-    <div class="slot" style="left:128px;top:128px;width:224px;--d:15.1s"></div>
-    <div class="slot" style="left:248px;top:204px;width:224px;--d:15.7s"></div>
-    <div class="blk" style="left:8px;top:52px;width:224px;--d:14.0s;--r:-4deg;--x:-30px;--y:140px">配車の組み直し</div>
-    <div class="blk" style="left:128px;top:128px;width:224px;--d:14.6s;--r:5deg;--x:40px;--y:96px;--o:right bottom">ドライバー説明会</div>
-    <div class="blk" style="left:248px;top:204px;width:224px;--d:15.2s;--r:-6deg;--x:-20px;--y:60px">旧システム停止</div>
+    <div class="slot" style="left:8px;top:52px;width:224px;--d:11.8s"></div>
+    <div class="slot" style="left:128px;top:128px;width:224px;--d:12.4s"></div>
+    <div class="slot" style="left:248px;top:204px;width:224px;--d:13.0s"></div>
+    <div class="blk" style="left:8px;top:52px;width:224px;--d:11.3s;--r:-4deg;--x:-30px;--y:140px">配車の組み直し</div>
+    <div class="blk" style="left:128px;top:128px;width:224px;--d:11.9s;--r:5deg;--x:40px;--y:96px;--o:right bottom">ドライバー説明会</div>
+    <div class="blk" style="left:248px;top:204px;width:224px;--d:12.5s;--r:-6deg;--x:-20px;--y:60px">旧システム停止</div>
   </div>
 </div>
 <p class="fact gothic">作者が初見で ○ を付けた18件のうち、15件は、師匠なら直す案でした。<small>架空のデータ・学習用の20場面。経緯を知らない作者が師匠役をし、シミュレータの判定では △ 8・× 7（D-059）</small></p>

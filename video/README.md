@@ -29,15 +29,20 @@ npx tsx video/stills.ts                                  # → docs/screens/vide
 video/assemble.sh                                        # → video/out/kokoroe-demo.mp4 (1280×720, 30 fps, H.264/AAC)
 ```
 
+Kento 11/6 evening (items 23 and 24): s01 lost its AI sentence and panel, s02 merged its first two sentences, and the 6.7 s went
+to s05, so the real screens start at about 1:07 instead of 1:13.6. Narration for s01/s02 is re-made and the seconds re-set from
+its speech marks on 11/7 (`narration.ts --yes --only s01-why,s02-problem`); s04b's Claude chip now reads
+「案・一言の読み取り・心得の文は Claude の API（既製）」. Total length is unchanged (about 2:56).
+
 | Starts at | Scene | Kind | Seconds | Narration |
 |---|---|---|---|---|
 | 0:00.0 | `s00-open` — two messages, one line circled, drawn into the director's head, 「来春 退職」 | anim | 12.7 | 12.4 s |
-| 0:13.2 | `s01-why` — 51.2% counts up, tags on half the companies / people walk out through a noren / the AI lights only written lines | anim | 17.0 | 16.7 s |
-| 0:30.7 | `s02-problem` | anim | 16.6 | 16.3 s |
-| 0:47.8 | `s03-head` | anim | 3.9 | 3.5 s |
-| 0:52.2 | `s04-title` (chapter: noren) — the title is now ココロエ / Kokoroe | anim | 0.5 + 10.2 | 9.9 s |
-| 1:03.4 | `s04b-flow` — 心得 and 心得帳 defined (narration and screen) | anim | 9.7 | 9.4 s |
-| 1:13.6 | `s05-choba` (chapter: noren; answers the cold open) | screen | 0.5 + 22.0 | 20.9 s |
+| 0:13.2 | `s01-why` — 51.2% counts up, tags on half the companies / people walk out through a noren (the AI panel cut, item 24) | anim | 13.0 | ≈ 12.7 s (11/7) |
+| 0:26.7 | `s02-problem` — first two sentences merged (item 24) | anim | 13.9 | ≈ 13.6 s (11/7) |
+| 0:41.1 | `s03-head` | anim | 3.9 | 3.5 s |
+| 0:45.5 | `s04-title` (chapter: noren) — the title is now ココロエ / Kokoroe | anim | 0.5 + 10.2 | 9.9 s |
+| 0:56.7 | `s04b-flow` — 心得 and 心得帳 defined (narration and screen) | anim | 9.7 | 9.4 s |
+| 1:06.9 | `s05-choba` (chapter: noren; answers the cold open) — +6.7 s held on the right column (item 24) | screen | 0.5 + 28.7 | 20.9 s |
 | 1:36.6 | `s06-kokoroe` | screen | 8.0 | 7.7 s |
 | 1:45.1 | `s06b-ask` | anim | 4.9 | 4.5 s |
 | 1:50.5 | `s07-noren` | screen | 10.5 | 5.7 s |
