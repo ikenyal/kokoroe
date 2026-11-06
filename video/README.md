@@ -53,7 +53,7 @@ chapter scene. The narration starts 0.15 s into each scene (`lead`).
 
 Sources on screen (s01-why):
 - 51.2%: 帝国データバンク「全国『後継者不在率』動向調査（2025年）」, of the small and medium firms surveyed.
-- 330万人: 総務省統計局「労働力調査（詳細集計）2025年（令和7年）平均結果」, 転職者数 (checked in the bureau's summary PDF on 11/4).
+- 330万人: 総務省統計局「労働力調査（詳細集計）2025年（令和7年）平均結果」, 転職者数 (checked in the bureau's summary PDF on 11/4; https://www.stat.go.jp/data/roudou/sokuhou/nen/dt/index.html).
 - Job transfers within a company have no clear public figure, so they get words only.
 
 ## What is Kokoroe's, and what is off the shelf (the organizers' answer, 11/5)

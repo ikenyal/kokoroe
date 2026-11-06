@@ -1284,3 +1284,14 @@ run that finds the book changed under it drafts again in the same slot (one at a
 that finds a finished prefetch out of date replaces it. Each redo is reserved against the limits with the visitor's address taken
 during the request, and its cost is recorded even if discarded. The conditions of use are unchanged. hitl-reviewer: OK. Result:
 the first ○ after a correction 10.1 s → 1.3–1.6 s; about one or two more drafts per correction.
+
+## D-067 · 2026-11-06 · Accepted (Kento) · Public demo spend caps for the submission: $10 a day, $60 a month
+
+**Context.** The prefetch (D-066) raised the measured cost of a short visit (3–4 cards, one correction) from about $0.06–0.09 to
+$0.08–0.11 (fictional data; reading times and routes differed, so not a like-for-like comparison). Three options were laid out in
+docs/freeze-report.md, section 2.
+**Decision (Kento 11/6).** Option B: `KOKOROE_DAILY_USD=10` at the freeze rebuild (about 90–160 short visits a day), and a Claude
+Console monthly limit of $60 on the public workspace, set by Kento after checking this month's spend. Spending is covered by free
+credits; the limits are there so that no real cost arises. Over a limit, the demo goes on with recorded data and says so.
+**Recorded in:** docs/deploy.md, docs/final-day.md (the Console step), docs/freeze-report.md.
+

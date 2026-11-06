@@ -42,8 +42,8 @@ companies have [no successor](https://www.tdb.co.jp/report/economic/20251121-suc
 happening across Japan — and, by extension, it could happen anywhere in the world where people work. Kokoroe starts with one of
 the hardest kinds of this to put into words: how to deal with each client.
 
-(Sources: no successor — the Teikoku Databank survey in the next paragraph; 3.3 million — Statistics Bureau of Japan, Labour Force
-Survey (Detailed Tabulation), 2025 average, number of job changers.)
+(Sources: no successor — the Teikoku Databank survey in the next paragraph, published 21 Nov 2025, about 270,000 companies;
+3.3 million — Statistics Bureau of Japan, [Labour Force Survey (Detailed Tabulation), 2025 average](https://www.stat.go.jp/data/roudou/sokuhou/nen/dt/index.html), number of job changers.)
 
 In a small Japanese company, how to deal with each client lives in one veteran's head: whom to tell first, what to send by mail and
 what to say face to face, when to stay away, who must hear it quietly before it becomes official. Asked to explain, the veteran
@@ -59,7 +59,8 @@ real veteran) marks 15 △ or × (see *What was tested*). And before the kickoff
 corrections are rarely a pure ○ or ×: most are "OK, but…" — which is why the master has a third mark, △ ([docs/evolution.md](docs/evolution.md), background).
 
 **Who it is for.** The veteran about to retire (the 師匠), who keeps their etiquette by saying "no" as usual, without being asked
-to explain; and whoever takes over (someone inside, or a buyer of the business), who gets answers with their reasons and history.
+to explain; and whoever takes over (someone inside, or a buyer of the business), who gets answers with their reasons and history. When the person in charge changes for another reason (a job change, a transfer),
+the hand-over is the same: the 心得帳 is passed on as an Agent Skill, whatever the reason.
 **When it is used:** the months between the retirement being decided and the hand-over, while the master checks the apprentice's
 daily plans; the 心得帳 grows as a by-product of that work. To start with your own clients: *Try it* → "Start from your own company".
 
