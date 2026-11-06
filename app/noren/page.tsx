@@ -203,7 +203,7 @@ export default async function NorenPage() {
           </label>
           <AskButton live={live} />
         </form>
-        {!live && <p className="mt-2 text-[13px] text-nibi">このデモでは、下の質問に記録済みの答えで返します。自由な質問には、公開版のライブで答えます。</p>}
+        {!live && <p className="mt-2 text-[13px] text-nibi">このデモでは、下の質問に、記録した稽古の心得帳からの答えで返します。自由な質問には、ライブ版で答えます。</p>}
         {live && s.meta.limit && <p className="mt-2 text-[13px] text-nibi">上限のあいだは、下の質問に記録済みの答えで返します。</p>}
         {answers.length > 0 && <div className="mt-10 space-y-10">{answers.map((t, i) => <Turn key={i} t={t} ruleText={ruleText} />)}</div>}
         {examples}
