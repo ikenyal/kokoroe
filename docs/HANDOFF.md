@@ -3,7 +3,7 @@
 A new session (even on another account) starts here. It remembers nothing; this file, `CLAUDE.md` and the logs are the memory.
 Updated at the end of every round.
 
-## Where things stand (updated 2026-11-07 02:15 JST)
+## Where things stand (updated 2026-11-07 02:45 JST)
 
 - Branches: work on `ui-polish`; after each round merge to `main` (`--no-ff`) and push both (normal push, never force).
 - Commit author must stay the repository setting: `ikenyal` / the GitHub noreply address (`git config user.email` shows it).
@@ -19,8 +19,8 @@ Updated at the end of every round.
 - Public site: still the old build. First rebuild tonight after Kento OKs the interim freeze report
   (`docs/freeze-report.md`); a second rebuild after 11/7's final version. See "Rebuild" below.
 - Console: workspace `kokoroe-public` has a $100/month cap (alert at $50); Kento set it.
-- Last round: D 26 (02:08) — interim freeze report brought up to 02:10.
-  Next eye: A, then B, C (after 02:53), D.
+- Last round: A 37 (02:23) — heavy ink rules use a --rule colour: same in light, grey in dark.
+  Next eye: B, then C (after 02:53), D, A.
 - API spent on rounds: 11/6 since 18:00 about $0.61; 11/7 from 00:00: about $0.12 so far (cap $5 for rounds; eval:final ≈ $9.75 is separate and needs Kento's go).
 
 ## The 15-minute rotation

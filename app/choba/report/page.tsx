@@ -43,7 +43,7 @@ export default async function ReportPage() {
       </p>
       <table className="mt-6 w-full border-collapse text-[15px] tabular-nums">
         <thead>
-          <tr className="border-b-2 border-sumi/80 text-left text-[13px] text-nibi">
+          <tr className="border-b-2 border-rule text-left text-[13px] text-nibi">
             <th className="py-2 font-normal">操作</th>
             <th className="font-normal">回数</th>
             <th className="font-normal">中央値</th>

@@ -51,7 +51,7 @@ export default async function Home(props: PageProps<"/">) {
         )}
 
         <h2 className="mt-10 font-mincho text-[18px]">始め方</h2>
-        <div className="mt-3 max-w-[32em] border-y-2 border-sumi/80">
+        <div className="mt-3 max-w-[32em] border-y-2 border-rule">
           <form action={start} className="grid items-center gap-x-5 gap-y-2 py-4 sm:grid-cols-[13rem_1fr]">
             <input type="hidden" name="mode" value="demo" />
             <button className="h-12 rounded-[3px] bg-ai-fill px-5 text-[16px] text-on-fill hover:opacity-95">デモの続きから見る</button>
@@ -75,7 +75,7 @@ export default async function Home(props: PageProps<"/">) {
             。上のどのボタンで始めても、最初からやり直しになります。
           </p>
         )}
-        <section aria-labelledby="range-h" className="mt-10 max-w-[32em] border-t-2 border-sumi/80 pt-4">
+        <section aria-labelledby="range-h" className="mt-10 max-w-[32em] border-t-2 border-rule pt-4">
           <h2 id="range-h" className="font-mincho text-[14px] text-sumi">扱う場面は10種類。メールだけではありません</h2>
           {(() => {
             const { shown, rest } = sceneRangeSplit();
@@ -106,7 +106,7 @@ export default async function Home(props: PageProps<"/">) {
 
       <div className="space-y-10">
         {ex && (
-          <figure aria-labelledby="ex-h" className="border-t-2 border-sumi/80 pt-4">
+          <figure aria-labelledby="ex-h" className="border-t-2 border-rule pt-4">
             <p id="ex-h" className="font-mincho text-[14px] text-sumi">一つの例：{ex.client}</p>
             <ol className="mt-2 text-[14px]">
               <li className="grid grid-cols-[7.5em_1fr] gap-x-3 border-t border-keisen py-2.5 first:border-t-0">
