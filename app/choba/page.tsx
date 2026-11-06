@@ -491,7 +491,8 @@ export default async function ChobaPage() {
               return (
                 <>
                   <span className="text-sumi">{said}</span>
-                  {p?.status === "offline" && <span className="block text-[12.5px]">{meta.limit ? "上限に達したため、いまは弟子の読み取りを行いません（上限が戻れば行います）。" : "このデモでは心得帳は書き足されません（公開版のライブでは、弟子がこの印を読み取り、心得帳に書き足します）。"}</span>}
+                  {/* On a live server a mark is left unread only by a limit; after a judge's code clears the notice it must not say 「このデモでは」 (体験の目 19). */}
+                  {p?.status === "offline" && <span className="block text-[12.5px]">{meta.limit ? "上限に達したため、いまは弟子の読み取りを行いません（上限が戻れば行います）。" : live ? "上限に達していたため、この印は読み取っていません。次の印からは読み取ります。" : "このデモでは心得帳は書き足されません（公開版のライブでは、弟子がこの印を読み取り、心得帳に書き足します）。"}</span>}
                 </>
               );
             })()}
