@@ -508,3 +508,20 @@ Short entries, appended every work session. Source material for the README secti
 - **The video as one piece.** judge-critic read only the video's script and stills. It found that two stills, seconds apart,
   contradicted each other: s06 ended on 「一言なし」 right after the master typed a remark. It also found that "114 taps" would sound
   like a person once the interim banner went away. Four scenes were re-shot on recorded data before noon.
+- **The organizers' answer turned into a judges' lane (afternoon).** The organizers said judges get their own link and a field for
+  access details. Kento asked for a judge code that keeps judges live when visitors have used up the day's budget.
+  - Claude built it so the value never enters the repository: an env var, a constant-time comparison, tries limited per address,
+    and an HMAC cookie. hitl-reviewer read the diff before the commit (NaN-safe limits, a minimum code length).
+  - Each eye then caught a different gap:
+    - C ran it live with the visitors' cap at $0 (the judge stayed live and was charged $0.035 to the judges' budget);
+    - ui-critic closed the field so visitors aren't drawn to an empty box;
+    - D found that a judge arriving after the cap ran out would never learn the field exists;
+    - B found the shared-limit wording was wrong for a judge;
+    - C found the next fix left a stale notice once a judge entered the code partway through a session.
+
+    None of these needed the API except the two live runs ($0.135 in all).
+- **A tab icon from SVG.** The Next.js 「N」 became a white 心 on indigo. Claude wrote the SVG and a script that renders it with
+  Playwright into the ICO and PNG files, so no image editor or external font is involved. The 180 px home-screen icon has square
+  corners because iOS rounds the corners itself.
+- **Flaky tests under load.** Three or four timing-bound tests timed out once while the machine's load average was 61; on a quiet
+  run all 316 passed. Logged rather than "fixed" by raising timeouts.
