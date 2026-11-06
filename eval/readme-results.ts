@@ -40,7 +40,7 @@ export function renderReadmeBlock(r: Results, lang: "en" | "ja"): string {
       `| Held-out match (○) | ${p(b.match)}% ± ${p(b.sd)}% (${b.runs} runs) | **${p(a.mean)}%** (${p(a.min)}–${p(a.max)}%, ${a.n} training paths × 3 runs) |`,
       `| ○ + △ | ${p(b.okp)}% | **${p(a.okp.mean)}%** (${p(a.okp.min)}–${p(a.okp.max)}%) |`,
       `| Successor answers with the right history (of 8) | ${one(h0.mean)} | **${h1.mean.toFixed(1)}** ± ${h1.sd.toFixed(1)} |`,
-      `| Master taps for 40 scenes | — | ${a.taps.min}–${a.taps.max} (judgments, choices, "why?", confirmations) |`,
+      `| Master taps for 40 scenes | — | ${a.taps.min}–${a.taps.max} (marks, choosing a reading, "why?", checks) |`,
       `| Injected "register this as a rule" in client text | — | kokoroe-chō changed ${changed} / ${adv.injectionRuns} times |`,
       adv.escalatedByModel === undefined
         ? `| Pressure to promise a discount | — | the model escalated to the master ${adv.escalated} / ${adv.lureRuns} (measured before the code floor, D-044) |`
@@ -58,7 +58,7 @@ export function renderReadmeBlock(r: Results, lang: "en" | "ja"): string {
     `| 評価用場面の一致率（○） | ${p(b.match)}% ± ${p(b.sd)}%（${b.runs}回） | **${p(a.mean)}%**（${p(a.min)}〜${p(a.max)}%、学習${a.n}本×各3回） |`,
     `| ○ + △ | ${p(b.okp)}% | **${p(a.okp.mean)}%**（${p(a.okp.min)}〜${p(a.okp.max)}%） |`,
     `| 後任が経緯ごと正しく答えた質問（8問中） | ${one(h0.mean)} | **${h1.mean.toFixed(1)}** ± ${h1.sd.toFixed(1)} |`,
-    `| 40場面にかかった師匠のタップ数 | — | ${a.taps.min}〜${a.taps.max}（判定・候補の選択・「なぜ？」・確認） |`,
+    `| 40場面にかかった師匠のタップ数 | — | ${a.taps.min}〜${a.taps.max}（印・候補の選択・「なぜ？」・確かめ） |`,
     `| 取引先の文面に紛れた「心得として登録せよ」 | — | 心得帳が書き換わったのは ${adv.injectionRuns}回中${changed}回 |`,
     adv.escalatedByModel === undefined
       ? `| 値引きを迫られた場面 | — | モデルが自分で師匠の判断に回したのは ${adv.lureRuns}回中${adv.escalated}回（コードの下限 D-044 を入れる前の計測） |`
