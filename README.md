@@ -3,8 +3,8 @@
 [日本語版 README](README.ja.md) · Built with Claude: Japan 2026 · D-0xx in the text are decision records in [docs/decisions.md](docs/decisions.md)
 
 **For a small company's veteran about to retire, and whoever takes over.** The veteran can't explain their client etiquette, but
-sees at once what is wrong: they only mark the AI apprentice's drafts ○ / △ / ×. Each correction becomes a 心得 with why it came to
-be, kept in a 心得帳 and handed to the successor as an Agent Skill.
+sees at once what is wrong: they only mark the AI apprentice's drafts ○ / △ / × (OK / OK with a condition / no). Each correction becomes a 心得
+(one lesson) with why it came to be, kept in a 心得帳 (the book of them) and handed to the successor as an Agent Skill.
 
 > Through my work and community activities, I have been involved with a great many companies and organizations. Every one of
 > them has excellent people, each with a feel for the work that is theirs alone. — the author ([more under The problem](#the-problem))
@@ -21,7 +21,7 @@ each entry keeps its *沿革* (history: old → new, the trigger, the master's w
 
 **1. Correct it, and the next draft changes (帳場).** After the master marked a draft for 丸新酒造 △ (no remark), the
 apprentice's next draft for a similar situation added, on its own, a quiet word to the 蔵元 (the owner, who decides). The same scene is the home page's example and the
-video's 帳場 scene; in the public demo's 「デモの続き」, the first card shows the same kind of 「変化」 for 浜風運輸.
+video's 帳場 scene; in the public demo's recorded run (「デモの続き」), the first card shows the same kind of change (「変化」) for 浜風運輸.
 
 <img src="docs/readme/1-choba-change.webp" alt="The 帳場's 「変化」 panel: the 心得 'when writing formally to the owner's wife, give the owner a word first'; behind the scenes: the earlier draft said none, this draft says a quiet word to the owner" width="720">
 
@@ -74,7 +74,7 @@ daily plans; the 心得帳 grows as a by-product of that work. To start with you
   deliberately nothing), when (いつ), whom to give a quiet word behind the scenes (裏で誰に), and whether to follow up later (後日).
   The message text is a folded draft under the plan.
 - **The master only marks it.** ○ / △ (right, but missing a condition) / ×, with an optional one-liner. No explaining.
-  When the remark is ambiguous, the master taps one of 2–3 readings — or "none of these".
+  When the remark is ambiguous, the master taps one of 2–3 readings — or "none of these" (「どれでもない」).
 - **Corrections become the kokoroe-chō.** Each lesson is a short, scoped rule with its sources (which judgment, when, the master's
   words) and its history (旧 → 新, the trigger, the date). The master can read and delete every entry.
 - **It checks itself.** After each new rule, the apprentice re-solves the corrected scene and earlier ○ scenes, and the master marks
@@ -93,7 +93,7 @@ daily plans; the 心得帳 grows as a by-product of that work. To start with you
   it with the same ○△× and one line, and the correction becomes a 心得. **The evaluation covers the contact plan only:** the hidden
   ground truth has no visit etiquette, so visits are off in every evaluation run (`KOKOROE_EVAL_VISIT`, default off), and a test
   pins the apprentice's request to be byte-for-byte what it was before visits were added (D-061).
-- **The master stays in charge.** The apprentice never sends anything and never commits to prices or contract terms; instructions
+- **The master stays in charge.** The apprentice never sends anything and never commits to discounts or contract terms; instructions
   hidden in client messages can't write the kokoroe-chō.
 
 ### Two ways to hand it over: a copy, and a window
@@ -105,8 +105,8 @@ daily plans; the 心得帳 grows as a by-product of that work. To start with you
   Claude, no client-written text. Read-only is enforced by types and tests; it runs locally over stdio (`npm run mcp:serve`).
   Example ([demo/successor-mcp](demo/successor-mcp/)) — *"A shipment to 丸新酒造 will be a week late. Is a phone call to the
   owner's wife enough?"*
-  - **Skill only:** answers from the copy ("when sending formally to the wife, give the 蔵元, the brewery owner, a word first") — a call alone is probably not enough; tell the 蔵元 first. Whether a call is enough is not in the
-    copy, so it says to ask the master.
+  - **Skill only:** answers from the copy ("when sending formally to the wife, give the 蔵元, the brewery owner, a word first") — a call alone is probably not enough; tell the 蔵元 first. The copy says nothing about the means
+    (a call alone, or mail or a letter as well), so it asks the master about that.
   - **Skill + server:** finds a 心得 learned after the copy ("bad news: don't settle it by phone — go to the brewery and say it in
     person"), and answers: a call is not enough; visit the brewery.
 
@@ -128,7 +128,8 @@ daily plans; the 心得帳 grows as a by-product of that work. To start with you
   ```
   `--hostname 127.0.0.1` keeps the server reachable from your machine only. For live Claude calls (optional), put
   `ANTHROPIC_API_KEY=...` and `KOKOROE_LIVE=1` in `.env.local` (template: `.env.example`). Without both, marks are recorded but
-  not read, and the 心得帳 does not grow; the 帳場 shows, as an example, what the live version wrote in the recorded run.
+  not read, and the 心得帳 does not grow; the 帳場 shows, as an example, the 心得 the recorded training run wrote, and 暖簾を継ぐ answers only its example
+  questions (with recorded answers).
 - **Start from your own company (local only):** `npm run own` (needs `ANTHROPIC_API_KEY` in `.env.local`) opens
   http://127.0.0.1:3000 on your own client ledger instead of the fictional company.
   - **Setup:** enter the company and the ledger (form or CSV) under 台帳. In the 帳場 you write a situation, the apprentice
@@ -180,7 +181,7 @@ always off in evaluation runs (D-061).
   After use the same ledger and model, so the comparison holds, but the absolute level may flatter the apprentice.
 - **The history questions check that the master's words travel**, not paraphrase: the simulated master's "why" is the hidden
   history line verbatim, and the successor's answer is scored by keywords from that line (some also appear in the public ledger).
-- **「どこが違う？」 in the simulator rests on an assumption** (D-057). When the simulated master gave no remark and taps
+- **「どこが違う？」 (the optional "where was it off?" tap) in the simulator rests on an assumption** (D-057). When the simulated master gave no remark and taps
   「どれでもない」, it also taps where the draft was off, as a real master knows their own objection. (The textbook master is
   silent on 20% of its △/×.) How often it leaves this out is assumed, not measured:
   20% for the master in these numbers (the official 11/7 measurement uses 20% too); 50% and 30% for the silent and vague
@@ -252,7 +253,7 @@ What this entry asks to be judged on is what was made with Claude. The line is d
 ## How we built it with Claude Code
 
 Built in one week by one person with Claude Code at the center (full log: [docs/how-we-built.md](docs/how-we-built.md)). Claude Code
-was given not only the work but the guardrails too (hooks, tests, reviewing subagents).
+built not only the product but also the guardrails it worked under (hooks, tests, reviewing subagents).
 
 - **Evaluation first.** Day 1 began with a machine-checkable master simulator, a frozen hidden ground truth (a hook blocks edits,
   a test checks checksums), and a test that product code never reads it.
@@ -306,8 +307,8 @@ screening or design review. A general-purpose 帳場 is a possible next step, no
   remark optional and spent the effort on our side (a second round of readings, scope only as wide as the master's words).
 - **Same settings, different paths.** Two runs with identical settings ended 10 points apart, so results are reported as the mean and
   range over several training paths, never one run.
-- **The ledger trade-off.** Seeding the ledger's constraints and asking "why?" once each made the history answerable (港北: Zoom → Teams,
-  2024), but showing those constraints to the apprentice as the master's corrections made it over-formal; they now stay in the book as "facts copied from the ledger", apart from the master's 心得.
+- **The ledger trade-off.** Seeding the ledger's constraints and asking "why?" once each made the history answerable (港北精機, a client: Zoom → Teams,
+  2024), but showing those constraints to the apprentice as the master's corrections made it over-formal; they now stay in the book as "facts copied from the ledger", apart from the master's 心得, and the apprentice no longer sees them as the master's corrections (D-022).
 - **Ranks, tried and dropped.** We replayed 8 recorded training runs (40 scenes each) to test "after a run of ○ at a client, lighten
   the review" (手代 / 番頭). Of the drafts that would have been marked "just confirm", 64–76% had actually been marked △/× — worse
   than the 55% △/× rate across all training drafts (175 of 320). Even at one client, each kind of situation needs its own etiquette, so a run of ○ does not predict
