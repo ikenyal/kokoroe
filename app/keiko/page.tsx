@@ -21,7 +21,7 @@ export default function KeikoPage() {
       <p className="yomi mt-3 max-w-[40em] font-mincho text-[19px] leading-relaxed sm:text-[21px]">
         {results.official ? "" : "途中経過では、"}師匠が{paths ? `約${paths.taps}回` : `${end.taps}回`}のタップで直すと、○ が付く案は
         <span className="tabular-nums">{pct(results.before.match)}</span>から
-        <span className="whitespace-nowrap"><span className="tabular-nums text-ai">{paths ? pct(paths.mean) : pct(end.match)}</span>に、</span><span className="whitespace-nowrap">後任が</span>経緯ごと答えられた質問は8問中
+        <span className="whitespace-nowrap">{paths && "平均"}<span className="tabular-nums text-ai">{paths ? pct(paths.mean) : pct(end.match)}</span>{paths && <span className="tabular-nums">（{pct(paths.min)}〜{pct(paths.max)}）</span>}に、</span><span className="whitespace-nowrap">後任が</span>経緯ごと答えられた質問は8問中
         <span className="tabular-nums">{hist[0].mean.toFixed(0)}</span>問から平均
         <span className="tabular-nums text-ai">{hist.at(-1)!.mean.toFixed(1)}</span><span className="whitespace-nowrap">問になりました。</span>
       </p>
@@ -64,7 +64,7 @@ export default function KeikoPage() {
             </tr>
             <tr className="align-baseline">
               <th scope="row" className="py-3 pr-4 text-[14.5px] font-normal">
-                後任の質問に、わけごと答えられた数
+                後任の質問に、経緯ごと答えられた数
                 <span className="block text-[12.5px] text-nibi">取引先の経緯を聞く8問のうち</span>
               </th>
               <td className="font-mincho text-[24px] leading-none">{hist[0].mean.toFixed(0)}<span className="text-[14px] text-nibi"> / 8</span></td>
@@ -115,7 +115,7 @@ export default function KeikoPage() {
       <section aria-labelledby="curve-h" className="mt-10 max-w-4xl">
         <div className="min-w-0">
           <h2 id="curve-h" className="font-mincho text-[18px]">師匠の手間と、一致の伸び</h2>
-          <p className="mt-1 text-[13px] text-nibi">横は師匠が押した回数、縦は ○ の割合。細い灰色の線は改良の途中の版（参考）、藍の点と縦線は今の構成を学習{paths?.n ?? 0}本で測った平均と<span className="whitespace-nowrap">幅{results.official ? "（正式な計測）" : "（途中経過）"}です。</span></p>
+          <p className="mt-1 text-[13px] text-nibi">横は師匠のタップ数、縦は ○ の割合。細い灰色の線は改良の途中の版（参考）、藍の点と縦線は今の構成を学習{paths?.n ?? 0}本で測った平均と<span className="whitespace-nowrap">幅{results.official ? "（正式な計測）" : "（途中経過）"}です。</span></p>
           <div className="mt-4">
             <p className="mb-1 text-[12.5px] text-nibi sm:hidden">図は横にずらせます（右端の藍の点が今の構成の結果）。</p>
             <CurveChart curves={curves} emphasis={paths ? null : latest.key} before={results.before} paths={paths} />

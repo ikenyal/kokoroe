@@ -3,7 +3,7 @@
 A new session (even on another account) starts here. It remembers nothing; this file, `CLAUDE.md` and the logs are the memory.
 Updated at the end of every round.
 
-## Where things stand (updated 2026-11-06 20:30 JST)
+## Where things stand (updated 2026-11-06 20:50 JST)
 
 - Branches: work on `ui-polish`; after each round merge to `main` (`--no-ff`) and push both (normal push, never force).
 - Commit author must stay the repository setting: `ikenyal` / the GitHub noreply address (`git config user.email` shows it).
@@ -19,8 +19,8 @@ Updated at the end of every round.
 - Public site: still the old build. First rebuild tonight after Kento OKs the interim freeze report
   (`docs/freeze-report.md`); a second rebuild after 11/7's final version. See "Rebuild" below.
 - Console: workspace `kokoroe-public` has a $100/month cap (alert at $50); Kento set it.
-- Last round: D 20 (20:23) — what a tap counts, worded the same on screen, README en/ja and the submission overview.
-  Next eye: A, then B, C (after 21:08), D. Note: `screens.ts --open "details summary"` opens every fold.
+- Last round: A 31 (20:38) — 稽古の記録 headline says 平均64%（58〜70%）, tap wording one way, 経緯ごと; home 「ベテラン（師匠）」; s08b re-shot.
+  Next eye: B, then C (after 21:08), D, A. Note: `screens.ts --open "details summary"` opens every fold.
 - API spent today on rounds since 18:00: about $0.51 (successor guard 2 × $0.13, C 14 $0.03, C 15 $0.10, C 16 $0.11).
 
 ## The 15-minute rotation
