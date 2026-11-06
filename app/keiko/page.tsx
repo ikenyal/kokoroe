@@ -123,6 +123,7 @@ export default function KeikoPage() {
           </div>
           <details className="mt-3 text-[13.5px]">
             <summary className="cursor-pointer text-ai select-none">表で見る</summary>
+            <p className="mt-1 text-[12.5px] text-nibi sm:hidden">表は横にずらせます。</p>
             <div className="overflow-x-auto">
             <table className="mt-2 w-full min-w-[34rem] border-collapse whitespace-nowrap tabular-nums">
               <thead>
