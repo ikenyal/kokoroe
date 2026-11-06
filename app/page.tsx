@@ -10,7 +10,7 @@ import { marushinStory, sceneRangeSplit } from "./dandori";
 import mcp from "@/demo/successor-mcp/answers.json";
 
 const STEPS = [
-  ["一", "弟子（AI の橙丸）が、誰に・何で・いつ・裏で誰に、という段取りを先に作る。"],
+  ["一", "弟子（AI の橙丸）が、誰に・何で・いつ・裏で誰に、という段⁠取⁠りを先に作る。"],
   ["二", "師匠は ○・△・× の印と、あれば一言を付けるだけ。"],
   ["三", "直された分が、わけつきで心得帳に残り、後任に渡る。"],
 ] as const;
@@ -22,7 +22,7 @@ export default async function Home(props: PageProps<"/">) {
   const live = liveEnabled();
   const ex = marushinStory(demo, mcp);
   return (
-    <div className="grid gap-x-14 gap-y-12 lg:grid-cols-[1.15fr_1fr]">
+    <div className="grid gap-x-14 gap-y-12 [word-break:auto-phrase] lg:grid-cols-[1.15fr_1fr]">
       <section className="flex flex-col">
         <h1 className="font-mincho text-[25px] leading-snug tracking-[0.04em] sm:text-[30px]">
           <span className="inline-block">聞いても出てこない</span><span className="inline-block">作法を、</span>
@@ -30,7 +30,7 @@ export default async function Home(props: PageProps<"/">) {
           <span className="inline-block">ダメ出しで受け継ぐ。</span>
         </h1>
         <p className="yomi mt-4 max-w-[32em] text-[16px]">
-          取引先ごとの付き合い方は、ベテランの頭の中にしかありません。説明はできなくても、案を見れば「違う」とはすぐ言えます。ココロエは、その「違う」を集めます。
+          取引先ごとの付き合い方は、ベテランの頭の中にしかありません。説明はできなくても、案を見れば「違う」とはすぐ言えます。コ⁠コ⁠ロ⁠エは、その「違う」を集めます。
         </p>
         <ol className="mt-6 max-w-[32em] border-t border-keisen max-md:order-last">
           {STEPS.map(([n, t]) => (

@@ -21,7 +21,7 @@ export default function KeikoPage() {
       <p className="yomi mt-3 max-w-[40em] font-mincho text-[19px] leading-relaxed sm:text-[21px]">
         {results.official ? "" : "途中経過では、"}師匠が{paths ? `約${paths.taps}回` : `${end.taps}回`}のタップで直すと、○ が付く案は
         <span className="tabular-nums">{pct(results.before.match)}</span>から
-        <span className="whitespace-nowrap"><span className="tabular-nums text-ai">{paths ? pct(paths.mean) : pct(end.match)}</span>に、</span>後任が経緯ごと答えられた質問は8問中
+        <span className="whitespace-nowrap"><span className="tabular-nums text-ai">{paths ? pct(paths.mean) : pct(end.match)}</span>に、</span><span className="whitespace-nowrap">後任が</span>経緯ごと答えられた質問は8問中
         <span className="tabular-nums">{hist[0].mean.toFixed(0)}</span>問から平均
         <span className="tabular-nums text-ai">{hist.at(-1)!.mean.toFixed(1)}</span><span className="whitespace-nowrap">問になりました。</span>
       </p>
