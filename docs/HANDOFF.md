@@ -3,7 +3,7 @@
 A new session (even on another account) starts here. It remembers nothing; this file, `CLAUDE.md` and the logs are the memory.
 Updated at the end of every round.
 
-## Where things stand (updated 2026-11-07 04:35 JST)
+## Where things stand (updated 2026-11-07 04:45 JST)
 
 - Branches: work on `ui-polish`; after each round merge to `main` (`--no-ff`) and push both (normal push, never force).
 - Commit author must stay the repository setting: `ikenyal` / the GitHub noreply address (`git config user.email` shows it).
@@ -19,9 +19,9 @@ Updated at the end of every round.
 - Public site: still the old build. First rebuild tonight after Kento OKs the interim freeze report
   (`docs/freeze-report.md`); a second rebuild after 11/7's final version. See "Rebuild" below.
 - Console: workspace `kokoroe-public` has a $100/month cap (alert at $50); Kento set it.
-- Last round: B 29 (04:23) — README Try it: what デモの続き does live and the first-card waits, 「確かめる」 and the per-address cap, keyless text as on screen.
-  Next eye: C (allowed; last C ran 02:53), then D, A, B. Prompt-touching changes allowed until 05:00 only.
-- API spent on rounds: 11/6 since 18:00 about $0.61; 11/7 from 00:00: about $0.22 so far (cap $5 for rounds; eval:final ≈ $9.75 is separate and needs Kento's go).
+- Last round: C 23 (04:38) — judge code + 「デモの続き」 with visitors at $0: live, charged to judges; no fixes.
+  Next eye: D, then A, B, C (after 05:38). From 05:00 no prompt-touching changes.
+- API spent on rounds: 11/6 since 18:00 about $0.61; 11/7 from 00:00: about $0.30 so far (cap $5 for rounds; eval:final ≈ $9.75 is separate and needs Kento's go).
 
 ## The 15-minute rotation
 
