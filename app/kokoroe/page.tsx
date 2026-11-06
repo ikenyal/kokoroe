@@ -115,8 +115,15 @@ function Rule({ r, fact = false, used = [] }: { r: KokoroeRule; fact?: boolean; 
       {r.status === "active" && (
         <div className="mt-1.5 flex flex-wrap items-start justify-between gap-x-6 text-[13px]">
           <details>
-            <summary className="inline-flex min-h-11 cursor-pointer items-center text-ai select-none">出典の一覧</summary>
-            <p className="text-[12.5px] text-nibi">この心得のもとになった、師匠の印と一言（どの場面の、いつのものか）。</p>
+            <summary className="inline-flex min-h-11 cursor-pointer items-center text-ai select-none">出どころ</summary>
+            {/* ui-critic 11/6 evening: a ledger fact must not be described as the master's marks; same word as 暖簾を継ぐ (出どころ). */}
+            <p className="text-[12.5px] text-nibi">
+              {fact
+                ? "この事実を写した、取引先台帳（いつ写したか）。"
+                : r.sources.some((x) => x.kind === "ledger")
+                  ? "この心得のもとになった、取引先台帳と、師匠の印と一言（どの場面の、いつのものか）。"
+                  : "この心得のもとになった、師匠の印と一言（どの場面の、いつのものか）。"}
+            </p>
             <ul className="mb-2 space-y-1">{r.sources.map((s, i) => <SourceLine key={i} s={s} />)}</ul>
           </details>
           <details className="text-right">
