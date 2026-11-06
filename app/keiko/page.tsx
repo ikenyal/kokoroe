@@ -38,7 +38,7 @@ export default function KeikoPage() {
           <thead>
             <tr className="border-b border-keisen text-[13px] text-nibi">
               <th className="py-2 font-normal">測ったこと</th>
-              <th className="w-[24%] font-normal">はじめ<span className="block whitespace-nowrap text-[12.5px]">（台帳と、その制約）</span></th>
+              <th className="w-[24%] font-normal">はじめ<span className="block text-[12.5px]"><span className="whitespace-nowrap">（台帳と、</span><span className="whitespace-nowrap">その制約）</span></span></th>
               <th className="w-[24%] font-normal">40場面のあと</th>
             </tr>
           </thead>
