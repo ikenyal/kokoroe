@@ -182,7 +182,7 @@ export default async function KokoroePage({ searchParams }: { searchParams: Prom
 
   return (
     <div className="grid gap-10 md:grid-cols-[13rem_1fr]">
-      <nav aria-label="心得帳の目次" className="md:sticky md:top-6 md:self-start">
+      <nav aria-label="心得帳の目次" className="[word-break:auto-phrase] md:sticky md:top-6 md:self-start">
         <h1 className="font-mincho text-[24px] tracking-[0.06em]">心得帳</h1>
         <p className="mt-1 text-[13px] text-nibi">
           師匠から覚えた心得 {nK}・台帳から写した事実 {nF}
@@ -194,7 +194,7 @@ export default async function KokoroePage({ searchParams }: { searchParams: Prom
         >
           心得帳を後任に渡す
         </a>
-        <p className="mt-1.5 text-[12.5px] text-nibi">Agent Skills の形（SKILL.md と取引先ごとのファイル）で書き出します。後任の Claude Code の .claude/skills/ に置くと使えます。{nK ? "" : "いまは台帳の事実だけです。心得が付いてから渡すのがおすすめです。"}</p>
+        <p className="mt-1.5 text-[12.5px] text-nibi">Agent Skills の形（SKILL.md と取引先ごとのファイル）で書⁠き⁠出⁠し⁠ま⁠す。後任の Claude Code の .claude/skills/ に置くと使えます。{nK ? "" : "いまは台帳の事実だけです。心得が付いてから渡すのがおすすめです。"}</p>
         {kokoroe.length > 0 && <p className="mt-5 hidden text-[12.5px] text-nibi md:block">心得</p>}
         <ol className="mt-1 hidden space-y-1 text-[14px] md:block">
           {kokoroe.map((g) => (
@@ -208,7 +208,7 @@ export default async function KokoroePage({ searchParams }: { searchParams: Prom
         </ol>
         {facts.length > 0 && (
           <p className="mt-3 text-[14px]">
-            <a href="#facts" className="hover:text-ai">台帳から写した事実 <span className="tabular-nums text-nibi">{nF}</span></a>
+            <a href="#facts" className="hover:text-ai"><span className="inline-block">台帳から写した事実</span> <span className="tabular-nums text-nibi">{nF}</span></a>
             <span className="block text-[12.5px] text-nibi">いちばん下に畳んであります</span>
           </p>
         )}
