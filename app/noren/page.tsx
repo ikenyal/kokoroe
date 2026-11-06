@@ -126,7 +126,7 @@ function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => str
                     {/^(取引先)?台帳/.test(h.source ?? "") ? (
                       <span className="inline-block whitespace-nowrap">出どころ：取引先台帳</span>
                     ) : (
-                      <span className="inline-block whitespace-nowrap">出どころ：師匠の直し{h.written && `（心得帳に書いた日 ${h.written}）`}</span>
+                      <span className="inline-block whitespace-nowrap">出どころ：師匠の直し{h.written && `（${h.written}）`}</span>
                     )}
                   </p>
                 </li>
