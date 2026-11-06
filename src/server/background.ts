@@ -44,7 +44,7 @@ export async function interpretInBackground(mode: Mode, sid: string, judgmentId:
     const before = round === 2 ? readMeta(mode, sid).pending.find((p) => p.judgmentId === judgmentId) : undefined;
     const rejected = before?.candidates;
     const usage: Usage[] = [];
-    const interp = await interpret({ scene, client, judgment, existing, rejected, area: isDiffArea(before?.area) ? before.area : null, usage }).finally(() => recordSpend(usage));
+    const interp = await interpret({ scene, client, judgment, existing, rejected, area: isDiffArea(before?.area) ? before.area : null, usage }).finally(() => recordSpend(usage, sid));
     const ex = readMeta(mode, sid).pending.find((p) => p.judgmentId === judgmentId)?.exclude;
     const cands = interp.candidates.map((c) => (ex && c.targetRuleId === ex ? { ...c, action: "add" as const, targetRuleId: null } : c));
     if (!cands.length) return update(s, judgmentId, { status: "nothing-learned", note: "読み取れる違いがありませんでした" });
@@ -110,7 +110,7 @@ export async function startPrefetch(s: Session, index: number): Promise<(() => P
   return () =>
     runPrefetch(s, index, item.scene, getClient(item.scene.clientId), async (scene, client) => {
       const d = makeDiscipleV1(s.store, "v1-live", { visit: visitInApp() }); // the same apprentice as draftLive
-      return d.propose(scene, client).finally(() => recordSpend(d.usage)); // counted even if it is discarded later
+      return d.propose(scene, client).finally(() => recordSpend(d.usage, s.sid)); // counted even if it is discarded later
     }, slot, () => reserve(s.sid, ip, { sessionCap: !ownEnabled() }) === null); // a redo is a live call like any other
 }
 
@@ -133,7 +133,7 @@ export async function draftLive(s: Session, index: number) {
         return; // keep the recorded draft
       }
       const d = makeDiscipleV1(s.store, "v1-live", { visit: visitInApp() }); // 訪問の段取り (D-061): on in the app
-      draft = await d.propose(item.scene, getClient(item.scene.clientId)).finally(() => recordSpend(d.usage));
+      draft = await d.propose(item.scene, getClient(item.scene.clientId)).finally(() => recordSpend(d.usage, s.sid));
     }
     // Re-read after the await and patch only this card, so background updates made meanwhile are kept.
     const meta = readMeta(s.mode, s.sid);

@@ -8,6 +8,8 @@ import demo from "@/data/demo/demo-snapshot.json";
 import { Mark } from "./marks";
 import { marushinStory, sceneRangeSplit } from "./dandori";
 import mcp from "@/demo/successor-mcp/answers.json";
+import { isJudgeRequest, judgeEnabled } from "@/src/server/judge";
+import { JudgeCodeForm } from "./judge-form";
 
 const STEPS = [
   ["一", "弟子（AI の橙丸）が、誰に・何で・いつ・裏で誰に、という段⁠取⁠りを先に作る。"],
@@ -185,6 +187,7 @@ export default async function Home(props: PageProps<"/">) {
             </div>
           </dl>
         </details>
+        {live && judgeEnabled() && <JudgeCodeForm already={await isJudgeRequest()} />}
       </div>
     </div>
   );
