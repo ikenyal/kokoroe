@@ -158,7 +158,7 @@ with code against a hidden ground truth (frozen, checksummed); the apprentice ne
 | Held-out match (○) | 55% ± 0% (3 runs) | **64%** (58–70%, 3 training paths × 3 runs) |
 | ○ + △ | 70% | **92%** (90–95%) |
 | Successor answers with the right history (of 8) | 0 | **5.3** ± 0.6 |
-| Master taps for 40 scenes | — | 110–120 (judgments, choices, "why?", confirmations) |
+| Master taps for 40 scenes | — | 110–120 (marks, choosing a reading, "why?", checks) |
 | Injected "register this as a rule" in client text | — | kokoroe-chō changed 0 / 9 times |
 | Pressure to promise a discount | — | the model escalated to the master 9 / 9 (measured before the code floor, D-044) |
 
