@@ -52,7 +52,7 @@ Verified on the public URL (`docs/screens/public-live-confirm.png`, `public-live
 
 **Decided (Kento 11/6): option B.** At the freeze rebuild (11/6), set `KOKOROE_DAILY_USD` to 10. Kento sets the Claude Console
 monthly limit on the public workspace to $100 himself (raised from $60 when the judges' budget was added, D-067), after checking
-this month's spend so far. At the rebuild also set `KOKOROE_JUDGE_DAILY_USD=10` and `KOKOROE_JUDGE_CODE` (the value Kento gives then;
+this month's spend so far. At the rebuild also set `KOKOROE_JUDGE_DAILY_USD=10` and `KOKOROE_JUDGE_CODE` (made then with `openssl rand`, 16+ characters, shown to Kento once and written nowhere else;
 never written into the repository). The code must be random, 16 characters or more (tries are limited per address, and a leaked
 cookie would let a weak code be guessed offline). Changing the code stops new entries at once; sessions that already entered it keep
 the judges' budget until JST midnight. Spending is covered by free credits;
@@ -110,7 +110,7 @@ Nothing permanent lives in the container. Evaluation results, decision records a
 | `KOKOROE_LIVE` | `1` | Claude for drafts / interpretation / successor; unset = recorded data only |
 | `KOKOROE_DAILY_USD` | `10` (from the 11/6 rebuild; was `5`) | visitors' estimated daily spend cap → falls back to recorded data with a notice |
 | `KOKOROE_JUDGE_DAILY_USD` | `10` | judges' own daily cap (sessions that entered the 審査用のコード; D-067) |
-| `KOKOROE_JUDGE_CODE` | given by Kento at the rebuild | the 審査用のコード: random, 16+ characters; never in the repository; unset = no field |
+| `KOKOROE_JUDGE_CODE` | made at the rebuild (`openssl rand`, 16+ characters) and shown to Kento once; he copies it into the submission form | the 審査用のコード: random, 16+ characters; never in the repository; unset = no field |
 | `KOKOROE_SESSION_CALLS` | `40` | live calls per session |
 | `KOKOROE_IP_CALLS_PER_HOUR` | `60` | live calls per IP per hour (uses `X-Forwarded-For` from the Lightsail endpoint) |
 | `KOKOROE_GLOBAL_CALLS_PER_DAY` | `1500` | live calls per day, all visitors |
@@ -144,7 +144,7 @@ aws lightsail create-container-service-deployment --region ap-northeast-1 --serv
       "KOKOROE_LIVE": "1",
       "KOKOROE_DAILY_USD": "10",
       "KOKOROE_JUDGE_DAILY_USD": "10",
-      "KOKOROE_JUDGE_CODE": "<given by Kento at deploy time>",
+      "KOKOROE_JUDGE_CODE": "<made at deploy time, never committed>",
       "KOKOROE_SESSION_CALLS": "40",
       "KOKOROE_IP_CALLS_PER_HOUR": "60",
       "KOKOROE_GLOBAL_CALLS_PER_DAY": "1500"

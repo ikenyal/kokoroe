@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- ココロエ's tab icon (Kento 11/6): 「心」 in white on the app's indigo (#2b4a6f). No external images or web fonts:
+       the glyph uses the system Mincho, and scripts/make-icons.ts bakes it into the PNG/ICO files the app serves. -->
+  <rect width="64" height="64" rx="10" fill="#2b4a6f"/>
+  <text x="32" y="47" text-anchor="middle" font-size="44" fill="#f3f2ee"
+        font-family="'Hiragino Mincho ProN','Yu Mincho','Noto Serif JP',serif">心</text>
+</svg>
