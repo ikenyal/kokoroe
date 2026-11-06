@@ -132,7 +132,7 @@ export default function KeikoPage() {
                   <th className="font-normal">タップ</th>
                   <th className="font-normal">一致率</th>
                   <th className="font-normal">○＋△</th>
-                  <th className="font-normal">沿革の質問</th>
+                  <th className="font-normal">経緯の質問</th>
                 </tr>
               </thead>
               <tbody>
@@ -154,7 +154,7 @@ export default function KeikoPage() {
             </table>
             </div>
             <p className="mt-2 text-[12.5px] text-nibi">
-              ± は、同じ心得帳で評価用20場面を3回測ったばらつき（±0 は3回とも同じ値）。沿革の質問は、取引先の経緯を聞く8問のうち、なぜそうなったかまで答えられた数。タップ0の行は、その版の学習の始め（それぞれの版を測ったときの台帳で）。図の「はじめ 55%」は、直した台帳で測り直した値です（数字の注記）。
+              ± は、同じ心得帳で評価用20場面を3回測ったばらつき（±0 は3回とも同じ値）。経緯の質問は、取引先の経緯を聞く8問のうち、なぜそうなったかまで答えられた数。タップ0の行は、その版の学習の始め（それぞれの版を測ったときの台帳で）。図の「はじめ 55%」は、直した台帳で測り直した値です（数字の注記）。
             </p>
           </details>
         </div>
