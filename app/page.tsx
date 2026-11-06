@@ -62,11 +62,12 @@ export default async function Home(props: PageProps<"/">) {
             <button className="h-12 rounded-[3px] border border-ai px-5 text-[16px] text-ai hover:bg-ai-soft">師匠になって試す</button>
             <p className="text-[14px] text-sumi">心得帳は空から。あなたの印だけで弟子を育てます。</p>
           </form>
+          {/* ui-critic 11/7 on the public site: the code field sits at the bottom; a judge may press a start button first.
+              Inside the block (above its closing rule) so it reads as a start step. */}
+          {live && judgeEnabled() && !(await isJudgeRequest()) && (
+            <p className="border-t border-keisen py-2.5 text-[13px] text-nibi">審査員の方へ：始める前に、ページ最下部の「審査用のコード」を入れてください。</p>
+          )}
         </div>
-        {/* ui-critic 11/7 on the public site: the code field sits at the bottom; a judge may press a start button first. */}
-        {live && judgeEnabled() && !(await isJudgeRequest()) && (
-          <p className="mt-2 max-w-[32em] text-[13px] text-nibi">審査員の方は、先にこのページのいちばん下の「審査用のコード」を入れてください。</p>
-        )}
         {fieldEnabled() && (
           <form action={start} className="mt-4">
             <input type="hidden" name="mode" value="field" />
