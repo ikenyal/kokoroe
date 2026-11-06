@@ -170,7 +170,7 @@ const STATUS: Record<Pending["status"], string> = {
   "needs-choice": "どの意味でしたか",
   choosing: "選んだ読み方を心得帳に書いています",
   verifying: "新しい心得で解き直して、確かめています",
-  "needs-confirm": "確かめ：直した場面を、新しい心得で解き直しました",
+  "needs-confirm": "新しい心得で、直した場面を解き直しました（右の欄）",
   "needs-regression": "回帰の確認：以前は ○ だった場面の案が変わりました",
   "rolled-back": "差し戻しました",
   withdrawn: "確かめで外れたため取り下げました",
@@ -196,13 +196,16 @@ function CheckCard({ p, step, sceneId, proposal, before, sceneOf }: { p: Pending
   // Own mode: the scene lives in the session's queue, not in the fictional training scenes (it used to fall back to C01 and crash).
   const scene = sceneOf(sceneId);
   const client = getClient(scene?.clientId ?? CLIENTS[0].id);
-  const rows = DECISION_ROWS.filter(([k, , f]) => !before || f(before, client) !== f(proposal, client) || k === "channel" || k === "formalTo");
+  const rows = DECISION_ROWS.filter(([k, , f]) => !before || f(before, client) !== f(proposal, client) || k === "channel" || k === "formalTo")
+    // A row that is empty and unchanged says nothing (ui-critic 11/6: 「師匠の確認 —」 looked like a field to fill).
+    .filter(([, , f]) => f(proposal, client) !== "—" || (before && f(before, client) !== "—"));
   return (
     <form action={verifyCheck} className="mt-2 rounded-[3px] border border-keisen p-3">
       <input type="hidden" name="judgmentId" value={p.judgmentId} />
       <input type="hidden" name="step" value={step} />
       <TimedFields />
-      <p className="text-[13px]">
+      <p className="text-[13.5px] text-sumi">新しい心得で解き直した案です。これでよいですか<span className="text-nibi">（押さなくても次の案へ進めます）</span></p>
+      <p className="mt-1 text-[13px]">
         {client.name}　{scene ? `${SCENE_TYPE_LABELS[scene.type]}・${scene.month}月` : sceneId}
       </p>
       <dl className="mt-1 text-[14px]">
@@ -223,11 +226,12 @@ function CheckCard({ p, step, sceneId, proposal, before, sceneOf }: { p: Pending
             </div>
           ))}
       </dl>
-      <input name="remark" maxLength={120} autoComplete="off" aria-label="一言（任意）" placeholder="一言（任意）" className="mt-2 block h-9 w-full rounded-[3px] border border-waku bg-kami px-2 font-mincho text-[14px]" />
+      <input name="remark" maxLength={120} autoComplete="off" aria-label="一言（なくても送れます）" placeholder="一言（なくても送れます）" className="mt-2 block h-9 w-full rounded-[3px] border border-waku bg-kami px-2 font-mincho text-[14px]" />
       <div className="mt-2 flex gap-2">
         {(["○", "△", "×"] as const).map((v) => (
-          <button key={v} name="verdict" value={v} aria-label={`${v} ${VERDICT_WORD[v]}`} className="flex h-10 w-12 items-center justify-center rounded-[3px] border border-keisen text-shu hover:border-shu hover:bg-shu-soft">
-            <Mark v={v} size={24} />
+          <button key={v} name="verdict" value={v} aria-label={`${v} ${VERDICT_WORD[v]}`} className="flex h-14 w-14 flex-col items-center justify-center gap-0.5 rounded-[3px] border border-keisen text-shu hover:border-shu hover:bg-shu-soft">
+            <Mark v={v} size={22} />
+            <span className="text-[11.5px] text-sumi">{VERDICT_WORD[v]}</span>
           </button>
         ))}
       </div>
@@ -298,6 +302,12 @@ function PendingItem({ p, verdict, beforeOf, ruleText, words, sceneOf }: { p: Pe
           </Link>
         </p>
       )}
+      {p.status === "needs-choice" && p.candidates && (() => {
+        // Which plan the readings are about (ui-critic 11/6: the card on the left has already moved on to the next one).
+        const b = beforeOf(p.judgmentId);
+        const sc = sceneOf(p.sceneId);
+        return b && sc ? <p className="mt-1 text-[12.5px] text-nibi">印を付けた案：誰に {toWhom(b, getClient(sc.clientId))}・何で {means(b)}・いつ {TIMING_JA[b.timing] ?? b.timing}</p> : null;
+      })()}
       {p.status === "needs-choice" && p.candidates && (
         <form action={choose} className="mt-2">
           <input type="hidden" name="judgmentId" value={p.judgmentId} />
@@ -311,7 +321,7 @@ function PendingItem({ p, verdict, beforeOf, ruleText, words, sceneOf }: { p: Pe
           {(p.round ?? 1) === 1 && p.noRemark ? (
             // 「どこが違う？」 (D-057): only when there was no remark; in the same tap as 「どれでもない」, optional. A hint for the next readings.
             <fieldset className="border-t border-keisen pt-2">
-              <legend className="text-[13px] text-nibi">どれでもないとき、どこが違いますか（押さなくても進めます）</legend>
+              <legend className="text-[13.5px] text-sumi">どれも違うとき、どこが違いますか<span className="text-nibi">（押すと、そこを手がかりに読み直します。押さなくても進めます）</span></legend>
               <div className="mt-1 flex flex-wrap gap-2">
                 {DIFF_AREAS.map((a) => (
                   <button key={a} name="pick" value={`none:${a}`} className="h-11 min-w-14 rounded-[3px] border border-keisen px-3 text-[15px] hover:border-ai hover:bg-ai-soft">
@@ -319,7 +329,7 @@ function PendingItem({ p, verdict, beforeOf, ruleText, words, sceneOf }: { p: Pe
                   </button>
                 ))}
                 <button name="pick" value="none" className="h-11 px-2 text-[14px] text-nibi underline-offset-4 hover:underline">
-                  どれでもない（場所は選ばない）
+                  どれでもない（場所は言わない）
                 </button>
               </div>
             </fieldset>
@@ -493,7 +503,7 @@ export default async function ChobaPage() {
               <span>（この判定の後に別の直しが入ったため、取り消せません）</span>
             ) : (
               <button className="ml-2 inline-flex min-h-11 items-center px-1 text-ai underline-offset-4 hover:underline">
-                取り消す{undoable.writes ? "（心得帳に書いた分も戻し、沿革に残します）" : ""}
+                取り消す{undoable.writes ? "（心得帳に書いた分も戻し、記録は残します）" : ""}
               </button>
             )}
           </form>
