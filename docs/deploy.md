@@ -108,7 +108,9 @@ Nothing permanent lives in the container. Evaluation results, decision records a
 |---|---|---|
 | `ANTHROPIC_API_KEY` | the `kokoroe-public` key | server-side only |
 | `KOKOROE_LIVE` | `1` | Claude for drafts / interpretation / successor; unset = recorded data only |
-| `KOKOROE_DAILY_USD` | `5` | estimated daily spend cap → falls back to recorded data with a notice |
+| `KOKOROE_DAILY_USD` | `10` (from the 11/6 rebuild; was `5`) | visitors' estimated daily spend cap → falls back to recorded data with a notice |
+| `KOKOROE_JUDGE_DAILY_USD` | `10` | judges' own daily cap (sessions that entered the 審査用のコード; D-067) |
+| `KOKOROE_JUDGE_CODE` | given by Kento at the rebuild | the 審査用のコード: random, 16+ characters; never in the repository; unset = no field |
 | `KOKOROE_SESSION_CALLS` | `40` | live calls per session |
 | `KOKOROE_IP_CALLS_PER_HOUR` | `60` | live calls per IP per hour (uses `X-Forwarded-For` from the Lightsail endpoint) |
 | `KOKOROE_GLOBAL_CALLS_PER_DAY` | `1500` | live calls per day, all visitors |
@@ -140,7 +142,9 @@ aws lightsail create-container-service-deployment --region ap-northeast-1 --serv
     "environment": {
       "ANTHROPIC_API_KEY": "<kokoroe-public key>",
       "KOKOROE_LIVE": "1",
-      "KOKOROE_DAILY_USD": "5",
+      "KOKOROE_DAILY_USD": "10",
+      "KOKOROE_JUDGE_DAILY_USD": "10",
+      "KOKOROE_JUDGE_CODE": "<given by Kento at deploy time>",
       "KOKOROE_SESSION_CALLS": "40",
       "KOKOROE_IP_CALLS_PER_HOUR": "60",
       "KOKOROE_GLOBAL_CALLS_PER_DAY": "1500"
