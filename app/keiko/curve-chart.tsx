@@ -68,7 +68,7 @@ export function CurveChart({
         viewBox={`0 0 ${W} ${H}`}
         className="h-auto w-full"
         role="img"
-        aria-label="学習曲線：師匠のタップ数に対する、評価用20場面の一致率"
+        aria-label="学習曲線：師匠のタップ数に対する、評価用20場面で ○ が付いた割合"
         onMouseLeave={() => setHover(null)}
         onMouseMove={(e) => {
           const r = e.currentTarget.getBoundingClientRect();

@@ -122,16 +122,16 @@ export default function KeikoPage() {
           </div>
           <details className="mt-3 text-[13.5px]">
             <summary className="cursor-pointer text-ai select-none">表で見る</summary>
-            <p className="mt-1 text-[12.5px] text-nibi sm:hidden">表は横にずらせます。</p>
+            <p className="mt-1 text-[12.5px] text-nibi">図の細い線（改良の途中の版）の数字です。今の構成の{paths ? pct(paths.mean) : pct(end.match)}と、はじめの{pct(results.before.match)}は、上の表にあります。<span className="sm:hidden">表は横にずらせます。</span></p>
             <div className="overflow-x-auto">
             <table className="mt-2 w-full min-w-[34rem] border-collapse whitespace-nowrap tabular-nums">
               <thead>
                 <tr className="border-b border-keisen text-left text-nibi">
                   <th className="py-1 font-normal">版</th>
-                  <th className="font-normal">学習場面</th>
+                  <th className="font-normal">場面</th>
                   <th className="font-normal">タップ</th>
-                  <th className="font-normal">一致率</th>
-                  <th className="font-normal">○＋△</th>
+                  <th className="font-normal">○ の割合</th>
+                  <th className="font-normal">○ か △</th>
                   <th className="font-normal">経緯の質問</th>
                 </tr>
               </thead>
@@ -154,7 +154,7 @@ export default function KeikoPage() {
             </table>
             </div>
             <p className="mt-2 text-[12.5px] text-nibi">
-              ± は、同じ心得帳で評価用20場面を3回測ったばらつき（±0 は3回とも同じ値）。経緯の質問は、取引先の経緯を聞く8問のうち、なぜそうなったかまで答えられた数。タップ0の行は、その版の学習の始め（それぞれの版を測ったときの台帳で）。図の「はじめ 55%」は、直した台帳で測り直した値です（数字の注記）。
+              ± は、同じ心得帳で評価用20場面を3回測ったばらつき（±0 は3回とも同じ値）。経緯の質問は、取引先の経緯を聞く8問のうち、なぜそうなったかまで答えられた数。場面0の行は、その版の学習の始め（それぞれの版を測ったときの台帳で）。図の「はじめ 55%」は、直した台帳で測り直した値です（数字の注記）。
             </p>
           </details>
         </div>
