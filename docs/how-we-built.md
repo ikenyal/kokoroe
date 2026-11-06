@@ -526,3 +526,20 @@ Short entries, appended every work session. Source material for the README secti
 - **Flaky tests under load.** Three, then four, timing-bound tests timed out in two runs while the machine's load average was 61 (limits, undo,
   verify-ui; none touched by the change); on a quiet
   run all 316 passed. Logged rather than "fixed" by raising timeouts.
+
+### 2026-11-06 (evening): the freeze moved to 07:00, and a hand-over file
+
+- **The freeze moved.** At 18:00 Kento moved the freeze to 11/7 07:00 and answered four open questions with "yes". Claude
+  recreated the session cron with the new stop time, plus a 05:00 cut-off for anything touching prompts or learning.
+- **hitl-reviewer stopped the first wording of a prompt change.** Kento asked that the successor stop quoting the ledger's
+  internal label and stop giving the date a ledger fact was copied in. Claude's first wording keyed this on the rule's 〔台帳〕
+  marker. hitl-reviewer pointed out that rules mixing a ledger fact with the master's later correction would then lose the master's real dates.
+  The rule now keys on each 沿革 line's source. Checked on one stored 心得帳 with the existing guard script (far questions made up 0,
+  price questions to the master 2/2, the label gone), about $0.26 for two runs. The live run then showed the citation card still
+  printed the copy date, so the card was changed too.
+- **Script edits written in Claude Code.** Kento chose to cut s01's AI sentence, merge s02's first two sentences and give the
+  seconds to s05. Claude wrote the merged sentence and, after judge-critic noticed the 6.7 s hold had no words, one new s05
+  sentence. The animations' timings were shifted by hand-checked stills; the exact seconds are set from the new audio on 11/7.
+- **A hand-over file for another account.** Kento may continue on another Claude Code account if usage runs out. Claude wrote
+  `docs/HANDOFF.md`: the state, the rotation rules, the cron prompt to paste (crons are tied to a session), the stop time, what
+  waits on Kento, and next steps. Every round updates it. Commits stay authored by the repository's noreply address.
