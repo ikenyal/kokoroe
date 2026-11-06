@@ -6,6 +6,7 @@ import { CLIENTS, COMPANY, getClient, HISTORY_QUESTIONS } from "@/src/core/world
 import { getSession, liveEnabled, type SuccessorTurn } from "@/src/server/session";
 import { ask } from "../actions";
 import { citationParts, plainText } from "@/src/lib/plain";
+import { isEitherOr } from "@/src/lib/question";
 import { ownEnabled } from "@/src/core/own-world";
 import general from "@/data/demo/recorded-answers-general.json";
 import recorded from "@/data/demo/recorded-answers.json";
@@ -62,10 +63,11 @@ function examplesInOrder() {
 
 function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => string | undefined }) {
   const a = ANSWER[t.answer];
+  const eitherOr = isEitherOr(t.question); // no はい・いいえ heading above an either/or answer (decision 19 (b))
   const g = withoutBook(t);
   const mine = (
     <>
-      <p className={`font-mincho text-[22px] ${a.tone}`}>{a.word}</p>
+      {!(eitherOr && t.answer !== "unknown") && <p className={`font-mincho text-[22px] ${a.tone}`}>{a.word}</p>}
       <p className="yomi mt-1 text-[16px]">{plainText(t.explanation)}</p>
     </>
   );
@@ -79,7 +81,7 @@ function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => str
         <div className="mt-4 grid gap-x-8 gap-y-5 sm:grid-cols-2">
           <section aria-label="心得帳なしの答え" className="order-2 border-t border-keisen pt-2 sm:order-none">
             <h3 className="text-[13px] text-nibi">心得帳なし（取引先台帳だけ）</h3>
-            <p className="mt-1 font-mincho text-[19px] text-sumi/80">{g.answer === "unknown" ? "判断できない" : ANSWER[g.answer].word}</p>
+            {!(eitherOr && g.answer !== "unknown") && <p className="mt-1 font-mincho text-[19px] text-sumi/80">{g.answer === "unknown" ? "判断できない" : ANSWER[g.answer].word}</p>}
             <p className="yomi mt-1 text-[15px] text-sumi/80">{plainText(g.explanation)}</p>
             <p className="mt-3 border-t border-keisen pt-2 text-[13.5px] text-sumi/80">根拠・経緯：なし（心得帳を渡していない）</p>
           </section>

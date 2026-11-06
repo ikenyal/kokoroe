@@ -50,7 +50,9 @@ Verified on the public URL (`docs/screens/public-live-confirm.png`, `public-live
 - **Built with Podman on the only machine here** (`hodoku-build-rosetta-v2`), as a separate tag (`localhost/kokoroe`); nothing of
   HODOKU's images, settings or cache was changed.
 
-Planned: raise `KOKOROE_DAILY_USD` to 10 before submission (11/8) — shown to Kento first.
+**Decided (Kento 11/6): option B.** At the freeze rebuild (11/6), set `KOKOROE_DAILY_USD` to 10. Kento sets the Claude Console
+monthly limit on the public workspace to $60 himself, after checking this month's spend so far. Spending is covered by free credits;
+the limits are there so that no real cost arises (docs/freeze-report.md, section 2).
 
 ## How the image was actually built and pushed (Podman, Apple Silicon)
 
