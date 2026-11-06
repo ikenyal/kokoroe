@@ -290,7 +290,7 @@ function PendingItem({ p, verdict, beforeOf, ruleText, words, sceneOf }: { p: Pe
   return (
     <li className="border-t border-keisen py-3 first:border-t-0">
       <p className="text-[13px] text-nibi">
-        {words(p.sceneId)}{/* offline: the status line above already says it; the example below says what the live version does */}{p.status === "offline" ? "" : `　${statusOf(p)}`}
+        {words(p.sceneId)}{/* offline: the status line above already says it; the example below says what the live version does */}{p.status === "offline" ? "" : `　${statusOf(p).replace("（右の欄）", "")}`}
         {p.round === 2 && p.status === "needs-choice" ? `（別の読み方${p.area ? `：「${AREA_ON_SCREEN[p.area]}」を手がかりに` : ""}）` : ""}
       </p>
       {p.status === "offline" && <OfflineExample sceneId={p.sceneId} verdict={verdict} />}
@@ -341,7 +341,7 @@ function PendingItem({ p, verdict, beforeOf, ruleText, words, sceneOf }: { p: Pe
         </form>
       )}
       {p.status === "needs-confirm" && p.verify?.retried && p.note && <p className="text-[13px] text-nibi">{p.note}</p>}
-      {p.status === "needs-confirm" && p.verify?.confirm && <CheckCard p={p} step="confirm" sceneId={p.sceneId} proposal={p.verify.confirm.proposal} sceneOf={sceneOf} />}
+      {p.status === "needs-confirm" && p.verify?.confirm && <CheckCard p={p} step="confirm" sceneId={p.sceneId} proposal={p.verify.confirm.proposal} before={beforeOf(p.judgmentId)} sceneOf={sceneOf} />}
       {p.status === "needs-regression" && p.verify?.current && (
         <CheckCard p={p} step="regression" sceneId={p.verify.current.sceneId} proposal={p.verify.current.proposal} before={beforeOf(p.verify.current.pastJudgmentId)} sceneOf={sceneOf} />
       )}

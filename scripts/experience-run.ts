@@ -102,7 +102,7 @@ const cardShown = (page: Page) => async () => (await page.locator('section[aria-
           if (await page.locator('aside input[name="why"]').count()) {
             await page.locator('aside input[name="why"]').fill("以前、先方と行き違いがあった");
             await page.locator('aside button:has-text("わけを残す")').click();
-            steps.push({ step: "わけを残す → 確かめ（直した場面を新しい心得で解き直す）が出るまで", ...(await waitFor(page, async () => /確かめ：|回帰の確認|取り下げ|差し戻し|確かめました/.test(await aside()), 120000)) });
+            steps.push({ step: "わけを残す → 確かめ（直した場面を新しい心得で解き直す）が出るまで", ...(await waitFor(page, async () => /確かめ：|解き直しました|回帰の確認|取り下げ|差し戻し|確かめました/.test(await aside()), 120000)) });
           }
           await shot("after-why-full", true);
         }
