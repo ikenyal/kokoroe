@@ -22,12 +22,12 @@ export default async function Home(props: PageProps<"/">) {
   const live = liveEnabled();
   const ex = marushinStory(demo, mcp);
   return (
-    <div className="grid gap-x-14 gap-y-12 md:grid-cols-[1.15fr_1fr]">
+    <div className="grid gap-x-14 gap-y-12 lg:grid-cols-[1.15fr_1fr]">
       <section className="flex flex-col">
         <h1 className="font-mincho text-[25px] leading-snug tracking-[0.04em] sm:text-[30px]">
-          聞いても出てこない作法を、
+          <span className="inline-block">聞いても出てこない</span><span className="inline-block">作法を、</span>
           <br />
-          ダメ出しで受け継ぐ。
+          <span className="inline-block">ダメ出しで受け継ぐ。</span>
         </h1>
         <p className="yomi mt-4 max-w-[32em] text-[16px]">
           取引先ごとの付き合い方は、ベテランの頭の中にしかありません。説明はできなくても、案を見れば「違う」とはすぐ言えます。ココロエは、その「違う」を集めます。
