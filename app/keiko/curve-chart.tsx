@@ -91,7 +91,7 @@ export function CurveChart({
         {Array.from({ length: xMax / 20 + 1 }, (_, i) => i * 20).map((t) => (
           <text key={t} x={x(t)} y={H - M.bottom + 18} textAnchor="middle" className="fill-nibi text-[11px]">{t}</text>
         ))}
-        <text x={(M.left + W - M.right) / 2} y={H - 6} textAnchor="middle" className="fill-nibi text-[12px]">師匠のタップ数（判定・候補の選択・「なぜ？」・確認の合計）</text>
+        <text x={(M.left + W - M.right) / 2} y={H - 6} textAnchor="middle" className="fill-nibi text-[12px]">師匠のタップ数（印・候補の選択・「なぜ？」・確かめの合計）</text>
 
         {/* Before band */}
         <rect x={M.left} width={W - M.left - M.right} y={y(before.match + before.sd)} height={y(before.match - before.sd) - y(before.match + before.sd)} className="fill-kami-2" />
