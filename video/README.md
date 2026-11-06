@@ -64,7 +64,7 @@ Sources on screen (s01-why):
 ## What is Kokoroe's, and what is off the shelf (the organizers' answer, 11/5)
 The organizers judge only what was made with Claude, and asked that a demo through Claude Code make clear which part is the
 entrant's own MCP server. So the video says it on screen (no narration change):
-- **s04b-flow:** a dashed chip under 弟子 「文面は Claude の API（既製）」, and a solid 藍 chip under 心得帳 「ココロエが作った仕組み」.
+- **s04b-flow:** a dashed chip under 弟子 「案・一言の読み取り・心得の文は Claude の API（既製）」 (two lines; was 「文面は…」 until item 23, 11/6), and a solid 藍 chip under 心得帳 「ココロエが作った仕組み」.
 - **s07-noren:** a tag in the top-left corner 「ココロエの画面（自作）。答えの文面は Claude の API が心得帳から書きます」 (drawn by
   `record.ts`, like the subtitles).
 - **s07b-mcp:**
