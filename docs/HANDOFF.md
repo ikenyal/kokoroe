@@ -64,9 +64,9 @@ Updated at the end of every round.
 
 ## Next
 
-1. Interim freeze report → Kento's OK → rebuild (above).
-2. Continue the rotation until 07:00 (next eye: see the log's last section).
-3. 11/7 after the freeze: `eval:final`, narration for s01/s02/s04b/s05/s06/s07c/s08b, re-shoot, README numbers, second rebuild.
+1. ~~Interim freeze report → Kento's OK → rebuild~~ done 11/7 05:16 (deployment 5).
+2. At 07:00: write the final freeze report (`docs/freeze-report.md`) and wait for Kento.
+3. 11/7 after the freeze: `eval:final`, narration for s01/s02/s04b/s05/s06/s07c/s08b, re-shoot, README numbers, second rebuild (Kento's OK; keep the same judge code).
 
 ## The cron prompt (paste as-is when re-creating)
 
