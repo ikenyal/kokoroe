@@ -5,7 +5,7 @@
  *   npx tsx scripts/check-diff-area.ts --base http://127.0.0.1:3101 --shots docs/screens
  * Card 1: △ with no remark → the readings come with the six area buttons (desktop and phone width; button sizes).
  * Card 2: △ with the remark 「違う」 → the readings come with a plain 「どれでもない」 only.
- * Then 「どれでもない（場所は選ばない）」 on card 1 must lead to the second readings, with no area buttons.
+ * Then 「どれでもない（場所は言わない）」 on card 1 must lead to the second readings, with no area buttons.
  */
 import { parseArgs } from "node:util";
 import { chromium, type Locator, type Page } from "playwright";
