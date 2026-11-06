@@ -32,7 +32,7 @@ export default async function Home(props: PageProps<"/">) {
           <span className="inline-block">ダメ出しで受け継ぐ。</span>
         </h1>
         <p className="yomi mt-4 max-w-[32em] text-[16px]">
-          取引先ごとの付き合い方は、ベテラン（師匠）の頭の中にしかありません。説明はできなくても、案を見れば「違う」とはすぐ言えます。コ⁠コ⁠ロ⁠エは、その「違う」を集めます。
+          取引先ごとの付き合い方は、ベテラン（師匠）の頭の中にしかありません。説明はできなくても、案を見れば「違う」と言えます。コ⁠コ⁠ロ⁠エは、その「違う」を集めます。
         </p>
         <ol className="mt-6 max-w-[32em] border-t border-keisen max-md:order-last">
           {STEPS.map(([n, t]) => (
