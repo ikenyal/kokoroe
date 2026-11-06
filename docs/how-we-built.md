@@ -519,9 +519,10 @@ Short entries, appended every work session. Source material for the README secti
     - B found the shared-limit wording was wrong for a judge;
     - C found the next fix left a stale notice once a judge entered the code partway through a session.
 
-    None of these needed the API except the two live runs ($0.135 in all).
+    None of these needed the API except C's live runs ($0.035 and $0.135, $0.170 in all).
 - **A tab icon from SVG.** The Next.js 「N」 became a white 心 on indigo. Claude wrote the SVG and a script that renders it with
   Playwright into the ICO and PNG files, so no image editor or external font is involved. The 180 px home-screen icon has square
   corners because iOS rounds the corners itself.
-- **Flaky tests under load.** Three or four timing-bound tests timed out once while the machine's load average was 61; on a quiet
+- **Flaky tests under load.** Three, then four, timing-bound tests timed out in two runs while the machine's load average was 61 (limits, undo,
+  verify-ui; none touched by the change); on a quiet
   run all 316 passed. Logged rather than "fixed" by raising timeouts.
