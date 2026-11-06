@@ -122,7 +122,8 @@ function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => str
                   {h.why && <p className="yomi text-[14px]"><span className="text-nibi">わけ：</span>{h.why}</p>}
                   <p className="text-[13px] text-nibi">
                     {h.source && <span className="inline-block whitespace-nowrap">出どころ：{h.source.replace("台帳（取引先台帳の明示的な制約）", "取引先台帳")}　</span>}
-                    {h.written && <span className="inline-block whitespace-nowrap">心得帳に書いた日：{h.written}</span>}
+                    {/* Kento 11/6 item 25: a fact copied from the client ledger is shown without its copy date (it is not when it began). */}
+                    {h.written && !h.source?.startsWith("台帳") && <span className="inline-block whitespace-nowrap">心得帳に書いた日：{h.written}</span>}
                   </p>
                 </li>
               );
