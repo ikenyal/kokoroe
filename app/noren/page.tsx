@@ -94,7 +94,7 @@ function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => str
                 const fact = t.citations.filter((c) => /出典[:：]\s*台帳/.test(c.history)).length;
                 const rule = t.citations.length - fact;
                 if (!t.citations.length) return "なし（心得帳に記録がないので、師匠に確認を勧める）";
-                return [rule && `心得${rule}つ`, fact && `取引先台帳の決まりごと${fact}つ`].filter(Boolean).join("・") + "（下に、わ⁠け⁠と⁠沿⁠革⁠）";
+                return [rule && `心得${rule}つ`, fact && `取引先台帳の決まりごと${fact}つ`].filter(Boolean).join("・") + "（わ⁠け⁠は⁠下⁠に⁠）";
               })()}
             </p>
           </section>
@@ -121,9 +121,13 @@ function Turn({ t, ruleText }: { t: SuccessorTurn; ruleText: (id: string) => str
                   {h.before && <p className="yomi text-[14px]"><span className="text-nibi">前は：</span>{h.before}</p>}
                   {h.why && <p className="yomi text-[14px]"><span className="text-nibi">わけ：</span>{h.why}</p>}
                   <p className="text-[13px] text-nibi">
-                    {h.source && <span className="inline-block whitespace-nowrap">出どころ：{h.source.replace("台帳（取引先台帳の明示的な制約）", "取引先台帳")}　</span>}
-                    {/* Kento 11/6 item 25: a fact copied from the client ledger is shown without its copy date (it is not when it began). */}
-                    {h.written && !h.source?.startsWith("台帳") && <span className="inline-block whitespace-nowrap">心得帳に書いた日：{h.written}</span>}
+                    {/* Both kinds say where they came from (ui-critic 11/6 evening). A fact copied from the client ledger is shown
+                        without its copy date (Kento 11/6 item 25: it is not when it began); the master's correction keeps its date. */}
+                    {h.source?.startsWith("台帳") ? (
+                      <span className="inline-block whitespace-nowrap">出どころ：取引先台帳</span>
+                    ) : (
+                      <span className="inline-block whitespace-nowrap">出どころ：師匠の直し{h.written && `（心得帳に書いた日 ${h.written}）`}</span>
+                    )}
                   </p>
                 </li>
               );

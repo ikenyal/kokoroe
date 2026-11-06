@@ -29,7 +29,7 @@
   .chip.own { width: 820px; margin-left: 0; }
   /* The own part spans 師匠 → 後任 (ui-critic 11/5: under the 心得帳 only, it read as if only the book were Kokoroe's). */
   .chip.own span { display: block; border: 1.5px solid var(--ai); border-top: none; color: var(--ai); padding-top: 6px; }
-  .defs { position: absolute; left: 240px; top: 448px; width: 800px; padding: 18px 30px; border-top: 1.5px solid var(--keisen); border-bottom: 1.5px solid var(--keisen);
+  .defs { position: absolute; left: 240px; top: 470px; width: 800px; padding: 18px 30px; border-top: 1.5px solid var(--keisen); border-bottom: 1.5px solid var(--keisen);
     display: grid; grid-template-columns: 5em 1fr; row-gap: 10px; font-size: 24px; line-height: 1.5; opacity: 0; animation: fade .4s 4.9s ease forwards; }
   .defs dt { font-weight: 600; opacity: 0; animation: fade .45s var(--d) ease forwards; }
   .defs dd { margin: 0; opacity: 0; animation: fade .45s var(--d) ease forwards; }
@@ -37,7 +37,7 @@
 </style></head>
 <body>
 <div class="node" style="left:70px;--d:.1s"><h2>弟子</h2><p class="gothic">AI（橙丸）<br>先に案を出す</p></div>
-<p class="chip gothic" style="left:70px;--d:.4s;width:320px;white-space:normal;line-height:1.45"><span>案・一言の読み取り・心得の文は<br>Claude の API（既製）</span></p>
+<p class="chip gothic" style="left:70px;--d:.4s;width:250px;margin-left:-20px;white-space:normal;line-height:1.35;font-size:15px"><span style="padding:2px 6px">案・一言の読み取り・<br>心得の文は Claude の API（既製）</span></p>
 <div class="arrow" style="left:282px;width:90px;--d:.5s"></div><p class="tag gothic" style="left:282px;--d:.6s">案</p>
 <div class="node" style="left:375px;--d:.7s"><h2>師匠</h2><p class="gothic">営業部長<br>直すだけ</p></div>
 <p class="marks"><span style="--d:1.4s">○</span><span style="--d:1.7s">△</span><span style="--d:2.0s;font-size:48px">×</span></p>
