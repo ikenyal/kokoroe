@@ -112,7 +112,7 @@ daily plans; the 心得帳 grows as a by-product of that work. To start with you
 - **Public demo:** _URL to be added (11/6)._ Two modes: **デモの続き** (button 「デモの続きから見る」: a recorded run stopped half-way) and **お試し**
   (button 「師匠になって試す」: you are the master). Live calls have limits per session and per day; when one is reached, the
   screen says so (「本日のお試し上限に達しました…」) and the demo goes on with recorded data.
-- **For judges:** enter the code given in the submission form under 「審査用のコード」 at the bottom of the home page, and live calls
+- **For judges:** enter the code given in the submission form under 「審査用のコード」 at the bottom of the home page (open it first), and live calls
   come from a separate daily budget, so visitors using up theirs does not stop you. Without the code, every screen still works on
   recorded data. The code changes only where the spend is counted, not drafting, learning, judging or the evaluation.
 - **Run locally** (Node 22+, npm; checked from a fresh clone: all four on 11/3; install, tests, eval:quick and a production build again on 11/5):
