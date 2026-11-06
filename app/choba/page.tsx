@@ -591,7 +591,7 @@ export default async function ChobaPage() {
 
       <aside aria-labelledby="bg-h" className={`scroll-mt-4 lg:order-none lg:border-l-2 lg:border-keisen lg:pl-6 ${asking.length ? "order-first" : ""}`}>
         <h2 id="bg-h" className="font-mincho text-[18px] tracking-[0.04em]">弟子の読み取り</h2>
-        <p className="mt-1 text-[13px] text-nibi">△・× の意味を弟子が読み取り、心得帳に書きます{live ? "" : "（公開版のライブで）"}。待たずに次の案へ進めます。</p>
+        <p className="mt-1 text-[13px] text-nibi">{live ? "△・× の意味を弟子が読み取り、心得帳に書きます。" : "このデモでは心得帳は書き足されません（書き足しはライブ版で）。"}待たずに次の案へ進めます。</p>
         {recent.length ? (
           <ul className="mt-3">{recent.map((p) => <PendingItem key={p.judgmentId} p={p} verdict={judgments.find((j) => j.id === p.judgmentId)?.verdict} ruleText={ruleText} words={words} sceneOf={(id) => meta.queue.find((q) => q.scene.id === id)?.scene ?? TRAIN_SCENES.find((t) => t.id === id)} beforeOf={(id) => judgments.find((j) => j.id === id)?.proposal} />)}</ul>
         ) : (
