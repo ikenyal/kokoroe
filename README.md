@@ -41,6 +41,7 @@ written down, and it is lost each time people change. That is a real waste. This
 companies have [no successor](https://www.tdb.co.jp/report/economic/20251121-successor25y/) and that some 3.3 million people change jobs in a year, the same thing is
 happening across Japan — and, by extension, it could happen anywhere in the world where people work. Kokoroe starts with one of
 the hardest kinds of this to put into words: how to deal with each client.
+
 (Sources: no successor — the Teikoku Databank survey in the next paragraph; 3.3 million — Statistics Bureau of Japan, Labour Force
 Survey (Detailed Tabulation), 2025 average, number of job changers.)
 
