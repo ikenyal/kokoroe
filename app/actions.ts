@@ -17,7 +17,9 @@ import { recordTrigger } from "@/src/learning/compile";
 import type { SessionMeta, SuccessorTurn, Timing } from "@/src/server/session";
 import { askSuccessor } from "@/src/successor/ask";
 import type { Usage } from "@/src/lib/claude";
-import { allowLive, allowStart, recordSpend } from "@/src/server/limits";
+import { allowLive, allowStart, clientIp, recordSpend, reserveJudgeTry } from "@/src/server/limits";
+import { codeMatches, JUDGE_COOKIE, judgeEnabled, judgeToken } from "@/src/server/judge";
+import { cookies } from "next/headers";
 import { fieldEnabled } from "@/src/server/field";
 import { enforceHitl } from "@/src/disciple/hitl";
 import { CLIENTS, getClient, HISTORY_QUESTIONS } from "@/src/core/world";
@@ -203,7 +205,7 @@ export async function ask(formData: FormData) {
   if (liveEnabled() && !refused) {
     const rules = (await s.store.listRules()).filter((r) => r.status === "active" && (r.scope.clientId === null || r.scope.clientId === clientId));
     const usage: Usage[] = [];
-    const a = await askSuccessor({ client: getClient(clientId), question, rules, usage }).finally(() => recordSpend(usage));
+    const a = await askSuccessor({ client: getClient(clientId), question, rules, usage }).finally(() => recordSpend(usage, s.sid));
     if (!a.citationsValid) {
       // Grounding check: a yes/no without real kokoroe-chō citations is not shown as an answer.
       turn = { at: new Date().toISOString(), clientId, question, answer: "unknown", explanation: "心得帳には記録がありません。師匠に確認してください。", citations: [], source: "live" };
@@ -430,3 +432,17 @@ export async function ownDeleteAll(formData: FormData) {
   reloadOwnWorld();
   redirect("/own");
 }
+
+/**
+ * 審査用のコード (Kento 11/6): a judge enters the code given in the submission form; on success the browser keeps an httpOnly
+ * cookie and its live calls come from the judges' own daily budget (src/server/limits.ts). Tries are limited per address per hour.
+ * Nothing else changes for the session.
+ */
+export async function enterJudgeCode(_prev: string, formData: FormData): Promise<string> {
+  if (!judgeEnabled()) return "off";
+  if (!reserveJudgeTry(await clientIp())) return "limit";
+  if (!codeMatches(String(formData.get("code") ?? "").slice(0, 200))) return "ng";
+  (await cookies()).set(JUDGE_COOKIE, judgeToken(), { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/", maxAge: 14 * 24 * 3600 });
+  return "ok";
+}
+

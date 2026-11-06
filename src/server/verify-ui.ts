@@ -43,7 +43,7 @@ async function draft(s: Session, scene: Scene): Promise<Proposal> {
   try {
     return await d.propose(scene, getClient(scene.clientId));
   } finally {
-    recordSpend(d.usage);
+    recordSpend(d.usage, s.sid);
   }
 }
 
@@ -95,7 +95,7 @@ export async function afterConfirm(mode: Mode, sid: string, judgmentId: string, 
           // On a failed call, withdraw rather than leave a rule that did not take active (review of D-045).
           const interp = await interpret({ scene, client, judgment: cj, existing, usage })
             .catch(() => null)
-            .finally(() => recordSpend(usage));
+            .finally(() => recordSpend(usage, s.sid));
           if (!interp) return withdraw(s, judgmentId, p.verify, cj.id, scene.id, verdict, remark, false);
           const c = !interp.ambiguous && interp.candidates.length === 1 ? interp.candidates[0] : undefined;
           if (c) {
@@ -220,7 +220,7 @@ export async function afterRegression(mode: Mode, sid: string, judgmentId: strin
       const interp = await interpret({
         scene: own, client, judgment, existing, usage,
         conflict: { ruleId: rule.id, ruleText: rule.text, scene, before: past.proposal, after: cur.proposal, verdict, remark },
-      }).finally(() => recordSpend(usage));
+      }).finally(() => recordSpend(usage, s.sid));
       const c = interp.candidates[0];
       if (c) {
         await applyCandidate(s.store, judgment, { ...c, action: "revise", targetRuleId: rule.id }, interp);

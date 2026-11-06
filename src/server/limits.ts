@@ -3,6 +3,8 @@
  *   - per session : at most SESSION_CALLS live calls (drafts, interpretations, successor answers)
  *   - per IP      : at most IP_CALLS_PER_HOUR live calls per hour
  *   - global/day  : estimated spend ≤ KOKOROE_DAILY_USD (default $5) per JST day, and ≤ GLOBAL_CALLS_PER_DAY calls
+ *   - judges     : a session that entered the 審査用のコード (src/server/judge.ts) draws on its own daily budget,
+ *                  KOKOROE_JUDGE_DAILY_USD (default $10), with no per-session cap; the per-IP cap still applies (Kento 11/6)
  * When a limit is hit, the UI falls back to recorded data and says 「本日のお試し上限に達しました」.
  * Counters live in a small JSON file under KOKOROE_DATA_DIR — fine for one instance; for several instances swap the storage
  * (docs/deploy.md). Only counts and amounts are stored, never content.
@@ -14,16 +16,22 @@ import { headers } from "next/headers";
 import { connection } from "next/server";
 import type { Usage } from "@/src/lib/claude";
 import { estimateUsd } from "@/src/lib/cost";
+import { isJudgeRequest } from "./judge";
 
 const DATA_DIR = process.env.KOKOROE_DATA_DIR ?? path.join(process.cwd(), ".data");
 const FILE = path.join(DATA_DIR, "limits.json");
 
+/** A number from the environment; anything not a finite number falls back to the default (a NaN cap would never trip). */
+const num = (v: string | undefined, d: number) => (v !== undefined && v.trim() !== "" && Number.isFinite(Number(v)) ? Number(v) : d);
+
 export const LIMITS = {
-  sessionCalls: Number(process.env.KOKOROE_SESSION_CALLS ?? 40),
-  ipCallsPerHour: Number(process.env.KOKOROE_IP_CALLS_PER_HOUR ?? 60),
-  globalCallsPerDay: Number(process.env.KOKOROE_GLOBAL_CALLS_PER_DAY ?? 1500),
-  dailyUsd: Number(process.env.KOKOROE_DAILY_USD ?? 5),
-  ipStartsPerHour: Number(process.env.KOKOROE_IP_STARTS_PER_HOUR ?? 30), // each start copies a ~100 KB snapshot to disk
+  sessionCalls: num(process.env.KOKOROE_SESSION_CALLS, 40),
+  ipCallsPerHour: num(process.env.KOKOROE_IP_CALLS_PER_HOUR, 60),
+  globalCallsPerDay: num(process.env.KOKOROE_GLOBAL_CALLS_PER_DAY, 1500),
+  dailyUsd: num(process.env.KOKOROE_DAILY_USD, 5),
+  ipStartsPerHour: num(process.env.KOKOROE_IP_STARTS_PER_HOUR, 30), // each start copies a ~100 KB snapshot to disk
+  judgeDailyUsd: num(process.env.KOKOROE_JUDGE_DAILY_USD, 10),
+  judgeTriesPerHour: num(process.env.KOKOROE_JUDGE_TRIES_PER_HOUR, 5),
 };
 
 interface Counters {
@@ -33,6 +41,10 @@ interface Counters {
   sessions: Record<string, number>;
   ips: Record<string, { hour: string; calls: number }>;
   starts?: Record<string, { hour: string; count: number }>;
+  judgeUsd?: number; // judges' spend today (separate budget)
+  judgeCalls?: number;
+  judgeSids?: string[]; // sessions that entered the code today (so background work is counted to the right budget)
+  judgeTries?: Record<string, { hour: string; count: number }>;
 }
 
 const jstDay = () => new Date(Date.now() + 9 * 3600_000).toISOString().slice(0, 10);
@@ -58,7 +70,7 @@ function save(c: Counters) {
  * the last trusted hop — counted from the END, never the first. With Lightsail there is one trusted hop (its load balancer).
  * X-Real-IP is ignored (a client can send it). No header (local dev) → "direct".
  */
-export function trustedClientIp(xff: string | null, trustedHops = Number(process.env.KOKOROE_TRUSTED_PROXY_HOPS ?? 1)): string {
+export function trustedClientIp(xff: string | null, trustedHops = num(process.env.KOKOROE_TRUSTED_PROXY_HOPS, 1)): string {
   const parts = (xff ?? "").split(",").map((x) => x.trim()).filter(Boolean);
   if (!parts.length || trustedHops < 1) return "direct";
   const ip = parts[Math.max(0, parts.length - trustedHops)];
@@ -78,12 +90,23 @@ export async function allowLive(sid: string): Promise<LimitReason | null> {
   // The counters read the clock: tell Next this runs at request time, never while prerendering (dev flagged Date.now(), 11/6).
   await connection();
   // Own mode (local, your own key): the per-session cap would stop your one lasting 心得帳 for the day; the daily spend cap stays.
-  return reserve(sid, await clientIp(), { sessionCap: !ownEnabled() });
+  return reserve(sid, await clientIp(), { sessionCap: !ownEnabled(), judge: await isJudgeRequest() });
 }
 
 /** The counting logic, separated from the request so it can be tested. */
-export function reserve(sid: string, ip: string, opts: { sessionCap?: boolean } = {}): LimitReason | null {
+export function reserve(sid: string, ip: string, opts: { sessionCap?: boolean; judge?: boolean } = {}): LimitReason | null {
   const c = load();
+  if (opts.judge || c.judgeSids?.includes(sid)) {
+    // A judge's session: its own daily budget, no per-session cap; the per-IP cap stays.
+    if ((c.judgeUsd ?? 0) >= LIMITS.judgeDailyUsd || (c.judgeCalls ?? 0) >= LIMITS.globalCallsPerDay) return "daily";
+    const ipj = c.ips[ip]?.hour === hour() ? c.ips[ip] : { hour: hour(), calls: 0 };
+    if (ipj.calls >= LIMITS.ipCallsPerHour) return "ip";
+    c.judgeCalls = (c.judgeCalls ?? 0) + 1;
+    if (!c.judgeSids?.includes(sid)) c.judgeSids = [...(c.judgeSids ?? []), sid];
+    c.ips[ip] = { hour: ipj.hour, calls: ipj.calls + 1 };
+    save(c);
+    return null;
+  }
   if (c.usd >= LIMITS.dailyUsd || c.calls >= LIMITS.globalCallsPerDay) return "daily";
   if ((opts.sessionCap ?? true) && (c.sessions[sid] ?? 0) >= LIMITS.sessionCalls) return "session";
   const ipc = c.ips[ip]?.hour === hour() ? c.ips[ip] : { hour: hour(), calls: 0 };
@@ -110,12 +133,25 @@ export function reserveStart(ip: string): boolean {
   return true;
 }
 
-/** Add the actual cost of finished calls to today's total. */
-export function recordSpend(usage: Usage[]) {
+/** Add the actual cost of finished calls to today's total — the judges' budget when the session is a judge's. */
+export function recordSpend(usage: Usage[], sid?: string) {
   if (!usage.length) return;
   const c = load();
-  c.usd += estimateUsd(usage, "max"); // an unknown model is counted at the highest price, never as $0
+  const usd = estimateUsd(usage, "max"); // an unknown model is counted at the highest price, never as $0
+  if (sid && c.judgeSids?.includes(sid)) c.judgeUsd = (c.judgeUsd ?? 0) + usd;
+  else c.usd += usd;
   save(c);
+}
+
+/** One try at the 審査用のコード from this address. False when the address has used up its tries this hour. */
+export function reserveJudgeTry(ip: string): boolean {
+  const c = load();
+  const prev = c.judgeTries?.[ip];
+  const cur = prev?.hour === hour() ? prev : { hour: hour(), count: 0 };
+  if (cur.count >= LIMITS.judgeTriesPerHour) return false;
+  c.judgeTries = { ...c.judgeTries, [ip]: { hour: cur.hour, count: cur.count + 1 } };
+  save(c);
+  return true;
 }
 
 export function dailyExhausted(): boolean {

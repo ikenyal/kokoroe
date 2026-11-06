@@ -1285,13 +1285,20 @@ that finds a finished prefetch out of date replaces it. Each redo is reserved ag
 during the request, and its cost is recorded even if discarded. The conditions of use are unchanged. hitl-reviewer: OK. Result:
 the first ○ after a correction 10.1 s → 1.3–1.6 s; about one or two more drafts per correction.
 
-## D-067 · 2026-11-06 · Accepted (Kento) · Public demo spend caps for the submission: $10 a day, $60 a month
+## D-067 · 2026-11-06 · Accepted (Kento) · Public demo spend caps for the submission: $10 a day (+ $10 for judges), $100 a month
 
 **Context.** The prefetch (D-066) raised the measured cost of a short visit (3–4 cards, one correction) from about $0.06–0.09 to
 $0.08–0.11 (fictional data; reading times and routes differed, so not a like-for-like comparison). Three options were laid out in
 docs/freeze-report.md, section 2.
 **Decision (Kento 11/6).** Option B: `KOKOROE_DAILY_USD=10` at the freeze rebuild (about 90–160 short visits a day), and a Claude
-Console monthly limit of $60 on the public workspace, set by Kento after checking this month's spend. Spending is covered by free
+Console monthly limit on the public workspace, set by Kento after checking this month's spend: $60 at first, raised to $100 the
+same day when the judges' budget was added (below). Spending is covered by free
 credits; the limits are there so that no real cost arises. Over a limit, the demo goes on with recorded data and says so.
 **Recorded in:** docs/deploy.md, docs/final-day.md (the Console step), docs/freeze-report.md.
+**Addendum (Kento 11/6, after the organizers' answer that judges should get a link that is set up).** A 審査用のコード field at the
+bottom of the home page (`src/server/judge.ts`, `app/judge-form.tsx`). A session that entered the right code draws on its own daily
+budget (`KOKOROE_JUDGE_DAILY_USD=10`, no per-session cap, the per-IP cap kept), so visitors using up their $10 does not stop the judges.
+The code is never in the repository (`KOKOROE_JUDGE_CODE`, set only on the public deployment; Kento gives the value at the rebuild).
+It is compared in constant time, tries are limited per address per hour, and the browser keeps an httpOnly cookie holding an HMAC
+keyed by the code. Only where the spend is counted changes (tests/judge-code.test.ts). Console monthly limit: $100.
 

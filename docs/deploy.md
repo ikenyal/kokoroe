@@ -51,7 +51,11 @@ Verified on the public URL (`docs/screens/public-live-confirm.png`, `public-live
   HODOKU's images, settings or cache was changed.
 
 **Decided (Kento 11/6): option B.** At the freeze rebuild (11/6), set `KOKOROE_DAILY_USD` to 10. Kento sets the Claude Console
-monthly limit on the public workspace to $60 himself, after checking this month's spend so far. Spending is covered by free credits;
+monthly limit on the public workspace to $100 himself (raised from $60 when the judges' budget was added, D-067), after checking
+this month's spend so far. At the rebuild also set `KOKOROE_JUDGE_DAILY_USD=10` and `KOKOROE_JUDGE_CODE` (the value Kento gives then;
+never written into the repository). The code must be random, 16 characters or more (tries are limited per address, and a leaked
+cookie would let a weak code be guessed offline). Changing the code stops new entries at once; sessions that already entered it keep
+the judges' budget until JST midnight. Spending is covered by free credits;
 the limits are there so that no real cost arises (docs/freeze-report.md, section 2).
 
 ## How the image was actually built and pushed (Podman, Apple Silicon)
