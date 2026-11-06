@@ -210,7 +210,7 @@ function CheckCard({ p, step, sceneId, proposal, before, sceneOf }: { p: Pending
       </p>
       <dl className="mt-1 text-[14px]">
         {rows.map(([k, label, f]) => (
-          <div key={k} className="grid grid-cols-[7.5em_1fr] gap-2">
+          <div key={k} className="grid grid-cols-[5.5em_1fr] gap-2">
             <dt className="text-nibi">{label}</dt>
             <dd className="yomi">
               {before && f(before, client) !== f(proposal, client) && <del className="mr-1 text-nibi">{f(before, client)}</del>}
@@ -220,7 +220,7 @@ function CheckCard({ p, step, sceneId, proposal, before, sceneOf }: { p: Pending
         ))}
         {proposal.visit &&
           VISIT_ROWS.map(([k, label]) => (
-            <div key={k} className="grid grid-cols-[7.5em_1fr] gap-2">
+            <div key={k} className="grid grid-cols-[5.5em_1fr] gap-2">
               <dt className="text-nibi">{label}</dt>
               <dd className="yomi">{noIds(proposal.visit![k]) || "—"}</dd>
             </div>
