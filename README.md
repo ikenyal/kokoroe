@@ -4,7 +4,8 @@
     <img src="docs/readme/logo-light.png" alt="ココロエ（Kokoroe）" width="360">
   </picture>
 </h1>
-<p align="center"><b>An AI apprentice that inherits the unwritten etiquette of business.</b><br>
+<p align="center"><b>The etiquette no one can put into words — handed down one correction at a time.</b><br>
+An AI apprentice that inherits the unwritten etiquette of business.<br>
 <sub><a href="README.ja.md">日本語版 README</a> · Built with Claude: Japan 2026 · all companies and people are fictional</sub></p>
 
 > Through my work and community activities, I have been involved with a great many companies and organizations. Every one of
