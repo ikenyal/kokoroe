@@ -32,26 +32,33 @@ def block(t):
     return "```text\n" + t.strip() + "\n```"
 
 U = "https://kokoroe.xzan0gz3dgpb8.ap-northeast-1.cs.amazonlightsail.com/"
+judge = re.search(r"<!-- judge:start -->\n(.*?)\n<!-- judge:end -->", s, re.S).group(1).strip()
+assert "\n" not in judge and U in judge
+# 9: the title line without the internal note, then ①〜⑤ (labels are in the sentences)
+item9 = re.sub(r"（Kento [^）]*）", "", strip_md(item9)).strip()
+# 10 and 12 are one-line fields
+item10 = item10.replace("\n", "")
+# 11: one field, each part starting with its number
+item11 = "\n\n".join(f"{k}{i11[k]}" for k in ("①", "②", "③"))
+# 8: in the form's order
+FORM8 = ["Claude Code CLI", "Claude Code IDE 拡張", "Claude Code Desktop", "Cowork", "Claude.ai", "Claude API", "Managed Agents", "Agent SDK", "その他"]
+item8 = [x for x in FORM8 if x in item8] + [x for x in item8 if x not in FORM8]
+n = lambda t: len(t.replace("\n", ""))
 out = [
-    "\n## 貼る用（11/7。フォームの項目の順。```text``` の中をそのまま貼る）\n",
-    "数字は 11/7 の正式な計測（架空の取引先10社・評価用20場面）。審査用のコードは、このファイルにもどこにも書かない。\n",
+    "\n## 貼る用（11/7。フォームの実物の 1〜12 の順。```text``` の中をそのまま貼る）\n",
+    "数字は 11/7 の正式な計測（架空の取引先10社・評価用20場面）。審査用のコードは、このファイルにもどこにも書かない（12 に Kento が手で入れる）。字数は改行を数えない。\n",
     "### 1. チーム名", block("ikenyal"),
-    "### 2. チームメンバー", block("Kento Ikeda（GitHub: ikenyal）"),
+    "### 2. チームメンバー（入力済み: Kento Ikeda / ikenyal。そのままでよい）",
     "### 3. プロジェクト名", block("ココロエ（Kokoroe）— 商いの心得を継ぐ、AIの弟子"),
-    "### 4. 選択したテーマ", block("あなたにしかない深さを"),
-    f"### 5. プロジェクト概要（{ov_count}字。500字以内。改行は数えない）", block(overview),
+    "### 4. 選択したテーマ（選ぶ）", block("あなたにしかない深さを"),
+    f"### 5. プロジェクト概要（{ov_count}字。500字以内）", block(overview),
     "### 6. 公開 GitHub リポジトリ", block("https://github.com/ikenyal/kokoroe"),
-    "### 公開デモのリンク（来場者向け）", block(U),
-    "### 公開デモのリンク（審査員向け）", block(U + "\n（最初の画面のいちばん下の「審査用のコード」を開いて、審査員のログイン情報のコードを入れてください。AI がその場で動くときの1日の上限が審査員用になるだけで、画面と動きは同じです）"),
-    "### 審査員のログイン情報（この欄だけにコードを書く）",
-    block(f"公開デモ: {U}\nログインは要りません。最初の画面のいちばん下の「審査用のコード」を開き、次のコードを入れて「確かめる」を押してください: 【Kento が手で入れる】\nコードを入れると、このブラウザで AI がその場で動く（案を作る・直しを読み取る・後任が答える）ときの1日の上限が審査員用になり、1回のお試しで使える回数の上限もなくなるので、来場者が多くて共通の上限に達しても、そのまま試し続けられます。画面・動き・データは同じで、別の環境に切り替わるのではありません。付けた印や育った心得帳はブラウザごとに分かれ、ほかの人と混ざりません（最初からやり直すか、24時間たつと消えます）。コードがなくても、来場者の上限まではライブで動き、そのあとは記録済みのデータで全ての画面を見られます。データはすべて架空です。"),
-    "### 7. デモ動画（YouTube、限定公開）", block(video_url or "【アップロード後に Kento が URL を入れる】") + f"\n\n題名は「{title}」。説明文は上の 7 の「説明文（最終）」をそのまま。",
-    "### 8. 使用した Claude の製品・機能（選ぶもの）", block("\n".join(item8)),
-    f"### 9. 開発中に一番詰まった場面（{len(strip_md(item9).replace(chr(10), ''))}字）", block(strip_md(item9)),
-    f"### 10. 公式の情報（{len(item10.replace(chr(10), ''))}字）", block(item10),
-    f"### 11 ① 日本語や日本の業務で使う立場から（{len(i11['①'].replace(chr(10), ''))}字）", block(i11["①"]),
-    f"### 11 ② 他の AI ツールと比べて（{len(i11['②'].replace(chr(10), ''))}字）", block(i11["②"]),
-    f"### 11 ③ 一つだけ直せるとしたら（{len(i11['③'].replace(chr(10), ''))}字）", block(i11["③"]),
+    "### 7. デモ動画", block(video_url or "【アップロード後に Kento が URL を入れる】"),
+    "### 8. 使用した Claude の製品・機能（チェックを入れる）", block("\n".join(item8)),
+    f"### 9. 開発中に一番詰まった場面（{n(item9)}字）", block(item9),
+    f"### 10. 開発に必要な公式の情報が十分見つけられましたか（1行・{n(item10)}字）", block(item10),
+    f"### 11. Claude を使った感想と改善してほしい点（①②③を1つの欄に・{n(item11)}字）", block(item11),
+    "### 12. 審査員用リンク（任意）（1行。【Kento が手で入れる】をコードに置き換える）", block(judge),
 ]
 open(p, "w", encoding="utf-8").write(s + "\n".join(out) + "\n")
 print("overview chars", ov_count, "| item8", item8)

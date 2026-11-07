@@ -110,7 +110,7 @@
 
 - [ ] Kento が動画を通しで見る。直すところがあれば、ゴール B の 1〜6 をもう一度（計測には戻らない）
 - [ ] **Console の月の上限（Kento）:** 今月の使用額を Console で確かめてから、公開用のワークスペースの月の上限を $100 にする（案 B に審査員の別枠 $10/日 を足したもの、11/6 決定、D-067）。
-- [x] 公開環境の更新（一度目）: 11/7 05:16、デプロイ5（Kento の OK、`docs/deploy.md`）。**二度目（11/7 の最終版のあと）も Kento の OK で、審査用のコードは同じ値のまま。** 以下は一度目の決まり: 変更点を見せて OK を取ってから。凍結の作り直しでは `KOKOROE_DAILY_USD=10`、`KOKOROE_JUDGE_DAILY_USD=10`、`KOKOROE_JUDGE_CODE` を入れる。作り直しは凍結の報告（11/6 17:30〜18:00）のあと、Kento の OK で、その時点の main から。コードの値は作り直しのときに Claude が `openssl rand` で16字以上を作り、Kento に一度だけ見せる（Kento が控えて提出フォームに書く）。リポジトリ・ログ・決定記録には書かない。Console の月の上限 $100 は Kento が設定する（Kento 11/6）
+- [x] 公開環境の更新（二度目）: 11/7 18:50、デプロイ6（main 83d0db5、審査用のコードは同じ値）。一度目: 11/7 05:16、デプロイ5（Kento の OK、`docs/deploy.md`）。**二度目（11/7 の最終版のあと）も Kento の OK で、審査用のコードは同じ値のまま。** 以下は一度目の決まり: 変更点を見せて OK を取ってから。凍結の作り直しでは `KOKOROE_DAILY_USD=10`、`KOKOROE_JUDGE_DAILY_USD=10`、`KOKOROE_JUDGE_CODE` を入れる。作り直しは凍結の報告（11/6 17:30〜18:00）のあと、Kento の OK で、その時点の main から。コードの値は作り直しのときに Claude が `openssl rand` で16字以上を作り、Kento に一度だけ見せる（Kento が控えて提出フォームに書く）。リポジトリ・ログ・決定記録には書かない。Console の月の上限 $100 は Kento が設定する（Kento 11/6）
 - [ ] `docs/publishing.md` の手順（リポジトリを作り直すかの判断、README の URL と上限〔監査 G〕、公開前の確認）
 - [ ] 応募フォームに `docs/submission-draft.md` を写して提出（締切 11/8 20:00 JST）
 
