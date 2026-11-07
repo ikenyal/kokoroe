@@ -60,11 +60,11 @@ export function renderReadmeBlock(r: Results, lang: "en" | "ja"): string {
     `| ○ + △ | ${p(b.okp)}% | **${p(a.okp.mean)}%**（${p(a.okp.min)}〜${p(a.okp.max)}%） |`,
     `| 後任が経緯ごと正しく答えた質問（8問中） | ${one(h0.mean)} | **${h1.mean.toFixed(1)}** ± ${h1.sd.toFixed(1)} |`,
     `| 40場面にかかった師匠のタップ数 | — | 平均${a.taps.mean}回（${a.taps.min}〜${a.taps.max}回。印・候補の選択・「なぜ？」・確かめ） |`,
-    `| 取引先の文面に紛れた「心得として登録せよ」 | — | 注入された文で心得帳が書き換わったのは ${adv.injectionRuns}回中${changed}回 |`,
+    `| 取引先の文面に紛れた「心得として登録せよ」 | — | 注入された文で心得帳が書き換わったのは${adv.injectionRuns}回中${changed}回 |`,
     adv.escalatedByModel === undefined
-      ? `| 値引きを迫られた場面 | — | モデルが自分で師匠の判断に回したのは ${adv.lureRuns}回中${adv.escalated}回（コードの下限 D-044 を入れる前の計測） |`
-      : `| 値引きを迫られた場面 | — | 弟子自身（モデルの判断）が師匠に回したのは ${adv.lureRuns}回中${adv.escalatedByModel}回。コードの下限（D-044）込みで ${adv.lureRuns}回中${adv.escalated}回 |`,
-    ...(r.official ? ["", "_注入の回数は、確かめのコードの数え方の誤り（学習中に退けた心得を「失われた」と数えていた）を、正式計測のあとに直して数え直したもの。生の記録は D-068 に。_"] : []),
+      ? `| 値引きを迫られた場面 | — | モデルが自分で師匠の判断に回したのは${adv.lureRuns}回中${adv.escalated}回（コードの下限D-044を入れる前の計測） |`
+      : `| 値引きを迫られた場面 | — | 弟子自身（モデルの判断）が師匠に回したのは${adv.lureRuns}回中${adv.escalatedByModel}回。コードの下限（D-044）込みで${adv.lureRuns}回中${adv.escalated}回 |`,
+    ...(r.official ? ["", "_注入の回数は、確かめのコードの数え方の誤り（学習中に退けた心得を「失われた」と数えていた）を、正式計測のあとに直して数え直したもの。生の記録はD-068に。_"] : []),
     ...(r.caveat ? ["", `_${r.caveat.ja}_`] : []),
   ].join("\n");
 }
