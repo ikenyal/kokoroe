@@ -79,6 +79,14 @@ entrant's own MCP server. So the video says it on screen (no narration change):
   accents fixed with `x-amazon-pron-kana` (`ACCENTS` in [narration.ts](narration.ts)), 0.5 s between sentences. In v3 most
   multi-sentence scenes use 0.3 s (`pauseMs`), to stay under 3:00. Readings that
   must not change on screen use `<sub alias>` (`READINGS`). Add a word to `ACCENTS` when it still sounds wrong.
+- 動画づくりの記録（ナレーションの読みを、私が耳で聞いて選んだ試し） — the record of making the video: `tools/voice-trial*.ts`
+  (the voice trial of 11/4, and trials 2–4 of 11/7 after the full watch). Each writes short Polly clips and a local listening page
+  under `out/audio/` (not committed); the readings chosen by ear are in `ACCENTS`, `YOMIGANA` and `SPEAK_AS` in
+  [narration.ts](narration.ts), and per scene in scenes.json (`accents`).
+- Assembly ([assemble.ts](assemble.ts), 11/7): pauses inside a scene (`holds`, placed in the narration's real silence), a longer
+  breath after chosen scenes (`after`), the last scene fading to the paper colour (`fadeOut`), and a subtitle drawn onto a live
+  take that is not re-recorded (`overlaySubtitles`, [subtitle-png.ts](subtitle-png.ts)). s05 can be re-cut from its live take
+  without the API (`shoot.ts --recut-s05`).
 - Scene seconds come from the narration's real length: each scene = 0.15 s lead + narration + room for the picture.
 - Subtitles switch on Polly's sentence speech marks (`<id>.marks.json`), so they follow the voice.
 - Numbers in the narration (`{before}` etc. in scenes.json) are filled from `data/demo/results.json`; while it is not official
@@ -124,7 +132,7 @@ entrant's own MCP server. So the video says it on screen (no narration change):
 - [x] s02 (Kento 11/5 night): a note from about 8.9 s (11.6 s before item 24; set on 11/7 from the new audio), when the mail goes out: 「作者が初見で ○ を付けた18件のうち、15件は、師匠なら直す案でした」
   with its conditions (fictional data, 20 training scenes, the author as a master who did not know the history, simulator: △ 8 · × 7, D-059;
   `docs/results/master-role-vs-simulator-2026-11-05.json`). On screen only: the narration is unchanged, because a sentence would
-  take the total to about 3:00 and would move s02's beats, which follow the narration. Stills: `docs/screens/video-dryrun/s02-problem-1..3.jpg`.
+  take the total to about 3:00 and would move s02's beats, which follow the narration. Stills: the dry run's stills were later left out of the public repository; the final ones are in `docs/screens/video-final/`.
 - [x] End card: the public demo URL (https://kokoroe.xzan0gz3dgpb8.ap-northeast-1.cs.amazonlightsail.com/) above the GitHub URL (known since deployment 5, 11/7; check the s09b stills).
 - [ ] 11/7: re-record the demo snapshot so 心得帳 shows a rule with a multi-entry 沿革 (today every rule in it has one entry). If it
       is re-recorded, also regenerate the README pictures (`scripts/readme-shots.ts`, then `cwebp -q 82`; picture 2 shows the 心得帳)
@@ -143,7 +151,7 @@ entrant's own MCP server. So the video says it on screen (no narration change):
       5.0 s while the title still fades in at 5.4 s. Check the stills on 11/7 and pull the title earlier if it looks late.
 - [x] s08b now says 「架空の10社で、」 (Kento 11/5). Re-synthesized on 11/5: 10.10 s of narration, scene 10.4 s (≈ $0.001).
 - [x] Dry run of the whole shoot on 11/5, after two days of screen changes (recorded data, the Takumi audio on disk, no API or
-      Polly): 2:56.2, nothing over its time. Stills in `docs/screens/video-dryrun/`. Fixed: s05 now scrolls to T13's 「裏で誰に」
+      Polly): 2:56.2, nothing over its time. Stills: the final ones are in `docs/screens/video-final/` (the dry run's were left out of the public repository). Fixed: s05 now scrolls to T13's 「裏で誰に」
       row by its label (the cards grew with visit plans and a fixed scroll missed it); the new labels in s04b, s07 and s07b no
       longer wrap or cover the logo. Details: docs/ui-polish-log.md.
 - [x] Subtitles timed to the audio (speech marks).

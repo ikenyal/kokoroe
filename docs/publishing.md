@@ -155,3 +155,43 @@ gh release create v1.0.0 --title "v1.0.0 — Built with Claude: Japan 2026 提�
 
 リリースの本文は `docs/release-v1.0.0.md`（日英。動画の URL は `YOUTUBE_URL` を置き換えてから）。
 
+
+## 7. 公開の直前の履歴の書き換え（作業の途中の画面写真を全履歴から除く。手順6の中。実行は Kento の OK のあと）
+
+**決めたこと（Kento 11/7）:** 公開リポジトリには、`scripts/publish/keep-screens.txt` の画面写真（126 件: README や記録から名指しでリンクしているもの、動画の最終の静止画、審査用のコードの画面、README の冒頭、公開版 v5）だけを残す。それ以外の `docs/screens/` は全履歴から除く（講評の繰り返し・試し撮り・ドライランなど約 1,100 件、約 1.1 GB）。試しの clone で、pack は 780 MB → 約 37 MB（11/7）。
+
+**いつ:** 手順5（公開版の2回目の作り直し）と README の `YOUTUBE_URL` の差し替えが済み、main に足すものがなくなったあと、公開の手前。書き換えたあとは、非公開の今のリポジトリに force push しない（書き換えは公開用の新しい clone の中だけで行い、新しい公開リポジトリに push する。今の非公開のリポジトリは §1 のとおり名前を変えて保管）。
+
+**手順（公開の手前で Kento に見せて OK を取ってから）**
+
+1. 手元の main が最新で、未コミットの変更がないことを確かめる（§1 の手順1〜3。bundle の控えも取る）。
+2. 書き換えの前に、普通のコミットで次を main に入れて push する（書き換えたあとの履歴にそのまま残る）:
+   - README（日英）の「Git の履歴について」に一文: 「公開の前（11/7）に、作業の途中の画面写真（講評の繰り返しの撮影など約 1,100 枚、約 1.1 GB）を全履歴から除きました。残した画面写真は、README や記録からリンクしているものだけです。」（英語も同じ内容）
+   - `docs/ui-polish-log.md` の冒頭に一行: 「このログが指す途中の画面写真は、公開リポジトリの全履歴から除いた（11/7）。非公開の保管リポジトリ kokoroe-archive に残っている。」
+   - 本文にコミット番号のあるファイル（`docs/decisions.md`・`docs/freeze-report.md`・`docs/ui-polish-log.md`・`docs/audits/2026-11-03.md`・`docs/audits/claude-security-2026-11-07.md`・`docs/deploy.md`・`docs/HANDOFF.md`）の冒頭に一行: 「本文のコミット番号は、公開の前の書き換え（11/7）より前のもの。`docs/commit-map-2026-11-07.txt` で今の番号に引ける。」
+3. 除く一覧を作る（そのときにリンクされている画面写真も自動で残す）:
+   ```bash
+   python3 scripts/publish/screens-plan.py > ~/kokoroe-backup/remove-screens-20261107.txt   # 件数は標準エラーに出る
+   ```
+4. 公開用の新しい clone の中で書き換える（今の作業ディレクトリは触らない）:
+   ```bash
+   git clone --no-local --single-branch --branch main ~/git/ikenyal/kokoroe ~/kokoroe-publish
+   cd ~/kokoroe-publish
+   git filter-repo --invert-paths --paths-from-file ~/kokoroe-backup/remove-screens-20261107.txt
+   cp .git/filter-repo/commit-map docs/commit-map-2026-11-07.txt   # 旧→新（old new の2列。0000… は空になって除かれたコミット）
+   git add docs/commit-map-2026-11-07.txt && git commit -m "Commit map of the 11/7 rewrite (in-progress screenshots removed from history)"
+   git reflog expire --expire=now --all && git gc --prune=now --aggressive
+   ```
+   （filter-repo は origin を外す。push 先は §1 の新しい公開リポジトリを `git remote add origin …` で足す。）
+5. 書き換えたあとに確かめて、結果を下の表に書く:
+
+   | 項目 | コマンド | 結果 |
+   |---|---|---|
+   | テスト | `npm ci && npm test` | （全件通る） |
+   | リンク切れ | README・SECURITY・docs（`docs/ui-polish-log.md` の画面写真へのリンクは除く）の相対リンク・画像の確かめ（11/7 に使ったリンクの検査と同じもの） | （0 件） |
+   | 秘密（全履歴） | `gitleaks git . --log-opts="--all" --redact` | （当たりは既知の誤検知だけ） |
+   | 作者・コミッター | `git log --all --format='%ae\|%ce' \| sort \| uniq -c` | （noreply の1行だけ） |
+   | 大きさ | `git count-objects -vH`（size-pack） | （約 40 MB 以下の見込み） |
+   | コミット数 | `git rev-list --count main`（書き換え前との差は、空になって除かれたコミット） | （書き換え前 −2 の見込み） |
+
+6. 結果を Kento に見せて OK を取ってから、§1 の手順で新しい公開リポジトリに push する。

@@ -2,19 +2,19 @@
  * Voice trial 3 (Kento 11/7): the six words still to settle, spoken with the readings already chosen in trial 2, plus a check
  * clip of the video's last seconds and the 「作者」 wording options. Same tags as trial 2 (Polly docs: phoneme x-amazon-pron-kana /
  * x-amazon-yomigana, sub, break, prosody rate).
- *   npx tsx video/voice-trial-3.ts          # list clips and cost; no API call
- *   npx tsx video/voice-trial-3.ts --yes    # → video/out/audio/trial3/*.mp3 and index.html
+ *   npx tsx video/tools/voice-trial-3.ts          # list clips and cost; no API call
+ *   npx tsx video/tools/voice-trial-3.ts --yes    # → video/out/audio/trial3/*.mp3 and index.html
  */
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
-import { ACCENTS, VOICE, ssmlBody } from "./narration";
+import { ACCENTS, VOICE, ssmlBody } from "../narration";
 
 const PROFILE = "brightflow-sandbox-ikeda";
 const REGION = "ap-northeast-1";
-const OUT = path.join(__dirname, "out", "audio", "trial3");
+const OUT = path.join(__dirname, "..", "out", "audio", "trial3");
 const USD_PER_M = 16;
 
 /** Chosen by Kento in trial 2 (11/7) — every clip here uses them, so the words are heard as they will be. */
@@ -107,7 +107,7 @@ function main() {
   }
   // The video's last seconds as they are now (2:50–2:57), to hear the closing line from the file itself.
   const end = path.join(OUT, "end-check.mp4");
-  if (!existsSync(end)) execFileSync("ffmpeg", ["-v", "error", "-y", "-ss", "170", "-i", path.join(__dirname, "out", "kokoroe-demo.mp4"), "-c:v", "libx264", "-preset", "veryfast", "-crf", "23", "-c:a", "aac", end]);
+  if (!existsSync(end)) execFileSync("ffmpeg", ["-v", "error", "-y", "-ss", "170", "-i", path.join(__dirname, "..", "out", "kokoroe-demo.mp4"), "-c:v", "libx264", "-preset", "veryfast", "-crf", "23", "-c:a", "aac", end]);
   const hash = (f: string) => createHash("md5").update(readFileSync(path.join(OUT, f))).digest("hex");
   const dur = (f: string) => Number(execFileSync("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", path.join(OUT, f)]).toString()).toFixed(1);
   const same = (it: Item, w: Way) => { const t = it.ways.filter((o) => o.key !== w.key && hash(file(it, o)) === hash(file(it, w))).map((o) => o.key); return t.length ? `（${t.join("・")}と同じ音。指定が効いていない）` : ""; };

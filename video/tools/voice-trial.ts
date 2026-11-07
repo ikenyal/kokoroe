@@ -7,8 +7,8 @@
  *   d  c + accents fixed with <phoneme alphabet="x-amazon-pron-kana"> (only where the engine allows it)
  * Plus a probe that checks whether each tag actually changes the audio for each voice/engine (item 3 of the request).
  *
- *   npx tsx video/voice-trial.ts --voices Tomoko:neural,Takumi:neural          # dry run: SSML, characters, cost; no call
- *   npx tsx video/voice-trial.ts --voices … --yes                               # synthesize → video/out/audio/trial/
+ *   npx tsx video/tools/voice-trial.ts --voices Tomoko:neural,Takumi:neural          # dry run: SSML, characters, cost; no call
+ *   npx tsx video/tools/voice-trial.ts --voices … --yes                               # synthesize → video/out/audio/trial/
  * Accents and readings are shared with video/narration.ts (the decided voice uses the same lists). Polly is called through the AWS CLI with the sandbox profile only (CLAUDE.md). Output is gitignored.
  */
 import { execFileSync } from "node:child_process";
@@ -16,12 +16,12 @@ import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
-import { ACCENTS, billedChars, ssmlBody as body } from "./narration";
+import { ACCENTS, billedChars, ssmlBody as body } from "../narration";
 export { ACCENTS };
 
 const PROFILE = "brightflow-sandbox-ikeda";
 const REGION = "ap-northeast-1";
-const OUT = path.join(__dirname, "out", "audio", "trial");
+const OUT = path.join(__dirname, "..", "out", "audio", "trial");
 /** USD per 1M billed characters (Polly pricing page; SSML tags are not billed). */
 export const USD_PER_M: Record<string, number> = { standard: 4, neural: 16, generative: 30, "long-form": 100 };
 
