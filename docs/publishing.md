@@ -179,6 +179,7 @@ gh release create v1.0.0 --title "v1.0.0 — Built with Claude: Japan 2026 提�
    cd ~/kokoroe-publish
    git config user.name ikenyal && git config user.email 974175+ikenyal@users.noreply.github.com   # 新しい clone は手元の設定を引き継がない（11/7 の試しで、map のコミットが PC 全体の設定の勤務先のアドレスになった）
    git filter-repo --invert-paths --paths-from-file ~/kokoroe-backup/remove-screens-20261107.txt
+   git filter-repo --replace-text ~/kokoroe-backup/replace-emails.txt   # Kento のメールアドレス（noreply 以外）を全履歴で <email> に置き換える（Kento 11/8）。ファイルはリポジトリの外、権限 600。中身（アドレス==><email> の行）は画面にもログにも出さない
    cp .git/filter-repo/commit-map docs/commit-map-2026-11-07.txt   # 旧→新（old new の2列。0000… は空になって除かれたコミット）
    git add docs/commit-map-2026-11-07.txt && git commit -m "Commit map of the 11/7 rewrite (in-progress screenshots removed from history)"
    git reflog expire --expire=now --all && git gc --prune=now --aggressive
@@ -193,6 +194,7 @@ gh release create v1.0.0 --title "v1.0.0 — Built with Claude: Japan 2026 提�
    | 秘密（全履歴） | `gitleaks git . --log-opts="--all" --redact` | （当たりは既知の誤検知だけ） |
    | 作者・コミッター | `git log --all --format='%ae\|%ce' \| sort \| uniq -c` | （noreply の1行だけ） |
    | 勤務先の名前 | 全履歴の差分とメッセージで、勤務先のドメインを数える（`git log --all -p --format=%B \| grep -ci <ドメイン>`。ドメインはここに書かない） | （0 件） |
+   | 作者のメールアドレス（どのドメインも。noreply を除く） | 全履歴の差分とメッセージで、`replace-emails.txt` のアドレスと、noreply 以外のメールアドレスの形の文字列を数える（値は出さず件数だけ） | （0 件） |
    | 大きさ | `git count-objects -vH`（size-pack） | （約 40 MB 以下の見込み） |
    | コミット数 | `git rev-list --count main`（書き換え前との差は、空になって除かれたコミット） | （書き換え前 −2 の見込み） |
 
