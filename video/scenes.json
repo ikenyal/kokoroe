@@ -132,7 +132,8 @@
       "page": "video/scenes/s07b-mcp.html",
       "part": "7 暖簾を継ぐ（Skill／MCP）",
       "narration": "心得帳は、手元のClaudeにも渡せます。育ち続ける心得帳に、問い合わせることもできます。",
-      "note": "answers from demo/successor-mcp/answers.json (record-answers.sh, empty dirs outside the repo)"
+      "note": "answers from demo/successor-mcp/answers.json (record-answers.sh, empty dirs outside the repo)",
+      "after": 0.5
     },
     {
       "id": "s07c-ask",
@@ -160,7 +161,8 @@
       "part": "8 なぜ効くか（数字）",
       "action": "稽古の記録: Before/After (reads data/demo/results.json; interim until 11/7)",
       "narration": "{interim}架空の10社で、台帳と制約だけの弟子は、{before}%。シミュレータの師匠が、印や選択肢を約{taps}回押すだけで、平均{after}%に。",
-      "pauseMs": 300
+      "pauseMs": 300,
+      "after": 0.5
     },
     {
       "id": "s09-edo",

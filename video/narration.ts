@@ -82,6 +82,7 @@ export const ACCENTS: [string, string][] = [
 
 /** Readings left to Polly's own accent (x-amazon-yomigana): chosen by ear on 11/7. They win over ACCENTS and READINGS. */
 export const YOMIGANA: [string, string][] = [
+  ["2通の連絡", "につうのれんらく"], // Kento 11/7 final watch
   ["取引先", "とりひきさき"],
   ["Claude", "くろーど"],
 ];
