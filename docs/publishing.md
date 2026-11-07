@@ -105,6 +105,7 @@
 | ローカルの設定 | `git check-ignore -v .claude/settings.local.json`、`git ls-files` | `.claude/settings.local.json` は `.gitignore` で除外、追跡なし。Claude Security の出力 `CLAUDE-SECURITY-*/` も除外（11/7 に足した。要約だけ `docs/audits/`） | — |
 | `.env` | `.env.example` の中身、`git check-ignore -v .env .env.local .env.production` | `.env.example` はあり、`ANTHROPIC_API_KEY=` は空、ほかは既定値の注（モデル名・数の上限）だけ。`.env`・`.env.*` は除外、追跡なし（`.env.example` だけ追跡） | — |
 | 除外すべきファイル | 上の表のコマンド | 追跡なし | — |
+| 公開したくない作業の残り（11/7 に追加） | `git ls-files \| grep -E 'CLAUDE-SECURITY\|(^\|/)\.DS_Store$\|\.(log\|tmp\|swp\|bak\|orig)$\|~$\|(^\|/)(\.next\|\.image\|\.data\|tmp\|scratchpad)/\|\.bundle$\|\.webm$\|\.mp4$\|\.mp3$'`、`git status --porcelain`、`git ls-files eval/runs` | 当たりなし（11/7）。Claude Security の出力・録画と音声・ビルドの出力・一時ファイルは追跡なし。`eval/runs/` の追跡は、記録として残す計測の要約 31 件だけ（古い未追跡の計測は 11/7 にリポジトリの外へ移した）。作業ツリーに未追跡のファイルなし | 公開の直前（手順1）にもう一度 |
 | 画面と動画 | 静止画（`docs/screens/video-final/`・公開版の `docs/screens/public-v5-*`・エラー画面）と MP4 の各場面を目で確かめた（ui-critic の点検を含む） | API キー・審査用のコード・アカウント番号・内部の値は写っていない。審査用のコードの欄は `type="password"`（点で隠れる）。エラー画面に出るのは Next.js の「問い合わせ用の番号」（中身のない識別子）だけ | `docs/screens/` の 1,207 件の画面写真のうち、目で見たのは今回の点検に使ったもの。ほかは撮影の仕組み（Playwright でページだけ）に頼る |
 | コードの脆弱性 | Claude Security の Scan codebase（全体、medium、攻撃面に重点）→ 要約は `docs/audits/claude-security-2026-11-07.md` | 要約を参照 | 要約の Coverage を参照 |
 | LICENSE・NOTICE | `LICENSE`（AGPL-3.0-only、D-069）、`data/NOTICE.md` | ある | — |
@@ -118,4 +119,39 @@
 3. **Collaborators and teams:** Kento だけ（ほかの人・チームを足さない）。
 4. **Branches → main のルール（ブランチ保護）:** force push を禁止、削除を禁止。直接の push は Kento だけなので、レビュー必須にはしない。
 5. **Actions → General:** このリポジトリはワークフローを持たない。Actions を使わないなら「Disable actions」、使うなら「Allow ikenyal, and select non-ikenyal, actions」で最小に。Workflow permissions は「Read repository contents permission」（読み取りだけ）。
-6. 確かめ: 認証なしで clone し、README の Quickstart（`npm ci`・`npm test`・`npm run dev -- --hostname 127.0.0.1`）が通ること。
+6. **Code security → Private vulnerability reporting を有効に**（`SECURITY.md` が案内している窓口。「Enable」を押す）。gh でもできる:
+   ```bash
+   gh api -X PUT repos/ikenyal/kokoroe/private-vulnerability-reporting
+   gh api repos/ikenyal/kokoroe/private-vulnerability-reporting   # {"enabled":true}
+   ```
+7. 確かめ: 認証なしで clone し、README の Quickstart（`npm ci`・`npm test`・`npm run dev -- --hostname 127.0.0.1`）が通ること。
+
+## 5. リポジトリの見え方（公開のあと、Kento の OK で gh から設定）
+
+- **About の説明文（英語の一行）:** The etiquette no one can put into words — handed down one correction at a time. An AI apprentice that inherits the unwritten etiquette of business.
+- **Website:** https://kokoroe.xzan0gz3dgpb8.ap-northeast-1.cs.amazonlightsail.com/
+- **Topics:** claude, claude-code, anthropic, built-with-claude, tacit-knowledge, human-in-the-loop, nextjs, mcp, agent-skills
+
+```bash
+gh repo edit ikenyal/kokoroe \
+  --description "The etiquette no one can put into words — handed down one correction at a time. An AI apprentice that inherits the unwritten etiquette of business." \
+  --homepage "https://kokoroe.xzan0gz3dgpb8.ap-northeast-1.cs.amazonlightsail.com/" \
+  --add-topic claude,claude-code,anthropic,built-with-claude,tacit-knowledge,human-in-the-loop,nextjs,mcp,agent-skills
+gh repo view ikenyal/kokoroe --json description,homepageUrl,repositoryTopics   # 確かめ
+```
+
+- **Social preview（API では設定できないので Kento が画面で）:** リポジトリの Settings → General →「Social preview」の「Edit」→「Upload an image…」で `app/opengraph-image.png`（1200×630、40KB 足らず）を選ぶ。保存後、リポジトリの URL を Slack や Discord に貼ってプレビューに出ることを確かめる。
+
+## 6. 提出版のタグとリリース（案。付けるのは手順6〔公開〕のあと、Kento の OK で）
+
+提出した版が後から分かるように、提出する main のコミットに注釈つきのタグを付け、リリースを作る。締切（11/8 20:00）より前に行う（締切の後はコミットもタグもしない）。
+
+```bash
+git switch main && git pull --ff-only
+git tag -a v1.0.0 -m "Built with Claude: Japan 2026 提出版 / submission version"
+git push origin v1.0.0
+gh release create v1.0.0 --title "v1.0.0 — Built with Claude: Japan 2026 提出版" --notes-file docs/release-v1.0.0.md --verify-tag
+```
+
+リリースの本文は `docs/release-v1.0.0.md`（日英。動画の URL は `YOUTUBE_URL` を置き換えてから）。
+
