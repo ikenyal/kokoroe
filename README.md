@@ -13,8 +13,8 @@ An AI apprentice that inherits the unwritten etiquette of business.<br>
 > written down, and it is lost each time people change. — Kento Ikeda (ikenyal) ([more under The problem](#the-problem))
 
 <p align="center">
-  <a href="YOUTUBE_URL"><img src="docs/readme/video-thumb.jpg" alt="Demo video on YouTube (2:57)" width="400"></a><br>
-  <a href="YOUTUBE_URL"><b>Watch the demo video</b></a> (2:57, YouTube) · <a href="https://kokoroe.xzan0gz3dgpb8.ap-northeast-1.cs.amazonlightsail.com/"><b>Open the public demo</b></a><br>
+  <a href="https://youtu.be/g-c1zFYKtQg"><img src="docs/readme/video-thumb.jpg" alt="Demo video on YouTube (2:57)" width="400"></a><br>
+  <a href="https://youtu.be/g-c1zFYKtQg"><b>Watch the demo video</b></a> (2:57, YouTube) · <a href="https://kokoroe.xzan0gz3dgpb8.ap-northeast-1.cs.amazonlightsail.com/"><b>Open the public demo</b></a><br>
   <sub>Judges: on the demo's home page, open 「審査用のコード」 at the bottom, enter the code from the submission form, then press 「デモの続きから見る」 (<a href="#try-it">details</a>).</sub>
 </p>
 
