@@ -19,7 +19,7 @@ export default function KeikoPage() {
       <h1 className="font-mincho text-[24px] tracking-[0.06em]">稽古の記録</h1>
       {/* What changed, and by how much, in one sentence — the same numbers as the table below (results.json). */}
       <p className="yomi mt-3 max-w-[40em] font-mincho text-[19px] leading-relaxed sm:text-[21px]">
-        {results.official ? "" : "途中経過では、"}師匠が{paths ? `約${paths.taps}回` : `${end.taps}回`}のタップで直すと、○ が付く案は
+        {results.official ? "" : "途中経過では、"}師匠が{paths ? `約${paths.taps}回` : `${end.taps}回`}、印や選択肢を押して直すと、師匠がそのまま通した（○）案は
         <span className="tabular-nums">{pct(results.before.match)}</span>から
         <span className="whitespace-nowrap">{paths && "平均"}<span className="tabular-nums text-ai">{paths ? pct(paths.mean) : pct(end.match)}</span>{paths && <span className="tabular-nums">（{pct(paths.min)}〜{pct(paths.max)}）</span>}に、</span><span className="whitespace-nowrap">後任が</span>経緯ごと答えられた質問は8問中
         <span className="tabular-nums">{hist[0].mean.toFixed(0)}</span>問から平均
@@ -45,7 +45,7 @@ export default function KeikoPage() {
           <tbody className="tabular-nums">
             <tr className="border-b border-keisen align-baseline">
               <th scope="row" className="py-3 pr-4 text-[14.5px] font-normal">
-                師匠が ○ を付けた<span className="whitespace-nowrap">割合</span>
+                師匠がそのまま通した（○）<span className="whitespace-nowrap">案の割合</span>
                 <span className="block text-[12.5px] text-nibi">学習に使わない評価用の20場面で</span>
               </th>
               <td className="font-mincho text-[30px] leading-none">{pct(results.before.match)}</td>

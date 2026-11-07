@@ -12,51 +12,51 @@
     {
       "id": "s00-open",
       "kind": "anim",
-      "seconds": 12.55,
+      "seconds": 12.9,
       "page": "video/scenes/s00-open.html",
       "part": "0 冒頭（見て分かる違い、分からない理由）",
       "note": "two near-identical messages to 丸新酒造; the right one has one more line (a word to the 蔵元, T05 → T13); answered in s05",
       "narration": "ほとんど同じ、2通の連絡。違いは、たった1行。でも、この1行がなぜ要るのか、知っているのは、来年の春に辞める部長だけです。",
       "pauseMs": 300,
-      "after": 0.6,
+      "after": 0.5,
       "holds": [
         {
           "sentence": 2,
-          "sec": 0.5
+          "sec": 0.45
         }
       ]
     },
     {
       "id": "s01-why",
       "kind": "anim",
-      "seconds": 12.95,
+      "seconds": 12.9,
       "page": "video/scenes/s01-why.html",
       "part": "なぜ今か（2つの力）",
       "source": "帝国データバンク「全国『後継者不在率』動向調査（2025年）」調査対象の中小企業のうち51.2%／総務省統計局「労働力調査（詳細集計）2025年平均結果」転職者数330万人（https://www.stat.go.jp/data/roudou/sokuhou/nen/dt/index.html）",
       "narration": "中小企業の半数あまりで、跡継ぎが決まっていません。仕事を変える人は、一年に三百三十万人。頭の中にしかない知恵を、いま、渡せる形に。",
       "pauseMs": 300,
-      "after": 0.6
+      "after": 0.5
     },
     {
       "id": "s02-problem",
       "kind": "anim",
-      "seconds": 14.2,
+      "seconds": 14.15,
       "page": "video/scenes/s02-problem.html",
       "part": "1・2 課題と何が起きるか（統合）",
       "narration": "取引先ごとの伝え方、三十年分の作法を、部長が一人で担ってきました。後任が、悪い知らせを、決まってからメールで送る。それだけで、長年の段取りが崩れます。",
       "pauseMs": 300,
-      "after": 0.6,
+      "after": 0.5,
       "holds": [
         {
           "sentence": 1,
-          "sec": 0.5
+          "sec": 0.45
         }
       ]
     },
     {
       "id": "s03-head",
       "kind": "anim",
-      "seconds": 3.75,
+      "seconds": 3.7,
       "page": "video/scenes/s03-head.html",
       "part": "3 なぜ残らないか",
       "narration": "書いて残して、と頼んでも、言葉にはなりません。"
@@ -64,7 +64,7 @@
     {
       "id": "s04-title",
       "kind": "anim",
-      "seconds": 9.7,
+      "seconds": 9.6,
       "page": "video/scenes/s04-title.html",
       "part": "4 解決とタイトル",
       "narration": "でも、案を見せれば、ベテランは「違う」と言えます。ココロエは、その「違う」を集める、AIの弟子です。",
@@ -83,7 +83,7 @@
     {
       "id": "s05-choba",
       "kind": "screen",
-      "seconds": 28.85,
+      "seconds": 28.82,
       "page": "/choba",
       "part": "5 帳場",
       "action": "お試し with KOKOROE_VIDEO_QUEUE=T05,T13: T05 △ + remark → (live) reading chosen → 確かめ ○ → T13 draft now has the quiet word to the 蔵元. Kento 11/6 item 24: +6.7 s from s01/s02, spent holding on the right column (the apprentice's reading and 「心得帳に書きました」) before scrolling to T13; final seconds set on 11/7 from the live take",
@@ -94,18 +94,18 @@
     {
       "id": "s06-kokoroe",
       "kind": "screen",
-      "seconds": 9.25,
+      "seconds": 9.05,
       "page": "/kokoroe",
       "part": "6 心得帳",
       "action": "open a rule's 沿革 and sources",
       "narration": "覚えた作法は、理由と、どの直しから来たかまで、心得帳に残ります。師匠は、いつでも読めて、消せます。",
       "pauseMs": 300,
-      "after": 0.6
+      "after": 0.5
     },
     {
       "id": "s06b-ask",
       "kind": "anim",
-      "seconds": 4.75,
+      "seconds": 4.7,
       "page": "video/scenes/ask.html#noren",
       "part": "引き（暖簾の前）",
       "subtitle": false,
@@ -114,7 +114,7 @@
     {
       "id": "s07-noren",
       "kind": "screen",
-      "seconds": 8.65,
+      "seconds": 8.6,
       "page": "/noren",
       "part": "7 暖簾を継ぐ",
       "action": "successor asks Q03 (浜風運輸: the delay notice after it is settled?) → the answer comes from the master's × and its わけ (Kento 11/5; README picture 3)",
@@ -123,21 +123,33 @@
         {
           "sentence": 1
         }
-      ]
+      ],
+      "overlayTag": {
+        "text": "ココロエの画面（自作）\n後任への答えは、\nClaude が心得帳だけを\n根拠に書いています",
+        "note": "Kento 11/7: the live s07 clip's tag said the answer was recorded and worded differently; the final s07 is a live answer worded like s06. The old tag is covered with the empty paper just below it (same clip, so the texture matches), then the new tag is drawn in the style of video/record.ts OWN_SCREEN.",
+        "patch": {
+          "x": 1078,
+          "y": 120,
+          "w": 196,
+          "h": 206,
+          "fromY": 340
+        }
+      }
     },
     {
       "id": "s07b-mcp",
       "kind": "anim",
-      "seconds": 7.85,
+      "seconds": 7.82,
       "page": "video/scenes/s07b-mcp.html",
       "part": "7 暖簾を継ぐ（Skill／MCP）",
       "narration": "心得帳は、手元のClaudeにも渡せます。育ち続ける心得帳に、問い合わせることもできます。",
-      "note": "answers from demo/successor-mcp/answers.json (record-answers.sh, empty dirs outside the repo)"
+      "note": "answers from demo/successor-mcp/answers.json (record-answers.sh, empty dirs outside the repo)",
+      "after": 0.45
     },
     {
       "id": "s07c-ask",
       "kind": "anim",
-      "seconds": 4.2,
+      "seconds": 4.17,
       "page": "video/scenes/ask.html#why",
       "part": "引き（なぜ効くかの前）",
       "subtitle": false,
@@ -146,7 +158,7 @@
     {
       "id": "s08-pile",
       "kind": "anim",
-      "seconds": 11.0,
+      "seconds": 10.98,
       "page": "video/scenes/s08-pile.html",
       "part": "8 なぜ効くか",
       "narration": "AIが出すのは、平均的な答えです。ベテランの知恵は、その平均との、ずれにあります。だから、ずれだけを集めればいい。",
@@ -155,17 +167,18 @@
     {
       "id": "s08b-keiko",
       "kind": "screen",
-      "seconds": 13.45,
+      "seconds": 14.05,
       "page": "/keiko",
       "part": "8 なぜ効くか（数字）",
       "action": "稽古の記録: Before/After (reads data/demo/results.json; interim until 11/7)",
-      "narration": "{interim}架空の10社で、台帳と制約だけの弟子は、{before}%。シミュレータの師匠が、印や選択肢を約{taps}回押すだけで、平均{after}%に。",
-      "pauseMs": 300
+      "narration": "{interim}架空の10社で、師匠がそのまま通した案は、学ぶ前は{before}%。シミュレータの師匠が、印や選択肢を約{taps}回押すだけで、平均{after}%に。",
+      "pauseMs": 300,
+      "after": 0.45
     },
     {
       "id": "s09-edo",
       "kind": "anim",
-      "seconds": 6.4,
+      "seconds": 6.35,
       "page": "video/scenes/s09-edo.html",
       "part": "9 締め",
       "narration": "江戸の商人は、火事のとき、品物より先に、帳面を守ったと伝えられています。",
@@ -174,7 +187,7 @@
     {
       "id": "s09b-end",
       "kind": "anim",
-      "seconds": 11.7,
+      "seconds": 10.9,
       "page": "video/scenes/s09b-end.html",
       "part": "9 締め（エンドカード）",
       "narration": "守るべき帳面は、いま、人の頭の中に。ココロエ。直すだけで、心得は次の代へ。",

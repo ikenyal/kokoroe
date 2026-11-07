@@ -17,7 +17,7 @@ import path from "node:path";
 const DIR = __dirname;
 const OUT = path.join(DIR, "out");
 type Hold = { sentence: number; sec: number };
-type Scene = { id: string; seconds: number; wipe?: string; after?: number; holds?: Hold[]; fadeOut?: number; overlaySubtitles?: { sentence: number }[]; narration: string };
+type Scene = { id: string; seconds: number; wipe?: string; after?: number; holds?: Hold[]; fadeOut?: number; overlaySubtitles?: { sentence: number }[]; overlayTag?: { text: string; patch?: { x: number; y: number; w: number; h: number; fromY: number } }; narration: string };
 const plan = JSON.parse(readFileSync(path.join(DIR, "scenes.json"), "utf8")) as { lead: number; gap: number; wipeHold: number; scenes: Scene[] };
 const PAPER = "0xf3f2ee";
 
@@ -85,6 +85,19 @@ function buildScene(s: Scene, i: number): number {
     inputs.push("-i", png);
     f.push(`[${v}][${n}:v]overlay=0:0:enable='between(t,${r3(from)},${r3(s.seconds - 0.05)})'[vo${n}]`);
     v = `vo${n}`;
+    n++;
+  }
+  if (s.overlayTag) {
+    const png = path.join(OUT, `${s.id}-tag.png`);
+    if (!existsSync(png)) throw new Error(`missing ${png} (npx tsx video/subtitle-png.ts)`);
+    inputs.push("-i", png);
+    const pt = s.overlayTag.patch; // cover the old tag with empty paper from lower in the same frame (the texture matches)
+    if (pt) {
+      f.push(`[${v}]split[pa${n}][pb${n}]`, `[pb${n}]crop=${pt.w}:${pt.h}:${pt.x}:${pt.fromY}[pc${n}]`, `[pa${n}][pc${n}]overlay=${pt.x}:${pt.y}[pp${n}]`);
+      v = `pp${n}`;
+    }
+    f.push(`[${v}][${n}:v]overlay=0:0[vt${n}]`);
+    v = `vt${n}`;
     n++;
   }
   const fade = s.fadeOut ? `,fade=t=out:st=${r3(total - s.fadeOut)}:d=${r3(s.fadeOut)}:color=${PAPER}` : "";
