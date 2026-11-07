@@ -119,9 +119,11 @@ daily plans; the 心得帳 grows as a by-product of that work. To start with you
   you wait. Live calls have limits per session and per day; when one is reached, the
   screen says so (「本日のお試し上限に達しました…」) and the demo goes on with recorded data.
 - **For judges:** enter the code given in the submission form under 「審査用のコード」 at the bottom of the home page (open it first) and press
-  「確かめる」; live calls then come from a separate daily budget, so visitors using up theirs does not stop you. Without the code, every screen still works on
-  recorded data. The code changes only how the limits are counted (its own daily budget, no per-session cap; the per-address cap stays), not drafting, learning, judging
-  or the evaluation.
+  「確かめる」. The only thing it changes is the daily usage limit for live drafting by the AI apprentice in that browser: it becomes a
+  judges' limit, so you can keep trying even when visitors have used up the shared one. Screens, behaviour and data are the same; it
+  does not switch to another environment (drafting, learning, judging and the evaluation are unchanged; the per-address limit stays).
+  Your marks and your growing 心得帳 are kept per browser and never mixed with anyone else's; they are gone when you start over or
+  after 24 hours. Without the code, every screen still works on recorded data.
 - **Run locally** (Node 22+, npm; checked from a fresh clone: all four on 11/3; install, tests, eval:quick and a production build again on 11/5):
   ```bash
   npm ci

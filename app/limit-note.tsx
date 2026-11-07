@@ -16,7 +16,7 @@ export async function LimitNote({ reason }: { reason?: LimitReason }) {
   return (
     <p role="status" className="mb-5 border-l-4 border-ai bg-ai-soft px-4 py-2 text-[14px]">
       {judge && reason === "daily" ? JUDGE_DAILY : LIMIT_MESSAGE[reason]}
-      {judgeHint && <span className="mt-1 block">審査員の方へ: 左上の「ココロエ」から最初の画面に戻り、いちばん下の「審査用のコード」に、提出フォームでお渡ししたコードを入れると、別の枠でライブを試せます。</span>}
+      {judgeHint && <span className="mt-1 block">審査員の方へ: 左上の「ココロエ」から最初の画面に戻り、いちばん下の「審査用のコード」に、提出フォームに記したコードを入れると、審査員用の上限で、このまま続けて試せます。</span>}
     </p>
   );
 }
