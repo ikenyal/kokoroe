@@ -88,6 +88,7 @@
   ```
   `--hostname 127.0.0.1` を付けると、自分の PC からだけ開けます。Claude を実際に呼ぶ場合（任意）は、`.env.local` に
   `ANTHROPIC_API_KEY=...` と `KOKOROE_LIVE=1` を書きます（ひな形は `.env.example`）。この2つがなければ、心得帳は書き足されません（書き足しはライブ版で）。△・× を付けると、帳場には記録した稽古で書かれた心得を例として出します。暖簾を継ぐは、例の質問にだけ、記録した稽古の心得帳からの答えで答えます。
+- **MCP サーバーを手元の Claude Code で試す（手元のみ）:** `git clone` と `npm install` のあと、後任の作業フォルダで `claude mcp add -s project kokoroe -- npm --prefix /path/to/kokoroe run -s mcp:serve -- --store /path/to/kokoroe/demo/successor-mcp/living-store.json` を実行します（`.mcp.json` が書かれ、最初に Claude Code がこのサーバーを使ってよいか確かめます）。11/7 に確かめたこと: このコマンドで設定が書かれ、サーバーが読み取り専用の4つの道具で応答する。質問から答えまでは、同じサーバーの設定を `claude --mcp-config` で渡して確かめています（[demo/successor-mcp/run.sh](demo/successor-mcp/run.sh)。最初の確認の画面はここでは通していません）。公開デモでは MCP を出していません。後任の手元の Claude Code が、手元の心得帳を読むためのもので、ネット越しには出さないためです。
 - **自分の会社で始める（手元のみ）:** `npm run own`（`.env.local` に `ANTHROPIC_API_KEY` が必要）で
   http://127.0.0.1:3000 を開くと、架空の会社ではなく、自分の取引先台帳から始められます。
   - **始め方:** 「台帳」で会社と台帳を入れます（フォームか CSV）。帳場で場面を書くと弟子が案を作り、あなたが印を付けます。

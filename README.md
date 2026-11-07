@@ -158,6 +158,12 @@ daily plans; the 心得帳 grows as a by-product of that work. To start with you
   `ANTHROPIC_API_KEY=...` and `KOKOROE_LIVE=1` in `.env.local` (template: `.env.example`). Without both, the 心得帳 is not added
   to here (that happens in the live version). After a △ or ×, the 帳場 shows as an example what the recorded training run wrote, and
   暖簾を継ぐ answers only its example questions, from the recorded training run's 心得帳.
+- **Try the MCP server with your own Claude Code (local only):** after `git clone` and `npm install`, in the successor's working
+  folder run `claude mcp add -s project kokoroe -- npm --prefix /path/to/kokoroe run -s mcp:serve -- --store /path/to/kokoroe/demo/successor-mcp/living-store.json`
+  (it writes `.mcp.json`; Claude Code asks to approve the server the first time). Checked on 11/7: the command writes that config,
+  and the server answers with its four read-only tools; the full question-and-answer ran with the same server settings through
+  `claude --mcp-config` in [demo/successor-mcp/run.sh](demo/successor-mcp/run.sh) (the approval prompt itself was not run here).
+  The public demo does not offer MCP: it is for the successor's own Claude Code reading the 心得帳 on their machine, not over the network.
 - **Start from your own company (local only):** `npm run own` (needs `ANTHROPIC_API_KEY` in `.env.local`) opens
   http://127.0.0.1:3000 on your own client ledger instead of the fictional company.
   - **Setup:** enter the company and the ledger (form or CSV) under 台帳. In the 帳場 you write a situation, the apprentice
