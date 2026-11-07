@@ -30,8 +30,8 @@
         {
           "sentence": 0,
           "from": 0.28,
-          "to": 0.77,
-          "why": "the recording started 0.7 s late, so the first line's first moments are not in the clip"
+          "to": 0.97,
+          "why": "the recording started 0.7 s late: the first line's first moments are not in the clip (overlaps the burned-in line by 0.2 s)"
         }
       ]
     },
@@ -49,9 +49,9 @@
       "subtitlePatches": [
         {
           "sentence": 2,
-          "from": 12.74,
+          "from": 12.57,
           "to": 13.17,
-          "why": "the voice ends at the scene's end; the line stays 0.3 s after it, over the held last frame"
+          "why": "the voice ends at the scene's end: the line stays 0.3 s after it, over the held last frame (overlaps by 0.2 s)"
         }
       ]
     },
@@ -90,7 +90,15 @@
       "narration": "でも、案を見せれば、ベテランは「違う」と言えます。ココロエは、その「違う」を集める、AIの弟子です。",
       "pauseMs": 300,
       "wipe": "noren",
-      "shift": 0.02
+      "shift": 0.02,
+      "subtitlePatches": [
+        {
+          "sentence": 1,
+          "from": 9.32,
+          "to": 9.95,
+          "why": "no blank before the next scene's first line: kept to the cut"
+        }
+      ]
     },
     {
       "id": "s04b-flow",
@@ -100,7 +108,15 @@
       "part": "4 解決とタイトル（流れ）",
       "narration": "師匠は、○△×と、あれば一言だけ。その一つ一つが心得になり、経緯ごと、心得帳に綴られます。",
       "pauseMs": 300,
-      "shift": 0.32
+      "shift": 0.32,
+      "subtitlePatches": [
+        {
+          "sentence": 0,
+          "from": 0.0,
+          "to": 0.25,
+          "why": "from the cut, so the change of line is the change of scene"
+        }
+      ]
     },
     {
       "id": "s05-choba",
@@ -201,7 +217,15 @@
       "narration": "{interim}架空の10社で、師匠がそのまま通した案は、学ぶ前は{before}%。シミュレータの師匠が、印や選択肢を平均{taps}回押すだけで、平均{after}%に。",
       "pauseMs": 300,
       "after": 0.45,
-      "shift": 0.2
+      "shift": 0.2,
+      "subtitlePatches": [
+        {
+          "sentence": 0,
+          "from": 0.0,
+          "to": 0.6,
+          "why": "from the cut (the previous line stays to the cut), no 0.37 s blank"
+        }
+      ]
     },
     {
       "id": "s09-edo",
