@@ -51,27 +51,57 @@ export const READINGS: [string, string][] = [
  * voice trial and kept by Kento on 11/4. These win over READINGS. Add a word here when it still sounds wrong.
  */
 export const ACCENTS: [string, string][] = [
+  // Kento's picks after the full watch (11/7, docs/ui-polish-log.md; video/voice-trial-2.ts and -3.ts)
+  ["三十年分の作法", "サンジューネンブンノサ'ホー"],
+  ["シミュレータの師匠", "シミュレーターノシ'ショー"],
+  ["丸新酒造", "マルシンシュ'ゾー"],
+  ["メールで送る", "メールデオクル"],
+  ["一つ一つが", "ヒト'ツヒト'ツガ"],
+  ["どの直しから", "ド'ノナオシカラ"],
+  ["来たかまで", "キ'タカマデ"],
+  ["自分から", "ジブンカラ"],
+  ["心得帳", "ココロエチョー"],
+  ["弟子が", "デシ'ガ"],
+  ["蔵元", "クラモト"],
+  ["AI", "エーア'イ"],
+  ["ずれ", "ズレ'"],
+  ["台帳", "ダイチョー"],
+  ["商人", "ショーニ'ン"],
   ["営業部長", "エーギョーブ'チョー"],
-  ["取引先", "トリヒキサキ"],
   ["ダメ出し", "ダメダシ"],
   ["解釈役", "カイシャクヤク"],
   ["ココロエ", "ココロ'エ"],
   ["一言", "ヒト'コト"],
   ["師匠", "シ'ショー"],
-  ["弟子", "デシ'"],
+  ["弟子", "デシ"],
   ["後任", "コーニン"],
   ["作法", "サ'ホー"],
+];
+
+/** Readings left to Polly's own accent (x-amazon-yomigana): chosen by ear on 11/7. They win over ACCENTS and READINGS. */
+export const YOMIGANA: [string, string][] = [
+  ["取引先", "とりひきさき"],
+  ["Claude", "くろーど"],
+];
+
+/** Said differently from what is shown (the subtitle keeps the written text). */
+export const SPEAK_AS: [string, string][] = [
+  ["弟子は、窓口", "弟子は窓口"], // Kento 11/7: a shorter pause after 弟子は
 ];
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 /** Text → SSML body: accents (pron-kana) first, then the <sub> readings, then escaped characters. */
-export function ssmlBody(text: string, accents: [string, string][] = ACCENTS): string {
+export function ssmlBody(text: string, accents: [string, string][] = ACCENTS, yomigana: [string, string][] = YOMIGANA): string {
   let out = "";
   for (let i = 0; i < text.length; ) {
+    const yomi = yomigana.find(([w]) => text.startsWith(w, i));
     const acc = accents.find(([w]) => text.startsWith(w, i));
     const sub = READINGS.find(([w]) => text.startsWith(w, i));
-    if (acc) {
+    if (yomi) {
+      out += `<phoneme alphabet="x-amazon-yomigana" ph="${esc(yomi[1])}">${esc(yomi[0])}</phoneme>`;
+      i += yomi[0].length;
+    } else if (acc) {
       out += `<phoneme alphabet="x-amazon-pron-kana" ph="${esc(acc[1])}">${esc(acc[0])}</phoneme>`;
       i += acc[0].length;
     } else if (sub) {
@@ -87,6 +117,7 @@ export function ssmlBody(text: string, accents: [string, string][] = ACCENTS): s
 
 /** The decided voice settings: one <prosody> around whole sentences, a pause between sentences (none after the last). */
 export function toSsml(text: string, pauseMs = VOICE.pauseMs, rate = VOICE.rate): string {
+  for (const [shown, said] of SPEAK_AS) text = text.replace(shown, said);
   return `<speak><prosody rate="${rate}%">${ssmlBody(text).replace(/。(?!$)/g, `。<break time="${pauseMs}ms"/>`)}</prosody></speak>`;
 }
 
