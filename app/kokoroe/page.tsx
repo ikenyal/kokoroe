@@ -201,7 +201,7 @@ export default async function KokoroePage({ searchParams }: { searchParams: Prom
         >
           心得帳を後任に渡す
         </a>
-        <p className="mt-1.5 text-[12.5px] text-nibi">Agent Skills の形（SKILL.md と取引先ごとのファイル）で書⁠き⁠出⁠し⁠ま⁠す。後任の Claude Code の .claude/skills/ に置くと使えます。{nK ? "" : "いまは台帳の事実だけです。心得が付いてから渡すのがおすすめです。"}</p>
+        <p className="mt-1.5 text-[12.5px] text-nibi">後任の Claude Code で使える形（Agent Skills）で書⁠き⁠出⁠し⁠ま⁠す。{nK ? "" : "いまは台帳の事実だけです。心得が付いてから渡すのがおすすめです。"}</p>
         {kokoroe.length > 0 && <p className="mt-5 hidden text-[12.5px] text-nibi md:block">心得</p>}
         <ol className="mt-1 hidden space-y-1 text-[14px] md:block">
           {kokoroe.map((g) => (
