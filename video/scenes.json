@@ -125,7 +125,7 @@
         }
       ],
       "overlayTag": {
-        "text": "ココロエの画面（自作）\n後任への答えは、\nClaude が心得帳だけを\n根拠に書いています",
+        "text": "ココロエのアプリの画面\n後任への答えは、\nClaude が心得帳だけを\n根拠に書いています",
         "note": "Kento 11/7: the live s07 clip's tag said the answer was recorded and worded differently; the final s07 is a live answer worded like s06. The old tag is covered with the empty paper just below it (same clip, so the texture matches), then the new tag is drawn in the style of video/record.ts OWN_SCREEN.",
         "patch": {
           "x": 1078,

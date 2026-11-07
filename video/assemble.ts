@@ -101,7 +101,7 @@ function buildScene(s: Scene, i: number): number {
     n++;
   }
   const fade = s.fadeOut ? `,fade=t=out:st=${r3(total - s.fadeOut)}:d=${r3(s.fadeOut)}:color=${PAPER}` : "";
-  f.push(`[${v}]tpad=start_mode=clone:start_duration=${r3(pre)}:stop_mode=clone:stop_duration=${r3(post)},trim=0:${r3(total)}${fade}[vout]`);
+  f.push(`[${v}]tpad=start_mode=clone:start_duration=${r3(pre)}:stop_mode=clone:stop_duration=${r3(post)},trim=0:${r3(total)}${fade},format=yuv420p[vout]`); // the fade filter switches to yuv444p otherwise, which QuickTime cannot play (11/7)
   // Sound: the narration in pieces, each piece later by the holds before it.
   if (existsSync(mp3)) {
     const a = n;
@@ -136,7 +136,12 @@ if (require.main === module) {
     list.push(`file '${s.id}.mp4'`);
   });
   writeFileSync(path.join(OUT, "concat.txt"), list.join("\n") + "\n");
-  execFileSync("ffmpeg", ["-loglevel", "error", "-y", "-f", "concat", "-safe", "0", "-i", path.join(OUT, "concat.txt"), "-c", "copy", path.join(OUT, "kokoroe-demo.mp4")]);
+  // Join, then encode the whole video once (Kento 11/7: one stream with no joins for players and YouTube — H.264 High,
+  // yuv420p, constant 30 fps, AAC, moov atom at the front).
+  const joined = path.join(OUT, "kokoroe-demo-joined.mp4");
+  execFileSync("ffmpeg", ["-loglevel", "error", "-y", "-f", "concat", "-safe", "0", "-i", path.join(OUT, "concat.txt"), "-c", "copy", joined]);
+  execFileSync("ffmpeg", ["-loglevel", "error", "-y", "-i", joined, "-c:v", "libx264", "-profile:v", "high", "-preset", "slow", "-crf", "18",
+    "-pix_fmt", "yuv420p", "-r", "30", "-fps_mode", "cfr", "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-movflags", "+faststart", path.join(OUT, "kokoroe-demo.mp4")]);
   console.log(`planned ${sum.toFixed(2)} s`);
   console.log(execFileSync("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "default=nw=1", path.join(OUT, "kokoroe-demo.mp4")]).toString().trim());
 }
