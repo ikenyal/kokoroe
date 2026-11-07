@@ -10,7 +10,7 @@ An AI apprentice that inherits the unwritten etiquette of business.<br>
 
 > Through my work and community activities, I have been involved with a great many companies and organizations. Every one of
 > them has excellent people, each with a feel for the work that is theirs alone. But most of it lives only in their heads; it is never
-> written down, and it is lost each time people change. — the author ([more under The problem](#the-problem))
+> written down, and it is lost each time people change. — Kento Ikeda (ikenyal) ([more under The problem](#the-problem))
 
 <p align="center">
   <a href="YOUTUBE_URL"><img src="docs/readme/video-thumb.jpg" alt="Demo video on YouTube (2:57)" width="400"></a><br>
@@ -78,7 +78,7 @@ successor lined up. Among newly appointed presidents, promotion from inside (36.
 "M&A and others" — mostly acquisitions or secondments — took 20.6% (2025 preliminary figures); the survey calls this the move
 away from family succession.
 
-The successor's side was seen in the author's own run as the master on fictional scenes: someone who does not know the
+The successor's side was seen in my own run as the master on fictional scenes: someone who does not know the
 history marks polite, plausible drafts ○ (18 of 20) — and of those 18, the code judge (one simulated master's ground truth, not a
 real veteran) marks 15 △ or × (see *What was tested*). And before the kickoff, a small self-trial showed that
 corrections are rarely a pure ○ or ×: most are "OK, but…" — which is why the master has a third mark, △ ([docs/evolution.md](docs/evolution.md), background).
@@ -173,7 +173,7 @@ daily plans; the 心得帳 grows as a by-product of that work. To start with you
     ○△×, prose first. Only times and counts are saved to the repo (`npm run own:save`; procedure in
     [docs/own-company-test.md](docs/own-company-test.md), D-060). It is there for a company that adopts Kokoroe: a veteran
     using it on clients they really know can compare the time to write with the time to correct.
-  - **The author's own run was stopped (D-062).** On a stand-in ledger the author did not know what was particular to each
+  - **My own run was stopped (D-062).** On a stand-in ledger I did not know what was particular to each
     client, so the only prose possible was general manners: the same average the AI already knows. So "correcting is easier
     than writing" has **not** been measured on a person here.
 
@@ -219,20 +219,20 @@ always off in evaluation runs (D-061).
 
 Besides the held-out evaluation above, two kinds of test. Neither is a test with real clients or in a real workplace.
 
-- **Master-role test (author only, local):** the author plays the master on fictional scenes in the 帳場 and the app times each
+- **Master-role test (local only):** I play the master on fictional scenes in the 帳場 and the app times each
   action ([docs/master-role-test.md](docs/master-role-test.md)). It is not a test with real clients or in a real workplace.
   - **Result (11/4, one person, 20 fictional scenes; D-059):** marking a card took a median of **53.5 s**, including reading the
     draft and its message (about 18 minutes for 20). Adding a remark and recording it took a median of 1.3 s; almost none were
     written.
-  - **18 of 20 were marked ○.** The author has never dealt with this fictional company, and to a first-time reader the polite,
+  - **18 of 20 were marked ○.** I have never dealt with this fictional company, and to a first-time reader the polite,
     plausible drafts looked fine. This is exactly the successor who would send the AI's draft as it is. Only someone who knows
     the history can correct the tacit part.
-  - **The same 20 drafts, scored by the code judge** (the simulator's hidden ground truth; no API; 11/5): of the 18 the author
-    marked ○, it marks **3 ○, 8 △ and 7 ×**. Of the author's two △, it marks one × and one ○. Same mark on 3 of 20. Conditions:
-    the drafts the author saw (made live during the test from the ledger's constraints plus the two 心得 learned on the way),
+  - **The same 20 drafts, scored by the code judge** (the simulator's hidden ground truth; no API; 11/5): of the 18 I
+    marked ○, it marks **3 ○, 8 △ and 7 ×**. Of my two △, it marks one × and one ○. Same mark on 3 of 20. Conditions:
+    the drafts I saw (made live during the test from the ledger's constraints plus the two 心得 learned on the way),
     the judge frozen since 11/3 (D-017), the contact plan only (D-061). It is one simulated master's ground truth, not a real
     veteran's ([docs/results/master-role-vs-simulator-2026-11-05.json](docs/results/master-role-vs-simulator-2026-11-05.json)).
-  - **Not measured:** writing the same etiquette as prose was not done (the author had no experience to write from). So there is
+  - **Not measured:** writing the same etiquette as prose was not done (I had no experience to write from). So there is
     no comparison of judging time with writing time, and no count of how much etiquette comes out.
 - **Persona simulation (not a real-world test):** master and successor personas played by Claude (a silent master, one who only
   says 「違う」, a busy-month master, a fat-fingered one, an abbreviating one; an indirect newcomer, a curt asker, and others).
@@ -259,7 +259,7 @@ What this entry asks to be judged on is what was made with Claude. The line is d
 **Made with Claude**
 - **This repository's code and documents**, written with Claude Code during the hackathon (from 2026-11-02): the app, the master
   simulator and evaluation, scripts, tests and hooks, the fictional data files, the README and the records, and the video's scene
-  pages and narration script (made with Claude; the author shortened one part, D-049). Which calls were the author's and what Claude Code did is in
+  pages and narration script (made with Claude; I shortened one part, D-049). Which calls were mine and what Claude Code did is in
   [docs/how-we-built.md](docs/how-we-built.md) (and in "A second 帳場" below).
 - **What Claude writes inside the app** (Anthropic API, called directly): the apprentice's 段取り drafts, message drafts and visit
   plans; the readings of the master's remark and the 心得 written from them; the successor's answers.
@@ -271,7 +271,7 @@ What this entry asks to be judged on is what was made with Claude. The line is d
   came from which.
 
 **Not made with Claude**
-- Narration voice: Amazon Polly (text-to-speech; the script was made with Claude, and the author shortened one part, D-049). Hosting: Amazon Lightsail.
+- Narration voice: Amazon Polly (text-to-speech; the script was made with Claude, and I shortened one part, D-049). Hosting: Amazon Lightsail.
 - Main open-source software: Next.js, React, Tailwind CSS, Zod, the MCP TypeScript SDK, Playwright (screen recording), ffmpeg (video
   assembly), Vitest. Fonts: Shippori Mincho and Zen Kaku Gothic New (Google Fonts, SIL Open Font License).
 - Statistics quoted in the README and the video: Teikoku Databank (successor survey, 2025) and the Statistics Bureau of Japan
@@ -289,7 +289,7 @@ built not only the product but also the guardrails it worked under (hooks, tests
 
 **About the Git history:** before publishing, while the repository was still private (11/3), the history was rewritten to remove a
 work e-mail address and content from the hackathon's sessions that may not be published: the author information (every commit now
-has one GitHub noreply author; one person made this work) and part of some diffs. The order, dates and content of the commits were
+has one GitHub noreply author; I made this work alone) and part of some diffs. The order, dates and content of the commits were
 kept, except for what was removed; checked against the pre-rewrite backup, one commit that the removal left empty was dropped (its
 change is in the next commit) and one commit message lost the removed word
 ([D-047](docs/decisions.md), [docs/audits/2026-11-03.md](docs/audits/2026-11-03.md), [docs/publishing.md](docs/publishing.md)).
@@ -378,7 +378,7 @@ to AI output as knowledge for later reasoning. (Both checked on arxiv.org on 202
 changed**, as a readable and deletable Agent Skill, for a small company's **client-by-client etiquette**.
 
 ## Data
-- All data is **fictional**. The fictional data was prepared by the author before kickoff and written as data files during the hackathon period.
+- All data is **fictional**. The fictional data was prepared by me before kickoff and written as data files during the hackathon period.
 - `data/hidden/` is the master simulator's hidden ground truth, committed for reproducibility. **The apprentice's code never reads it —
   a test enforces this.** It is frozen (hook + checksum test).
 
@@ -389,7 +389,7 @@ changed**, as a readable and deletable Agent Skill, for a small company's **clie
   from private development and does not apply to anything published here.
 - **Your 心得帳 is yours.** The 心得帳 you grow and the Skill you export (a copy of it) belong to you: they are the program's
   output, not covered by the AGPL.
-- **Other terms:** to use the code under different terms, contact the author on GitHub ([ikenyal](https://github.com/ikenyal)).
+- **Other terms:** to use the code under different terms, contact [ikenyal](https://github.com/ikenyal) on GitHub.
 - **Fictional world data** (`data/`: Daidai Kobo, its clients, kokoroe and scenes) is separate: © 2026 ikenyal, all rights reserved,
   limited to evaluating and demonstrating this project; not covered by the AGPL-3.0. See [data/NOTICE.md](data/NOTICE.md).
 - Dependencies' licenses and how they fit with the AGPL: [docs/licenses.md](docs/licenses.md).

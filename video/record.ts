@@ -17,7 +17,7 @@ import { VOICE, loadPlan } from "./narration";
 
 const ROOT = path.resolve(__dirname, "..");
 const OUT = path.join(__dirname, "out");
-const { values } = parseArgs({ options: { base: { type: "string", default: "http://127.0.0.1:3000" }, only: { type: "string" }, live: { type: "boolean", default: false } } });
+const { values } = parseArgs({ options: { base: { type: "string", default: "http://127.0.0.1:3000" }, only: { type: "string" }, live: { type: "boolean", default: false }, "recut-s05": { type: "string" } } });
 const plan = loadPlan();
 const LEAD = (JSON.parse(readFileSync(path.join(__dirname, "scenes.json"), "utf8")) as { lead?: number }).lead ?? 0;
 const results = readFileSync(path.join(ROOT, "data/demo/results.json"), "utf8");
@@ -206,8 +206,16 @@ const STEPS: Record<string, (p: Page, base: string, live: boolean) => Promise<vo
 async function s05TwoPass(
   browser: import("playwright").Browser, s: { id: string; page: string; seconds: number }, base: string,
   storageState: Awaited<ReturnType<import("playwright").BrowserContext["storageState"]>> | undefined,
-  viewport: { width: number; height: number }, cues: string[], at: number[], end: number,
+  viewport: { width: number; height: number }, cues: string[], at: number[], end: number, recut?: Record<string, number>,
 ) {
+  // --recut-s05 (11/7, after Kento's full watch): skip pass 1 and cut the live take already recorded (s05-raw.webm) with its
+  // logged step times — the narration changed, the live footage does not.
+  const rawPath = path.join(OUT, "s05-raw.webm");
+  let marks: Record<string, number>;
+  if (recut) {
+    if (!existsSync(rawPath)) throw new Error("--recut-s05 needs video/out/s05-raw.webm from the live take");
+    marks = recut;
+  } else {
   const rawCtx = await browser.newContext({ viewport, locale: "ja-JP", colorScheme: "light", storageState, recordVideo: { dir: OUT, size: { width: 1280, height: 720 } } });
   await rawCtx.addInitScript(`window.RESULTS = ${results}; window.MCP = ${mcpAnswers};`);
   const p = await rawCtx.newPage();
@@ -226,7 +234,7 @@ async function s05TwoPass(
   await card.locator('input[name="remark"]').pressSequentially("裏で蔵元に一言", { delay: 110 });
   await p.waitForTimeout(500);
   await card.locator('button:has-text("で記録する")').click();
-  const marks: Record<string, number> = { recorded: since() };
+  marks = { recorded: since() };
   await p.evaluate(() => window.scrollTo({ top: 0, behavior: "smooth" })); // the right column: the apprentice's reading
   const picks = p.locator('aside button[name="pick"]');
   if (await shown(picks, 60000)) {
@@ -254,12 +262,15 @@ async function s05TwoPass(
   await p.waitForTimeout(7000);
   const rawVideo = p.video();
   await rawCtx.close();
-  const rawPath = path.join(OUT, "s05-raw.webm");
   if (rawVideo) renameSync(await rawVideo.path(), rawPath);
   console.log("  s05 live marks (s):", JSON.stringify(Object.fromEntries(Object.entries(marks).map(([k, v]) => [k, +v.toFixed(2)]))));
+  }
   if (marks.written === undefined || marks.t13 === undefined) throw new Error("s05: the reading or T13's 変化 did not appear — not cutting a clip that would not show them");
   // Cut: [0, at[4]) the 判定 and the remark; then the reading written, for 「弟子はその一言を読み取り…」; then T13 from 「次の根回し…」.
-  const s0 = at[4], s1 = at[5], total = s.seconds;
+  // Cut points by sentence, not by position (the narration gained a sentence on 11/7).
+  const iRead = cues.findIndex((c) => c.startsWith("弟子はその一言")), iNext = cues.findIndex((c) => c.startsWith("次の根回し"));
+  if (iRead < 0 || iNext < 0) throw new Error("s05: the cut sentences were not found in the narration");
+  const s0 = at[iRead], s1 = at[iNext], total = s.seconds;
   const seg2 = Math.max(marks.readings ?? marks.recorded, marks.written - 3.0);
   const seg3 = marks.t13 - 0.3;
   const edit = path.join(OUT, "s05-edit.mp4");
@@ -309,8 +320,9 @@ async function s05TwoPass(
       storageState = await setup.storageState();
       await setup.close();
     }
-    if (s.id === "s05-choba" && values.live) {
-      await s05TwoPass(browser, s, values.base!, storageState, viewport, cues, at, end);
+    if (s.id === "s05-choba" && (values.live || values["recut-s05"])) {
+      const recut = values["recut-s05"] ? (JSON.parse(values["recut-s05"]) as Record<string, number>) : undefined;
+      await s05TwoPass(browser, s, values.base!, storageState, viewport, cues, at, end, recut);
       console.log(`${s.id}: ${s.seconds}s recorded (live, cut)`);
       continue;
     }

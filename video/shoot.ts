@@ -26,6 +26,7 @@ const { values } = parseArgs({
     mcp: { type: "boolean", default: false },
     "skip-build": { type: "boolean", default: false },
     only: { type: "string" },
+    "recut-s05": { type: "string" }, // JSON of the live take's step times; re-cuts s05 from s05-raw.webm without the API
   },
 });
 const run = (cmd: string, args: string[], cwd = ROOT) => execFileSync(cmd, args, { cwd, stdio: "inherit" });
@@ -70,7 +71,7 @@ async function main() {
   try {
     await waitUp();
     console.log(`server on ${BASE} (${values.live ? "live" : "fixed data"})`);
-    run("npx", ["tsx", "video/record.ts", "--base", BASE, ...(values.live ? ["--live"] : []), ...(values.only ? ["--only", values.only] : [])]);
+    run("npx", ["tsx", "video/record.ts", "--base", BASE, ...(values.live ? ["--live"] : []), ...(values.only ? ["--only", values.only] : []), ...(values["recut-s05"] ? ["--recut-s05", values["recut-s05"]] : [])]);
   } finally {
     server.kill("SIGTERM");
     rmSync(dataDir, { recursive: true, force: true });
@@ -83,7 +84,7 @@ async function main() {
     for (const f of readdirSync(from)) copyFileSync(path.join(from, f), path.join(ROOT, "video/out/audio", f));
     console.log(`narration: ${values.voice} (${readdirSync(from).filter((f) => f.endsWith(".mp3")).length} scenes; others silent)`);
   }
-  if (!values.only) run(path.join(ROOT, "video/assemble.sh"), []);
+  if (!values.only) run("npx", ["tsx", path.join(ROOT, "video/assemble.ts")]);
 }
 
 main().catch((e) => {
