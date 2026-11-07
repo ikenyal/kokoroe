@@ -8,7 +8,8 @@
  * after (scenes.json "lead"); without marks they fall back to a share of the scene proportional to sentence length.
  * Numbers come from data/demo/results.json (window.RESULTS; the narration's {before} etc. are filled the same way).
  */
-import { existsSync, mkdirSync, readFileSync, renameSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
 import { chromium, type Locator, type Page } from "playwright";
@@ -195,6 +196,88 @@ const STEPS: Record<string, (p: Page, base: string, live: boolean) => Promise<vo
   },
 };
 
+/**
+ * s05 live, in two passes (Kento 11/7: the live steps take ~90 s, the scene is 26 s — jump cuts, not a longer scene).
+ * Pass 1 records the real live session without subtitles and notes when each step happened. The clip is then cut into three
+ * parts with ffmpeg — the 判定 and the remark, the right column when the reading is written, T13's 変化 — and pass 2 plays the
+ * cut clip full frame in a page with the same subtitles and noren as every other scene, so nothing is staged: every frame is
+ * from the live run, only the waiting is cut out.
+ */
+async function s05TwoPass(
+  browser: import("playwright").Browser, s: { id: string; page: string; seconds: number }, base: string,
+  storageState: Awaited<ReturnType<import("playwright").BrowserContext["storageState"]>> | undefined,
+  viewport: { width: number; height: number }, cues: string[], at: number[], end: number,
+) {
+  const rawCtx = await browser.newContext({ viewport, locale: "ja-JP", colorScheme: "light", storageState, recordVideo: { dir: OUT, size: { width: 1280, height: 720 } } });
+  await rawCtx.addInitScript(`window.RESULTS = ${results}; window.MCP = ${mcpAnswers};`);
+  const p = await rawCtx.newPage();
+  const tStart = Date.now();
+  const since = () => (Date.now() - tStart) / 1000;
+  const until = async (sec: number) => { const w = sec * 1000 - (Date.now() - tStart); if (w > 0) await p.waitForTimeout(w); };
+  await p.goto(base + s.page);
+  const card = p.locator('section[aria-labelledby="card-h"]');
+  await p.waitForTimeout(3600);
+  await glideTo(p, card.locator('section[aria-label="訪問"]'), 1000);
+  await p.waitForTimeout(1200);
+  await glideTo(p, card.locator('section[aria-label="判定"]'), 1000);
+  await until(at[2]); // 「師匠は、△。」
+  await card.locator('label:has(input[value="△"])').click();
+  await p.waitForTimeout(700);
+  await card.locator('input[name="remark"]').pressSequentially("裏で蔵元に一言", { delay: 110 });
+  await p.waitForTimeout(500);
+  await card.locator('button:has-text("で記録する")').click();
+  const marks: Record<string, number> = { recorded: since() };
+  await p.evaluate(() => window.scrollTo({ top: 0, behavior: "smooth" })); // the right column: the apprentice's reading
+  const picks = p.locator('aside button[name="pick"]');
+  if (await shown(picks, 60000)) {
+    marks.readings = since();
+    await p.waitForTimeout(1800);
+    const kura = picks.filter({ hasText: "蔵元" });
+    await ((await kura.count()) ? kura.first() : picks.first()).click();
+  }
+  if (await shown(p.locator("aside").getByText("心得帳に書きました"), 45000)) marks.written = since();
+  await p.waitForTimeout(2500);
+  if (await shown(p.locator('aside button[name="skip"]'), 20000)) await p.locator('aside button[name="skip"]').first().click();
+  if (await shown(p.locator('aside button[name="verdict"][value="○"]'), 45000)) await p.locator('aside button[name="verdict"][value="○"]').first().click();
+  const change = card.locator('section[aria-label="変化"]');
+  if (await shown(change, 90000)) {
+    await glideTo(p, change, 1200);
+    await p.waitForTimeout(400);
+    marks.t13 = since();
+  }
+  await p.waitForTimeout(7000);
+  const rawVideo = p.video();
+  await rawCtx.close();
+  const rawPath = path.join(OUT, "s05-raw.webm");
+  if (rawVideo) renameSync(await rawVideo.path(), rawPath);
+  console.log("  s05 live marks (s):", JSON.stringify(Object.fromEntries(Object.entries(marks).map(([k, v]) => [k, +v.toFixed(2)]))));
+  if (marks.written === undefined || marks.t13 === undefined) throw new Error("s05: the reading or T13's 変化 did not appear — not cutting a clip that would not show them");
+  // Cut: [0, at[4]) the 判定 and the remark; then the reading written, for 「弟子はその一言を読み取り…」; then T13 from 「次の根回し…」.
+  const s0 = at[4], s1 = at[5], total = s.seconds;
+  const seg2 = Math.max(marks.readings ?? marks.recorded, marks.written - 3.0);
+  const seg3 = marks.t13 - 0.3;
+  const edit = path.join(OUT, "s05-edit.mp4");
+  execFileSync("ffmpeg", ["-loglevel", "error", "-y", "-i", rawPath, "-filter_complex",
+    `[0:v]trim=0:${s0.toFixed(2)},setpts=PTS-STARTPTS[a];` +
+    `[0:v]trim=start=${seg2.toFixed(2)}:duration=${(s1 - s0).toFixed(2)},setpts=PTS-STARTPTS[b];` +
+    `[0:v]trim=start=${seg3.toFixed(2)}:duration=${(total - s1 + 0.3).toFixed(2)},setpts=PTS-STARTPTS[c];` +
+    `[a][b][c]concat=n=3:v=1:a=0,fps=25[o]`, "-map", "[o]", "-c:v", "libx264", "-pix_fmt", "yuv420p", edit]);
+  console.log(`  s05 cut: 0–${s0.toFixed(1)} | ${seg2.toFixed(1)}–${(seg2 + s1 - s0).toFixed(1)} | ${seg3.toFixed(1)}–${(seg3 + total - s1).toFixed(1)}`);
+  // Pass 2: play the cut clip with the scene's subtitles and noren, like any other scene.
+  const html = path.join(OUT, "s05-play.html");
+  writeFileSync(html, `<!doctype html><html><body style="margin:0;background:#f3f2ee"><video src="s05-edit.mp4" autoplay muted playsinline style="display:block;width:1280px;height:720px"></video></body></html>`);
+  const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 }, locale: "ja-JP", recordVideo: { dir: OUT, size: { width: 1280, height: 720 } } });
+  const t0 = Date.now();
+  await ctx.addInitScript(SUBTITLE(cues, at, end, t0, 26));
+  await ctx.addInitScript(WIPE(t0));
+  const pp = await ctx.newPage();
+  await pp.goto("file://" + html);
+  await pp.waitForTimeout(Math.max(0, total * 1000 - (Date.now() - t0)));
+  const v = pp.video();
+  await ctx.close();
+  if (v) renameSync(await v.path(), path.join(OUT, `${s.id}.webm`));
+}
+
 (async () => {
   mkdirSync(OUT, { recursive: true });
   const browser = await chromium.launch();
@@ -215,6 +298,11 @@ const STEPS: Record<string, (p: Page, base: string, live: boolean) => Promise<vo
       await sp.waitForURL("**/choba");
       storageState = await setup.storageState();
       await setup.close();
+    }
+    if (s.id === "s05-choba" && values.live) {
+      await s05TwoPass(browser, s, values.base!, storageState, viewport, cues, at, end);
+      console.log(`${s.id}: ${s.seconds}s recorded (live, cut)`);
+      continue;
     }
     const ctx = await browser.newContext({
       viewport, locale: "ja-JP", colorScheme: "light", storageState,
