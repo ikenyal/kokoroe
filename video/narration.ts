@@ -53,6 +53,8 @@ export const READINGS: [string, string][] = [
 export const ACCENTS: [string, string][] = [
   // Kento's picks after the full watch (11/7, docs/ui-polish-log.md; video/tools/voice-trial-2.ts and -3.ts)
   ["三十年分の作法", "サンジューネンブンノサ'ホー"],
+  ["心得帳に", "ココロエチョーニ"], // trial 4 A, every scene (Kento 11/7: the same word reads the same throughout)
+  ["弟子は", "デシ'ワ"], // trial 4 B, every scene
   ["シミュレータの師匠", "シミュレーターノシ'ショー"],
   ["丸新酒造", "マルシンシュ'ゾー"],
   ["メールで送る", "メールデオクル"],
