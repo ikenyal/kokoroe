@@ -45,20 +45,20 @@ FORM8 = ["Claude Code CLI", "Claude Code IDE 拡張", "Claude Code Desktop", "Co
 item8 = [x for x in FORM8 if x in item8] + [x for x in item8 if x not in FORM8]
 n = lambda t: len(t.replace("\n", ""))
 out = [
-    "\n## 貼る用（11/7。フォームの実物の 1〜12 の順。```text``` の中をそのまま貼る）\n",
-    "数字は 11/7 の正式な計測（架空の取引先10社・評価用20場面）。審査用のコードは、このファイルにもどこにも書かない（12 に Kento が手で入れる）。字数は改行を数えない。\n",
+    "\n## 貼る用（11/7。フォームの実物の1〜12の順。```text``` の中をそのまま貼る）\n",
+    "数字は11/7の正式な計測（架空の取引先10社・評価用20場面）。審査用のコードは、このファイルにもどこにも書かない（12にKentoが手で入れる）。字数は改行を数えない。\n",
     "### 1. チーム名", block("ikenyal"),
     "### 2. チームメンバー（入力済み: Kento Ikeda / ikenyal。そのままでよい）",
     "### 3. プロジェクト名", block("ココロエ（Kokoroe）— 商いの心得を継ぐ、AIの弟子"),
     "### 4. 選択したテーマ（選ぶ）", block("あなたにしかない深さを"),
     f"### 5. プロジェクト概要（{ov_count}字。500字以内）", block(overview),
-    "### 6. 公開 GitHub リポジトリ", block("https://github.com/ikenyal/kokoroe"),
+    "### 6. 公開GitHubリポジトリ", block("https://github.com/ikenyal/kokoroe"),
     "### 7. デモ動画", block(video_url or "【アップロード後に Kento が URL を入れる】"),
-    "### 8. 使用した Claude の製品・機能（チェックを入れる）", block("\n".join(item8)),
+    "### 8. 使用したClaudeの製品・機能（チェックを入れる）", block("\n".join(item8)),
     f"### 9. 開発中に一番詰まった場面（{n(item9)}字）", block(item9),
     f"### 10. 開発に必要な公式の情報が十分見つけられましたか（1行・{n(item10)}字）", block(item10),
-    f"### 11. Claude を使った感想と改善してほしい点（①②③を1つの欄に・{n(item11)}字）", block(item11),
-    "### 12. 審査員用リンク（任意）（1行。【Kento が手で入れる】をコードに置き換える）", block(judge),
+    f"### 11. Claudeを使った感想と改善してほしい点（①②③を1つの欄に・{n(item11)}字）", block(item11),
+    "### 12. 審査員用リンク（任意）（1行。【Kentoが手で入れる】をコードに置き換える）", block(judge),
 ]
 open(p, "w", encoding="utf-8").write(s + "\n".join(out) + "\n")
 print("overview chars", ov_count, "| item8", item8)

@@ -25,8 +25,8 @@ describe("README results block: the lure row says who sent it to the master (Ken
     const ja = renderReadmeBlock(r, "ja").split("\n").find((l) => l.startsWith("| 値引きを迫られた場面"))!;
     expect(en).toContain(`the apprentice itself (the model's own decision) sent ${adv.escalatedByModel} / ${adv.lureRuns} to the master`);
     expect(en).toContain(`(D-044), ${adv.escalated} / ${adv.lureRuns}`);
-    expect(ja).toContain(`弟子自身（モデルの判断）が師匠に回したのは ${adv.lureRuns}回中${adv.escalatedByModel}回`);
-    expect(ja).toContain(`込みで ${adv.lureRuns}回中${adv.escalated}回`);
+    expect(ja).toContain(`弟子自身（モデルの判断）が師匠に回したのは${adv.lureRuns}回中${adv.escalatedByModel}回`);
+    expect(ja).toContain(`込みで${adv.lureRuns}回中${adv.escalated}回`);
   });
 });
 

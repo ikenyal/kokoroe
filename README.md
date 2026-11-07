@@ -23,7 +23,8 @@ An AI apprentice that inherits the unwritten etiquette of business.<br>
   <sub>From the video's 帳場 scene, recorded live: △ and one word → written into the 心得帳 → the next draft shows 「変化」. The wait and one card in between are cut (the corner says so).</sub>
 </p>
 
-**For a small company's veteran about to retire, and whoever takes over.** The veteran can't explain their client etiquette, but
+**For the people whose feel for the work lives only in their heads, and whoever takes over.** That know-how is lost each time
+people change; Kokoroe hands it on, starting with how to deal with each client. The veteran can't explain their client etiquette, but
 sees what is wrong when shown a draft: they only mark the AI apprentice's drafts ○ / △ / × (OK / OK with a condition / no). Each correction becomes a 心得
 (one lesson) with why it came to be, kept in a 心得帳 (the book of them) and handed to the successor as an Agent Skill.
 
@@ -70,10 +71,11 @@ the hardest kinds of this to put into words: how to deal with each client.
 (Sources: no successor — the Teikoku Databank survey in the next paragraph, published 21 Nov 2025, about 270,000 companies;
 3.3 million — Statistics Bureau of Japan, [Labour Force Survey (Detailed Tabulation), 2025 average](https://www.stat.go.jp/data/roudou/sokuhou/nen/dt/index.html), number of job changers.)
 
-In a small Japanese company, how to deal with each client lives in one veteran's head: whom to tell first, what to send by mail and
+How to deal with each client is a typical case. In many workplaces it lives in one veteran's head: whom to tell first, what to send by mail and
 what to say face to face, when to stay away, who must hear it quietly before it becomes official. Asked to explain, the veteran
 can't — it was never put into words. But show them a draft and they can say "no, not like that".
-When they retire, the etiquette and *why it became so* leave with them. In Teikoku Databank's [nationwide successor survey (2025)](https://www.tdb.co.jp/report/economic/20251121-successor25y/), 51.2% of the small and medium companies it covered had no
+When they retire or move on, the etiquette and *why it became so* leave with them. Business succession in small Japanese companies
+is one example: in Teikoku Databank's [nationwide successor survey (2025)](https://www.tdb.co.jp/report/economic/20251121-successor25y/), 51.2% of the small and medium companies it covered had no
 successor lined up. Among newly appointed presidents, promotion from inside (36.1%) overtook family succession (32.3%) and
 "M&A and others" — mostly acquisitions or secondments — took 20.6% (2025 preliminary figures); the survey calls this the move
 away from family succession.
@@ -83,10 +85,10 @@ history marks polite, plausible drafts ○ (18 of 20) — and of those 18, the c
 real veteran) marks 15 △ or × (see *What was tested*). And before the kickoff, a small self-trial showed that
 corrections are rarely a pure ○ or ×: most are "OK, but…" — which is why the master has a third mark, △ ([docs/evolution.md](docs/evolution.md), background).
 
-**Who it is for.** The veteran about to retire (the 師匠), who keeps their etiquette by saying "no" as usual, without being asked
-to explain; and whoever takes over (someone inside, or a buyer of the business), who gets answers with their reasons and history. When the person in charge changes for another reason (a job change, a transfer),
-the hand-over is the same: the 心得帳 is passed on as an Agent Skill, whatever the reason.
-**When it is used:** the months between the retirement being decided and the hand-over, while the master checks the apprentice's
+**Who it is for.** The veteran whose feel for the work lives in their head (the 師匠), who keeps their etiquette by saying "no" as usual, without being asked
+to explain; and whoever takes over (someone inside, or a buyer of the business), who gets answers with their reasons and history. Whether the reason is retirement, a job change or a transfer,
+the hand-over is the same: the 心得帳 is passed on as an Agent Skill.
+**When it is used:** the months before a retirement or a transfer, while the master checks the apprentice's
 daily plans; the 心得帳 grows as a by-product of that work. To start with your own clients: *Try it* → "Start from your own company".
 
 ## What Kokoroe does
@@ -120,7 +122,7 @@ daily plans; the 心得帳 grows as a by-product of that work. To start with you
 
 ### Two ways to hand it over: a copy, and a window
 - **Agent Skill = a copy of the kokoroe-chō at one moment.** It works offline in the successor's own Claude Code and is what
-  remains when the master has retired. The Skill states the moment it was copied.
+  remains when the master has retired or moved on. The Skill states the moment it was copied.
 - **Read-only MCP server = a window onto the kokoroe-chō that keeps growing.** During the overlap — the master still correcting,
   the successor already working — the successor's Claude asks `changes_since(<moment of the copy>)` and sees what changed after
   the copy. Four read-only tools (`list_clients`, `get_kokoroe`, `get_history`, `changes_since`); no write tool, no tool that calls
@@ -384,7 +386,7 @@ Learning from human corrections and widening autonomy step by step is not new. *
 2606.04321) turns a professional's corrections into preference data and lets an agent earn autonomy per skill; *Seedentia* (Wolter
 et al., arXiv 2603.24858, "Context-Mediated Domain Adaptation in Multi-Agent Sensemaking Systems") takes a domain expert's edits
 to AI output as knowledge for later reasoning. (Both checked on arxiv.org on 2026-11-06.) Kokoroe's focus is different: handing what was learned to **another person**, keeping **why it
-changed**, as a readable and deletable Agent Skill, for a small company's **client-by-client etiquette**.
+changed**, as a readable and deletable Agent Skill, starting with **client-by-client etiquette**.
 
 ## Data
 - All data is **fictional**. The fictional data was prepared by me before kickoff and written as data files during the hackathon period.
