@@ -185,7 +185,7 @@ with code against a hidden ground truth (frozen, checksummed); the apprentice ne
 
 | | Before (client ledger, with its constraints) | After 40 corrections |
 |---|---|---|
-| Held-out match (○) | 54% ± 2% (6 runs) | **71%** (65–75%, 5 training paths × 3 runs) |
+| Drafts the master passed as they were (○), held-out | 54% ± 2% (6 runs) | **71%** (65–75%, 5 training paths × 3 runs) |
 | ○ + △ | 69% | **91%** (85–95%) |
 | Successor answers with the right history (of 8) | 0 | **5.2** ± 1.3 |
 | Master taps for 40 scenes | — | 107–128 (marks, choosing a reading, "why?", checks) |

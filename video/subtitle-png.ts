@@ -10,7 +10,7 @@ import path from "node:path";
 import { chromium } from "playwright";
 
 const DIR = __dirname;
-const plan = JSON.parse(readFileSync(path.join(DIR, "scenes.json"), "utf8")) as { scenes: { id: string; kind: string; narration: string; overlaySubtitles?: { sentence: number }[] }[] };
+const plan = JSON.parse(readFileSync(path.join(DIR, "scenes.json"), "utf8")) as { scenes: { id: string; kind: string; narration: string; overlaySubtitles?: { sentence: number }[]; overlayTag?: { text: string } }[] };
 
 (async () => {
   const browser = await chromium.launch();
@@ -27,6 +27,19 @@ const plan = JSON.parse(readFileSync(path.join(DIR, "scenes.json"), "utf8")) as 
       execFileSync("ffmpeg", ["-v", "error", "-y", "-i", raw, "-vf", "scale=1280:720:flags=lanczos", path.join(DIR, "out", `${s.id}-sub${o.sentence}.png`)]);
       console.log(`${s.id} sentence ${o.sentence}: ${cues[o.sentence]}`);
     }
+  }
+  // A corner tag redrawn over a live take (scenes.json "overlayTag"; video/assemble.ts first covers the old tag), in the
+  // style of video/record.ts OWN_SCREEN (screen scenes: 1536×864, scaled to 1280×720 like the recording).
+  for (const s of plan.scenes.filter((x) => x.overlayTag)) {
+    const { text } = s.overlayTag!;
+    const page = await browser.newPage({ viewport: { width: 1536, height: 864 } });
+    await page.setContent(`<html><body style="margin:0;background:transparent">
+      <div style="position:fixed;right:18px;top:150px;width:max-content;white-space:pre-line;padding:8px 12px;border:2px solid #2b4a6f;background:rgba(243,242,238,.94);color:#2b4a6f;font:600 17px/1.55 'Hiragino Sans','Yu Gothic',sans-serif">${text}</div></body></html>`);
+    const raw = path.join(DIR, "out", `${s.id}-tag-raw.png`);
+    await page.screenshot({ path: raw, omitBackground: true });
+    await page.close();
+    execFileSync("ffmpeg", ["-v", "error", "-y", "-i", raw, "-vf", "scale=1280:720:flags=lanczos", path.join(DIR, "out", `${s.id}-tag.png`)]);
+    console.log(`${s.id} tag: ${text.replace(/\n/g, " ")}`);
   }
   await browser.close();
 })();

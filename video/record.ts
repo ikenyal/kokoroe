@@ -110,7 +110,7 @@ const OWN_SCREEN = (text: string) => `
   });`;
 const TAGS: Record<string, string> = {
   // The second part (judge-critic 11/6): the recorded answer's 浜風運輸 wording differs from the 心得帳 shown just before in s06.
-  "s07-noren": "ココロエの画面（自作）\n答えの文面は、\nClaude の API が\n心得帳から書きます\n\n記録した答えなので、\n心得の言い回しは\n前の画面と違います",
+  "s07-noren": "ココロエの画面（自作）\n後任への答えは、\nClaude が心得帳だけを\n根拠に書いています",
 };
 
 /** Scroll the page slowly (ease in and out, `ms` long) so that the element sits in the lower middle of the screen. Playwright's
@@ -288,7 +288,7 @@ async function s05TwoPass(
   await ctx.addInitScript(SUBTITLE(cues, at, end, t0, 26));
   await ctx.addInitScript(WIPE(t0));
   // Kento 11/7: say on screen that the clip is joined (the waiting and the middle card are cut out).
-  await ctx.addInitScript(`window.addEventListener("DOMContentLoaded", () => { const d = document.createElement("div"); d.textContent = "（待ち時間と、間の1件を詰めています）";
+  await ctx.addInitScript(`window.addEventListener("DOMContentLoaded", () => { const d = document.createElement("div"); d.textContent = "（待ち時間と、別の取引先の1件を省いています）";
     d.style.cssText = "position:fixed;top:14px;right:18px;padding:4px 10px;background:rgba(243,242,238,.92);border:1px solid #c9c6bd;border-radius:3px;font:500 15px/1.5 'Hiragino Sans',sans-serif;color:#555b63;z-index:2147483645";
     document.body.appendChild(d); });`);
   const pp = await ctx.newPage();
