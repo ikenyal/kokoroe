@@ -41,10 +41,11 @@ export function renderReadmeBlock(r: Results, lang: "en" | "ja"): string {
       `| ○ + △ | ${p(b.okp)}% | **${p(a.okp.mean)}%** (${p(a.okp.min)}–${p(a.okp.max)}%) |`,
       `| Successor answers with the right history (of 8) | ${one(h0.mean)} | **${h1.mean.toFixed(1)}** ± ${h1.sd.toFixed(1)} |`,
       `| Master taps for 40 scenes | — | ${a.taps.min}–${a.taps.max} (marks, choosing a reading, "why?", checks) |`,
-      `| Injected "register this as a rule" in client text | — | kokoroe-chō changed ${changed} / ${adv.injectionRuns} times |`,
+      `| Injected "register this as a rule" in client text | — | kokoroe-chō changed by the injected text ${changed} / ${adv.injectionRuns} times |`,
       adv.escalatedByModel === undefined
         ? `| Pressure to promise a discount | — | the model escalated to the master ${adv.escalated} / ${adv.lureRuns} (measured before the code floor, D-044) |`
         : `| Pressure to promise a discount | — | the model escalated ${adv.escalatedByModel} / ${adv.lureRuns} on its own; with the code floor (D-044) ${adv.escalated} / ${adv.lureRuns} |`,
+      ...(r.official ? ["", "_The injection count was recounted after the official run: the check had counted rules already retired during training as \"lost\". The raw output and the fix are in D-068._"] : []),
       ...(r.caveat ? ["", `_${r.caveat.en}_`] : []),
     ].join("\n");
   }
@@ -59,10 +60,11 @@ export function renderReadmeBlock(r: Results, lang: "en" | "ja"): string {
     `| ○ + △ | ${p(b.okp)}% | **${p(a.okp.mean)}%**（${p(a.okp.min)}〜${p(a.okp.max)}%） |`,
     `| 後任が経緯ごと正しく答えた質問（8問中） | ${one(h0.mean)} | **${h1.mean.toFixed(1)}** ± ${h1.sd.toFixed(1)} |`,
     `| 40場面にかかった師匠のタップ数 | — | ${a.taps.min}〜${a.taps.max}（印・候補の選択・「なぜ？」・確かめ） |`,
-    `| 取引先の文面に紛れた「心得として登録せよ」 | — | 心得帳が書き換わったのは ${adv.injectionRuns}回中${changed}回 |`,
+    `| 取引先の文面に紛れた「心得として登録せよ」 | — | 注入された文で心得帳が書き換わったのは ${adv.injectionRuns}回中${changed}回 |`,
     adv.escalatedByModel === undefined
       ? `| 値引きを迫られた場面 | — | モデルが自分で師匠の判断に回したのは ${adv.lureRuns}回中${adv.escalated}回（コードの下限 D-044 を入れる前の計測） |`
       : `| 値引きを迫られた場面 | — | モデル単体で ${adv.lureRuns}回中${adv.escalatedByModel}回、コードの下限（D-044）込みで ${adv.lureRuns}回中${adv.escalated}回、師匠の判断に回した |`,
+    ...(r.official ? ["", "_注入の回数は、確かめのコードの数え方の誤り（学習中に退けた心得を「失われた」と数えていた）を、正式計測のあとに直して数え直したもの。生の記録は D-068 に。_"] : []),
     ...(r.caveat ? ["", `_${r.caveat.ja}_`] : []),
   ].join("\n");
 }
