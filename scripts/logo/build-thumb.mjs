@@ -15,8 +15,8 @@ const FONT_DIR = process.env.FONT_DIR;
 if (!FONT_DIR) throw new Error("Set FONT_DIR (see scripts/logo/build-logo.mjs).");
 const tmp = mkdtempSync(path.join(tmpdir(), "kokoroe-thumb-"));
 const frame = path.join(tmp, "frame.png");
-// 1:29.6 of the final cut: the next draft for 丸新酒造 with its 「変化」 panel.
-execFileSync("ffmpeg", ["-v", "error", "-y", "-ss", "89.6", "-i", path.join(ROOT, "video/out/kokoroe-demo.mp4"), "-frames:v", "1", frame]);
+// 1:33.0 of the final cut (11/7 last version; was 1:29.6 before the holds): the next draft for 丸新酒造 with its 「変化」 panel.
+execFileSync("ffmpeg", ["-v", "error", "-y", "-ss", "93.0", "-i", path.join(ROOT, "video/out/kokoroe-demo.mp4"), "-frames:v", "1", frame]);
 const logo = readFileSync(path.join(ROOT, "docs/readme/logo-light.svg"), "utf8").replace(/width="[\d.]+" height="[\d.]+"/, 'width="440"');
 const font = (w) => `url(data:font/ttf;base64,${readFileSync(path.join(FONT_DIR, `ShipporiMincho-${w}.ttf`)).toString("base64")})`;
 const html = `<html><head><style>
@@ -33,7 +33,7 @@ body { margin: 0; width: 1280px; height: 720px; background: #f3f2ee; font-family
 .foot { position: absolute; left: 72px; bottom: 34px; font-size: 18px; color: #565b62; letter-spacing: 0.04em; }
 </style></head><body>
 <div class="rule" style="top:48px"></div><div class="rule" style="bottom:76px"></div>
-<div class="left">${logo}<div class="line">聞いても出てこない作法を、<br>ダメ出しで受け継ぐ。</div><div class="play"><i></i>デモ動画 2:57</div></div>
+<div class="left">${logo}<div class="line">聞いても出てこない作法を、<br>ダメ出しで受け継ぐ。</div><div class="play"><i></i>デモ動画 2:58</div></div>
 <div class="shot"><img src="data:image/png;base64,${readFileSync(frame).toString("base64")}"></div>
 <div class="foot">Built with Claude: Japan 2026　登場する会社・人物・数字は架空です</div>
 </body></html>`;

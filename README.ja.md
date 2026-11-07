@@ -10,8 +10,8 @@
 > これまで仕事やコミュニティの活動を通じて、数多くの企業や団体と関わってきました。どの現場にも優れた人がいて、その人ならではの仕事の勘どころがあります。けれど、その多くは本人の頭の中にしかなく、書き残されないまま、人が替わるたびに失われていきます。— 池田 健人（ikenyal）（続きは[課題](#課題)）
 
 <p align="center">
-  <a href="https://youtu.be/g-c1zFYKtQg"><img src="docs/readme/video-thumb.jpg" alt="YouTube のデモ動画（2:57）" width="400"></a><br>
-  <a href="https://youtu.be/g-c1zFYKtQg"><b>デモ動画を見る</b></a>（2:57、YouTube）・<a href="https://kokoroe.xzan0gz3dgpb8.ap-northeast-1.cs.amazonlightsail.com/"><b>公開デモを開く</b></a><br>
+  <a href="https://youtu.be/g-c1zFYKtQg"><img src="docs/readme/video-thumb.jpg" alt="YouTube のデモ動画（2:58）" width="400"></a><br>
+  <a href="https://youtu.be/g-c1zFYKtQg"><b>デモ動画を見る</b></a>（2:58、YouTube）・<a href="https://kokoroe.xzan0gz3dgpb8.ap-northeast-1.cs.amazonlightsail.com/"><b>公開デモを開く</b></a><br>
   <sub>審査員の方へ：公開デモの最初の画面のいちばん下「審査用のコード」に、提出フォームのコードを入れてから「デモの続きから見る」へ（<a href="#動かし方">詳しく</a>）。</sub>
 </p>
 

@@ -5,7 +5,7 @@
 ココロエ（Kokoroe）— 聞いても出てこない作法を、ダメ出しで受け継ぐ。
 The etiquette no one can put into words — handed down one correction at a time.
 
-- デモ動画 / Demo video (2:57): https://youtu.be/g-c1zFYKtQg
+- デモ動画 / Demo video (2:58): https://youtu.be/g-c1zFYKtQg
 - 公開デモ / Public demo: https://kokoroe.xzan0gz3dgpb8.ap-northeast-1.cs.amazonlightsail.com/
 - README: [日本語](https://github.com/ikenyal/kokoroe/blob/v1.0.0/README.ja.md) / [English](https://github.com/ikenyal/kokoroe/blob/v1.0.0/README.md)
 
