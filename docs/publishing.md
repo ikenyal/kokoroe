@@ -189,13 +189,21 @@ gh release create v1.0.0 --title "v1.0.0 — Built with Claude: Japan 2026 提�
 
    | 項目 | コマンド | 結果 |
    |---|---|---|
-   | テスト | `npm ci && npm test` | （全件通る） |
-   | リンク切れ | README・SECURITY・docs（`docs/ui-polish-log.md` の画面写真へのリンクは除く）の相対リンク・画像の確かめ（11/7 に使ったリンクの検査と同じもの） | （0 件） |
-   | 秘密（全履歴） | `gitleaks git . --log-opts="--all" --redact` | （当たりは既知の誤検知だけ） |
-   | 作者・コミッター | `git log --all --format='%ae\|%ce' \| sort \| uniq -c` | （noreply の1行だけ） |
-   | 勤務先の名前 | 全履歴の差分とメッセージで、勤務先のドメインを数える（`git log --all -p --format=%B \| grep -ci <ドメイン>`。ドメインはここに書かない） | （0 件） |
-   | 作者のメールアドレス（どのドメインも。noreply を除く） | 全履歴の差分とメッセージで、`replace-emails.txt` のアドレスと、noreply 以外のメールアドレスの形の文字列を数える（値は出さず件数だけ） | （0 件） |
-   | 大きさ | `git count-objects -vH`（size-pack） | （約 40 MB 以下の見込み） |
-   | コミット数 | `git rev-list --count main`（書き換え前との差は、空になって除かれたコミット） | （書き換え前 −2 の見込み） |
+   | テスト | `npm ci && npm test` | 324件すべて通る（11/8） |
+   | リンク切れ | README・SECURITY・docs（`docs/ui-polish-log.md` の画面写真へのリンクは除く）の相対リンク・画像の確かめ（11/7 に使ったリンクの検査と同じもの） | 0件（27ファイル） |
+   | 秘密（全履歴） | `gitleaks git . --log-opts="--all" --redact` | 301コミットを走査、当たりは1件。既知の誤検知（`tests/fixtures/hidden-freeze.json` のチェックサム） |
+   | 作者・コミッター | `git log --all --format='%ae\|%ce' \| sort \| uniq -c` | 494コミットすべて noreply の1行だけ |
+   | 勤務先の名前 | 全履歴の差分とメッセージで、勤務先のドメインを数える（`git log --all -p --format=%B \| grep -ci <ドメイン>`。ドメインはここに書かない） | 0件 |
+   | 作者のメールアドレス（どのドメインも。noreply を除く） | 全履歴の差分とメッセージで、`replace-emails.txt` のアドレスと、noreply 以外のメールアドレスの形の文字列を数える（値は出さず件数だけ） | 0件（noreply 以外のメールアドレスの形の文字列も0件） |
+   | 大きさ | `git count-objects -vH`（size-pack） | 57.4 MB（見込みより多いのは、見込みのあとに残す画面写真が増え、残したファイルの古い版も履歴に残るため） |
+   | コミット数 | `git rev-list --count main`（書き換え前との差は、空になって除かれたコミット） | 494（書き換え前 495。空になった2つが除かれ、commit-map のコミットが1つ足された）。commit-map は `docs/commit-map-2026-11-07.txt`（496行） |
 
 6. 結果を Kento に見せて OK を取ってから、§1 の手順で新しい公開リポジトリに push する。
+
+**結果（11/8）:** 上の表は、11/8 の書き換え（main 233174b から。画面写真の除去とメールアドレスの置き換えを1回の filter-repo で実行）のあとの値。Kento の OK のあと、§1 の手順4〜8で公開した（11/8 早朝）。
+
+- 今の非公開リポジトリは `kokoroe-archive-2026-11` に改名して保管（非公開のまま）。新しい `ikenyal/kokoroe` に、書き換えた main だけを push して公開した（リモートは `refs/heads/main` だけ）。
+- GitHub の設定: Secret scanning と Push protection を有効、Private vulnerability reporting を有効、Collaborators は ikenyal だけ、main の削除と force push をルールセットで禁止、Actions はワークフローがないのでオフ、About の説明文・Website（公開デモの URL）・Topics。Social preview の画像は Kento が画面で入れる。
+- v1.0.0: 注釈つきのタグ（作成者は noreply）とリリース（本文は `docs/release-v1.0.0.md`）。
+- 公開後の確かめ（ログインしていない状態）: README（日英）と SECURITY.md が表示され、画像は日英とも7枚すべて読み込まれる（動く画像・サムネイルを含む）。README と SECURITY のリンク59件がすべて開く（動画・公開デモ・リリース・commit-map を含む。`demo/successor-mcp/` はフォルダなので GitHub の画面の URL で確かめた）。LICENSE は API で `AGPL-3.0` と認識される。リリースのページが開く。Secret scanning の警告は0件。API で見たコミットの作者は noreply だけ。
+- 公開版（デプロイ7）は作り直していない。
