@@ -19,8 +19,8 @@ This is a hackathon entry (Built with Claude: Japan 2026) maintained by one pers
   the Anthropic Console. When a limit is hit, the demo falls back to recorded data.
   公開版の上限：セッションごと・アドレスごとの1時間・1日（来場者と審査員は別）、Console の月の上限。上限に達すると記録済みのデータで動きます。
 - **Judge code:** never in the repository (set only on the deployment), compared in constant time, tries limited per address,
-  kept as an httpOnly cookie that cannot be forged without the code. It changes only which daily limit is used.
-  審査用のコード：リポジトリに書かない。比べ方は一定時間、試せる回数に上限、httpOnly の cookie。変わるのは1日の上限だけ。
+  kept as an httpOnly cookie that cannot be forged without the code. It changes only the limits live AI calls count against (a judges' daily limit, no per-session cap).
+  審査用のコード：リポジトリに書かない。比べ方は一定時間、試せる回数に上限、httpOnly の cookie。変わるのは、AI がその場で動くときの上限だけ（審査員用の1日の上限、1回のお試しの回数の上限なし）。
 - **The AI never sends or promises anything:** money, contract terms and first contact with key clients always go to the master.
   弟子は何も送らず、約束しない。値引き・契約・大事な取引先への最初の連絡は、必ず師匠へ。
 - **Client text cannot rewrite the 心得帳:** only the master's own marks and words become 心得.

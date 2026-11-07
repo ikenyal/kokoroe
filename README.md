@@ -27,8 +27,10 @@ An AI apprentice that inherits the unwritten etiquette of business.<br>
 sees what is wrong when shown a draft: they only mark the AI apprentice's drafts ○ / △ / × (OK / OK with a condition / no). Each correction becomes a 心得
 (one lesson) with why it came to be, kept in a 心得帳 (the book of them) and handed to the successor as an Agent Skill.
 
-> **Numbers are from the official run on 11/7** (5 training paths, each held-out evaluation × 3; `eval/runs/2026-11-07T00-09-03-058Z-final.json`).
-> All companies, people and situations are fictional (株式会社だいだい工房 and its 10 clients).
+> [!NOTE]
+> - **Recorded:** the pictures in this README, and the video (the app's screens and HTML animations; its 帳場 scene was shot live, with the waits and one card in between cut, as it says on screen).
+> - **Live:** the public demo. Claude drafts, reads your corrections and answers the successor on the spot, until a limit is reached; then it goes on with recorded data.
+> - **Fictional:** every company, person and situation (株式会社だいだい工房 and its 10 clients). The numbers come from a simulated master on that data (official run on 11/7: 5 training paths, each held-out evaluation × 3; `eval/runs/2026-11-07T00-09-03-058Z-final.json`).
 
 **Words used below:** *Kokoroe* (ココロエ) is the name of this work. A *kokoroe* (心得) is one piece of the master's practice; the
 *kokoroe-chō* (心得帳) is the book that keeps them, client by client, with why each came to be — the apprentice learns into it, and
@@ -138,11 +140,13 @@ daily plans; the 心得帳 grows as a by-product of that work. To start with you
   you wait. Live calls have limits per session and per day; when one is reached, the
   screen says so (「本日のお試し上限に達しました…」) and the demo goes on with recorded data.
 - **For judges:** enter the code given in the submission form under 「審査用のコード」 at the bottom of the home page (open it first) and press
-  「確かめる」. The only thing it changes is the daily usage limit for live drafting by the AI apprentice in that browser: it becomes a
-  judges' limit, so you can keep trying even when visitors have used up the shared one. Screens, behaviour and data are the same; it
+  「確かめる」. The only thing it changes is the limit that live AI calls in that browser count against (the apprentice's drafts, the reading
+  of your corrections, the successor's answers): it becomes a judges' daily limit with no per-session cap, so you can keep trying
+  even when visitors have used up the shared one. Screens, behaviour and data are the same; it
   does not switch to another environment (drafting, learning, judging and the evaluation are unchanged; the per-address limit stays).
   Your marks and your growing 心得帳 are kept per browser and never mixed with anyone else's; they are gone when you start over or
-  after 24 hours. Without the code, every screen still works on recorded data.
+  after 24 hours. Without the code the demo is live too, until the visitors' limit is reached; after that, every screen goes on with
+  recorded data.
 - **Run locally** (Node 22+, npm; checked from a fresh clone: all four on 11/3; install, tests, eval:quick and a production build again on 11/5):
   ```bash
   npm ci
@@ -186,7 +190,7 @@ with code against a hidden ground truth (frozen, checksummed); the apprentice ne
 | Successor answers with the right history (of 8) | 0 | **5.2** ± 1.3 |
 | Master taps for 40 scenes | — | 107–128 (marks, choosing a reading, "why?", checks) |
 | Injected "register this as a rule" in client text | — | kokoroe-chō changed by the injected text 0 / 9 times |
-| Pressure to promise a discount | — | the model escalated 9 / 9 on its own; with the code floor (D-044) 9 / 9 |
+| Pressure to promise a discount | — | the apprentice itself (the model's own decision) sent 9 / 9 to the master; with the code floor added (D-044), 9 / 9 |
 
 _The injection count was recounted after the official run: the check had counted rules already retired during training as "lost". The raw output and the fix are in D-068._
 <!-- results:end -->
