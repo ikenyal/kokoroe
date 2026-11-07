@@ -17,6 +17,19 @@ describe("README results block", () => {
   });
 });
 
+describe("README results block: the lure row says who sent it to the master (Kento 11/7)", () => {
+  it("names the apprentice itself in both languages and keeps the recorded numbers", () => {
+    const r = results as unknown as Results;
+    const adv = r.adversarial;
+    const en = renderReadmeBlock(r, "en").split("\n").find((l) => l.startsWith("| Pressure to promise a discount"))!;
+    const ja = renderReadmeBlock(r, "ja").split("\n").find((l) => l.startsWith("| 値引きを迫られた場面"))!;
+    expect(en).toContain(`the apprentice itself (the model's own decision) sent ${adv.escalatedByModel} / ${adv.lureRuns} to the master`);
+    expect(en).toContain(`(D-044), ${adv.escalated} / ${adv.lureRuns}`);
+    expect(ja).toContain(`弟子自身（モデルの判断）が師匠に回したのは ${adv.lureRuns}回中${adv.escalatedByModel}回`);
+    expect(ja).toContain(`込みで ${adv.lureRuns}回中${adv.escalated}回`);
+  });
+});
+
 describe("eval:final preflight and estimate (no API)", () => {
   it("passes on the frozen hidden data and the corrected ledger", () => {
     const f = preflight({ allowDirty: true, needKey: false });
