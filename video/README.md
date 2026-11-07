@@ -115,7 +115,7 @@ entrant's own MCP server. So the video says it on screen (no narration change):
   frame whose right column shows 「心得帳に書きました」. If the take falls back to an empty remark (「一言なし」) or shows
   「このデモでは心得帳は書き足されません」, change the sentence in `scenes.json` to 「弟子はその △ の意味を読み取り、心得帳に書きました。」 and
   re-make the s05 narration with it.
-- [ ] 11/7 live s05 (judge-critic 11/7 01:38): keep the right column on screen while 「弟子はその一言を読み取り、心得帳に書きました。」
+- [x] 11/7 live s05 — done as jump cuts (two-pass recording; corner label 「（待ち時間と、間の1件を詰めています）」; `docs/ui-polish-log.md`). Was: keep the right column on screen while 「弟子はその一言を読み取り、心得帳に書きました。」
   plays; start the scroll to T13 only at the speech mark of 「次の根回しの場面では…」 (`video/out/audio/Takumi/s05-choba.marks.json`).
   Keep a still of the right column under that sentence.
 - [ ] 11/7 narration (judge-critic 11/7 01:38): s02, s04b, s06 and s08b lines changed tonight (no 「頭の中にしかありません」 twice in a row;

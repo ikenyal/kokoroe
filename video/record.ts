@@ -237,10 +237,16 @@ async function s05TwoPass(
   }
   if (await shown(p.locator("aside").getByText("心得帳に書きました"), 45000)) marks.written = since();
   await p.waitForTimeout(2500);
-  if (await shown(p.locator('aside button[name="skip"]'), 20000)) await p.locator('aside button[name="skip"]').first().click();
-  if (await shown(p.locator('aside button[name="verdict"][value="○"]'), 45000)) await p.locator('aside button[name="verdict"][value="○"]').first().click();
+  if (await shown(p.locator('aside button[name="skip"]'), 8000)) await p.locator('aside button[name="skip"]').first().click();
+  if (await shown(p.locator('aside button[name="verdict"][value="○"]'), 15000)) await p.locator('aside button[name="verdict"][value="○"]').first().click();
+  // The middle card (T02) was drafted before the rule existed; give the prefetched T13 time to be rebuilt with it, then ○.
+  await glideTo(p, card.locator('section[aria-label="判定"]'), 800);
+  marks.middle = since();
+  await p.waitForTimeout(9000);
+  await card.locator('label:has(input[value="○"])').click();
+  await card.locator('button:has-text("で記録する")').click();
   const change = card.locator('section[aria-label="変化"]');
-  if (await shown(change, 90000)) {
+  if (await shown(change, 60000)) {
     await glideTo(p, change, 1200);
     await p.waitForTimeout(400);
     marks.t13 = since();
@@ -270,6 +276,10 @@ async function s05TwoPass(
   const t0 = Date.now();
   await ctx.addInitScript(SUBTITLE(cues, at, end, t0, 26));
   await ctx.addInitScript(WIPE(t0));
+  // Kento 11/7: say on screen that the clip is joined (the waiting and the middle card are cut out).
+  await ctx.addInitScript(`window.addEventListener("DOMContentLoaded", () => { const d = document.createElement("div"); d.textContent = "（待ち時間と、間の1件を詰めています）";
+    d.style.cssText = "position:fixed;top:14px;right:18px;padding:4px 10px;background:rgba(243,242,238,.92);border:1px solid #c9c6bd;border-radius:3px;font:500 15px/1.5 'Hiragino Sans',sans-serif;color:#555b63;z-index:2147483645";
+    document.body.appendChild(d); });`);
   const pp = await ctx.newPage();
   await pp.goto("file://" + html);
   await pp.waitForTimeout(Math.max(0, total * 1000 - (Date.now() - t0)));
