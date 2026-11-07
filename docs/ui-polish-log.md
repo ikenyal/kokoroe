@@ -2194,3 +2194,8 @@ evaluation reads are unchanged.
 - Claude Security の Scan codebase（全体）: 検証を通った指摘 0 件（候補4件は 3対0 で退けた）。要約は `docs/audits/claude-security-2026-11-07.md`、元の出力は手元だけ（`.gitignore`）。直したものなし。
 - `docs/submission-draft.md`: 7 を最終の題名・説明文に。末尾に「貼る用」（フォームの順、字数つき、審査用のコードの欄は【Kento が手で入れる】）。
 - `docs/final-day.md`: 提出の直前に Kento が手でやる確かめ（8項目）。
+
+## 11/7 審査用のコードの言葉（Kento）
+
+- 「枠」をやめ、「AI が案を作る1日の上限が審査員用になる」「画面と動きとデータは同じ」「データはブラウザごと」に。直した場所: 最初の画面のヒントと「審査用のコード」の説明・受け付けたあとの一行（`app/page.tsx`・`app/judge-form.tsx`）、共通の上限に達したときの審査員向けの一言（`app/limit-note.tsx`）、README（日英）、提出の下書きの審査員の欄。動きは変えていない（文言だけ。テストは文言を見ていないので変更なし）。
+- 動画には映らない（審査用のコードは撮影で設定していない）。画面写真: `docs/screens/judge-copy/`（手元の 127.0.0.1、使い捨てのテスト用コード）。
