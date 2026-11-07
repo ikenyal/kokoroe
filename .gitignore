@@ -40,3 +40,6 @@ npm-debug.log*
 
 # rendered video (large binaries)
 video/out/
+
+# Claude Security scan output (local only; a summary goes to docs/audits/)
+CLAUDE-SECURITY-*/
