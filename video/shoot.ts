@@ -61,7 +61,9 @@ async function main() {
     HOSTNAME: "127.0.0.1",
     PORT: String(PORT),
     KOKOROE_DATA_DIR: dataDir,
-    KOKOROE_VIDEO_QUEUE: "T05,T13",
+    // Live: one card (T02, another client) between T05 and T13, so T13 is drafted after the reading is written (11/7: the next
+    // card is drafted at once after △, before the reading; s05 cuts the middle card out and says so on screen).
+    KOKOROE_VIDEO_QUEUE: values.live ? "T05,T02,T13" : "T05,T13",
     ...(values.live ? { KOKOROE_LIVE: "1", ANTHROPIC_API_KEY: keyFromEnvLocal() } : {}),
   };
   const server = spawn("node", ["server.js"], { cwd: path.join(ROOT, ".image"), env, stdio: ["ignore", "ignore", "inherit"] });
