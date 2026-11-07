@@ -10,15 +10,15 @@ import path from "node:path";
 import { chromium } from "playwright";
 
 const DIR = __dirname;
-const plan = JSON.parse(readFileSync(path.join(DIR, "scenes.json"), "utf8")) as { scenes: { id: string; kind: string; narration: string; overlaySubtitles?: { sentence: number }[]; overlayTag?: { text: string } }[] };
+const plan = JSON.parse(readFileSync(path.join(DIR, "scenes.json"), "utf8")) as { scenes: { id: string; kind: string; narration: string; overlaySubtitles?: { sentence: number }[]; subtitlePatches?: { sentence: number }[]; overlayTag?: { text: string } }[] };
 
 (async () => {
   const browser = await chromium.launch();
-  for (const s of plan.scenes.filter((x) => x.overlaySubtitles?.length)) {
+  for (const s of plan.scenes.filter((x) => x.overlaySubtitles?.length || x.subtitlePatches?.length)) {
     const cues = s.narration.split(/(?<=。)/).map((x) => x.trim()).filter(Boolean);
     const px = s.kind === "screen" ? 31 : 26;
     const vp = s.kind === "screen" ? { width: 1536, height: 864 } : { width: 1280, height: 720 };
-    for (const o of s.overlaySubtitles!) {
+    for (const o of [...(s.overlaySubtitles ?? []), ...(s.subtitlePatches ?? [])]) {
       const page = await browser.newPage({ viewport: vp });
       await page.setContent(`<html><body style="margin:0;background:transparent"><div style="position:fixed;left:0;right:0;margin:0 auto;width:fit-content;bottom:${Math.round(px * 1.08)}px;max-width:${Math.round(px * 42)}px;padding:${Math.round(px * 0.3)}px ${Math.round(px * 0.85)}px;background:rgba(31,35,40,.82);color:#f3f2ee;font:500 ${px}px/1.6 'Hiragino Sans','Yu Gothic',sans-serif;border-radius:4px;text-align:center">${cues[o.sentence]}</div></body></html>`);
       const raw = path.join(DIR, "out", `${s.id}-sub${o.sentence}-raw.png`);

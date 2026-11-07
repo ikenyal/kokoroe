@@ -11,6 +11,7 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { cueWindows, sentenceSpans } from "./timing";
 import { parseArgs } from "node:util";
 import { chromium, type Locator, type Page } from "playwright";
 import { VOICE, loadPlan } from "./narration";
@@ -26,25 +27,28 @@ const mcpAnswers = readFileSync(path.join(ROOT, "demo/successor-mcp/answers.json
 /** Screen scenes start a デモの続き session, except s05 (お試し, the T05 → T13 queue). */
 const START: Record<string, "demo" | "trial"> = { "s05-choba": "trial" };
 
-/** Cue start times (s, from the clip's start): Polly's sentence marks + lead, or a share proportional to sentence length. */
-function cueTimes(id: string, cues: string[], seconds: number): { at: number[]; end: number } {
-  if (!cues.length) return { at: [], end: seconds }; // no subtitle (text-led cards: the words are on screen)
-  const marks = path.join(__dirname, "out", "audio", VOICE.id, `${id}.marks.json`);
-  if (existsSync(marks)) {
-    const m = JSON.parse(readFileSync(marks, "utf8")) as { seconds: number; sentences: number[] };
-    if (m.sentences.length === cues.length) return { at: m.sentences.map((t) => LEAD + t / 1000), end: Math.min(seconds - 0.05, LEAD + m.seconds + 0.3) };
-    console.warn(`  ${id}: ${m.sentences.length} sentence marks for ${cues.length} subtitle lines — timing by length instead`);
+/** Cue on/off times (s, from the clip's start). With narration: from where each sentence really sounds (video/timing.ts —
+ *  measured from the audio; Polly's marks alone could be a second early), shown 0.05 s before the voice and hidden 0.3 s after
+ *  it (Kento 11/7). Without: a share proportional to sentence length. */
+function cueTimes(id: string, cues: string[], seconds: number): { at: number[]; until: number[]; end: number } {
+  if (!cues.length) return { at: [], until: [], end: seconds }; // no subtitle (text-led cards: the words are on screen)
+  const spans = sentenceSpans(id, VOICE.id);
+  if (spans && spans.length === cues.length) {
+    const { at, until } = cueWindows(spans, LEAD, seconds);
+    return { at, until, end: until.at(-1)! };
   }
+  if (spans) console.warn(`  ${id}: ${spans.length} spoken sentences for ${cues.length} subtitle lines — timing by length instead`);
   const total = cues.reduce((n, c) => n + c.length, 0);
-  let at = 0;
-  return { at: cues.map((c) => { const t = at; at += (seconds * c.length) / total; return t; }), end: seconds };
+  let t = 0;
+  const at = cues.map((c) => { const x = t; t += (seconds * c.length) / total; return x; });
+  return { at, until: at.slice(1).concat(seconds), end: seconds };
 }
 
 /** Subtitle overlay: one sentence at a time. Times are relative to the clip's start (t0, ms since epoch), so a page load
  *  in the middle of a scene picks up the current line instead of starting over. */
-const SUBTITLE = (cues: string[], at: number[], end: number, t0: number, px: number) => `
+const SUBTITLE = (cues: string[], at: number[], until: number[], t0: number, px: number) => `
   window.addEventListener("DOMContentLoaded", () => {
-    const cues = ${JSON.stringify(cues)}, at = ${JSON.stringify(at)};
+    const cues = ${JSON.stringify(cues)}, at = ${JSON.stringify(at)}, until = ${JSON.stringify(until)};
     if (!cues.length) return;
     const el = document.createElement("div");
     // Centered with margin:auto (not left:50% + translate, which caps the box at half the width and wraps short lines).
@@ -56,8 +60,10 @@ const SUBTITLE = (cues: string[], at: number[], end: number, t0: number, px: num
     const now = () => Date.now() - ${t0};
     const show = (t) => { el.textContent = t; el.style.visibility = t ? "visible" : "hidden"; };
     show("");
-    cues.forEach((c, i) => setTimeout(() => show(c), Math.max(0, at[i] * 1000 - now())));
-    setTimeout(() => show(""), Math.max(0, ${end} * 1000 - now()));
+    cues.forEach((c, i) => {
+      setTimeout(() => show(c), Math.max(0, at[i] * 1000 - now()));
+      setTimeout(() => { if (el.textContent === c) show(""); }, Math.max(0, until[i] * 1000 - now())); // only its own line
+    });
   });`;
 
 /** Chapter break (scenes.json "wipe": "noren", used three times only): the scene opens behind a noren — four 藍 flaps on a bar,
@@ -206,7 +212,7 @@ const STEPS: Record<string, (p: Page, base: string, live: boolean) => Promise<vo
 async function s05TwoPass(
   browser: import("playwright").Browser, s: { id: string; page: string; seconds: number }, base: string,
   storageState: Awaited<ReturnType<import("playwright").BrowserContext["storageState"]>> | undefined,
-  viewport: { width: number; height: number }, cues: string[], at: number[], end: number, recut?: Record<string, number>,
+  viewport: { width: number; height: number }, cues: string[], at: number[], until: number[], recut?: Record<string, number>,
 ) {
   // --recut-s05 (11/7, after Kento's full watch): skip pass 1 and cut the live take already recorded (s05-raw.webm) with its
   // logged step times — the narration changed, the live footage does not.
@@ -285,7 +291,7 @@ async function s05TwoPass(
   writeFileSync(html, `<!doctype html><html><body style="margin:0;background:#f3f2ee"><video src="s05-edit.mp4" autoplay muted playsinline style="display:block;width:1280px;height:720px"></video></body></html>`);
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 }, locale: "ja-JP", recordVideo: { dir: OUT, size: { width: 1280, height: 720 } } });
   const t0 = Date.now();
-  await ctx.addInitScript(SUBTITLE(cues, at, end, t0, 26));
+  await ctx.addInitScript(SUBTITLE(cues, at, until, t0, 26));
   await ctx.addInitScript(WIPE(t0));
   // Kento 11/7: say on screen that the clip is joined (the waiting and the middle card are cut out).
   await ctx.addInitScript(`window.addEventListener("DOMContentLoaded", () => { const d = document.createElement("div"); d.textContent = "（待ち時間と、別の取引先の1件を省いています）";
@@ -306,7 +312,7 @@ async function s05TwoPass(
   for (const s of plan.scenes.filter((x) => !only || only.includes(x.id))) {
     const subtitle = s.subtitle === false || s.narration.startsWith("（") ? "" : s.narration; // （…） = placeholder; text-led cards have none
     const cues = subtitle.split(/(?<=。)/).map((x) => x.trim()).filter(Boolean);
-    const { at, end } = cueTimes(s.id, cues, s.seconds);
+    const { at, until } = cueTimes(s.id, cues, s.seconds);
     // Screen scenes: a slightly larger viewport scaled down to 1280×720, so a whole 帳場 card fits.
     const viewport = s.kind === "screen" ? { width: 1536, height: 864 } : { width: 1280, height: 720 };
     // Screen scenes: start the session off camera and carry its cookie into the recorded context.
@@ -322,7 +328,7 @@ async function s05TwoPass(
     }
     if (s.id === "s05-choba" && (values.live || values["recut-s05"])) {
       const recut = values["recut-s05"] ? (JSON.parse(values["recut-s05"]) as Record<string, number>) : undefined;
-      await s05TwoPass(browser, s, values.base!, storageState, viewport, cues, at, end, recut);
+      await s05TwoPass(browser, s, values.base!, storageState, viewport, cues, at, until, recut);
       console.log(`${s.id}: ${s.seconds}s recorded (live, cut)`);
       continue;
     }
@@ -333,7 +339,7 @@ async function s05TwoPass(
     await ctx.addInitScript(`window.RESULTS = ${results}; window.MCP = ${mcpAnswers};`);
     const t0 = Date.now();
     // Screen scenes are recorded at 1536 px and scaled to 1280, so their subtitles are drawn larger to look the same.
-    await ctx.addInitScript(SUBTITLE(cues, at, end, t0, s.kind === "screen" ? 31 : 26));
+    await ctx.addInitScript(SUBTITLE(cues, at, until, t0, s.kind === "screen" ? 31 : 26));
     // s08b always says the numbers are fictional and the master is the simulator (judge-critic 11/6: "114 taps" otherwise reads as a
     // person); while the numbers are interim it says that too.
     if (s.id === "s08b-keiko") {

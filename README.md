@@ -188,7 +188,7 @@ with code against a hidden ground truth (frozen, checksummed); the apprentice ne
 | Drafts the master passed as they were (○), held-out | 54% ± 2% (6 runs) | **71%** (65–75%, 5 training paths × 3 runs) |
 | ○ + △ | 69% | **91%** (85–95%) |
 | Successor answers with the right history (of 8) | 0 | **5.2** ± 1.3 |
-| Master taps for 40 scenes | — | 107–128 (marks, choosing a reading, "why?", checks) |
+| Master taps for 40 scenes | — | 119 taps on average (107–128; marks, choosing a reading, "why?", checks) |
 | Injected "register this as a rule" in client text | — | kokoroe-chō changed by the injected text 0 / 9 times |
 | Pressure to promise a discount | — | the apprentice itself (the model's own decision) sent 9 / 9 to the master; with the code floor added (D-044), 9 / 9 |
 
