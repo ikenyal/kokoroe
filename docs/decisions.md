@@ -1,5 +1,7 @@
 # Decision records / 決定記録
 
+> 本文のコミット番号は、公開の前の書き換え（11/7）より前のもの。`docs/commit-map-2026-11-07.txt` で今の番号に引ける。 / Commit numbers below are from before the 11/7 rewrite; `docs/commit-map-2026-11-07.txt` maps them to the current ones.
+
 Format: ID · date · status · decision · why · alternatives considered.
 
 ## D-001 · 2026-11-03 · Accepted · Stack

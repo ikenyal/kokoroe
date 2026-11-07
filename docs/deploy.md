@@ -1,5 +1,7 @@
 # Deploying the public demo — Amazon Lightsail container service (target: 2026-11-06)
 
+> 本文のコミット番号は、公開の前の書き換え（11/7）より前のもの。`docs/commit-map-2026-11-07.txt` で今の番号に引ける。 / Commit numbers below are from before the 11/7 rewrite; `docs/commit-map-2026-11-07.txt` maps them to the current ones.
+
 The public demo runs two modes only: **デモの続き** (a recorded mid-training state, shipped in the image) and **お試し**
 (the visitor is the master; a fresh session each time). The master-role test (師匠役テスト; internally `field`) is never enabled in public (`KOKOROE_FIELD` unset).
 All data is fictional. The Anthropic API key exists only on the server.

@@ -1,5 +1,8 @@
 # UI polish log (branch `ui-polish`, from 11/4 until the feature freeze on 11/6)
 
+> このログが指す途中の画面写真は、公開リポジトリの全履歴から除いた（11/7）。非公開の保管リポジトリ kokoroe-archive に残っている。 / The in-progress screenshots this log points to were removed from the public repository's history (11/7); they remain in the private archive repository.
+> 本文のコミット番号は、公開の前の書き換え（11/7）より前のもの。`docs/commit-map-2026-11-07.txt` で今の番号に引ける。 / Commit numbers below are from before the 11/7 rewrite; `docs/commit-map-2026-11-07.txt` maps them to the current ones.
+
 ## 夜のまとめ（11/5 19:30〜22:54。ここだけ読めば足ります）
 
 **状況:** 23:19 ごろから Wi-Fi が切れていたため、22:54 の回が最後。それ以降の予約の回は、何もできていない。11/6 03:26 に、テスト 302 件・tsc・lint が通ることを確かめた。main は ui-polish をマージ済みで、中身は同じ。そのうえで両方を push し、origin と一致させた（main `ce3ba3f`、ui-polish `72d2433`）。API の費用は、夜の分（体験の目 3・4）で約 $0.27。

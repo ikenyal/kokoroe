@@ -1,5 +1,7 @@
 # Claude Security の点検（2026-11-07）
 
+> 本文のコミット番号は、公開の前の書き換え（11/7）より前のもの。`docs/commit-map-2026-11-07.txt` で今の番号に引ける。 / Commit numbers below are from before the 11/7 rewrite; `docs/commit-map-2026-11-07.txt` maps them to the current ones.
+
 - **何をしたか:** Claude Security（Claude Code のプラグイン、0.12.0）の Scan codebase を、作業ツリー全体に対して1回走らせた。対象は main の `0121ea9`、強さ medium、攻撃面（外から届く本番のコード）に重点。コードは読んだだけで、実行も攻撃の試しもしていない。
 - **結果: 検証を通った指摘は 0 件**（「走らせていない」ではなく、走らせて 0 件）。候補は4件あり、3人の検証役（届くか・害があるか・守りがあるか）が4件とも 3対0 で「誤検知」とした。
 - **元の出力:** `CLAUDE-SECURITY-<日時>/`（結果の本文・JSONL・SARIF・版の記録）は手元だけに置き、公開リポジトリには入れない（`.gitignore`）。出力の中の秘密の値を伏せる工程も走らせ、伏せるものは 0 件だった。
