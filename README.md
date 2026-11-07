@@ -357,6 +357,19 @@ screening or design review. A general-purpose 帳場 is a possible next step, no
   discounts and contracts still always go to the master, in code. Trust ranks wait for real use, where the same kind of situation
   comes back often enough to measure.
 
+## If a company really adopted it
+
+**Why the public demo has no login:** judges can try it at once; it only handles fictional data; and the marks and the 心得帳 you
+grow are kept per browser and deleted after 24 hours (or when you start over).
+
+**What adoption would need — none of this is built:**
+- an account per company and a login;
+- roles kept apart: the master (marks and corrects), the successor (asks), an administrator (members, export, deletion);
+- where the 心得帳 is kept and how it is exported and backed up. Today it is a local JSON file on the server, or an Anthropic
+  memory store behind a flag (D-002); the Agent Skill export (`SKILL.md`) exists.
+
+「自分の会社で始める」 (own mode) exists today only on your own machine (127.0.0.1); it is not offered on the public demo.
+
 ## Related work
 Learning from human corrections and widening autonomy step by step is not new. *The Digital Apprentice* (Weber and Taneja, arXiv
 2606.04321) turns a professional's corrections into preference data and lets an agent earn autonomy per skill; *Seedentia* (Wolter
