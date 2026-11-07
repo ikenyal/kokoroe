@@ -110,7 +110,7 @@ const OWN_SCREEN = (text: string) => `
   });`;
 const TAGS: Record<string, string> = {
   // The second part (judge-critic 11/6): the recorded answer's 浜風運輸 wording differs from the 心得帳 shown just before in s06.
-  "s07-noren": "ココロエの画面（自作）\n後任への答えは、\nClaude が心得帳だけを\n根拠に書いています",
+  "s07-noren": "ココロエのアプリの画面\n後任への答えは、\nClaude が心得帳だけを\n根拠に書いています",
 };
 
 /** Scroll the page slowly (ease in and out, `ms` long) so that the element sits in the lower middle of the screen. Playwright's
