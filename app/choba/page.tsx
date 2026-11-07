@@ -126,7 +126,7 @@ function EffectView({ effect, client, draft, words, ruleHref, recorded }: { effe
           <>
             {point && (
               <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 border-y border-keisen py-3">
-                <dt className="whitespace-nowrap text-[13px] text-sumi">{({ 何で: "何で（手段）", いつ: "いつ（時期）" } as Record<string, string>)[point.label] ?? point.label}</dt>
+                <dt className="whitespace-nowrap text-[13px] text-sumi">変わったのは「{point.label}」</dt>
                 <dd className="grid gap-1">
                   <span className="text-[12.5px] text-sumi/75">
                     {/* Always another scene (ruleEffect skips the corrected one): say so, so it does not read as the wrong scene (ui-critic 11/5). */}
