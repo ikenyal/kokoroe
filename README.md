@@ -299,6 +299,9 @@ has one GitHub noreply author; I made this work alone) and part of some diffs. T
 kept, except for what was removed; checked against the pre-rewrite backup, one commit that the removal left empty was dropped (its
 change is in the next commit) and one commit message lost the removed word
 ([D-047](docs/decisions.md), [docs/audits/2026-11-03.md](docs/audits/2026-11-03.md), [docs/publishing.md](docs/publishing.md)).
+Before publishing (11/7), the in-progress screenshots (about 1,100 images, about 1.1 GB, mostly repeated review shots) were removed
+from the whole history; the screenshots kept are only those linked from the README and the records. Commit numbers in the records
+are from before that rewrite; [docs/commit-map-2026-11-07.txt](docs/commit-map-2026-11-07.txt) maps them to the current ones.
 
 - **Evaluation first.** Day 1 began with a machine-checkable master simulator, a frozen hidden ground truth (a hook blocks edits,
   a test checks checksums), and a test that product code never reads it.

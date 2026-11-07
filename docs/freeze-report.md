@@ -1,5 +1,7 @@
 # 凍結の報告（最終版、11/7 07:00）
 
+> 本文のコミット番号は、公開の前の書き換え（11/7）より前のもの。`docs/commit-map-2026-11-07.txt` で今の番号に引ける。 / Commit numbers below are from before the 11/7 rewrite; `docs/commit-map-2026-11-07.txt` maps them to the current ones.
+
 凍結は 11/7 07:00（Kento 11/6 18:00 の決まり）。ここから新しい改良は始めない。下の 0 が最終の要点で、そのあとの節は、11/6 19:00 からの中間版の記録（追記のたびに足したもの）。
 
 ## 最終の要点（11/7 07:00）
