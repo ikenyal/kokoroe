@@ -74,7 +74,7 @@
     {
       "id": "s04b-flow",
       "kind": "anim",
-      "seconds": 10.5,
+      "seconds": 10.7,
       "page": "video/scenes/s04b-flow.html",
       "part": "4 解決とタイトル（流れ）",
       "narration": "師匠は、○△×と、あれば一言だけ。その一つ一つが心得になり、経緯ごと、心得帳に綴られます。",
@@ -83,19 +83,13 @@
     {
       "id": "s05-choba",
       "kind": "screen",
-      "seconds": 29.0,
+      "seconds": 28.85,
       "page": "/choba",
       "part": "5 帳場",
       "action": "お試し with KOKOROE_VIDEO_QUEUE=T05,T13: T05 △ + remark → (live) reading chosen → 確かめ ○ → T13 draft now has the quiet word to the 蔵元. Kento 11/6 item 24: +6.7 s from s01/s02, spent holding on the right column (the apprentice's reading and 「心得帳に書きました」) before scrolling to T13; final seconds set on 11/7 from the live take",
       "narration": "丸新酒造への、新しい提案です。弟子は、窓口の奥様にだけ送る案を出しました。師匠は、△。師匠の一言は、裏で蔵元へ、そっと一言。冒頭の手紙の、最後の1行です。弟子はその一言を読み取り、心得帳に書きました。次の根回しの場面では、弟子が自分から、それを添えるようになりました。",
       "pauseMs": 300,
-      "wipe": "noren",
-      "accents": [
-        [
-          "弟子は",
-          "デシ'ワ"
-        ]
-      ]
+      "wipe": "noren"
     },
     {
       "id": "s06-kokoroe",
@@ -106,13 +100,7 @@
       "action": "open a rule's 沿革 and sources",
       "narration": "覚えた作法は、理由と、どの直しから来たかまで、心得帳に残ります。師匠は、いつでも読めて、消せます。",
       "pauseMs": 300,
-      "after": 0.6,
-      "accents": [
-        [
-          "心得帳に",
-          "ココロエチョーニ"
-        ]
-      ]
+      "after": 0.6
     },
     {
       "id": "s06b-ask",
@@ -140,7 +128,7 @@
     {
       "id": "s07b-mcp",
       "kind": "anim",
-      "seconds": 8.1,
+      "seconds": 7.85,
       "page": "video/scenes/s07b-mcp.html",
       "part": "7 暖簾を継ぐ（Skill／MCP）",
       "narration": "心得帳は、手元のClaudeにも渡せます。育ち続ける心得帳に、問い合わせることもできます。",
@@ -149,7 +137,7 @@
     {
       "id": "s07c-ask",
       "kind": "anim",
-      "seconds": 3.85,
+      "seconds": 4.2,
       "page": "video/scenes/ask.html#why",
       "part": "引き（なぜ効くかの前）",
       "subtitle": false,
@@ -167,7 +155,7 @@
     {
       "id": "s08b-keiko",
       "kind": "screen",
-      "seconds": 13.6,
+      "seconds": 13.45,
       "page": "/keiko",
       "part": "8 なぜ効くか（数字）",
       "action": "稽古の記録: Before/After (reads data/demo/results.json; interim until 11/7)",

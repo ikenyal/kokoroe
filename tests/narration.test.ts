@@ -14,7 +14,8 @@ describe("narration SSML (Takumi, 105%, accents; decided 11/4)", () => {
   });
   it("uses Kento's 11/7 picks: yomigana where Polly's own accent was chosen, and speaks 弟子は without the pause", () => {
     expect(toSsml("取引先とClaude")).toBe('<speak><prosody rate="105%"><phoneme alphabet="x-amazon-yomigana" ph="とりひきさき">取引先</phoneme>と<phoneme alphabet="x-amazon-yomigana" ph="くろーど">Claude</phoneme></prosody></speak>');
-    expect(toSsml("弟子は、窓口へ")).toContain('ph="デシ">弟子</phoneme>は窓口へ');
+    expect(toSsml("弟子は、窓口へ")).toContain(`ph="デシ'ワ">弟子は</phoneme>窓口へ`);
+    expect(toSsml("心得帳に残る")).toContain('ph="ココロエチョーニ">心得帳に</phoneme>');
     expect(toSsml("三十年分の作法")).toContain(`ph="サンジューネンブンノサ'ホー">三十年分の作法</phoneme>`);
   });
   it("wraps whole sentences in one prosody and pauses between sentences only", () => {
