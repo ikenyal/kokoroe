@@ -24,6 +24,15 @@
           "sentence": 2,
           "sec": 0.45
         }
+      ],
+      "shift": 0.71,
+      "subtitlePatches": [
+        {
+          "sentence": 0,
+          "from": 0.28,
+          "to": 0.77,
+          "why": "the recording started 0.7 s late, so the first line's first moments are not in the clip"
+        }
       ]
     },
     {
@@ -35,7 +44,16 @@
       "source": "帝国データバンク「全国『後継者不在率』動向調査（2025年）」調査対象の中小企業のうち51.2%／総務省統計局「労働力調査（詳細集計）2025年平均結果」転職者数330万人（https://www.stat.go.jp/data/roudou/sokuhou/nen/dt/index.html）",
       "narration": "中小企業の半数あまりで、跡継ぎが決まっていません。仕事を変える人は、一年に三百三十万人。頭の中にしかない知恵を、いま、渡せる形に。",
       "pauseMs": 300,
-      "after": 0.5
+      "after": 0.5,
+      "shift": 0.27,
+      "subtitlePatches": [
+        {
+          "sentence": 2,
+          "from": 12.74,
+          "to": 13.17,
+          "why": "the voice ends at the scene's end; the line stays 0.3 s after it, over the held last frame"
+        }
+      ]
     },
     {
       "id": "s02-problem",
@@ -51,7 +69,8 @@
           "sentence": 1,
           "sec": 0.45
         }
-      ]
+      ],
+      "shift": 0.29
     },
     {
       "id": "s03-head",
@@ -59,7 +78,8 @@
       "seconds": 3.7,
       "page": "video/scenes/s03-head.html",
       "part": "3 なぜ残らないか",
-      "narration": "書いて残して、と頼んでも、言葉にはなりません。"
+      "narration": "書いて残して、と頼んでも、言葉にはなりません。",
+      "shift": 0.25
     },
     {
       "id": "s04-title",
@@ -69,7 +89,8 @@
       "part": "4 解決とタイトル",
       "narration": "でも、案を見せれば、ベテランは「違う」と言えます。ココロエは、その「違う」を集める、AIの弟子です。",
       "pauseMs": 300,
-      "wipe": "noren"
+      "wipe": "noren",
+      "shift": 0.02
     },
     {
       "id": "s04b-flow",
@@ -78,7 +99,8 @@
       "page": "video/scenes/s04b-flow.html",
       "part": "4 解決とタイトル（流れ）",
       "narration": "師匠は、○△×と、あれば一言だけ。その一つ一つが心得になり、経緯ごと、心得帳に綴られます。",
-      "pauseMs": 300
+      "pauseMs": 300,
+      "shift": 0.32
     },
     {
       "id": "s05-choba",
@@ -89,7 +111,8 @@
       "action": "お試し with KOKOROE_VIDEO_QUEUE=T05,T13: T05 △ + remark → (live) reading chosen → 確かめ ○ → T13 draft now has the quiet word to the 蔵元. Kento 11/6 item 24: +6.7 s from s01/s02, spent holding on the right column (the apprentice's reading and 「心得帳に書きました」) before scrolling to T13; final seconds set on 11/7 from the live take",
       "narration": "丸新酒造への、新しい提案です。弟子は、窓口の奥様にだけ送る案を出しました。師匠は、△。師匠の一言は、裏で蔵元へ、そっと一言。冒頭の手紙の、最後の1行です。弟子はその一言を読み取り、心得帳に書きました。次の根回しの場面では、弟子が自分から、それを添えるようになりました。",
       "pauseMs": 300,
-      "wipe": "noren"
+      "wipe": "noren",
+      "shift": 0.04
     },
     {
       "id": "s06-kokoroe",
@@ -100,7 +123,8 @@
       "action": "open a rule's 沿革 and sources",
       "narration": "覚えた作法は、理由と、どの直しから来たかまで、心得帳に残ります。師匠は、いつでも読めて、消せます。",
       "pauseMs": 300,
-      "after": 0.5
+      "after": 0.5,
+      "shift": 0.17
     },
     {
       "id": "s06b-ask",
@@ -134,7 +158,8 @@
           "h": 206,
           "fromY": 340
         }
-      }
+      },
+      "shift": 0.18
     },
     {
       "id": "s07b-mcp",
@@ -144,7 +169,8 @@
       "part": "7 暖簾を継ぐ（Skill／MCP）",
       "narration": "心得帳は、手元のClaudeにも渡せます。育ち続ける心得帳に、問い合わせることもできます。",
       "note": "answers from demo/successor-mcp/answers.json (record-answers.sh, empty dirs outside the repo)",
-      "after": 0.45
+      "after": 0.45,
+      "shift": 0.05
     },
     {
       "id": "s07c-ask",
@@ -162,18 +188,20 @@
       "page": "video/scenes/s08-pile.html",
       "part": "8 なぜ効くか",
       "narration": "AIが出すのは、平均的な答えです。ベテランの知恵は、その平均との、ずれにあります。だから、ずれだけを集めればいい。",
-      "pauseMs": 300
+      "pauseMs": 300,
+      "shift": 0.1
     },
     {
       "id": "s08b-keiko",
       "kind": "screen",
-      "seconds": 14.05,
+      "seconds": 14.1,
       "page": "/keiko",
       "part": "8 なぜ効くか（数字）",
       "action": "稽古の記録: Before/After (reads data/demo/results.json; interim until 11/7)",
-      "narration": "{interim}架空の10社で、師匠がそのまま通した案は、学ぶ前は{before}%。シミュレータの師匠が、印や選択肢を約{taps}回押すだけで、平均{after}%に。",
+      "narration": "{interim}架空の10社で、師匠がそのまま通した案は、学ぶ前は{before}%。シミュレータの師匠が、印や選択肢を平均{taps}回押すだけで、平均{after}%に。",
       "pauseMs": 300,
-      "after": 0.45
+      "after": 0.45,
+      "shift": 0.2
     },
     {
       "id": "s09-edo",
@@ -182,17 +210,19 @@
       "page": "video/scenes/s09-edo.html",
       "part": "9 締め",
       "narration": "江戸の商人は、火事のとき、品物より先に、帳面を守ったと伝えられています。",
-      "wipe": "noren"
+      "wipe": "noren",
+      "shift": -0.03
     },
     {
       "id": "s09b-end",
       "kind": "anim",
-      "seconds": 10.9,
+      "seconds": 10.85,
       "page": "video/scenes/s09b-end.html",
       "part": "9 締め（エンドカード）",
       "narration": "守るべき帳面は、いま、人の頭の中に。ココロエ。直すだけで、心得は次の代へ。",
       "pauseMs": 300,
-      "fadeOut": 1
+      "fadeOut": 1,
+      "shift": 0.01
     }
   ],
   "gap": 0.25,

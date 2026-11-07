@@ -19,7 +19,7 @@ export default function KeikoPage() {
       <h1 className="font-mincho text-[24px] tracking-[0.06em]">稽古の記録</h1>
       {/* What changed, and by how much, in one sentence — the same numbers as the table below (results.json). */}
       <p className="yomi mt-3 max-w-[40em] font-mincho text-[19px] leading-relaxed sm:text-[21px]">
-        {results.official ? "" : "途中経過では、"}師匠が{paths ? `約${paths.taps}回` : `${end.taps}回`}、印や選択肢を押して直すと、師匠がそのまま通した（○）案は
+        {results.official ? "" : "途中経過では、"}師匠が{paths ? `平均${paths.taps}回` : `${end.taps}回`}、印や選択肢を押して直すと、師匠がそのまま通した（○）案は
         <span className="tabular-nums">{pct(results.before.match)}</span>から
         <span className="whitespace-nowrap">{paths && "平均"}<span className="tabular-nums text-ai">{paths ? pct(paths.mean) : pct(end.match)}</span>{paths && <span className="tabular-nums">（{pct(paths.min)}〜{pct(paths.max)}）</span>}に、</span><span className="whitespace-nowrap">後任が</span>経緯ごと答えられた質問は8問中
         <span className="tabular-nums">{hist[0].mean.toFixed(0)}</span>問から平均
@@ -79,7 +79,7 @@ export default function KeikoPage() {
           </tbody>
         </table>
         <p className="mt-2 text-[13px] text-nibi">
-          師匠の手間は、40場面で{paths ? ` 約 ${paths.taps} 回` : ` ${end.taps} 回`}のタップ（印・候補の選択・「なぜ？」・確かめの合計）。
+          師匠の手間は、40場面で{paths ? ` 平均 ${paths.taps} 回` : ` ${end.taps} 回`}のタップ（印・候補の選択・「なぜ？」・確かめの合計）。
         </p>
       </section>
 
