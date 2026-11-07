@@ -19,9 +19,9 @@ const range = (xs: number[]) => ({ mean: mean(xs), min: Math.min(...xs), max: Ma
 /** Development history (interim versions of the loop), shown as grey curves on the 稽古の記録 screen. */
 const CURVES: { file: string; key: string; label: string; note: string }[] = [
   { file: "2026-11-02T20-21-47-985Z-curve.json", key: "v1", label: "1回目", note: "最初の学習ループ" },
-  { file: "2026-11-02T20-48-24-850Z-curve.json", key: "v2", label: "2回目", note: "確かめ稽古と回帰テスト" },
-  { file: "2026-11-02T21-06-39-884Z-curve.json", key: "v3", label: "3回目", note: "台帳の心得を弟子にも見せた" },
-  { file: "2026-11-02T21-36-30-068Z-curve.json", key: "v4", label: "4回目", note: "台帳は心得帳のみ＋一般化" },
+  { file: "2026-11-02T20-48-24-850Z-curve.json", key: "v2", label: "2回目", note: "直した場面の解き直しを足した" },
+  { file: "2026-11-02T21-06-39-884Z-curve.json", key: "v3", label: "3回目", note: "台帳の事実も弟子に見せた" },
+  { file: "2026-11-02T21-36-30-068Z-curve.json", key: "v4", label: "4回目", note: "台帳の事実は心得帳だけに置き、心得を広く使う" },
 ];
 type Point = { trainedScenes: number; masterTaps: number; match: { mean: number; sd: number }; okOrPartial: { mean: number }; history: { correct: number } };
 

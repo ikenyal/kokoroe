@@ -80,7 +80,7 @@ export default async function Home(props: PageProps<"/">) {
             。上のどのボタンで始めても、最初からやり直しになります。
           </p>
         )}
-        <section aria-labelledby="range-h" className="mt-10 max-w-[32em] border-t-2 border-rule pt-4">
+        <section aria-labelledby="range-h" className="mt-10 max-w-[32em] border-t border-keisen pt-4">
           <h2 id="range-h" className="font-mincho text-[14px] text-sumi">扱う場面は10種類。メールだけではありません</h2>
           {(() => {
             const { shown, rest } = sceneRangeSplit();

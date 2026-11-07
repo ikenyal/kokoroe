@@ -752,6 +752,14 @@ Totals over the 4 stores, as in the table above. History is the mean per store, 
   2/2, 「明示的な制約」 2 → 0, internal labels 1 → 1 (a K-id; the screen shows it as 「心得」). The master-taught rule's date
   (11/3, with its 2019 きっかけ) is still said. `eval:quick` runs the fixed textbook baseline and does not exercise the
   successor (0% / 45%, unchanged from 11/4).
+- **Third addendum (2026-11-07, Kento, after the official run): 「全場面」.** The plain-words list now also says no 「全場面」
+  (say 「どの場面でも」). This came **after** `eval:final`, so the public successor prompt differs from the measured one by this one
+  wording item; the official numbers (Before 54% → After 71%, history 0 → 5.2 / 8) belong to the prompt before it.
+  Checked on 1 store, one run per question, fictional data (`successor-guard-2026-11-07-after-zenbamen-1store.json`, ≈ $0.13):
+  far made-up 0, price → master 2/2, 「全場面」 0, history 5/8 (6 on 11/6), internal labels in 2 answers (a K-id and 「未記入」, both
+  seen before on the same store or question). hitl-reviewer: OK; side effect — 「どの場面でも」 now appears in 3 explanations
+  (accurate for these client-scoped rules), and in Q03 it replaced the words the history check looks for, so that answer scored as
+  history-missing while still answering "no".
 - **Kento's "30 questions not in the book":** the repo has no 30-question set. The check was run on the guard's existing
   not-covered set: 10 questions (6 far, 4 near) × 4 stores. The far ones are the made-up-answer check, and it stays at 0.
 - **Recorded answers are untouched:**
