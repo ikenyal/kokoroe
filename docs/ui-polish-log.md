@@ -2313,3 +2313,9 @@ evaluation reads are unchanged.
 - 提出の下書き 7 の説明文を最新の動画に（「待ち時間と、別の取引先の1件を省いて」「一部は私が短くした」「1:08 ごろ」、尺 177.9 秒）。11 ① の「作者が初見で」→「私が初見で」。貼る文にほかの「作者」はなし。「貼る用」を作り直した（概要 488 字、11 ① 282 字）。貼る用の作り方は `scripts/publish/build-paste.py`（作業用の置き場から移した）。
 - README（日英）の「動かし方」に MCP サーバーを手元の Claude Code で試す手順。11/7 に確かめたこと: リポジトリの外の空のフォルダで `claude mcp add -s project kokoroe -- npm --prefix … run -s mcp:serve -- --store …/living-store.json` が `.mcp.json` を書く、サーバーが MCP の初期化に答えて読み取り専用の4つの道具を返し `list_clients` が動く（手で JSON-RPC を送った。API は使っていない）。質問から答えまでは同じ設定で `claude --mcp-config`（`demo/successor-mcp/run.sh`）。初回の承認の画面は通していない。公開デモに MCP を出さない理由も一言。
 - 動画の URL の差し替え: `scripts/publish/set-youtube-url.py`（README 日英 各2、リリースの本文 1、提出の下書き 7 と貼る用）。写しで試して、全部差し替わり `YOUTUBE_URL` が残らないことを確かめた。
+
+## 11/8 審査用のコードのボタン名と提出の文（Kento）
+
+- 審査用のコードのボタン「確かめる」を「コードを確認」に変えた（`app/judge-form.tsx`）。受け付けたあとの「確認しました。…」、コードが違うときの「コードが違います。…」は、このボタン名と食い違わないので変えていない。README（日英。英語版は「コードを確認」(Check code)）、`docs/final-day.md` の手順、`scripts/experience-run.ts` のボタンの探し方をそろえた。動画には映らない（撮影は `KOKOROE_JUDGE_CODE` を設定しないので欄が出ない）。画面写真 `docs/screens/judge-copy/` を撮り直した（手元の 127.0.0.1、使い捨てのテスト用コード）。
+- 提出の下書きを Kento の校正版（11/8）にそろえた。フォームの実物は13欄（10 は、9 に文字を入れると開く4つの欄）。9 と 12 は長い版（1,195字・2,624字、上限3,000字）。`scripts/publish/build-paste.py` が13欄の「貼る用」を作り、校正版と1行も違わないことを確かめた。5 の「架空の10社で」に合わせ、`tests/submission-draft.test.ts` は「架空の」で数字の断りを確かめる形にした。
+- README を提出の文にそろえた: 後任の答えは「心得帳だけを根拠に」→「心得帳を元に」（英語も "grounded only in" → "based on"。答えは取引先台帳の事実も使うので、こちらが正確）、フックの一文は「指示を忘れても効きます」→「必ず守られます」。

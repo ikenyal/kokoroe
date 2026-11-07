@@ -109,7 +109,7 @@ daily plans; the 心得帳 grows as a by-product of that work. To start with you
   - *An earlier ○ scene now gets △/×:* the rule is narrowed once; if it still breaks, it is rolled back (差し戻し), also recorded.
   - In the training loop, habits seen at several clients are also proposed as company-wide rules for the master to confirm
     (not yet in the 帳場).
-- **The successor inherits it.** 暖簾を継ぐ: the successor asks "can I skip this?" and gets an answer grounded only in the kokoroe-chō,
+- **The successor inherits it.** 暖簾を継ぐ: the successor asks "can I skip this?" and gets an answer based on the kokoroe-chō,
   with the rule and its history — or "not recorded; ask the master". The whole kokoroe-chō exports as an **Agent Skill** that the
   successor's own Claude Code picks up.
 - **Visits, too (app only).** When the plan visits the client in person, the apprentice also writes the visit plan: what to wear
@@ -142,7 +142,7 @@ daily plans; the 心得帳 grows as a by-product of that work. To start with you
   you wait. Live calls have limits per session and per day; when one is reached, the
   screen says so (「本日のお試し上限に達しました…」) and the demo goes on with recorded data.
 - **For judges:** enter the code given in the submission form under 「審査用のコード」 at the bottom of the home page (open it first) and press
-  「確かめる」. The only thing it changes is the limit that live AI calls in that browser count against (the apprentice's drafts, the reading
+  「コードを確認」 (Check code). The only thing it changes is the limit that live AI calls in that browser count against (the apprentice's drafts, the reading
   of your corrections, the successor's answers): it becomes a judges' daily limit with no per-session cap, so you can keep trying
   even when visitors have used up the shared one. Screens, behaviour and data are the same; it
   does not switch to another environment (drafting, learning, judging and the evaluation are unchanged; the per-address limit stays).

@@ -69,7 +69,7 @@ const cardShown = (page: Page) => async () => (await page.locator('section[aria-
     const enterCode = async () => {
       await page.locator("summary:has-text('審査用のコード')").click();
       await page.locator('input[name="code"]').fill(values["judge-code"]!);
-      await page.locator('button:has-text("確かめる")').click();
+      await page.locator('button:has-text("コードを確認")').click();
       await page.locator("text=確認しました。このブラウザでは").waitFor({ timeout: 10000 });
       steps.push({ step: "審査用のコードを入れた", ms: 0, seen: [] });
     };
