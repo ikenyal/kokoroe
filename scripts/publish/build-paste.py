@@ -36,8 +36,9 @@ judge = re.search(r"<!-- judge:start -->\n(.*?)\n<!-- judge:end -->", s, re.S).g
 assert "\n" not in judge and U in judge
 # 9: the title line without the internal note, then ①〜⑤ (labels are in the sentences)
 item9 = re.sub(r"（Kento [^）]*）", "", strip_md(item9)).strip()
-# 10 and 12 are one-line fields
+# 10 and 12 are one-line fields (10: 150 characters at most, Kento 11/7)
 item10 = item10.replace("\n", "")
+assert len(item10) <= 150, f"10 is {len(item10)} characters (150 at most)"
 # 11: one field, each part starting with its number
 item11 = "\n\n".join(f"{k}{i11[k]}" for k in ("①", "②", "③"))
 # 8: in the form's order
@@ -56,7 +57,7 @@ out = [
     "### 7. デモ動画", block(video_url or "【アップロード後に Kento が URL を入れる】"),
     "### 8. 使用したClaudeの製品・機能（チェックを入れる）", block("\n".join(item8)),
     f"### 9. 開発中に一番詰まった場面（{n(item9)}字）", block(item9),
-    f"### 10. 開発に必要な公式の情報が十分見つけられましたか（1行・{n(item10)}字）", block(item10),
+    f"### 10. 開発に必要な公式の情報が十分見つけられましたか（1行・150字以内・{n(item10)}字）", block(item10),
     f"### 11. Claudeを使った感想と改善してほしい点（①②③を1つの欄に・{n(item11)}字）", block(item11),
     "### 12. 審査員用リンク（任意）（1行。【Kentoが手で入れる】をコードに置き換える）", block(judge),
 ]
