@@ -91,3 +91,31 @@
 - 除外すべきファイル: 追跡されているものはなし。
 - LICENSE（MIT）と `data/NOTICE.md`: あり。
 - **未了:** README の公開デモの URL と上限（英・日とも「11/6 に追記」のまま）。画面写真の目視の確認。公開後の新しい clone での確認。
+
+**公開前の確かめ（11/7、Claude。読み取りと検査だけ。チェックリストに合わせて、どこまで確かめたかを分けて書く）**
+
+| 項目 | 確かめた方法 | 結果 | 確かめていない範囲 |
+|---|---|---|---|
+| 秘密（全履歴、Gitleaks） | `gitleaks git . --log-opts="--all" --redact`（8.30.1、Homebrew で入れた） | 270 コミットを走査、当たり1件。`tests/fixtures/hidden-freeze.json` の `data/hidden/` のファイルの sha256（ファイル名がキーの JSON）を、汎用の鍵の規則が拾ったもの。誤検知 | 差分のないコミット（マージ）は Gitleaks の走査の外。全参照の非マージ 272 のうち 270（残り2つは差分なし） |
+| 秘密（全履歴、既存の検査） | 上の表の `git log --all -p \| grep …`、`bash scripts/check-secrets.sh` | 本物のキー・トークンなし。当たりは検査パターン自身。`check-secrets` は通る | 画像の中の文字（検索できない）。下の「画面と動画」で目で確かめた |
+| アカウント番号つきの ARN（全履歴） | 上の表のコマンド | 0 件 | — |
+| 勤務先のドメイン（全履歴・作者情報） | 上の表のコマンド（`WORK_DOMAIN` は環境変数で渡し、ファイルに書かない） | 0 件・0 件 | — |
+| 作者・コミッター（全履歴） | `git log --all --format='%ae\|%ce' \| sort \| uniq -c` | 全 438 コミットが noreply の1行だけ | — |
+| セッションの記述（全履歴） | 上の表のコマンド | 当たり1件。この表のコマンドの文字列そのもの | — |
+| ローカルの設定 | `git check-ignore -v .claude/settings.local.json`、`git ls-files` | `.claude/settings.local.json` は `.gitignore` で除外、追跡なし。Claude Security の出力 `CLAUDE-SECURITY-*/` も除外（11/7 に足した。要約だけ `docs/audits/`） | — |
+| `.env` | `.env.example` の中身、`git check-ignore -v .env .env.local .env.production` | `.env.example` はあり、`ANTHROPIC_API_KEY=` は空、ほかは既定値の注（モデル名・数の上限）だけ。`.env`・`.env.*` は除外、追跡なし（`.env.example` だけ追跡） | — |
+| 除外すべきファイル | 上の表のコマンド | 追跡なし | — |
+| 画面と動画 | 静止画（`docs/screens/video-final/`・公開版の `docs/screens/public-v5-*`・エラー画面）と MP4 の各場面を目で確かめた（ui-critic の点検を含む） | API キー・審査用のコード・アカウント番号・内部の値は写っていない。審査用のコードの欄は `type="password"`（点で隠れる）。エラー画面に出るのは Next.js の「問い合わせ用の番号」（中身のない識別子）だけ | `docs/screens/` の 1,207 件の画面写真のうち、目で見たのは今回の点検に使ったもの。ほかは撮影の仕組み（Playwright でページだけ）に頼る |
+| コードの脆弱性 | Claude Security の Scan codebase（全体、medium、攻撃面に重点）→ 要約は `docs/audits/claude-security-2026-11-07.md` | 要約を参照 | 要約の Coverage を参照 |
+| LICENSE・NOTICE | `LICENSE`（MIT）、`data/NOTICE.md` | ある | — |
+
+## 4. 公開したあとに GitHub で設定すること（実行は公開のとき。Kento の OK のあと）
+
+新しい公開リポジトリ `ikenyal/kokoroe` で、Settings から:
+
+1. **Code security → Secret scanning を有効に**（公開リポジトリは既定で有効のことが多い。有効になっているかを確かめる）。
+2. **Push protection を有効に**（秘密を含む push を止める）。
+3. **Collaborators and teams:** Kento だけ（ほかの人・チームを足さない）。
+4. **Branches → main のルール（ブランチ保護）:** force push を禁止、削除を禁止。直接の push は Kento だけなので、レビュー必須にはしない。
+5. **Actions → General:** このリポジトリはワークフローを持たない。Actions を使わないなら「Disable actions」、使うなら「Allow ikenyal, and select non-ikenyal, actions」で最小に。Workflow permissions は「Read repository contents permission」（読み取りだけ）。
+6. 確かめ: 認証なしで clone し、README の Quickstart（`npm ci`・`npm test`・`npm run dev -- --hostname 127.0.0.1`）が通ること。

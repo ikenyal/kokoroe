@@ -554,3 +554,5 @@ Short entries, appended every work session. Source material for the README secti
   - **One process slip.** A round changed the README's generated results table by hand and committed while two tests failed,
     because the command only printed the test output. It was fixed within minutes in the generator, and every later commit is
     gated on the test exit code (`docs/ui-polish-log.md`, D 20).
+
+- **11/7（動画の確認待ち）:** Claude Security プラグイン（Scan codebase。Workflow で調べ役 27 人と3人の検証役の多数決）で作業ツリー全体を点検し、指摘 0 件。秘密を伏せる工程はサブエージェント（scan-redactor）。Gitleaks で全履歴。提出フォームの「貼る用」は、ドラフトの各項目から小さなスクリプトで組み立て、字数をそえた。
