@@ -2207,3 +2207,10 @@ evaluation reads are unchanged.
 - OGP: `app/opengraph-image.png`・`app/twitter-image.png`（1200×630）と alt、`metadataBase`（公開 URL）、`twitter:card` = summary_large_image。本番ビルドで og:image が公開 URL になることを確かめた。
 - README（日英）の冒頭: ロゴ（picture で明暗）→ 一行 → 作者の言葉 → 動画のサムネイル（動画の1コマから、`scripts/logo/build-thumb.mjs`）と公開デモのリンク → 動く画像（s05 から ffmpeg で 8.7 秒、1.8MB、隅の「詰めています」は残る）→ 既存の3枚。動画の URL は `YOUTUBE_URL` のまま（Kento がアップロード後に渡す）。
 - 画面写真: `docs/screens/readme-head/`（GitHub の CSS で手元で描いたもの、明暗）。
+
+## 11/7 英語の一行と、動画の終わりの画面（Kento）
+
+- README（英）の一行を "The etiquette no one can put into words — handed down one correction at a time." に。英語の副題はその下に残した。OGP は日本語の一行と英語の副題のままで、英語の一行は使っていない（そろえる場所なし）。
+- 動画の終わりの画面（s09b）の「ココロエ Kokoroe」の文字をロゴ（`docs/readme/logo-light.svg` と同じ形）に差し替えた。s09b だけを固定データで撮り直し（ライブなし）、つなぎ直した。長さ 177.0 秒（2:57）のまま。
+- 撮り直しの s09b は、録画の始まりの揺れで字幕が前の版より 0.7 秒早かった（「ココロエ。」が 170.5 秒、前は 171.2 秒、ナレーションは 171.5 秒）。新しいクリップの頭に最初のコマ（白い紙）を 0.7 秒足して、前の版と同じ時刻にそろえた（10 コマ/秒で一致を確かめた）。0〜160 秒は前の MP4 とコマ単位で同じ（PSNR inf）。
+- 静止画: `docs/screens/video-final/final-s09b-end-logo.jpg`（最後のコマ）、`final-s09b-end-logo-mid.jpg`（172.5 秒）。
