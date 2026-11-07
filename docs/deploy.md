@@ -77,7 +77,16 @@ Verified on the public URL (`docs/screens/public-live-confirm.png`, `public-live
   - the favicon, icon and OGP images are byte-identical to the repository, and `og:image` points to the public URL;
   - the 「審査用のコード」 explanation shows, and the code is accepted;
   - お試し's first card drafted live in 4.1 s on the judges' budget, with no limit notice (one card only).
-  - Screenshots: `docs/screens/public-v6-*.png`.
+  - Screenshots: `docs/screens/public-v6-*.png` (removed from the public history; deployment 7 has its own).
+
+**Deployment 7 (2026-11-08 04:40, `:kokoroe.web.7`, Kento's word: the judge code button now reads 「コードを確認」):**
+- **From `main` at `3add7fa`.** Same environment and the same `KOKOROE_JUDGE_CODE` as deployment 6, carried over the same way
+  (600-permission temp file outside the repo, only the image swapped, the file deleted right after; nothing printed).
+- **Verified on the public URL with Playwright:** `/`, `/keiko`, `/kokoroe`, `/noren` give 200 (and `/choba` opens from
+  「師匠になって試す」), an unknown page gives 404; the AI banner shows; `/keiko` shows 54% → 71%, 平均119回 with no 「途中経過」;
+  favicon, icons and OGP images are byte-identical to the repository and `og:image` points to the public URL; the 「審査用のコード」
+  field has the button 「コードを確認」 and accepts the code; お試し's first card drafted live in 5.4 s on the judges' budget, with
+  no limit notice (one card only). Screenshots: `docs/screens/public-v7-*.png`.
 
 **Decided (Kento 11/6): option B.** At the freeze rebuild (11/6), set `KOKOROE_DAILY_USD` to 10. Kento sets the Claude Console
 monthly limit on the public workspace to $100 himself (raised from $60 when the judges' budget was added, D-067), after checking
