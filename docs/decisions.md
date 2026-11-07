@@ -86,7 +86,7 @@ Node 22 runtime (22.x), which vitest 5 also requires. `npm audit --omit=dev`: 0 
 before `git commit`.
 **Why:** gitleaks isn't installed; a tiny script covers the realistic risks (Anthropic/AWS keys, `.env.local`) with zero setup.
 
-## D-008 · 2026-11-03 · Accepted · Split licensing
+## D-008 · 2026-11-03 · Code licence superseded by D-069 (data/ part still holds) · Split licensing
 Code under MIT (Copyright (c) 2026 ikenyal). Fictional world data under `data/` is © 2026 ikenyal, all rights reserved,
 limited to evaluating/demonstrating this project (`data/NOTICE.md`).
 **Why:** the organizers confirmed code can be OSS while data/logos may carry a separate no-reuse condition, as long as it is explicit.
@@ -1341,3 +1341,14 @@ keyed by the code. Only where the spend is counted changes (tests/judge-code.tes
 - **Where it shows.** The README result tables (generated) carry a one-line note pointing here. Kento decided (a): fix and recount,
   rather than publish the raw 9 / 9 with a note. hitl-reviewer read the diff (OK; it also noted that in every injection run the
   master's own verdict did change the store — K-028 added, K-013 revised — so the table now says "changed by the injected text").
+
+## D-069 · 2026-11-07 · Accepted (Kento) · Code licence: MIT → AGPL-3.0-only, before the repository is made public
+The code moves from MIT to **GNU AGPL-3.0-only** (`LICENSE`: the full text from gnu.org, unchanged, under `Copyright (c) 2026
+ikenyal`; `package.json` `"license": "AGPL-3.0-only"`). Kento is the only author, so he can relicense alone; the repository has not
+been public under MIT. Unchanged: `data/` stays © 2026 ikenyal, all rights reserved, for evaluating and demonstrating this project
+only (`data/NOTICE.md`, D-008). The README says in plain words: use, change and run it for your own company freely; offering a
+changed version to others as a network service means publishing that code under the same terms; the 心得帳 a user grows and the
+Skill they export are theirs (program output, not covered by the AGPL); other terms by asking the author (GitHub: ikenyal).
+Dependencies checked against the AGPL: `docs/licenses.md` (none incompatible, none unknown).
+**Why:** to keep the work open for anyone to read and run, while stopping a closed SaaS copy (the AGPL's network clause), and to
+let the author also use it under other terms. "-only" rather than "-or-later", so a future licence version is a decision, not automatic.

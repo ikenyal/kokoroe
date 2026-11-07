@@ -2214,3 +2214,9 @@ evaluation reads are unchanged.
 - 動画の終わりの画面（s09b）の「ココロエ Kokoroe」の文字をロゴ（`docs/readme/logo-light.svg` と同じ形）に差し替えた。s09b だけを固定データで撮り直し（ライブなし）、つなぎ直した。長さ 177.0 秒（2:57）のまま。
 - 撮り直しの s09b は、録画の始まりの揺れで字幕が前の版より 0.7 秒早かった（「ココロエ。」が 170.5 秒、前は 171.2 秒、ナレーションは 171.5 秒）。新しいクリップの頭に最初のコマ（白い紙）を 0.7 秒足して、前の版と同じ時刻にそろえた（10 コマ/秒で一致を確かめた）。0〜160 秒は前の MP4 とコマ単位で同じ（PSNR inf）。
 - 静止画: `docs/screens/video-final/final-s09b-end-logo.jpg`（最後のコマ）、`final-s09b-end-logo-mid.jpg`（172.5 秒）。
+
+## 11/7 ライセンスを AGPL-3.0-only に（Kento、D-069）
+
+- `LICENSE` を gnu.org の AGPL-3.0 の全文（sha256 0d96a4ff…、変更なし）に。先頭に `Copyright (c) 2026 ikenyal`。`package.json` に `"license": "AGPL-3.0-only"`（ロックファイルも）。
+- README（日英）のライセンスの節、`data/NOTICE.md`、`docs/publishing.md`、決定記録（D-008 に「コードの部分は D-069 で置き換え」、D-069 を新設）。依存のライセンスは `docs/licenses.md`。
+- アプリの画面にはライセンスの文言がないので、公開版の画面は変わらない。

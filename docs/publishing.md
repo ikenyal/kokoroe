@@ -75,7 +75,7 @@
 | 作者・コミッター（全履歴） | `git log --all --format='%ae\|%ce' \| sort \| uniq -c` | noreply の1行だけ |
 | セッションの記述（全履歴） | `git log --all -p \| grep -c -i -e "ワークショップ" -e "登壇" -e "講演"`、ほかに当たった行は目で確認 | 0。当たった行は D-047 の説明・`/goal` の公開ドキュメントなど、セッションの内容ではないもの |
 | 除外すべきファイル | `git ls-files \| grep -E "(^\|/)\.env($\|\.)\|^\.data/\|node_modules/\|eval/runs/raw/\|\.pem$\|\.key$\|\.bundle$\|video/out/"`（`.env.example` は除く） | なし |
-| ライセンス | `LICENSE`（MIT）、`data/NOTICE.md`（架空の世界データの扱い） | ある |
+| ライセンス | `LICENSE`（AGPL-3.0-only。11/7 に MIT から変更、D-069）、`data/NOTICE.md`（架空の世界データの扱い） | ある |
 | README の公開 URL・上限 | 「2. 公開と同時に README に載せるもの」 | 公開デモの URL と上限が英・日ともに入っている |
 | 秘密情報の検査（今のファイル） | `bash scripts/check-secrets.sh` | 通る |
 | 画面写真 | `docs/screens/**/*.png` に URL バーや手元のパスが写っていない | 写っていない（Playwright の撮影はページだけ） |
@@ -89,7 +89,7 @@
 - 作者・コミッター: 全 120 コミットが `974175+ikenyal@users.noreply.github.com` だけ（全ブランチ）。
 - セッションの記述: 0 件。「speaker」「presented」などで当たった行は、D-047 の説明そのもの、`/goal` の公開ドキュメントの説明、コードのコメント。
 - 除外すべきファイル: 追跡されているものはなし。
-- LICENSE（MIT）と `data/NOTICE.md`: あり。
+- LICENSE（11/5 の時点は MIT。11/7 に AGPL-3.0-only へ変更、D-069）と `data/NOTICE.md`: あり。
 - **未了:** README の公開デモの URL と上限（英・日とも「11/6 に追記」のまま）。画面写真の目視の確認。公開後の新しい clone での確認。
 
 **公開前の確かめ（11/7、Claude。読み取りと検査だけ。チェックリストに合わせて、どこまで確かめたかを分けて書く）**
@@ -107,7 +107,7 @@
 | 除外すべきファイル | 上の表のコマンド | 追跡なし | — |
 | 画面と動画 | 静止画（`docs/screens/video-final/`・公開版の `docs/screens/public-v5-*`・エラー画面）と MP4 の各場面を目で確かめた（ui-critic の点検を含む） | API キー・審査用のコード・アカウント番号・内部の値は写っていない。審査用のコードの欄は `type="password"`（点で隠れる）。エラー画面に出るのは Next.js の「問い合わせ用の番号」（中身のない識別子）だけ | `docs/screens/` の 1,207 件の画面写真のうち、目で見たのは今回の点検に使ったもの。ほかは撮影の仕組み（Playwright でページだけ）に頼る |
 | コードの脆弱性 | Claude Security の Scan codebase（全体、medium、攻撃面に重点）→ 要約は `docs/audits/claude-security-2026-11-07.md` | 要約を参照 | 要約の Coverage を参照 |
-| LICENSE・NOTICE | `LICENSE`（MIT）、`data/NOTICE.md` | ある | — |
+| LICENSE・NOTICE | `LICENSE`（AGPL-3.0-only、D-069）、`data/NOTICE.md` | ある | — |
 
 ## 4. 公開したあとに GitHub で設定すること（実行は公開のとき。Kento の OK のあと）
 

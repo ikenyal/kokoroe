@@ -222,6 +222,8 @@ Claude Code の機能は、それぞれ一つの目的に使いました。
 - `data/hidden/` は師匠シミュレータ専用の隠しの正解で、評価を再現できるよう含めています。**弟子のコードからは読みません（テストで検査）。** 凍結済みです（フックとチェックサムのテスト）。
 
 ## ライセンス
-- **コード:** [MIT](LICENSE)（Copyright (c) 2026 ikenyal）
-- **架空の世界データ**（`data/` 配下: だいだい工房の設定・心得・場面）: © 2026 ikenyal. All rights reserved.
-  このプロジェクトの評価・デモ目的に限ります。MIT ライセンスの対象外です。詳細は [data/NOTICE.md](data/NOTICE.md)。
+- **コード:** [GNU AGPL-3.0-only](LICENSE)（Copyright (c) 2026 ikenyal）。使う・直す・自社で動かすのは自由です。直したものをネットのサービスとしてほかの人に提供するなら、そのコードも同じ条件で公開してください。
+- **心得帳は利用者のもの:** 利用者が育てた心得帳と、書き出した Skill（心得帳の写し）は、利用者自身のものです（プログラムの出力で、AGPL の対象ではありません）。
+- **別の条件での利用:** ご相談は作者まで（GitHub の [ikenyal](https://github.com/ikenyal)）。
+- **架空の世界データ**（`data/` 配下: だいだい工房の設定・心得・場面）は別です: © 2026 ikenyal. All rights reserved. このプロジェクトの評価・デモ目的に限ります。AGPL-3.0 の対象外です。詳細は [data/NOTICE.md](data/NOTICE.md)。
+- 依存しているソフトウェアのライセンスと AGPL との両立: [docs/licenses.md](docs/licenses.md)。

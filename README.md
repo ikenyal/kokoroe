@@ -356,6 +356,11 @@ changed**, as a readable and deletable Agent Skill, for a small company's **clie
   a test enforces this.** It is frozen (hook + checksum test).
 
 ## License
-- **Code:** [MIT](LICENSE) — Copyright (c) 2026 ikenyal.
-- **Fictional world data** (`data/`: Daidai Kobo, its clients, kokoroe and scenes): © 2026 ikenyal. All rights reserved.
-  Use is limited to evaluating and demonstrating this project; not covered by the MIT License. See [data/NOTICE.md](data/NOTICE.md).
+- **Code:** [GNU AGPL-3.0-only](LICENSE) — Copyright (c) 2026 ikenyal. You are free to use it, change it and run it for your own
+  company. If you offer a changed version to other people as a network service, you must publish that code under the same terms.
+- **Your 心得帳 is yours.** The 心得帳 you grow and the Skill you export (a copy of it) belong to you: they are the program's
+  output, not covered by the AGPL.
+- **Other terms:** to use the code under different terms, contact the author on GitHub ([ikenyal](https://github.com/ikenyal)).
+- **Fictional world data** (`data/`: Daidai Kobo, its clients, kokoroe and scenes) is separate: © 2026 ikenyal, all rights reserved,
+  limited to evaluating and demonstrating this project; not covered by the AGPL-3.0. See [data/NOTICE.md](data/NOTICE.md).
+- Dependencies' licenses and how they fit with the AGPL: [docs/licenses.md](docs/licenses.md).
