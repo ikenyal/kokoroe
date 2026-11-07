@@ -1,11 +1,11 @@
-<!-- Draft of the GitHub release body for the submission tag v1.0.0 (docs/publishing.md §6). Replace YOUTUBE_URL before use.
+<!-- Draft of the GitHub release body for the submission tag v1.0.0 (docs/publishing.md §6). 
      The tag and release are made only after the repository is public, with Kento's OK, before the deadline. -->
 **Built with Claude: Japan 2026 提出版 / submission version**
 
 ココロエ（Kokoroe）— 聞いても出てこない作法を、ダメ出しで受け継ぐ。
 The etiquette no one can put into words — handed down one correction at a time.
 
-- デモ動画 / Demo video (2:57): YOUTUBE_URL
+- デモ動画 / Demo video (2:57): https://youtu.be/g-c1zFYKtQg
 - 公開デモ / Public demo: https://kokoroe.xzan0gz3dgpb8.ap-northeast-1.cs.amazonlightsail.com/
 - README: [日本語](https://github.com/ikenyal/kokoroe/blob/v1.0.0/README.ja.md) / [English](https://github.com/ikenyal/kokoroe/blob/v1.0.0/README.md)
 

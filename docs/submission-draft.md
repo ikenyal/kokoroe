@@ -59,7 +59,7 @@ https://github.com/ikenyal/kokoroe
 
 ## 7. デモ動画 *（3分以内・アクセス可。YouTube の URL）
 
-URL: 〔11/7 の撮影のあと、YouTube に限定公開でアップロードした URL〕
+URL: https://youtu.be/g-c1zFYKtQg
 
 - **公開の設定:** 限定公開（リンクを知っている人だけ）。
 - **題名（最終）:** ココロエ（Kokoroe）— 直すだけで、心得は次の代へ｜Built with Claude: Japan 2026
@@ -218,7 +218,7 @@ https://kokoroe.xzan0gz3dgpb8.ap-northeast-1.cs.amazonlightsail.com/
 ```
 ### 7. デモ動画（YouTube、限定公開）
 ```text
-【アップロード後に Kento が URL を入れる】
+https://youtu.be/g-c1zFYKtQg
 ```
 
 題名は「ココロエ（Kokoroe）— 直すだけで、心得は次の代へ｜Built with Claude: Japan 2026」。説明文は上の 7 の「説明文（最終）」をそのまま。
