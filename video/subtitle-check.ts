@@ -8,6 +8,7 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { fillNumbers } from "./narration";
 import { cueWindows, sentenceSpans } from "./timing";
 
 const OUT = path.join(__dirname, "out");
@@ -15,6 +16,8 @@ const plan = JSON.parse(readFileSync(path.join(__dirname, "scenes.json"), "utf8"
   lead: number; gap: number; wipeHold: number;
   scenes: { id: string; seconds: number; wipe?: string; after?: number; holds?: { sentence: number; sec: number }[]; narration: string; subtitle?: false; shift?: number }[];
 };
+// numbers in the narration ({before}, {taps} …) are filled from results.json, as in the recording
+for (const sc of plan.scenes) sc.narration = fillNumbers(sc.narration, JSON.parse(readFileSync(path.join(__dirname, "..", "data/demo/results.json"), "utf8")));
 const W = 320, H = 14, FPS = 30;
 
 /** Subtitle runs in a file: [on, off, signature] with times in seconds of that file. */
@@ -51,7 +54,7 @@ export function runs(file: string, from = 0, dur?: number): { on: number; off: n
   const merged: typeof kept = [];
   for (const r of kept) {
     const p = merged.at(-1);
-    if (p && r.on - p.off <= 0.05 && Math.abs((r.right - r.left) - (p.right - p.left)) <= 6) p.off = r.off;
+    if (process.env.RAW_RUNS !== "1" && p && r.on - p.off <= 0.05 && Math.abs((r.right - r.left) - (p.right - p.left)) <= 6) p.off = r.off;
     else merged.push({ ...r });
   }
   return merged.filter((r) => r.off - r.on > 0.1);
