@@ -2199,3 +2199,11 @@ evaluation reads are unchanged.
 
 - 「枠」をやめ、「AI が案を作る1日の上限が審査員用になる」「画面と動きとデータは同じ」「データはブラウザごと」に。直した場所: 最初の画面のヒントと「審査用のコード」の説明・受け付けたあとの一行（`app/page.tsx`・`app/judge-form.tsx`）、共通の上限に達したときの審査員向けの一言（`app/limit-note.tsx`）、README（日英）、提出の下書きの審査員の欄。動きは変えていない（文言だけ。テストは文言を見ていないので変更なし）。
 - 動画には映らない（審査用のコードは撮影で設定していない）。画面写真: `docs/screens/judge-copy/`（手元の 127.0.0.1、使い捨てのテスト用コード）。
+
+## 11/7 ロゴと README の冒頭（Kento）
+
+- ロゴ: 藍の印（細い内枠、白の「心」）＋「ココロエ」＋小さく Kokoroe。文字はすべて、しっぽり明朝（OFL）の字形をパスにしたもの（`scripts/logo/build-logo.mjs`、opentype.js）。朱・グラデーション・外部の素材は使わない。明暗の2版（`docs/readme/logo-{light,dark}.{svg,png}`）。
+- タブのアイコンも同じ印・同じ書体に作り直した（`scripts/icon/kokoroe-icon.svg` → `scripts/make-icons.ts`）。タブは動画に映らない（録画はページだけ）。
+- OGP: `app/opengraph-image.png`・`app/twitter-image.png`（1200×630）と alt、`metadataBase`（公開 URL）、`twitter:card` = summary_large_image。本番ビルドで og:image が公開 URL になることを確かめた。
+- README（日英）の冒頭: ロゴ（picture で明暗）→ 一行 → 作者の言葉 → 動画のサムネイル（動画の1コマから、`scripts/logo/build-thumb.mjs`）と公開デモのリンク → 動く画像（s05 から ffmpeg で 8.7 秒、1.8MB、隅の「詰めています」は残る）→ 既存の3枚。動画の URL は `YOUTUBE_URL` のまま（Kento がアップロード後に渡す）。
+- 画面写真: `docs/screens/readme-head/`（GitHub の CSS で手元で描いたもの、明暗）。

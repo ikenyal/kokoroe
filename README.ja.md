@@ -1,10 +1,25 @@
-# ココロエ（Kokoroe）— 商いの心得を継ぐ、AIの弟子
-
-[English README](README.md)・Built with Claude: Japan 2026
-
-**聞いても出てこない作法を、ダメ出しで受け継ぐ。** 引退を控えた中小企業のベテランと、その後を継ぐ人のためのものです。ベテランは AI の弟子の案に ○・△・× を付けるだけ。直しの一つ一つが、なぜそうなったかと一緒に心得帳に残り、Agent Skill として後任に渡ります。
+<h1 align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/logo-dark.png">
+    <img src="docs/readme/logo-light.png" alt="ココロエ（Kokoroe）" width="360">
+  </picture>
+</h1>
+<p align="center"><b>聞いても出てこない作法を、ダメ出しで受け継ぐ。</b><br>
+<sub>商いの心得を継ぐ、AIの弟子・<a href="README.md">English README</a>・Built with Claude: Japan 2026・会社も人物も架空です</sub></p>
 
 > これまで仕事やコミュニティの活動を通じて、数多くの企業や団体と関わってきました。どの現場にも優れた人がいて、その人ならではの仕事の勘どころがあります。けれど、その多くは本人の頭の中にしかなく、書き残されないまま、人が替わるたびに失われていきます。— 作者（続きは[課題](#課題)）
+
+<p align="center">
+  <a href="YOUTUBE_URL"><img src="docs/readme/video-thumb.jpg" alt="YouTube のデモ動画（2:57）" width="400"></a><br>
+  <a href="YOUTUBE_URL"><b>デモ動画を見る</b></a>（2:57、YouTube）・<a href="https://kokoroe.xzan0gz3dgpb8.ap-northeast-1.cs.amazonlightsail.com/"><b>公開デモを開く</b></a>
+</p>
+
+<p align="center">
+  <img src="docs/readme/0-loop.gif" alt="動画の帳場の場面から：師匠が案に △ を付けて一言を打つ。弟子がそれを心得帳に書く。丸新酒造の次の案に「変化」が出て、蔵元にもそっと一言を添えている" width="720"><br>
+  <sub>動画の帳場の場面（ライブで撮影）から：△ と一言 → 心得帳に書かれる → 次の案に「変化」。待ち時間と間の1件は詰めています（画面の隅に出ます）。</sub>
+</p>
+
+引退を控えた中小企業のベテランと、その後を継ぐ人のためのものです。ベテランは AI の弟子の案に ○・△・× を付けるだけ。直しの一つ一つが、なぜそうなったかと一緒に心得帳に残り、Agent Skill として後任に渡ります。
 
 > **数字は 11/7 の正式な計測です**（学習5本・評価は3回ずつ、`eval/runs/2026-11-07T00-09-03-058Z-final.json`）。
 > 登場する会社・人物・場面はすべて架空です（株式会社だいだい工房と取引先10社）。
@@ -153,7 +168,8 @@ _注入の回数は、確かめのコードの数え方の誤り（学習中に�
 - ナレーションの音声：Amazon Polly（音声合成。台本は上のとおり Claude と作り、一部は作者が短くした）。ホスティング：Amazon Lightsail。
 - 主なオープンソース：Next.js、React、Tailwind CSS、Zod、MCP の TypeScript SDK、Playwright（画面の録画）、ffmpeg（動画の組み立て）、Vitest。フォント：しっぽり明朝、Zen 角ゴシック New（Google Fonts、SIL Open Font License）。
 - README と動画で引用する統計：帝国データバンク（後継者不在率の調査、2025年）、総務省統計局（労働力調査、2025年）。
-- 外部の画像・音楽は使っていません。動画の絵は、HTML/CSS で作ったページと、アプリそのものの画面です。
+- 外部の画像・音楽も、生成 AI の画像も使っていません。動画の絵は、HTML/CSS で作ったページと、アプリそのものの画面です。
+- ロゴ・タブのアイコン・リンクのプレビュー（OGP）の画像：文字は、しっぽり明朝（SIL Open Font License 1.1）の字形をパスにしたもので、アプリの色で `scripts/logo/build-logo.mjs`（Claude で作成）が組んでいます。README の動画のサムネイルと動く画像は、デモ動画から作りました（動画の1コマと、帳場の場面を ffmpeg で切り出したもの。`scripts/logo/build-thumb.mjs`）。README のほかの画像は、アプリの画面のスクリーンショットです。
 
 ## Claude Code でどう作ったか
 

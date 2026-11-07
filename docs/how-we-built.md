@@ -556,3 +556,4 @@ Short entries, appended every work session. Source material for the README secti
     gated on the test exit code (`docs/ui-polish-log.md`, D 20).
 
 - **11/7（動画の確認待ち）:** Claude Security プラグイン（Scan codebase。Workflow で調べ役 27 人と3人の検証役の多数決）で作業ツリー全体を点検し、指摘 0 件。秘密を伏せる工程はサブエージェント（scan-redactor）。Gitleaks で全履歴。提出フォームの「貼る用」は、ドラフトの各項目から小さなスクリプトで組み立て、字数をそえた。
+- **11/7（ロゴ）:** ロゴ・タブのアイコン・OGP の画像は、Claude Code が書いたスクリプトで、アプリのフォント（しっぽり明朝、OFL）の字形をパスにして組んだ（生成 AI の画像は使わない）。README の動く画像は動画から ffmpeg で切り出し、README の見え方は GitHub の CSS を手元で当てて Playwright で確かめた。
