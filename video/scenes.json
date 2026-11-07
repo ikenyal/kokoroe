@@ -89,7 +89,13 @@
       "action": "お試し with KOKOROE_VIDEO_QUEUE=T05,T13: T05 △ + remark → (live) reading chosen → 確かめ ○ → T13 draft now has the quiet word to the 蔵元. Kento 11/6 item 24: +6.7 s from s01/s02, spent holding on the right column (the apprentice's reading and 「心得帳に書きました」) before scrolling to T13; final seconds set on 11/7 from the live take",
       "narration": "丸新酒造への、新しい提案です。弟子は、窓口の奥様にだけ送る案を出しました。師匠は、△。師匠の一言は、裏で蔵元へ、そっと一言。冒頭の手紙の、最後の1行です。弟子はその一言を読み取り、心得帳に書きました。次の根回しの場面では、弟子が自分から、それを添えるようになりました。",
       "pauseMs": 300,
-      "wipe": "noren"
+      "wipe": "noren",
+      "accents": [
+        [
+          "弟子は",
+          "デシ'ワ"
+        ]
+      ]
     },
     {
       "id": "s06-kokoroe",
@@ -100,7 +106,13 @@
       "action": "open a rule's 沿革 and sources",
       "narration": "覚えた作法は、理由と、どの直しから来たかまで、心得帳に残ります。師匠は、いつでも読めて、消せます。",
       "pauseMs": 300,
-      "after": 0.6
+      "after": 0.6,
+      "accents": [
+        [
+          "心得帳に",
+          "ココロエチョーニ"
+        ]
+      ]
     },
     {
       "id": "s06b-ask",

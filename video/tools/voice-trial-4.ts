@@ -1,16 +1,16 @@
 /**
  * Voice trial 4 (Kento 11/7): two small things heard in the rebuilt video — 「心得帳に」's に too strong, and 弟子は's intonation.
  * Spoken with the narration's current settings (video/narration.ts, all of Kento's picks applied).
- *   npx tsx video/voice-trial-4.ts [--yes]   → video/out/audio/trial4/index.html
+ *   npx tsx video/tools/voice-trial-4.ts [--yes]   → video/out/audio/trial4/index.html
  */
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
-import { ACCENTS, SPEAK_AS, VOICE, ssmlBody } from "./narration";
+import { ACCENTS, SPEAK_AS, VOICE, ssmlBody } from "../narration";
 
-const OUT = path.join(__dirname, "out", "audio", "trial4");
+const OUT = path.join(__dirname, "..", "out", "audio", "trial4");
 type Way = { key: string; note: string; acc?: [string, string][] };
 const items: { id: string; title: string; where: string; text: string; ways: Way[] }[] = [
   { id: "u1", title: "「心得帳に」の「に」", where: "s06", text: "覚えた作法は、理由と、どの直しから来たかまで、心得帳に残ります。", ways: [

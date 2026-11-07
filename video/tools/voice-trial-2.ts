@@ -1,8 +1,8 @@
 /**
  * Voice trial 2 (Kento 11/7, after watching the whole video): short Polly clips of the words that sound wrong, with two or three
  * ways of saying each, plus the reworded lines (B) and the fixes for the silent stretch and the ending (C), on one local page.
- *   npx tsx video/voice-trial-2.ts          # list the clips, billed characters and the cost; no API call
- *   npx tsx video/voice-trial-2.ts --yes    # synthesize → video/out/audio/trial2/*.mp3 and index.html (Kento picks by ear)
+ *   npx tsx video/tools/voice-trial-2.ts          # list the clips, billed characters and the cost; no API call
+ *   npx tsx video/tools/voice-trial-2.ts --yes    # synthesize → video/out/audio/trial2/*.mp3 and index.html (Kento picks by ear)
  * Only what the Polly docs list for Japanese is used (checked 11/7): <phoneme alphabet="x-amazon-pron-kana"> (katakana; ' after
  * the mora where the pitch falls, no mark = flat), <sub alias>, <break time>, and <prosody rate> around the whole text.
  * https://docs.aws.amazon.com/polly/latest/dg/supportedtags.html · …/phoneme-tag.html · …/ph-table-japanese.html
@@ -14,13 +14,13 @@ import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
-import { ACCENTS, VOICE, fillNumbers, ssmlBody } from "./narration";
+import { ACCENTS, VOICE, fillNumbers, ssmlBody } from "../narration";
 
 const PROFILE = "brightflow-sandbox-ikeda";
 const REGION = "ap-northeast-1";
-const OUT = path.join(__dirname, "out", "audio", "trial2");
+const OUT = path.join(__dirname, "..", "out", "audio", "trial2");
 const USD_PER_M = 16;
-const results = JSON.parse(readFileSync(path.join(__dirname, "..", "data/demo/results.json"), "utf8"));
+const results = JSON.parse(readFileSync(path.join(__dirname, "..", "..", "data/demo/results.json"), "utf8"));
 const num = (t: string) => fillNumbers(t, results);
 
 /** One way of saying it: accents (pron-kana) that win over the narration's, and ｜<ms> for an extra pause. */

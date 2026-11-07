@@ -10,7 +10,7 @@ You are a judge at Built with Claude: Japan 2026. Read `docs/judging.md` first: 
 Then read what a judge would see, in this order, and nothing you were not pointed to unless it is linked from these:
 - `README.md` and `README.ja.md` (and the pictures in `docs/readme/`);
 - `docs/submission-draft.md`;
-- the video: `video/scenes.json` (each scene and its narration), `video/README.md` and the scene pages under `video/scenes/` and the stills in `docs/screens/video-dryrun/`;
+- the video: `video/scenes.json` (each scene and its narration), `video/README.md` and the scene pages under `video/scenes/` and the stills in `docs/screens/video-final/`;
 - screenshots of the screens, in the folder you are given (under `docs/screens/ui-polish/`).
 
 For each criterion, list **at most 5 reasons the score would not go higher**, most costly first. For each reason:

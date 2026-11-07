@@ -51,7 +51,7 @@ export const READINGS: [string, string][] = [
  * voice trial and kept by Kento on 11/4. These win over READINGS. Add a word here when it still sounds wrong.
  */
 export const ACCENTS: [string, string][] = [
-  // Kento's picks after the full watch (11/7, docs/ui-polish-log.md; video/voice-trial-2.ts and -3.ts)
+  // Kento's picks after the full watch (11/7, docs/ui-polish-log.md; video/tools/voice-trial-2.ts and -3.ts)
   ["三十年分の作法", "サンジューネンブンノサ'ホー"],
   ["シミュレータの師匠", "シミュレーターノシ'ショー"],
   ["丸新酒造", "マルシンシュ'ゾー"],
@@ -116,9 +116,9 @@ export function ssmlBody(text: string, accents: [string, string][] = ACCENTS, yo
 }
 
 /** The decided voice settings: one <prosody> around whole sentences, a pause between sentences (none after the last). */
-export function toSsml(text: string, pauseMs = VOICE.pauseMs, rate = VOICE.rate): string {
+export function toSsml(text: string, pauseMs = VOICE.pauseMs, rate = VOICE.rate, sceneAccents: [string, string][] = []): string {
   for (const [shown, said] of SPEAK_AS) text = text.replace(shown, said);
-  return `<speak><prosody rate="${rate}%">${ssmlBody(text).replace(/。(?!$)/g, `。<break time="${pauseMs}ms"/>`)}</prosody></speak>`;
+  return `<speak><prosody rate="${rate}%">${ssmlBody(text, [...sceneAccents, ...ACCENTS]).replace(/。(?!$)/g, `。<break time="${pauseMs}ms"/>`)}</prosody></speak>`;
 }
 
 /** Billed characters ≈ the text Polly reads (tags excluded; <sub> aliases are what it reads). */
@@ -139,6 +139,8 @@ export type Scene = {
   id: string; kind: "screen" | "anim"; seconds: number; page: string; narration: string; pauseMs?: number; subtitle?: false;
   /** chapter break: the scene opens behind a noren that parts left and right (video/record.ts) */
   wipe?: "noren";
+  /** Accents for this scene only, ahead of ACCENTS (11/7 trial 4: chosen by ear in one sentence, so kept to that scene). */
+  accents?: [string, string][];
 };
 export function loadPlan(): { scenes: Scene[] } {
   const plan = JSON.parse(readFileSync(path.join(__dirname, "scenes.json"), "utf8")) as { scenes: Scene[] };
@@ -153,7 +155,7 @@ function main() {
   const scenes = loadPlan().scenes.filter((s) => s.narration && (!ids || ids.includes(s.id)));
   let chars = 0;
   for (const s of scenes) {
-    const ssml = toSsml(s.narration, s.pauseMs);
+    const ssml = toSsml(s.narration, s.pauseMs, VOICE.rate, s.accents);
     chars += billedChars(ssml);
     console.log(`${s.id} (${s.seconds}s, ${billedChars(ssml)} chars)\n  ${ssml}`);
   }
@@ -170,7 +172,7 @@ function main() {
       "--language-code", "ja-JP", "--text-type", "ssml", "--text", ssml, ...extra, file,
     ], { stdio: ["ignore", "ignore", "inherit"] });
   for (const s of scenes) {
-    const ssml = toSsml(s.narration, s.pauseMs);
+    const ssml = toSsml(s.narration, s.pauseMs, VOICE.rate, s.accents);
     const mp3 = path.join(dir, `${s.id}.mp3`), marks = path.join(dir, `${s.id}.marks.json`);
     polly(ssml, mp3, ["--output-format", "mp3", "--sample-rate", "24000"]);
     polly(ssml, marks, ["--speech-mark-types", "sentence", "--output-format", "json"]); // the list option must not be last: it would swallow the outfile

@@ -1,7 +1,7 @@
 # ナレーションの声の試作（11/4）
 
 Kazuha・Tomoko・Takumi を聞き比べた結果、どの声も気になる点があった。そこで、Polly のままで、原稿と SSML を変えて良くなるかを試した。
-道具は `video/voice-trial.ts`。音声と聞き比べのページは `video/out/audio/trial/index.html` で、Git には入れていない。
+道具は `video/tools/voice-trial.ts`。音声と聞き比べのページは `video/out/audio/trial/index.html` で、Git には入れていない。
 
 ## 声とエンジン（describe-voices、ap-northeast-1、読み取りのみ）
 
@@ -69,7 +69,7 @@ Kazuha・Tomoko・Takumi を聞き比べた結果、どの声も気になる点�
 ## 2回目（Takumi に絞って、速さと間を試す）
 
 - **聞いた結果（Kento）:** 声は Takumi、アクセントは d の指定を使う。速さは、90% ではなく、逆に少し上げる方向。
-- **作ったもの:** 原稿は b、アクセントは d と同じ。速さ 100・105・110% × 文と文の間 0.5秒・0.3秒 の6通り × 2場面。`npx tsx video/voice-trial.ts --round2 --yes` で作る。請求対象 1,098字、約 $0.018。
+- **作ったもの:** 原稿は b、アクセントは d と同じ。速さ 100・105・110% × 文と文の間 0.5秒・0.3秒 の6通り × 2場面。`npx tsx video/tools/voice-trial.ts --round2 --yes` で作る。請求対象 1,098字、約 $0.018。
 
 | 速さ・間 | 1 課題（割り当て15秒） | 4 解決とタイトル（割り当て15秒） |
 |---|---|---|
