@@ -2220,3 +2220,12 @@ evaluation reads are unchanged.
 - `LICENSE` を gnu.org の AGPL-3.0 の全文（sha256 0d96a4ff…、変更なし）に。先頭に `Copyright (c) 2026 ikenyal`。`package.json` に `"license": "AGPL-3.0-only"`（ロックファイルも）。
 - README（日英）のライセンスの節、`data/NOTICE.md`、`docs/publishing.md`、決定記録（D-008 に「コードの部分は D-069 で置き換え」、D-069 を新設）。依存のライセンスは `docs/licenses.md`。
 - アプリの画面にはライセンスの文言がないので、公開版の画面は変わらない。
+
+## 11/7 公開の仕上げ（Kento の 1〜7）
+
+- README（日英）のライセンスの節に「すべての版は AGPL-3.0-only、過去の MIT の LICENSE は非公開の間のもの」（履歴は書き換えない）。
+- `SECURITY.md`（Private vulnerability reporting、メールは書かない、守っていること）。公開後の有効化の手順を `docs/publishing.md` §4 に。
+- `docs/publishing.md` §5 リポジトリの見え方（About・Website・Topics の gh コマンド、Social preview は Kento が画面で）、§6 提出版のタグ v1.0.0 とリリースの案（本文は `docs/release-v1.0.0.md`）。
+- 公開前の確かめに「公開したくない作業の残り」の行（当たりなし）。README・SECURITY・リリースの本文のリンクを機械で確かめた: 相対リンク・画像・見出しへのリンクの切れ 0、外部リンクは 200（v1.0.0 のタグへのリンクだけ、タグがまだないので 404）。
+- judge-critic（最後の初見の読み）: A2 README の 1 枚目の説明を「記録した稽古（一言なし）／動画はライブで一言あり」に分けた、A3 稽古の記録を含む4つの画面の説明、A4 冒頭に審査員の入り方の一行、A5 提出の概要「約119回」→「平均119回」（488字）。A1（審査用のコードの説明が、案だけでなく読み取り・後任の答えにも効き、セッションごとの上限もなくなることを書いていない）は、Kento が決めた文言なので案として Kento に。B1（冒頭の「何が録画・何がライブ・何が架空か」の箱）、B2（英語の表の 9/9 の行）は案だけ。
+- `docs/screens/readme-head/` を撮り直した。

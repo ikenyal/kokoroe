@@ -14,7 +14,8 @@ An AI apprentice that inherits the unwritten etiquette of business.<br>
 
 <p align="center">
   <a href="YOUTUBE_URL"><img src="docs/readme/video-thumb.jpg" alt="Demo video on YouTube (2:57)" width="400"></a><br>
-  <a href="YOUTUBE_URL"><b>Watch the demo video</b></a> (2:57, YouTube) · <a href="https://kokoroe.xzan0gz3dgpb8.ap-northeast-1.cs.amazonlightsail.com/"><b>Open the public demo</b></a>
+  <a href="YOUTUBE_URL"><b>Watch the demo video</b></a> (2:57, YouTube) · <a href="https://kokoroe.xzan0gz3dgpb8.ap-northeast-1.cs.amazonlightsail.com/"><b>Open the public demo</b></a><br>
+  <sub>Judges: on the demo's home page, open 「審査用のコード」 at the bottom, enter the code from the submission form, then press 「デモの続きから見る」 (<a href="#try-it">details</a>).</sub>
 </p>
 
 <p align="center">
@@ -32,13 +33,15 @@ sees what is wrong when shown a draft: they only mark the AI apprentice's drafts
 **Words used below:** *Kokoroe* (ココロエ) is the name of this work. A *kokoroe* (心得) is one piece of the master's practice; the
 *kokoroe-chō* (心得帳) is the book that keeps them, client by client, with why each came to be — the apprentice learns into it, and
 each entry keeps its *沿革* (history: old → new, the trigger, the master's words, the date). The *帳場* is the master's desk
-(the review screen), and *暖簾を継ぐ* ("taking over the shop curtain") is the successor's screen. D-0xx in the text are decision records in [docs/decisions.md](docs/decisions.md).
+(the review screen), *暖簾を継ぐ* ("taking over the shop curtain") is the successor's screen, and *稽古の記録* (the training
+record) shows the Before/After numbers below on screen. D-0xx in the text are decision records in [docs/decisions.md](docs/decisions.md).
 
 ## See it on screen (recorded demo, fictional data)
 
-**1. Correct it, and the next draft changes (帳場).** After the master marked a draft for 丸新酒造 △ (no remark), the
-apprentice's next draft for a similar situation added, on its own, a quiet word to the 蔵元 (the owner, who decides). The same scene is the home page's example and the
-video's 帳場 scene; in the public demo's recorded run (「デモの続き」), the first card shows the same kind of change (「変化」) for 浜風運輸.
+**1. Correct it, and the next draft changes (帳場).** In a recorded training run, after the master marked a draft for 丸新酒造 △
+(no remark), the apprentice's next draft for a similar situation added, on its own, a quiet word to the 蔵元 (the owner, who decides).
+The home page's example is this run; the video's 帳場 scene shows the same lesson recorded live, where the master adds one word. In the
+public demo's 「デモの続き」 (which starts from a recorded run's 心得帳), the first card shows the same kind of change (「変化」) for 浜風運輸.
 
 <img src="docs/readme/1-choba-change.webp" alt="The 帳場's 「変化」 panel: the 心得 'when writing formally to the owner's wife, give the owner a word first'; behind the scenes: the earlier draft said none, this draft says a quiet word to the owner" width="720">
 
@@ -358,6 +361,8 @@ changed**, as a readable and deletable Agent Skill, for a small company's **clie
 ## License
 - **Code:** [GNU AGPL-3.0-only](LICENSE) — Copyright (c) 2026 ikenyal. You are free to use it, change it and run it for your own
   company. If you offer a changed version to other people as a network service, you must publish that code under the same terms.
+- **Every version:** every version in this repository is published under AGPL-3.0-only. The MIT LICENSE in early commits dates
+  from private development and does not apply to anything published here.
 - **Your 心得帳 is yours.** The 心得帳 you grow and the Skill you export (a copy of it) belong to you: they are the program's
   output, not covered by the AGPL.
 - **Other terms:** to use the code under different terms, contact the author on GitHub ([ikenyal](https://github.com/ikenyal)).
