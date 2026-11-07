@@ -165,7 +165,9 @@ const STEPS: Record<string, (p: Page, base: string, live: boolean) => Promise<vo
         if (await shown(p.locator('aside button[name="verdict"][value="○"]'), 45000)) await p.locator('aside button[name="verdict"][value="○"]').first().click();
       }
     }
-    await p.waitForTimeout(2000);
+    // Hold on the right column (the reading and 「心得帳に書きました」) while 「弟子はその一言を読み取り、心得帳に書きました。」 plays,
+    // and move to T13 only when 「次の根回しの場面では…」 starts (judge-critic 11/7, item 24's extra seconds go to this hold).
+    await p.getByText("次の根回しの場面では", { exact: false }).first().waitFor({ state: "visible", timeout: 30000 }).catch(() => p.waitForTimeout(2000));
     // T13's draft: the quiet word to the 蔵元. The card is long since visit plans were added (11/5), so scroll to the
     // 段取り's 「裏で誰に」 row itself rather than by a fixed amount (dry run 11/5: a fixed scroll ended below the 段取り).
     const back = card.locator('section[aria-label="段取り"] dt', { hasText: "裏で誰に" }).first();

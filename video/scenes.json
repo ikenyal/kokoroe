@@ -22,7 +22,7 @@
     {
       "id": "s01-why",
       "kind": "anim",
-      "seconds": 13.0,
+      "seconds": 13.1,
       "page": "video/scenes/s01-why.html",
       "part": "なぜ今か（2つの力）",
       "source": "帝国データバンク「全国『後継者不在率』動向調査（2025年）」調査対象の中小企業のうち51.2%／総務省統計局「労働力調査（詳細集計）2025年平均結果」転職者数330万人（https://www.stat.go.jp/data/roudou/sokuhou/nen/dt/index.html）",
@@ -32,7 +32,7 @@
     {
       "id": "s02-problem",
       "kind": "anim",
-      "seconds": 13.9,
+      "seconds": 14.2,
       "page": "video/scenes/s02-problem.html",
       "part": "1・2 課題と何が起きるか（統合）",
       "narration": "取引先ごとの伝え方、三十年分の作法を、部長が一人で担ってきました。後任が、悪い知らせを、決まってからメールで送る。それだけで、長年の段取りが崩れます。",
@@ -59,7 +59,7 @@
     {
       "id": "s04b-flow",
       "kind": "anim",
-      "seconds": 9.7,
+      "seconds": 10.3,
       "page": "video/scenes/s04b-flow.html",
       "part": "4 解決とタイトル（流れ）",
       "narration": "師匠は、○△×、要れば一言だけ。その一つ一つが心得になり、経緯ごと、心得帳に綴られます。",
@@ -68,7 +68,7 @@
     {
       "id": "s05-choba",
       "kind": "screen",
-      "seconds": 28.7,
+      "seconds": 26.0,
       "page": "/choba",
       "part": "5 帳場",
       "action": "お試し with KOKOROE_VIDEO_QUEUE=T05,T13: T05 △ + remark → (live) reading chosen → 確かめ ○ → T13 draft now has the quiet word to the 蔵元. Kento 11/6 item 24: +6.7 s from s01/s02, spent holding on the right column (the apprentice's reading and 「心得帳に書きました」) before scrolling to T13; final seconds set on 11/7 from the live take",
@@ -79,7 +79,7 @@
     {
       "id": "s06-kokoroe",
       "kind": "screen",
-      "seconds": 8.0,
+      "seconds": 8.5,
       "page": "/kokoroe",
       "part": "6 心得帳",
       "action": "open a rule's 沿革 and sources",
@@ -116,7 +116,7 @@
     {
       "id": "s07c-ask",
       "kind": "anim",
-      "seconds": 3.6,
+      "seconds": 4.0,
       "page": "video/scenes/ask.html#why",
       "part": "引き（なぜ効くかの前）",
       "subtitle": false,
@@ -134,7 +134,7 @@
     {
       "id": "s08b-keiko",
       "kind": "screen",
-      "seconds": 10.4,
+      "seconds": 12.0,
       "page": "/keiko",
       "part": "8 なぜ効くか（数字）",
       "action": "稽古の記録: Before/After (reads data/demo/results.json; interim until 11/7)",
