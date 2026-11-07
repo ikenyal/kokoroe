@@ -287,6 +287,13 @@ What this entry asks to be judged on is what was made with Claude. The line is d
 Built in one week by one person with Claude Code at the center (full log: [docs/how-we-built.md](docs/how-we-built.md)). Claude Code
 built not only the product but also the guardrails it worked under (hooks, tests, reviewing subagents).
 
+**About the Git history:** before publishing, while the repository was still private (11/3), the history was rewritten to remove a
+work e-mail address and content from the hackathon's sessions that may not be published: the author information (every commit now
+has one GitHub noreply author; one person made this work) and part of some diffs. The order, dates and content of the commits were
+kept, except for what was removed; checked against the pre-rewrite backup, one commit that the removal left empty was dropped (its
+change is in the next commit) and one commit message lost the removed word
+([D-047](docs/decisions.md), [docs/audits/2026-11-03.md](docs/audits/2026-11-03.md), [docs/publishing.md](docs/publishing.md)).
+
 - **Evaluation first.** Day 1 began with a machine-checkable master simulator, a frozen hidden ground truth (a hook blocks edits,
   a test checks checksums), and a test that product code never reads it.
 
