@@ -40,6 +40,6 @@ describe("submission draft: overview (form item 5)", () => {
 
   it("opens with 「このプロジェクトは、…です。」 in one sentence, and labels its numbers as fictional", () => {
     expect(text).toMatch(/^このプロジェクトは、[^。]+です。/);
-    expect(text).toContain("架空のデータ");
+    expect(text).toMatch(/架空の(データ|10社|取引先)/); // Kento 11/8: 「架空の10社で」
   });
 });
