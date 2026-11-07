@@ -12,9 +12,19 @@ import "./globals.css";
 const shippori = Shippori_Mincho({ weight: ["400", "600"], subsets: ["latin"], variable: "--font-shippori", preload: false });
 const zenkaku = Zen_Kaku_Gothic_New({ weight: ["400", "500", "700"], subsets: ["latin"], variable: "--font-zenkaku", preload: false });
 
+// The link preview (OGP / X card) image is app/opengraph-image.png and app/twitter-image.png (scripts/logo/build-logo.mjs).
+// metadataBase makes their URLs absolute; it is the public demo's address (README, docs/deploy.md).
 export const metadata: Metadata = {
+  metadataBase: new URL("https://kokoroe.xzan0gz3dgpb8.ap-northeast-1.cs.amazonlightsail.com/"),
   title: "ココロエ（Kokoroe）",
   description: "商いの心得を継ぐ、AIの弟子 — 架空の「だいだい工房」のデモ",
+  openGraph: {
+    title: "ココロエ（Kokoroe）— 聞いても出てこない作法を、ダメ出しで受け継ぐ。",
+    description: "AI の弟子の案に、ベテランが ○・△・× と一言で直すだけで、理由と経緯つきの心得帳が育ち、後任に渡ります。架空の会社のデモ。",
+    type: "website",
+    locale: "ja_JP",
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 /**

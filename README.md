@@ -1,14 +1,29 @@
-# Kokoroe — an AI apprentice that inherits the unwritten etiquette of business
-
-[日本語版 README](README.ja.md) · Built with Claude: Japan 2026 · D-0xx in the text are decision records in [docs/decisions.md](docs/decisions.md)
-
-**For a small company's veteran about to retire, and whoever takes over.** The veteran can't explain their client etiquette, but
-sees what is wrong when shown a draft: they only mark the AI apprentice's drafts ○ / △ / × (OK / OK with a condition / no). Each correction becomes a 心得
-(one lesson) with why it came to be, kept in a 心得帳 (the book of them) and handed to the successor as an Agent Skill.
+<h1 align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/logo-dark.png">
+    <img src="docs/readme/logo-light.png" alt="ココロエ（Kokoroe）" width="360">
+  </picture>
+</h1>
+<p align="center"><b>An AI apprentice that inherits the unwritten etiquette of business.</b><br>
+<sub><a href="README.ja.md">日本語版 README</a> · Built with Claude: Japan 2026 · all companies and people are fictional</sub></p>
 
 > Through my work and community activities, I have been involved with a great many companies and organizations. Every one of
 > them has excellent people, each with a feel for the work that is theirs alone. But most of it lives only in their heads; it is never
 > written down, and it is lost each time people change. — the author ([more under The problem](#the-problem))
+
+<p align="center">
+  <a href="YOUTUBE_URL"><img src="docs/readme/video-thumb.jpg" alt="Demo video on YouTube (2:57)" width="400"></a><br>
+  <a href="YOUTUBE_URL"><b>Watch the demo video</b></a> (2:57, YouTube) · <a href="https://kokoroe.xzan0gz3dgpb8.ap-northeast-1.cs.amazonlightsail.com/"><b>Open the public demo</b></a>
+</p>
+
+<p align="center">
+  <img src="docs/readme/0-loop.gif" alt="From the video's 帳場 scene: the master marks a draft △ and types a word; the apprentice writes it into the 心得帳; the next draft for 丸新酒造 shows 「変化」: a quiet word to the owner" width="720"><br>
+  <sub>From the video's 帳場 scene, recorded live: △ and one word → written into the 心得帳 → the next draft shows 「変化」. The wait and one card in between are cut (the corner says so).</sub>
+</p>
+
+**For a small company's veteran about to retire, and whoever takes over.** The veteran can't explain their client etiquette, but
+sees what is wrong when shown a draft: they only mark the AI apprentice's drafts ○ / △ / × (OK / OK with a condition / no). Each correction becomes a 心得
+(one lesson) with why it came to be, kept in a 心得帳 (the book of them) and handed to the successor as an Agent Skill.
 
 > **Numbers are from the official run on 11/7** (5 training paths, each held-out evaluation × 3; `eval/runs/2026-11-07T00-09-03-058Z-final.json`).
 > All companies, people and situations are fictional (株式会社だいだい工房 and its 10 clients).
@@ -16,7 +31,7 @@ sees what is wrong when shown a draft: they only mark the AI apprentice's drafts
 **Words used below:** *Kokoroe* (ココロエ) is the name of this work. A *kokoroe* (心得) is one piece of the master's practice; the
 *kokoroe-chō* (心得帳) is the book that keeps them, client by client, with why each came to be — the apprentice learns into it, and
 each entry keeps its *沿革* (history: old → new, the trigger, the master's words, the date). The *帳場* is the master's desk
-(the review screen), and *暖簾を継ぐ* ("taking over the shop curtain") is the successor's screen.
+(the review screen), and *暖簾を継ぐ* ("taking over the shop curtain") is the successor's screen. D-0xx in the text are decision records in [docs/decisions.md](docs/decisions.md).
 
 ## See it on screen (recorded demo, fictional data)
 
@@ -253,7 +268,11 @@ What this entry asks to be judged on is what was made with Claude. The line is d
   assembly), Vitest. Fonts: Shippori Mincho and Zen Kaku Gothic New (Google Fonts, SIL Open Font License).
 - Statistics quoted in the README and the video: Teikoku Databank (successor survey, 2025) and the Statistics Bureau of Japan
   (Labour Force Survey, 2025).
-- No external images or music are used. The pictures in the video are HTML/CSS pages and screens of the app itself.
+- No external images or music are used, and no AI-generated images. The pictures in the video are HTML/CSS pages and screens of the app itself.
+- The logo, tab icon and link-preview (OGP) image: the letters are outlines of Shippori Mincho (SIL Open Font License 1.1), laid out
+  by `scripts/logo/build-logo.mjs` (made with Claude) on the app's own colours. The README's video thumbnail and moving picture are cut
+  from the demo video (a frame of it, and ffmpeg on its 帳場 scene; `scripts/logo/build-thumb.mjs`); the other README images are
+  screenshots of the app.
 
 ## How we built it with Claude Code
 
